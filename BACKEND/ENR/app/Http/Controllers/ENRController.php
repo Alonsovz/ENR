@@ -16,8 +16,7 @@ class ENRController extends Controller
 
         return response()->json($codigos);
     }
-
-
+    
     public function getMetodologiaCalc(){
         $codigos = DB::connection('facturacion')->select("
         select * from enr_metodologiaCalc where idEliminado = 1
