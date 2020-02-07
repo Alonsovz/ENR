@@ -1,0 +1,20 @@
+
+
+.right {
+    box-shadow: 5px 0 5px -5px #333;
+}
+
+#collapseTwo{
+    background-color: #323259 !important;
+    color: #ffffff !important;
+}
+
+.collapse-item{
+    color: #ffffff !important;
+    font-size: 15px;
+}
+
+.collapse-item:hover{
+    background-color: #222245 !important;
+    
+}

@@ -1,0 +1,88 @@
+tbody tr{
+    
+    color: #fff !important;
+  }
+  tbody tr:nth-child(odd){
+    background-color: #30304D;
+    color: #fff !important;
+  }
+  
+  tbody tr:hover{
+    background-color: #1B1B38 !important;
+    
+    color: #D4BEFB !important;
+  }
+
+
+  .modal-header{
+    background-color: #1B1B38 !important;
+    color: #B18AFF !important;
+  }
+
+  .modal-footer{
+    background-color: #1B1B38 !important;
+    color: #D4BEFB !important;
+  }
+
+  .modal-body{
+    background-color: #30304D !important;
+  }
+
+ 
+  label{
+    color: white !important;
+    text-align: center !important;
+  }
+
+  .form-control{
+    background-color: #1B1B38 !important;
+    color: #D4BEFB !important;
+  }
+
+  .modal-content{
+    border: 1px solid #D4BEFB !important;
+  }
+
+
+  .save{
+    background-color: #A16EFF !important;
+    color: black !important;
+  }
+  
+  .save:hover{
+    background-color: #9B6AFC !important;
+  }
+
+
+  .eliminarModal{
+    text-align: center !important;
+    font-size: 18px !important;
+    color: #D4BEFB !important;
+  }
+
+  .title{
+    margin-left: 25px !important;
+  }
+
+  .pull-right{
+    float:right;
+  }
+
+
+
+  .btn-circle {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.42857;
+}
+
+.add{
+  background-color: #530892 !important;
+  color: white !important;
+  height: 100% !important;
+  border: 1px solid #9B6AFC !important;
+}
