@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;
 
-class VerifyCsrfToken extends Middleware
+class VerifyCsrfToken extends BaseVerifier
 {
     /**
      * Indicates whether the XSRF-TOKEN cookie should be set on the response.
@@ -19,6 +19,11 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        'saveCodigoENR',
+        'updateCodigoENR',
+        'deleteCodigoENR',
+        'saveMetodologia',
+        'updateMetodologia',
+        'deleteMetodologia',
     ];
 }

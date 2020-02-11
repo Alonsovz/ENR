@@ -15,11 +15,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(array('prefix' => 'api'), function() {
+
 
     Route::any('test', 'TestController@index');
     Route::any('getCodigoENR', 'ENRController@getCodigoENR');
 
     Route::any('getMetodologiaCalc', 'ENRController@getMetodologiaCalc');
+    Route::post('saveCodigoENR', 'ENRController@saveCodigos');
+    Route::post('updateCodigoENR', 'ENRController@updateCodigos');
+    Route::post('deleteCodigoENR', 'ENRController@deleteCodigos');
+    Route::post('saveMetodologia', 'ENRController@saveMetodologia');
+    Route::post('updateMetodologia', 'ENRController@updateMetodologia');
+    Route::post('deleteMetodologia', 'ENRController@deleteMetodologia');
     
-});

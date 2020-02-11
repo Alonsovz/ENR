@@ -45,21 +45,29 @@ margin-left: 20px;border: 1px solid white;">
           </div>
           <div id="divAgregarCode" class="animated flipInX">
               <hr style="background-color: #B18AFF !important;">
-              <div class="row">
-                <div class="col-md-4">
-                    <label> <i class="fas fa-cubes"></i> Código Tipo</label>
-                    <input class="form-control" placeholder="Ingreso Código Tipo" id="codeTipo">
-                </div>
-                <div class="col-md-4">
-                    <label> <i class="fas fa-codeopen"></i> Tipo ENR</label>
-                    <textarea rows="3" class="form-control" placeholder="Ingreso Tipo ENR" id="codeTipoENR"></textarea>
-                </div>
-                <div class="col-md-4">
-                    <label> <i class="fas fa-codeopen"></i> Tiempo Retroactivo</label>
-                    <input class="form-control" placeholder="Ingreso Tiempo Retroactivo" id="tiempoRetroactivo">
-                </div>
+              
+                <form [formGroup]='frm_codigoENR'>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <label> <i class="fas fa-cubes"></i> Código Tipo</label>
+                      <input class="form-control" placeholder="Ingreso Código Tipo"
+                      formControlName ="codigoTipo">
+                    </div>
+                    <div class="col-md-4">
+                        <label> <i class="fas fa-codeopen"></i> Tipo ENR</label>
+                        <textarea rows="3" class="form-control" placeholder="Ingreso Tipo ENR"
+                        formControlName="tipoENR"></textarea>
+                    </div>
+                    <div class="col-md-4">
+                        <label> <i class="fas fa-codeopen"></i> Tiempo Retroactivo</label>
+                        <input class="form-control" placeholder="Ingreso Tiempo Retroactivo"
+                        formControlName="tiempoRetroactivo">
+                    </div>
+                  </div>
+                </form>
                 
-              </div>
+                
+              
               <div class="row mt-2">
                 <div class="col-md-4">
                 </div>
@@ -73,7 +81,7 @@ margin-left: 20px;border: 1px solid white;">
                     <button type="button" class="btn btn-secondary pull-right" (click)="ocultarDivAgregarCode()">
                       <i class="fas fa-times-circle"></i>  Cancelar
                     </button>
-                    <button type="button" class="btn btn-default save pull-right">
+                    <button type="button" class="btn btn-default save pull-right" (click)="saveCodigoENR()">
                       <i class="fas fa-save"></i>  Guardar
                     </button>
                   </div>
@@ -91,6 +99,7 @@ margin-left: 20px;border: 1px solid white;">
           <table  id="codigos_tbl" class="table small mt-5" style="margin-right: 20px;">
             <thead class="thead-dark">
               <tr>
+                <th style="background-color:#323259; color:#A16EFF;" class="text-center">ID</th>
                 <th style="background-color:#323259; color:#A16EFF;" class="text-center">Código Tipo</th>
                 <th style="background-color:#323259; color:#A16EFF;" class="text-center">Tipo ENR</th>
                 <th style="background-color:#323259; color:#A16EFF;" class="text-center">Tiempo Retroactivo</th>
@@ -99,6 +108,7 @@ margin-left: 20px;border: 1px solid white;">
             </thead>
             <tbody style="background-color:#323259; color:white;text-align: center;font-size: 15px;">
               <tr *ngFor="let codigo  of cod">
+                <td>{{codigo.id}}</td>
                <td>{{codigo.codigoTipo}}</td>
                <td>{{codigo.TipoENR}}</td>
                <td>{{codigo.tiempoRetroactivo}}</td>
@@ -134,7 +144,7 @@ margin-left: 20px;border: 1px solid white;">
 
 
 
-<div class="modal animated flipInX" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" id="modalEditarCodigo">
+<div class="modal animated flipInY" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" id="modalEditarCodigo">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -145,19 +155,25 @@ margin-left: 20px;border: 1px solid white;">
         
       </div>
       <div class="modal-body"><br><br>
-        <form>
+        <form [formGroup] = "frmEditarCodigoENR">
           <div class="row">
             <div class="col-md-4">
                 <label> Código Tipo</label>
-                <input class="form-control" value="{{codEdition.codigoTipo}}">
+                <input class="form-control" 
+                formControlName = "codigoTipo" name="codigoTipo">
+
+                <input type="hidden" class="form-control" 
+                formControlName = "id" name="id"><br><br>
             </div>
             <div class="col-md-4">
                 <label>Tipo ENR</label>
-                <textarea rows="3" class="form-control" value="{{codEdition.TipoENR}}"></textarea>
+                <textarea rows="3" class="form-control" 
+                formControlName="TipoENR" name="TipoENR"></textarea>
             </div>
             <div class="col-md-4">
                 <label>Tiempo Retroactivo</label>
-                <input class="form-control" value="{{codEdition.tiempoRetroactivo}}">
+                <input class="form-control" 
+                formControlName="tiempoRetroactivo" name="tiempoRetroactivo">
             </div>
           
           </div>
@@ -167,7 +183,7 @@ margin-left: 20px;border: 1px solid white;">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           <i class="fas fa-times-circle"></i>  Cerrar
         </button>
-        <button type="button" class="btn btn-default save">
+        <button type="button" class="btn btn-default save" data-dismiss="modal" (click)="updateCodigoENR()">
           <i class="fas fa-save"></i>  Guardar
         </button>
         
@@ -179,7 +195,7 @@ margin-left: 20px;border: 1px solid white;">
 
 
 
-<div class="modal animated flipInX" id="eliminarCodigo" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal animated flipInY" id="eliminarCodigo" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -195,13 +211,16 @@ margin-left: 20px;border: 1px solid white;">
         <hr style="background-color: #B18AFF !important;">
         ¿Desea eliminar el código: <a style="color: yellow;">{{eliCodigo.codigoTipo}}
         ({{eliCodigo.TipoENR}})</a> ?
-        <input type="hidden" class="form-control" value="{{eliCodigo.id}}"><br><br>
+        <form [formGroup] = "frmEliminarCodigoENR">
+          <input type="hidden" class="form-control" formControlName="id" name="id"><br><br>
+        </form>
+        
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           <i class="fas fa-times-circle"></i>  Cerrar
         </button>
-        <button type="button" class="btn btn-default save">
+        <button type="button" class="btn btn-default save" data-dismiss="modal" (click)="deleteCodigoENR()">
           <i class="fas fa-save"></i>  Guardar
         </button>
         

@@ -128,7 +128,16 @@ li {
   cursor: pointer;
 }
 
+.perfil{
+  background-color: #323259 !important;
+  color: #aaa !important;
+}
 
+
+.perfil > a:hover{
+  background-color: #222245 !important;
+  color: #aaa !important;
+}
 /*ANIMACION DE OPCIONES DE PERFIL*/
 
 

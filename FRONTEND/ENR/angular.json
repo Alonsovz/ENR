@@ -32,7 +32,8 @@
               "../ENR/node_modules/@fortawesome/fontawesome-free/css/all.css",
               "../ENR/node_modules/@fortawesome/fontawesome-free/css/fontawesome.css",
               
-              "../ENR/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css"
+              "../ENR/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css",
+              "../ENR/node_modules/notie/dist/notie.css",
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.js",
@@ -40,7 +41,9 @@
              
               "../ENR/node_modules/@fortawesome/fontawesome-free/js/fontawesome.js",
               "./node_modules/bootstrap/dist/js/bootstrap.js",
-              "../ENR/node_modules/datatables.net/js/jquery.dataTables.js"
+              "../ENR/node_modules/datatables.net/js/jquery.dataTables.js",
+              
+              "../ENR/node_modules/notie/dist/notie.js"
             ]
           },
           "configurations": {

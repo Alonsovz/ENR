@@ -21,23 +21,30 @@
           </button>
           </div>
         </div>
-        <div id="divAgregarMet" class="animated fadeInRight">
+        <div id="divAgregarMet" class="animated flipInX">
             <hr style="background-color: #B18AFF !important;">
-            <div class="row">
-              <div class="col-md-4">
-                  <label> Código Tipo</label>
-                  <input class="form-control" placeholder="Ingreso Código Tipo" id="metTipo">
-              </div>
-              <div class="col-md-4">
-                  <label>Tipo ENR</label>
-                  <textarea rows="3" class="form-control" placeholder="Ingreso Tipo ENR" id="metTipoENR"></textarea>
-              </div>
-              <div class="col-md-4">
-                  <label>Tipo EDESAL</label>
-                  <textarea rows="3" class="form-control" placeholder="Ingreso Tipo EDESAL" id="tipoEdesal"></textarea>
-              </div>
+            
+              <form [formGroup]="frmMetodologiaCalc">
+                <div class="row">
+                  <div class="col-md-4">
+                    <label> Código Tipo</label>
+                    <input class="form-control" placeholder="Ingreso Código Tipo" 
+                    formControlName="codigo" name="codigo">
+                  </div>
+                  <div class="col-md-4">
+                      <label>Tipo ENR</label>
+                      <textarea rows="3" class="form-control" placeholder="Ingreso Tipo ENR" 
+                      formControlName="TipoENR" name="TipoENR"></textarea>
+                  </div>
+                  <div class="col-md-4">
+                      <label>Tipo EDESAL</label>
+                      <textarea rows="3" class="form-control" placeholder="Ingreso Tipo EDESAL" 
+                      formControlName="tipoEdesal" name="tipoEdesal"></textarea>
+                  </div>
+                </div>
+              </form>
               
-            </div>
+            
             <div class="row mt-2">
               <div class="col-md-4">
               </div>
@@ -51,7 +58,7 @@
                   <button type="button" class="btn btn-secondary pull-right" (click)="ocultarDivAgregarMet()">
                     <i class="fas fa-times-circle"></i>  Cancelar
                   </button>
-                  <button type="button" class="btn btn-default save pull-right">
+                  <button type="button" class="btn btn-default save pull-right" (click)="saveMetodologiaCalc()">
                     <i class="fas fa-save"></i>  Guardar
                   </button>
                 </div>
@@ -66,9 +73,10 @@
 
         
         <br><br>
-        <table  id="metodologia_tbl" class="table small mt-5">
+        <table  id="metodologia_tbl" class="table small mt-5" style="width: 100%;">
             <thead class="thead-dark">
               <tr>
+                <th style="background-color:#323259; color:#A16EFF;" class="text-center">ID</th>
                 <th style="background-color:#323259; color:#A16EFF;" class="text-center">Código Tipo</th>
                 <th style="background-color:#323259; color:#A16EFF;" class="text-center">Tipo ENR</th>
                 <th style="background-color:#323259; color:#A16EFF;" class="text-center">Tipo EDESAL</th>
@@ -77,6 +85,7 @@
             </thead>
             <tbody style="background-color:#323259; color:white;text-align: center;font-size: 15px;">
               <tr *ngFor="let met  of metodo">
+                <td>{{met.id}}</td>
                <td>{{met.codigo}}</td>
                <td>{{met.TipoENR}}</td>
                <td>{{met.tipoEdesal}}</td>
@@ -112,21 +121,26 @@
       </div>
       <div class="modal-body">
         <br><br>
-        <form>
+        <form [formGroup] = "frmEditarMetodologiaCalc">
           <div class="row">
             <div class="col-md-4">
-                <label> Código Tipo</label>
-                <input class="form-control" value="{{metCodigo.codigo}}">
+              <label> Código Tipo</label>
+              <input class="form-control" placeholder="Ingreso Código Tipo" 
+              formControlName="codigo" name="codigo">
+
+              <input type="hidden" class="form-control" placeholder="Ingreso Código Tipo" 
+              formControlName="id" name="id">
             </div>
             <div class="col-md-4">
                 <label>Tipo ENR</label>
-                <textarea rows="3" class="form-control" value="{{metCodigo.TipoENR}}"></textarea>
+                <textarea rows="3" class="form-control" placeholder="Ingreso Tipo ENR" 
+                formControlName="TipoENR" name="TipoENR"></textarea>
             </div>
             <div class="col-md-4">
                 <label>Tipo EDESAL</label>
-                <textarea rows="3" class="form-control" value="{{metCodigo.tipoEdesal}}"></textarea>
+                <textarea rows="3" class="form-control" placeholder="Ingreso Tipo EDESAL" 
+                formControlName="tipoEdesal" name="tipoEdesal"></textarea>
             </div>
-          
           </div>
         </form><br><br>
       </div>
@@ -135,7 +149,7 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           <i class="fas fa-times-circle"></i>  Cerrar
         </button>
-        <button type="button" class="btn btn-default save">
+        <button type="button" class="btn btn-default save" data-dismiss="modal" (click)="updateMetodologia()">
           <i class="fas fa-save"></i>  Guardar
         </button>
       </div>
@@ -160,13 +174,20 @@
         <hr style="background-color: #B18AFF !important;">
         ¿Desea eliminar el código: <a style="color: yellow;">{{eliMetCodigo.codigo}}
         ({{eliMetCodigo.TipoENR}})</a> ?
-        <input type="hidden" class="form-control" value="{{eliMetCodigo.id}}"><br><br>
+        <form [formGroup] = "frmEliminarMetodologiaCalc">
+          <div class="row">
+            <div class="col-md-4">
+              <input type="hidden" class="form-control" placeholder="Ingreso Código Tipo" 
+              formControlName="id" name="id">
+           </div>
+          </div>
+        </form><br><br>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           <i class="fas fa-times-circle"></i>  Cerrar
         </button>
-        <button type="button" class="btn btn-default save">
+        <button type="button" class="btn btn-default save" data-dismiss="modal" (click)="deleteMetodologia()">
           <i class="fas fa-save"></i>  Guardar
         </button>
         

@@ -39,6 +39,10 @@ tbody tr{
     color: #D4BEFB !important;
   }
 
+  .form-control:focus{
+   border: 2px solid #CEABFD !important;
+  } 
+
   .modal-content{
     border: 1px solid #D4BEFB !important;
   }

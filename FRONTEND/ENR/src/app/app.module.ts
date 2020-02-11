@@ -10,6 +10,7 @@ import { WrapperComponent } from './components/wrapper/wrapper.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CodigoTipoENRComponent } from './components/codigo-tipo-enr/codigo-tipo-enr.component';
 import { MetodologiaCalculoComponent } from './components/metodologia-calculo/metodologia-calculo.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,11 +21,14 @@ import { MetodologiaCalculoComponent } from './components/metodologia-calculo/me
     DashboardComponent,
     CodigoTipoENRComponent,
     MetodologiaCalculoComponent,
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
