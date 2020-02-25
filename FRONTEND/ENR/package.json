@@ -28,6 +28,7 @@
     "datatables.net-dt": "^1.10.20",
     "fontawesome": "^5.6.3",
     "jquery": "^3.4.1",
+    "ngx-mask": "^8.1.7",
     "notie": "^4.3.1",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",

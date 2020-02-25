@@ -1,0 +1,142 @@
+<head>
+    <link rel="stylesheet" href="../../../assets/imagenes/animate.min.css">
+  </head>
+<div class="row" style="margin-left: 30px;margin-right: 30px;">
+  
+    <div class="col-md-6 animated fadeInRight">  
+        <form [formGroup]='frm_NIS'>
+            <label>
+                <img class="img-profile" src="../../../assets/imagenes/html.png" width=25 height=25>
+                Ingrese el N° de Suministro
+            </label>
+            <input type="text" class="form-control" placeholder="Digíte el NIS a evaluar"
+            formControlName="nis" name="nis" autocomplete="off" mask="0000000"> 
+        </form>
+                     
+    </div>
+    <div class="col-md-3 animated fadeInLeft">  
+        
+          <button type="submit" [disabled] = "frm_NIS.invalid" (click)="obtenerDatos()"
+           class="btn btn-success" style="margin-top: 35px;"> <i class="fa fa-search"></i> Buscar</button>    
+    </div>
+
+    <div class="col-md-3 animated fadeInLeft" >
+        <label>
+            <i class="fa fa-laptop-code"></i>
+           Caso N°
+        </label>
+        <input type="text" class="form-control" style="width:50%;text-align: center;" readonly="true" value="1">
+    </div>
+    
+    
+</div><br>
+
+<hr style="background-color: #A84DF4 !important;height: 2px;">
+<div class="row animated fadeInDown" style="margin-left: 30px;margin-top: 25px;margin-right: 30px;" 
+*ngFor="let dat  of datos">
+    <div class="col-lg-12">
+        <h4 style="color: #A84DF4;">
+            <img class="img-profile" src="../../../assets/imagenes/result.png" width=30 height=30
+            style="margin-bottom: 5px;">
+            Datos obtenidos
+        </h4>
+    </div>
+
+
+    <form [formGroup]='frm_DatosNIS'>
+        <div class="row" style="margin-left: 10px;margin-right: 30px;" >
+            <div class="col-md-6">
+                <label><i class="fa fa-user"></i> Usuario</label>          
+                <input type="text" class="form-control"  placeholder="Usuario" readonly="true"
+                formControlName="usuario" name="usuario" value="{{dat.usuario}}">         
+            </div>
+            <div class="col-md-6">
+                <label><i class="fa fa-address-card"></i> Dirección</label>
+                <textarea rows="3" class="form-control"  placeholder="Dirección" readonly="true"
+                formControlName="direccion" name="direccion" value="{{dat.direccion}}"></textarea>     
+            </div>
+            <div class="col-md-6"><br>
+                <label><i class="fa fa-home"></i> Municipio</label>          
+                <input type="text" class="form-control"  placeholder="Municipio" readonly="true"
+                formControlName="municipio" name="municipio" value="{{dat.municipio}}">         
+            </div>
+            <div class="col-md-6"><br>
+                <label><i class="fa fa-home"></i> Colonia</label>
+                <input type="text" class="form-control"  placeholder="Colonia" readonly="true"
+                formControlName="colonia" name="colonia" value="{{dat.colonia}}">    
+            </div>
+            <div class="col-md-4"><br>
+                <label><i class="fa fa-network-wired"></i> Red Eléctrica asociada</label>          
+                <input type="text" class="form-control"  placeholder="Red Eléctrica asociada" 
+                formControlName="red" name="red" readonly="true">         
+            </div>
+            <div class="col-md-4"><br>
+                <label><i class="fa fa-bolt"></i> Trafo</label>          
+                <input type="text" class="form-control"  placeholder="Red Eléctrica asociada" 
+                formControlName="red" name="red" readonly="true" value="{{dat.trafo}}">         
+            </div>
+            <div class="col-md-4"><br>
+                <label><i class="fa fa-project-diagram"></i> N° de Medidor</label>
+                <input type="text" class="form-control"  placeholder="N° de Medidor" formControlName="medidor" name="medidor"
+                readonly="true" value="{{dat.medidor}}">    
+            </div>
+        </div>
+        
+    </form>
+    
+    
+    <div class="col-lg-12">
+        <hr style="background-color: #D1D104 !important; height: 2px;">
+        <h4 style="color: #D1D104;">
+            <img class="img-profile" src="../../../assets/imagenes/search.png" width=30 height=30
+            style="margin-bottom: 5px;">
+            Documentación probatoria del caso
+        </h4>
+        <form [formGroup]="productForm">
+            <a (click)="addDoc()" class="btn btn-warning btn-sm" style="float: right;
+            font-weight: bold;color:black;background-color: #D1D104;"><i class="fa fa-plus"></i> Nuevo</a>
+            <br>
+            <table class="table small mt-3">
+                <thead class="thead-dark">
+                    <tr >
+                        <th style="background-color:#323259; color:#B0B005;font-size: 16;
+                        border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center">Título</th>
+                        <th style="background-color:#323259; color:#B0B005;font-size: 16px;
+                        border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center">Tipo de prueba</th>
+                        <th style="background-color:#323259; color:#B0B005;font-size: 16px;
+                        border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center">Archivo</th>
+                        <th style="background-color:#323259; color:#B0B005;font-size: 16px;
+                        border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center"></th>
+                    </tr>
+                </thead>
+                <tbody  formArrayName="documentacion"
+                style="background-color:#222245; color:white;text-align: center;font-size: 15px;">
+                    <tr *ngFor="let item of documentos.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                        <td style="border-bottom: 1px solid white;"><textarea 
+                            formControlName="nombreDoc"
+                            name="tituloDoc"  rows="2" class="form-control" placeholder="Titulo del documento"></textarea></td>
+                        <td style="border-bottom: 1px solid white;">
+                            <select class="form-control" name="tipoPrueba" formControlName="tipoPrueba">
+                            <option value="1">Seleccione</option>
+                            <option value="Fotografía">Fotografía</option>
+                            <option value="Documento">Documento</option>
+                            <option value="Otro">Otro</option>
+                        </select></td>
+                        <td style="border-bottom: 1px solid white;">
+                            <input class="form-control" type="file" formControlName="archivo"
+                            style="height: 45px;"></td>
+                        <td style="border-bottom: 1px solid white;">
+                            <a class="btn btn-danger btn-sm" (click)="deleteDoc(pointIndex)"><i class="fa fa-trash"></i></a> </td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </form>
+        
+    </div>
+</div>   
+
+    
+   
+
+

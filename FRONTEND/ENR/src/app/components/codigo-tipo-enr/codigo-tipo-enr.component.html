@@ -30,7 +30,7 @@ margin-left: 20px;border: 1px solid white;">
           <div class="row mt-2">
           <div class="col-lg-10" style="background-color: #1B1B38;color: white;
           text-align: center;font-size: 25px;color:#A16EFF;font-weight: bold;">
-            <img class="img-profile" src="../../../assets/imagenes/work.png" width=35 height=35
+            <img class="img-profile" src="../../../assets/imagenes/identification.png" width=35 height=35
             style="margin-bottom: 5px;">
             Códigos tipo de ENR
           </div>
@@ -81,7 +81,7 @@ margin-left: 20px;border: 1px solid white;">
                     <button type="button" class="btn btn-secondary pull-right" (click)="ocultarDivAgregarCode()">
                       <i class="fas fa-times-circle"></i>  Cancelar
                     </button>
-                    <button type="button" class="btn btn-default save pull-right" (click)="saveCodigoENR()">
+                    <button type="submit" [disabled] = "frm_codigoENR.invalid" class="btn btn-default save pull-right" (click)="saveCodigoENR()">
                       <i class="fas fa-save"></i>  Guardar
                     </button>
                   </div>

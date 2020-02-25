@@ -126,4 +126,31 @@ class ENRController extends Controller
 
     }
 
+    public function getDatosbyNIS(Request $request)
+    {
+        $nis = $request["nis"];
+
+        $getDatos =  DB::connection('facturacion')->select("
+        select distinct cli.nombres+ ' '+cli.apellidos as usuario,
+        fes.anexo_direccion as direccion,feMun.nombre_municipio as municipio,
+        feCol.nombre_colonia as colonia,'' as red, feTran.codigo_trafo as trafo,
+        feApa.numero_medidor as medidor from fe_suministros fes
+        inner join fe_cliente as cli on cli.CODIGO_CLIENTE = fes.CODIGO_CLIENTE
+        inner join fe_departamentos as feDep on feDep.codigo_departamento = fes.codigo_departamento         
+        inner join fe_municipios as feMun on feMun.codigo_municipio = fes.codigo_municipio
+        and feMun.codigo_departamento = feDep.codigo_departamento
+        inner join fe_colonias feCol on feCol.codigo_colonia = fes.codigo_colonia
+        and feCol.codigo_departamento = fes.codigo_departamento
+        and feCol.codigo_municipio = fes.codigo_municipio
+        and feCol.codigo_poblacion = fes.codigo_poblacion
+        inner join fe_aparatos feApa on feApa.num_suministro = fes.num_suministro
+        inner join EDESAL_CALIDAD.dbo.ens_transformadores as feTran on feTran.codigo_trafo = feApa.codigo_elemento
+        where (feApa.bandera_activo = 1) and (fes.estado = 'A')
+        and (fes.num_suministro = ?)",[$nis]);
+
+
+        return response()->json($getDatos);
+
+    }
+
 }

@@ -58,7 +58,7 @@
                   <button type="button" class="btn btn-secondary pull-right" (click)="ocultarDivAgregarMet()">
                     <i class="fas fa-times-circle"></i>  Cancelar
                   </button>
-                  <button type="button" class="btn btn-default save pull-right" (click)="saveMetodologiaCalc()">
+                  <button type="submit" [disabled] = "frmMetodologiaCalc.invalid" class="btn btn-default save pull-right" (click)="saveMetodologiaCalc()">
                     <i class="fas fa-save"></i>  Guardar
                   </button>
                 </div>

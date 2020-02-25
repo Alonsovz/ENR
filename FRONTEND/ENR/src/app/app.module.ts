@@ -11,6 +11,9 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CodigoTipoENRComponent } from './components/codigo-tipo-enr/codigo-tipo-enr.component';
 import { MetodologiaCalculoComponent } from './components/metodologia-calculo/metodologia-calculo.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DatosENRComponent } from './components/datos-enr/datos-enr.component';
+import { NgxMaskModule } from 'ngx-mask'
+
 
 @NgModule({
   declarations: [
@@ -21,13 +24,14 @@ import { ReactiveFormsModule } from '@angular/forms';
     DashboardComponent,
     CodigoTipoENRComponent,
     MetodologiaCalculoComponent,
+    DatosENRComponent,
     
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    
+    NgxMaskModule.forRoot(),
     ReactiveFormsModule,
   ],
   providers: [],

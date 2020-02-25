@@ -12,7 +12,7 @@ export class MetodologiaCalcService {
 
   constructor(private http: HttpClient, private url: GlobalService) { }
 
-  // obtener los reclamos filtrado por FE y OC
+  
   public getMetodologiaCalc(): Observable<metodologia[]> {
     return this.http.get(this.url.getUrlBackEnd() +'getMetodologiaCalc').pipe(map(data => data as metodologia[]));
   }

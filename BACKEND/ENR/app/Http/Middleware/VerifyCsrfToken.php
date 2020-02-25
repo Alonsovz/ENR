@@ -25,5 +25,6 @@ class VerifyCsrfToken extends BaseVerifier
         'saveMetodologia',
         'updateMetodologia',
         'deleteMetodologia',
+        'getDatosbyNIS',
     ];
 }

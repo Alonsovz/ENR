@@ -21,10 +21,14 @@ Route::get('/', function () {
     Route::any('getCodigoENR', 'ENRController@getCodigoENR');
 
     Route::any('getMetodologiaCalc', 'ENRController@getMetodologiaCalc');
+
     Route::post('saveCodigoENR', 'ENRController@saveCodigos');
     Route::post('updateCodigoENR', 'ENRController@updateCodigos');
     Route::post('deleteCodigoENR', 'ENRController@deleteCodigos');
     Route::post('saveMetodologia', 'ENRController@saveMetodologia');
     Route::post('updateMetodologia', 'ENRController@updateMetodologia');
     Route::post('deleteMetodologia', 'ENRController@deleteMetodologia');
+
+
+    Route::post('getDatosbyNIS', 'ENRController@getDatosbyNIS');
     

@@ -1,0 +1,19 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { GlobalService } from './global.service';
+import { map } from 'rxjs/operators';
+import { DatosENR } from '../models/datos-enr';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DatosENRService {
+
+  constructor(private http: HttpClient, private url: GlobalService) { }
+
+  public getDatosbyNIS(nis): Observable<DatosENR[]> {
+    //console.log(nis);
+    return this.http.post<DatosENR[]>(this.url.getUrlBackEnd() + 'getDatosbyNIS', nis).pipe(map(data => data as DatosENR[]));
+  }
+}

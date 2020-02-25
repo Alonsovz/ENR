@@ -1,0 +1,19 @@
+label{
+    color: white !important;
+    text-align: center !important;
+  }
+
+
+  .form-control:focus{
+    border: 2px solid #CEABFD !important;
+    background-color: #222245 !important;
+   } 
+
+  .form-control{
+    background-color: #1B1B38 !important;
+    color: #D4BEFB !important;
+  }
+
+  .alignright{
+      float: right !important;
+  }
