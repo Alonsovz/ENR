@@ -31,4 +31,9 @@ Route::get('/', function () {
 
 
     Route::post('getDatosbyNIS', 'ENRController@getDatosbyNIS');
+    Route::post('getOrdenesbyNIS', 'ENRController@getOrdenesbyNIS');
     
+    Route::post('getDiasRetroactivos', 'ENRController@getDiasRetroactivos');
+
+    
+    Route::post('saveDatosNISGenerales', 'ENRController@saveDatosNISGenerales');

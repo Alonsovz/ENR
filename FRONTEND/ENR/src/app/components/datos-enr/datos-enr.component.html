@@ -1,42 +1,31 @@
 <head>
     <link rel="stylesheet" href="../../../assets/imagenes/animate.min.css">
+    
   </head>
 <div class="row" style="margin-left: 30px;margin-right: 30px;">
-  
     <div class="col-md-6 animated fadeInRight">  
         <form [formGroup]='frm_NIS'>
             <label>
-                <img class="img-profile" src="../../../assets/imagenes/html.png" width=25 height=25>
+                <img class="img-profile" src="../../../assets/imagenes/html.png">
                 Ingrese el N° de Suministro
             </label>
             <input type="text" class="form-control" placeholder="Digíte el NIS a evaluar"
             formControlName="nis" name="nis" autocomplete="off" mask="0000000"> 
-        </form>
-                     
+        </form>           
     </div>
     <div class="col-md-3 animated fadeInLeft">  
-        
           <button type="submit" [disabled] = "frm_NIS.invalid" (click)="obtenerDatos()"
-           class="btn btn-success" style="margin-top: 35px;"> <i class="fa fa-search"></i> Buscar</button>    
+           class="btn btn-success" style="margin-top: 40px;"> <i class="fa fa-search"></i> Buscar</button>    
     </div>
+</div>
 
-    <div class="col-md-3 animated fadeInLeft" >
-        <label>
-            <i class="fa fa-laptop-code"></i>
-           Caso N°
-        </label>
-        <input type="text" class="form-control" style="width:50%;text-align: center;" readonly="true" value="1">
-    </div>
-    
-    
-</div><br>
-
-<hr style="background-color: #A84DF4 !important;height: 2px;">
-<div class="row animated fadeInDown" style="margin-left: 30px;margin-top: 25px;margin-right: 30px;" 
+<div class="row animated fadeInDown" id="data" style="margin-left: 30px;margin-top: 25px;margin-right: 30px;" 
 *ngFor="let dat  of datos">
     <div class="col-lg-12">
+        <hr style="background-color: #A84DF4 !important;height: 2px;">
+
         <h4 style="color: #A84DF4;">
-            <img class="img-profile" src="../../../assets/imagenes/result.png" width=30 height=30
+            <img class="img-profile" src="../../../assets/imagenes/result.png"
             style="margin-bottom: 5px;">
             Datos obtenidos
         </h4>
@@ -48,63 +37,212 @@
             <div class="col-md-6">
                 <label><i class="fa fa-user"></i> Usuario</label>          
                 <input type="text" class="form-control"  placeholder="Usuario" readonly="true"
-                formControlName="usuario" name="usuario" value="{{dat.usuario}}">         
+                formControlName="usuario" name="usuario" [(ngModel)]="dat.usuario">    
+                <input type="hidden" class="form-control"  placeholder="Usuario" readonly="true"
+                formControlName="num_suministro" name="num_suministro" [(ngModel)]="dat.num_suministro">     
             </div>
             <div class="col-md-6">
                 <label><i class="fa fa-address-card"></i> Dirección</label>
                 <textarea rows="3" class="form-control"  placeholder="Dirección" readonly="true"
-                formControlName="direccion" name="direccion" value="{{dat.direccion}}"></textarea>     
+                formControlName="direccion" name="direccion" [(ngModel)]="dat.direccion"></textarea>     
             </div>
             <div class="col-md-6"><br>
                 <label><i class="fa fa-home"></i> Municipio</label>          
                 <input type="text" class="form-control"  placeholder="Municipio" readonly="true"
-                formControlName="municipio" name="municipio" value="{{dat.municipio}}">         
+                formControlName="municipio" name="municipio" [(ngModel)]="dat.municipio">         
             </div>
             <div class="col-md-6"><br>
                 <label><i class="fa fa-home"></i> Colonia</label>
                 <input type="text" class="form-control"  placeholder="Colonia" readonly="true"
-                formControlName="colonia" name="colonia" value="{{dat.colonia}}">    
+                formControlName="colonia" name="colonia" [(ngModel)]="dat.colonia">    
             </div>
             <div class="col-md-4"><br>
                 <label><i class="fa fa-network-wired"></i> Red Eléctrica asociada</label>          
                 <input type="text" class="form-control"  placeholder="Red Eléctrica asociada" 
-                formControlName="red" name="red" readonly="true">         
+                formControlName="red_electrica" name="red_electrica" readonly="true" [(ngModel)]="dat.red_electrica">         
             </div>
             <div class="col-md-4"><br>
                 <label><i class="fa fa-bolt"></i> Trafo</label>          
-                <input type="text" class="form-control"  placeholder="Red Eléctrica asociada" 
-                formControlName="red" name="red" readonly="true" value="{{dat.trafo}}">         
+                <input type="text" class="form-control"  placeholder="Trafo" 
+                formControlName="trafo" name="trafo" readonly="true" [(ngModel)]="dat.trafo">         
             </div>
             <div class="col-md-4"><br>
                 <label><i class="fa fa-project-diagram"></i> N° de Medidor</label>
                 <input type="text" class="form-control"  placeholder="N° de Medidor" formControlName="medidor" name="medidor"
-                readonly="true" value="{{dat.medidor}}">    
+                readonly="true" [(ngModel)]="dat.medidor">    
+            </div>
+            <div class="col-lg-12"><br><br>
+                <hr style="background-color: #51F749 !important; height: 2px;">
+                <h4 style="color: #51F749;">
+                    <img class="img-profile" src="../../../assets/imagenes/order.png"
+                    style="margin-bottom: 5px;">
+                    Órdenes técnicas asociadas al suministro
+                </h4>
+            </div>
+            <div class="col-md-12" style="max-height: 300px; overflow-y: auto;
+            overflow-x: auto;
+            margin-top: 25px;">
+                <table  id="ordenesTbl" class="table small mt-5" style="width: 99%;
+                margin:auto">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th style="background-color:#323259; color:#51F749;"
+                        class="text-center">N° Orden</th>
+                        <th style="background-color:#323259; color:#51F749;"
+                        class="text-center">Tipo Orden</th>
+                       
+                        <th style="background-color:#323259; color:#51F749;"
+                         class="text-center">Usuario Asignado</th>
+                        <th style="background-color:#323259; color:#51F749;"
+                         class="text-center">Fecha de asignación</th>
+                        <th style="background-color:#323259; color:#51F749;"
+                         class="text-center">Descripción</th>
+                         <th style="background-color:#323259; color:#51F749;"
+                         class="text-center">Usuario resolución</th>
+                         <th style="background-color:#323259; color:#51F749;"
+                         class="text-center">Fecha de resolución</th>
+                         <th style="background-color:#323259; color:#51F749;"
+                         class="text-center"></th>
+                    </tr>
+                    </thead>
+                    <tbody style="background-color:#323259; color:white;text-align: center;font-size: 15px;">
+                      <tr *ngFor="let orden  of ordenes">                        
+                       <td>{{orden.orden}}</td>
+                       <td style="width: 50%;">{{orden.tipo}}</td>
+                       <td>{{orden.asignado}}</td>
+                       <td>{{orden.fechaAsig}}</td>
+                       <td style="width: 50%;">
+                            <div style="width:100%; max-height:60px; overflow:auto">
+                                {{orden.descripcion}}
+                            </div>
+                        </td>
+                        <td>{{orden.resolucion}}</td>
+                       <td>{{orden.fechaRes}}</td>
+                       <td>
+                           <button class="btn btn-success btn-circle" style="background-color: #51F749;
+                           color:black" data-toggle="modal" data-target="#adjuntarArchivosOrden"
+                           (click)="modalAdjuntar(orden)">
+                                <i class="fa fa-paperclip"></i>
+                           </button>
+                       </td>
+                      
+                        </tr>
+                    </tbody>
+                  </table>
+                 
+
+             
+            </div>
+          
+            
+            <div class="col-lg-12"><br><br>
+                <hr style="background-color: #49F7DD !important; height: 2px;">
+                <h4 style="color: #49F7DD;">
+                    <img class="img-profile" src="../../../assets/imagenes/cost.png"
+                    style="margin-bottom: 5px;">
+                    Generales Cálculo ENR
+                </h4>
+            </div>
+              
+            <div class="col-md-6"><br>
+                <label><i class="fa fa-barcode"></i> Número de Notificación ENR</label>          
+                <input type="text" class="form-control"  placeholder="Número de Notificación ENR"
+                formControlName="nNotificacion">
+            </div>
+            <div class="col-md-6"><br>
+                <label><i class="fa fa-file"></i> Adjunto: Scan de notificacion inicial</label>          
+                <input type="file" class="form-control" style="height: 45px;" formControlName="adScanNoti">
+           
+            </div>
+            <div class="col-md-6"><br>
+                <label><i class="fa fa-calendar"></i> Fecha de primera notificación </label>          
+                <input type="date" class="form-control"  formControlName="fechaPrimeraNoti">
+           
+            </div>
+            <div class="col-md-6"><br>
+                <label><i class="fa fa-calendar"></i> Fecha de Regularización</label>          
+                <input type="date" (change)="asigFechaFin()" class="form-control" formControlName="fechaRegular">
+           
+            </div>
+            
+           
+            
+            <div class="col-md-5"><br>
+                <label><i class="fa fa-archive"></i> Tipo de Caso ENR</label>          
+                <select (change)="asigDias()" class="form-control" formControlName="codTipoENR">
+                    <option value="0" set selected> Seleccione una opción</option>
+                    <option *ngFor="let codENR of codigosENR"  value="{{codENR.id}}">
+                        {{codENR.codigoTipo}} -- {{codENR.TipoENR}}
+                    </option>
+                </select>         
+            </div>
+            
+            <div class="col-md-2" id="diasData"><br> 
+                <div  *ngFor="let dia  of dias">
+                    <label><i class="fa fa-calendar"></i> Tiempo Retroactivo</label>
+                    <input type="text" readonly="true" formControlName="diasRetroactivos" class="form-control" [(ngModel)]="dia.diasRetro">
+                </div>              
+            </div>
+            <div class="col-md-5"><br>
+                <label><i class="fa fa-archive"></i> Tipo de Cálculo de metodología ENR</label>          
+                <select class="form-control" formControlName="codTipoMetENR">
+                    <option value="0" set selected> Seleccione una opción</option>
+                    <option *ngFor="let codMetENR of codigosMetENR" value="{{codMetENR.id}}">
+                        {{codMetENR.codigo}} -- {{codMetENR.TipoENR}}
+                    </option>
+                </select>
+           
+            </div>
+
+            <div class="col-md-4"><br>
+                <label><i class="fa fa-calendar"></i> Fecha de Inicio</label>
+                <input type="date" (change)="validarFechaInicio()" class="form-control" formControlName="fechaInicioENR">
+            </div>
+            <div class="col-md-4"><br>
+                <label><i class="fa fa-calendar"></i> Fecha Fin (Limite es fecha regularización)</label>
+                <input type="date" (change)="validarFechas()" disabled="true" 
+                id="fechaf" class="form-control" formControlName="fechaFinENR">
+            </div>
+            <div class="col-md-4"><br>
+                <label><i class="fa fa-money-check-alt"></i> Días de Cobro ENR</label>
+                <input type="text" placeholder="Días de Cobro ENR"
+                class="form-control" formControlName="diasCobro" readonly="true">
             </div>
         </div>
-        
     </form>
     
-    
-    <div class="col-lg-12">
+
+
+
+    <div class="col-lg-12"><br><br>
         <hr style="background-color: #D1D104 !important; height: 2px;">
         <h4 style="color: #D1D104;">
-            <img class="img-profile" src="../../../assets/imagenes/search.png" width=30 height=30
+            <img class="img-profile" src="../../../assets/imagenes/search.png"
             style="margin-bottom: 5px;">
             Documentación probatoria del caso
         </h4>
-        <form [formGroup]="productForm">
+        <form [formGroup]="docForm">
             <a (click)="addDoc()" class="btn btn-warning btn-sm" style="float: right;
             font-weight: bold;color:black;background-color: #D1D104;"><i class="fa fa-plus"></i> Nuevo</a>
             <br>
             <table class="table small mt-3">
                 <thead class="thead-dark">
                     <tr >
-                        <th style="background-color:#323259; color:#B0B005;font-size: 16;
-                        border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center">Título</th>
                         <th style="background-color:#323259; color:#B0B005;font-size: 16px;
-                        border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center">Tipo de prueba</th>
+                        border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center">
+                            <label class="fa fa-pen" style="color:#B0B005 !important;"></label>
+                            Título
+                        </th>
                         <th style="background-color:#323259; color:#B0B005;font-size: 16px;
-                        border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center">Archivo</th>
+                        border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center">
+                            <label class="fa fa-archive" style="color:#B0B005 !important;"></label>
+                            Tipo de prueba
+                        </th>
+                        <th style="background-color:#323259; color:#B0B005;font-size: 16px;
+                        border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center">
+                            <label class="fa fa-file" style="color:#B0B005 !important;"></label>
+                            Archivo
+                        </th>
                         <th style="background-color:#323259; color:#B0B005;font-size: 16px;
                         border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center"></th>
                     </tr>
@@ -132,11 +270,163 @@
                 </tbody>
             </table>
         </form>
-        
+    <br><br>
+    <hr style="background-color: #3AF415 !important; height: 2px;">
+    <button class="btn btn-success btn-block" style="font-weight: bold !important;"
+    data-toggle="modal" data-target="#guardarDatosConfirm">
+       <i class="fas fa-save"></i> Guardar Todo
+    </button>
+
+    <button class="btn btn-secondary btn-block" style="font-weight: bold !important;"
+   data-toggle="modal" data-target="#cancelarGuardadoModal">
+        <i class="fas fa-times"></i> Cancelar
+    </button>
     </div>
+    
+
+
+
+
+
+    
+  
 </div>   
+<div class="modal animated flipInY" data-backdrop="static" data-keyboard="false" 
+tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
+    <div class="modal-dialog mw-100 w-75" >
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <img class="img-profile" src="../../../assets/imagenes/attach.png" width=45 height=45>
+            Adjuntar archivos a la orden : <a style="color: #51F749;">{{ordenNumero.orden}}</a> 
+            || Tipo de Orden : <a style="color: #51F749;">{{ordenNumero.tipo}}</a>
+        </h5>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="adjuntoOrdenesForm">
+                <a (click)="addDocOrden()" class="btn btn-info btn-sm" style="float: right;
+                font-weight: bold;color:black;background-color: #51F749;"><i class="fa fa-plus"></i> Nuevo</a>
+                <br>
+                <table class="table small mt-3">
+                    <thead class="thead-dark">
+                        <tr >
+                            <th style="background-color:#323259; color:#51F749;font-size: 16px;
+                            border-bottom: 2px solid #51F749;font-weight: bold;" class="text-center">
+                                <label class="fa fa-pen" style="color:#51F749 !important;"></label>
+                                Título
+                            </th>
+                            <th style="background-color:#323259; color:#51F749;font-size: 16px;
+                        border-bottom: 2px solid #51F749;font-weight: bold;" class="text-center">
+                            <label class="fa fa-archive" style="color:#51F749 !important;"></label>
+                            Tipo de adjunto
+                        </th>
+                            <th style="background-color:#323259; color:#51F749;font-size: 16px;
+                            border-bottom: 2px solid #51F749;font-weight: bold;" class="text-center">
+                                <label class="fa fa-file" style="color:#51F749 !important;"></label>
+                                Archivo
+                            </th>
+                            <th style="background-color:#323259; color:#51F749;font-size: 16px;
+                            border-bottom: 2px solid #51F749;font-weight: bold;" class="text-center"></th>
+                        </tr>
+                    </thead>
+                    <tbody  formArrayName="documentacionOrden"
+                    style="background-color:#222245; color:white;text-align: center;font-size: 15px;">
+                       
+                    <tr *ngFor="let item of adjuntos.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                        <td style="border-bottom: 1px solid white;"><textarea 
+                            formControlName="nombreDocOrden"
+                             rows="2" class="form-control" placeholder="Titulo del documento"></textarea></td>
+                             <td style="border-bottom: 1px solid white;">
+                                <select class="form-control" name="tipoAdjuntoOrden" formControlName="tipoAdjuntoOrden">
+                                <option value="1">Seleccione</option>
+                                <option value="Visita Inspección Técnica">Visita Inspección Técnica</option>
+                                <option value="Cambio de Medidor">Cambio de Medidor</option>
+                                <option value="Verificación de Lectura">Verificación de Lectura</option>
+                            </select></td>
+                        <td style="border-bottom: 1px solid white;">
+                            <input class="form-control" type="file" formControlName="archivoOrden"
+                            style="height: 45px;"></td>
+                        <td style="border-bottom: 1px solid white;">
+                            <a class="btn btn-danger btn-sm" (click)="deleteDocOrden(pointIndex)"><i class="fa fa-trash"></i></a> </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            <i class="fas fa-times-circle"></i>  Cerrar
+          </button>
+          <button type="button" class="btn btn-default save" data-dismiss="modal">
+            <i class="fas fa-paperclip"></i>  Adjuntar
+          </button>
+          
+        </div>
+      </div>
+    </div>
+</div>
 
     
    
 
 
+<div class="modal animated fadeInUp" id="cancelarGuardadoModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="title" style="color:#0CD902 !important;">
+            <img class="img-profile" src="../../../assets/imagenes/confirm.png" width=35 height=35>
+            Confirmación
+          </h5>
+          
+        </div>
+        <div class="modal-body">
+         
+          <h4 style="text-align: center;color: #67E1E1;">¿Desea cancelar el proceso de guardado?</h4>
+          <h5 style="text-align: center;color: #FC0505;">¡La información no guardada se perderá!</h5>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal">
+            <i class="fas fa-times-circle"></i>  No!
+          </button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="cancelarGuardado()">
+            <i class="fas fa-thumbs-up"></i>  Si, cancelar!
+          </button>
+          
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="modal animated fadeInDown" id="guardarDatosConfirm" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="title" style="color:#0CD902 !important;">
+            <img class="img-profile" src="../../../assets/imagenes/confirm.png" width=35 height=35>
+            Confirmación
+          </h5>
+          
+        </div>
+        <div class="modal-body">
+         
+          <h4 style="text-align: center;color: #67E1E1;">¿Desea guardar el caso ENR?</h4>
+        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal">
+            <i class="fas fa-times-circle"></i>  No!
+          </button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal"  (click)="guardarDatos()">
+            <i class="fas fa-thumbs-up"></i>  Si, guardar!
+          </button>
+          
+          
+        </div>
+      </div>
+    </div>
+  </div>

@@ -12,8 +12,7 @@ import { CodigoTipoENRComponent } from './components/codigo-tipo-enr/codigo-tipo
 import { MetodologiaCalculoComponent } from './components/metodologia-calculo/metodologia-calculo.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DatosENRComponent } from './components/datos-enr/datos-enr.component';
-import { NgxMaskModule } from 'ngx-mask'
-
+import { NgxMaskModule } from 'ngx-mask';
 
 @NgModule({
   declarations: [
@@ -33,8 +32,11 @@ import { NgxMaskModule } from 'ngx-mask'
     HttpClientModule,
     NgxMaskModule.forRoot(),
     ReactiveFormsModule,
+
   ],
-  providers: [],
+  providers: [
+    
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

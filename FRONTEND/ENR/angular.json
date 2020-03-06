@@ -34,6 +34,8 @@
               
               "../ENR/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css",
               "../ENR/node_modules/notie/dist/notie.css",
+              
+              "../ENR/node_modules/ng-pick-datetime/assets/style/picker.min.css"
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.js",

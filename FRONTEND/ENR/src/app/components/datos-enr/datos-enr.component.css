@@ -1,3 +1,17 @@
+tbody tr{
+
+  color: #fff !important;
+}
+tbody tr:nth-child(odd){
+  background-color: #30304D;
+  color: #fff !important;
+}
+
+tbody tr:hover{
+  background-color: #1B1B38 !important;
+  color: #D4BEFB !important;
+}
+
 label{
     color: white !important;
     text-align: center !important;
@@ -17,3 +31,41 @@ label{
   .alignright{
       float: right !important;
   }
+
+
+  .btn-circle {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.42857;
+}
+
+
+.modal-header{
+  background-color: #3E3E5B !important;
+  color: #B18AFF !important;
+}
+
+.modal-footer{
+  background-color: #3E3E5B !important;
+  color: #D4BEFB !important;
+}
+
+.modal-body{
+  background-color: #1B1B38 !important;
+  
+ 
+}
+
+
+.save{
+  background-color: #A16EFF !important;
+  color: black !important;
+}
+
+.save:hover{
+  background-color: #8E61E9 !important;
+}

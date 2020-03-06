@@ -16,4 +16,19 @@ export class DatosENRService {
     //console.log(nis);
     return this.http.post<DatosENR[]>(this.url.getUrlBackEnd() + 'getDatosbyNIS', nis).pipe(map(data => data as DatosENR[]));
   }
+
+
+  public getOrdenesbyNIS(nis): Observable<DatosENR[]> {
+    //console.log(nis);
+    return this.http.post<DatosENR[]>(this.url.getUrlBackEnd() + 'getOrdenesbyNIS', nis).pipe(map(data => data as DatosENR[]));
+  }
+
+  public getDiasRetroactivos(codigo) : Observable<DatosENR[]>{
+    return this.http.post<DatosENR[]>(this.url.getUrlBackEnd() + 'getDiasRetroactivos', codigo).pipe(map(data => data as DatosENR[]));
+  }
+
+  public saveDatosNISGenerales(datos: DatosENR): Observable<DatosENR> {
+    console.log(datos);
+    return this.http.post<DatosENR>(this.url.getUrlBackEnd() + 'saveDatosNISGenerales', datos).pipe(map(data => data as DatosENR));
+  }
 }
