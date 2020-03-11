@@ -14,26 +14,9 @@ tbody tr{
   }
 
 
-
-  .modal-header{
-    background-color: #1B1B38 !important;
-    color: #B18AFF !important;
-  }
-
-  .modal-footer{
-    background-color: #1B1B38 !important;
-    color: #D4BEFB !important;
-  }
-
-  .modal-body{
-    background-color: #30304D !important;
-  }
-
- 
   label{
     color: white !important;
     text-align: center !important;
-    font-size: 13px;
   }
 
   .form-control:focus{
@@ -43,7 +26,6 @@ tbody tr{
   .form-control{
     background-color: #1B1B38 !important;
     color: #D4BEFB !important;
-    font-size: 13px;
   }
 
   .modal-content{
@@ -61,22 +43,6 @@ tbody tr{
   }
 
 
-  .eliminarModal{
-    text-align: center !important;
-    font-size: 18px !important;
-    color: #D4BEFB !important;
-  }
-
-  .title{
-    margin-left: 25px !important;
-  }
-
-  .pull-right{
-    float:right;
-  }
-
-
-
   .btn-circle {
     width: 30px;
     height: 30px;
@@ -87,20 +53,24 @@ tbody tr{
     line-height: 1.42857;
 }
 
-.add{
-  background-color: #530892 !important;
-  color: white !important;
-  height: 100% !important;
-  border: 1px solid #9B6AFC !important;
-}
-
-.alertImg{
-  width:35px;
-  height:35px;
-  margin-bottom: 5px;
+.btn2{
+    background-color: #5C26C9 !important;
+    color: white !important;
 }
 
 
-.btn{
-  font-size: 13px;
+.btn2:hover{
+    background-color: #3E1393 !important;
+    color: white !important;
+}
+
+.btn1{
+    background-color: #329313 !important;
+    color: white !important;
+}
+
+
+.btn1:hover{
+    background-color: #1D6C04 !important;
+    color: white !important;
 }

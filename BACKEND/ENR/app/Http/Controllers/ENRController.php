@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Response as FacadeResponse;
+
+
+date_default_timezone_set("America/El_Salvador");
 
 class ENRController extends Controller
 {
@@ -167,7 +172,9 @@ class ENRController extends Controller
         convert(varchar(10), feOr.fecha_asignacion, 103) as fechaAsig,
         feOr.comentario as descripcion,
         feOr.usuario_resolucion as resolucion,
-        convert(varchar(10), feOr.fecha_resolucion, 103) as fechaRes
+        convert(varchar(10), feOr.fecha_resolucion, 103) as fechaRes,
+        (select count(id) from enr_documentacionOT where correlativoOrden =
+        feOr.numero_orden and idEliminado = 1) as adjuntos
         from EDESAL_CALIDAD.dbo.fe_calidad_reclamos_ordenes as feOr
         inner join EDESAL_CALIDAD.dbo.fe_calidad_tipo_ordentrabajo as fe
         on fe.codigo_tipo_ordentrabajo = feOr.codigo_tipo_ordentrabajo
@@ -227,7 +234,7 @@ class ENRController extends Controller
                         'num_suministro' => $num_suministro ,
                          'nNotiENR' => $nNotificacion,
                          'fechaPrimerNoti' => $fecha1Noti,
-                         'scanPrimerNoti' => $adScanNoti,
+                         'scanPrimerNoti' => substr($adScanNoti,12),
                          'fechaRegularizacion'=>$fecha2Regula,
                          'codigoTipoENR'=>$codTipoENR,
                          'codigoTipoMet'=>$codTipoMetENR,
@@ -236,7 +243,8 @@ class ENRController extends Controller
                          'diasCobro'=>$diasCobro,
                          'usuario_creacion'=>$usuario_creacion,
                          'estado'=>1,
-                         'idEliminado'=>2,
+                         'idEliminado'=>1,
+                         'fechaCreacion'=>date('Ymd H:i:s'),
                          ]);
 
 
@@ -244,4 +252,164 @@ class ENRController extends Controller
 
     }
 
+    public function saveDocProbatoria(Request $request){
+        $doc = json_encode($request["documentacion"]);
+
+        $documentacion = json_decode($doc);
+       
+        $contador = 0;
+        
+        $ultimoCaso = DB::connection('facturacion')->table('enr_DatosGenerales')
+        ->select('enr_DatosGenerales.id')->orderBy('enr_DatosGenerales.id','desc')->first();
+
+
+        foreach($documentacion as $docSave){
+            $insertar =  DB::connection('facturacion')->table('enr_Documentacion')
+                         ->insert([
+                        'idCasoENR' => $ultimoCaso->id ,
+                         'titulo' => $docSave->nombreDoc,
+                         'tipo' => $docSave->tipoPrueba,
+                         'ruta' => $docSave->archivo,
+                         'fechaCreacion'=>date('Ymd H:i:s'),
+                         ]);
+
+            $contador++;
+        }     
+            
+        
+       if($contador == count($documentacion)){
+        return response()->json("ok");
+       }
+       
+        
+    }
+
+
+    public function saveDocOT(Request $request){
+        $doc = json_encode($request["documentacionOrden"]);
+
+        $documentacion = json_decode($doc);
+       
+        $contador = 0;
+        $usuario_creacion = 151;
+
+      
+      
+        foreach($documentacion as $docSave){
+          $insertar =  DB::connection('facturacion')->table('enr_DocumentacionOT')
+                       ->insert([
+                      'correlativoOrden' => $docSave->ordenN ,
+                       'tipo' => $docSave->tipoAdjuntoOrden,
+                       'ruta' => $docSave->file,
+                       'fechaCreacion'=>date('Ymd H:i:s'),
+                       'titulo'=>$docSave->nombreDocOrden,
+                       'idEliminado'=>1,
+                       'usuarioCreacion'=>$usuario_creacion,
+                       ]);
+            $contador++;
+        }     
+        
+        
+       if($contador == count($documentacion)){
+        return response()->json("ok");
+       }
+       
+        
+    }
+
+
+    public function getRepositorioIngresados(){
+        $getDatos =  DB::connection('facturacion')->select("
+        select dg.id as caso, dg.num_suministro as usuario,
+        dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
+        convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
+        t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado from enr_datosGenerales dg
+        inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
+        inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
+        inner join comanda_db.dbo.users u on u.id = dg.usuario_creacion
+        where dg.idEliminado = 1 and dg.estado = 1
+        ");
+
+
+        return response()->json($getDatos);
+    }
+
+    public function getRepositorioCalculados(){
+        $getDatos =  DB::connection('facturacion')->select("
+        select dg.id as caso, dg.num_suministro as usuario,
+        dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
+        convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
+        t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado from enr_datosGenerales dg
+        inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
+        inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
+        inner join comanda_db.dbo.users u on u.id = dg.usuario_creacion
+        where dg.idEliminado = 1 and dg.estado = 2
+        ");
+
+
+        return response()->json($getDatos);
+    }
+
+
+    public function getRepositorioNotificados(){
+        $getDatos =  DB::connection('facturacion')->select("
+        select dg.id as caso, dg.num_suministro as usuario,
+        dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
+        convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
+        t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado from enr_datosGenerales dg
+        inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
+        inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
+        inner join comanda_db.dbo.users u on u.id = dg.usuario_creacion
+        where dg.idEliminado = 1 and dg.estado = 3
+        ");
+
+
+        return response()->json($getDatos);
+    }
+
+
+    public function moveDoc(Request $request){
+    
+      
+        $file = $request->file('file');
+
+        $nombreoriginal = $file->getClientOriginalName();
+        $file->move('files/',(string)$nombreoriginal);
+
+        return response()->json($nombreoriginal);
+      
+      
+
+    }
+
+
+    public function getAdjuntosOrdenes(Request $request){
+        $codigo = $request["orden"];
+
+        $getDatos =  DB::connection('facturacion')->select("
+        select d.titulo as titulo, d.tipo as tipo,
+        d.ruta as ruta,
+        convert(varchar(10),d.fechaCreacion,103) as fechaCreacion,
+        u.alias as creador,RIGHT(d.ruta,3) as ext
+        from enr_documentacionOT d
+        inner join comanda_db.dbo.users u on u.id = d.usuarioCreacion
+        where d.correlativoOrden = ?
+        ",[$codigo]);
+
+
+        return response()->json($getDatos);
+    }
+
+
+    public function descargarArchivo(Request $request){
+
+        $file = $request["ruta"];
+
+        if(file_exists(public_path('files/'.$file))){
+            return response()->download(public_path('files/'.$file));
+        }else{
+            return response()->json('Archivo no encontrado');
+        }
+        
+    }
 }

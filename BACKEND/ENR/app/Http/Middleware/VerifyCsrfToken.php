@@ -28,6 +28,14 @@ class VerifyCsrfToken extends BaseVerifier
         'getDatosbyNIS',
         'getOrdenesbyNIS',
         'getDiasRetroactivos',
-        'saveDatosNISGenerales'
+        'saveDatosNISGenerales',
+        'saveDocProbatoria',
+        'saveDocOT',
+        'moveDoc',
+        'getRepositorioIngresados',
+        'getRepositorioNotificados',
+        'getRepositorioCalculados',
+        'getAdjuntosOrdenes',
+        'descargarArchivo'
     ];
 }

@@ -1,0 +1,208 @@
+<head>
+    <link rel="stylesheet" href="../../../assets/imagenes/animate.min.css">
+</head>
+
+<div class="row animated fadeInLeft" style="margin-left: 30px;margin-right: 30px;
+background-color: #323259;">
+  <div class="center" style="margin: auto;">
+    <h3 style="color: #9AFB4D;">
+        <img class="img-profile" src="../../../assets/imagenes/folder.png"
+        style="margin-bottom: 5px;margin-top: 5px;" height=45>
+        Repositorio de Casos de ENR
+    </h3>
+  </div>
+</div>
+<br><br>
+
+    <ul class="nav nav-tabs animated fadeInRight" id="myTab" role="tablist" 
+    style="margin-right: 30px;
+    margin-left: 30px;">
+      <li class="nav-item">
+        <a class="nav-link active"  data-toggle="tab" href="#ingresados" role="tab" 
+        aria-controls="home" aria-selected="true" style="color:white;background-color: #1B1B38;">
+        <i class="fas fa-save"></i>
+        Ingresado
+         </a>
+      </li>
+      <li class="nav-item" style="border-bottom:1px solid white;">
+        <a class="nav-link"  data-toggle="tab" href="#calculados" role="tab"
+        aria-controls="profile" aria-selected="false" style="color:white;background-color: #1B1B38;">
+         <i class="fas fa-calculator"></i>
+            Calculado
+        </a>
+      </li>
+      <li class="nav-item" style="border-bottom:1px solid white;">
+        <a class="nav-link"  data-toggle="tab" href="#notificados" role="tab"
+        aria-controls="profile" aria-selected="false" style="color:white;background-color: #1B1B38;">
+         <i class="fas fa-bell"></i>
+            Notificado
+        </a>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="myTabContent" style="background-color: #323259;margin-right: 30px;
+    margin-left: 30px;border: 1px solid white;">
+        <div class="tab-pane fade show active" id="ingresados" role="tabpanel" aria-labelledby="">
+            <div class="row animated flipInX">
+                <div class="col-lg-2"></div>
+                    <div class="col-lg-8" style="background-color: #1B1B38;color: white;
+                    text-align: center;font-size: 25px;color:#4DFBE6;font-weight: bold;">
+                      <img class="img-profile" src="../../../assets/imagenes/homework.png"  height=35
+                      style="margin-bottom: 5px;">
+                      Casos Ingresados (Pendientes de Cálculo)
+                    </div>                   
+                <div class="col-lg-2"></div>
+
+            </div>
+            <div class="row mt-5 animated flipInX">
+                <div class="col-lg-1"></div>
+                <div class="col-lg-10">
+                    <table  id="tbl_Ingresados" class="table small mt-5" style="width: 100%;">
+                        <thead class="thead-dark">
+                          <tr>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">N° Caso</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">N° Suministro</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Cod. Tipo ENR</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Cod. Metodología ENR</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Dias de Cobro</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Fecha de Creación</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Usuario Creación</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody style="background-color:#323259; color:white;text-align: center;font-size: 13px;">
+                            <tr *ngFor="let rep  of repositorioIng">
+                               <td>{{rep.caso}}</td>
+                               <td>{{rep.usuario}}</td>
+                               <td>{{rep.codigoENR}}</td>
+                               <td>{{rep.metodologiaENR}}</td>
+                               <td>{{rep.diasCobrar}}</td>
+                               <td>{{rep.fechaCreacion}}</td>
+                               <td>{{rep.usuarioCreacion}}</td>
+                               <td>
+                                <button class="btn btn-default btn-circle btn1">
+                                    <i class="fas fa-edit"></i>
+                                 </button>
+                                     &nbsp;
+                                 <button class="btn btn-default btn-circle btn2">
+                                     <i class="fas fa-calculator"></i>
+                                 </button>
+                               </td>
+                            </tr>
+                        </tbody>
+                    </table><br><br>
+                </div>
+                <div class="col-lg-1"></div>
+            </div>         
+        </div>
+        <div class="tab-pane" id="calculados" role="tabpanel" aria-labelledby="">
+            <div class="row animated flipInX">
+                <div class="col-lg-2"></div>
+                    <div class="col-lg-8" style="background-color: #1B1B38;color: white;
+                    text-align: center;font-size: 25px;color:#4DFBE6;font-weight: bold;">
+                      <img class="img-profile" src="../../../assets/imagenes/moneyIn.png"  height=35
+                      style="margin-bottom: 5px;">
+                      Casos Calculados (Pendientes de Notificación)
+                    </div>                   
+                <div class="col-lg-2"></div>
+            </div>
+
+            <div class="row mt-5 animated flipInX">
+                <div class="col-lg-1"></div>
+                <div class="col-lg-10">
+                    <table  id="tbl_Calculados" class="table small mt-5" style="width: 100%;">
+                        <thead class="thead-dark">
+                          <tr>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">N° Caso</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">N° Suministro</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Cod. Tipo ENR</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Cod. Metodología ENR</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Dias de Cobro</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Fecha de Creación</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Usuario Creación</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody style="background-color:#323259; color:white;text-align: center;font-size: 13px;">
+                            <tr *ngFor="let rep  of repositorioCalc">
+                               <td>{{rep.caso}}</td>
+                               <td>{{rep.usuario}}</td>
+                               <td>{{rep.codigoENR}}</td>
+                               <td>{{rep.metodologiaENR}}</td>
+                               <td>{{rep.diasCobrar}}</td>
+                               <td>{{rep.fechaCreacion}}</td>
+                               <td>{{rep.usuarioCreacion}}</td>
+                               <td>
+                                    <button class="btn btn-default btn-circle btn1">
+                                       <i class="fas fa-edit"></i>
+                                    </button>
+                                        &nbsp;
+                                    <button class="btn btn-default btn-circle btn2">
+                                        <i class="fas fa-bell"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table><br><br>
+                </div>
+                <div class="col-lg-1"></div>
+            </div> 
+
+        </div>
+
+        <div class="tab-pane" id="notificados" role="tabpanel" aria-labelledby="">
+            <div class="row animated flipInX">
+                <div class="col-lg-2"></div>
+                    <div class="col-lg-8" style="background-color: #1B1B38;color: white;
+                    text-align: center;font-size: 25px;color:#4DFBE6;font-weight: bold;">
+                      <img class="img-profile" src="../../../assets/imagenes/bell.png"  height=35
+                      style="margin-bottom: 5px;">
+                      Casos Notificados
+                    </div>                   
+                <div class="col-lg-2"></div>
+            </div>
+
+            <div class="row mt-5 animated flipInX">
+                <div class="col-lg-1"></div>
+                <div class="col-lg-10">
+                    <table  id="tbl_Notificados" class="table small mt-5" style="width: 100%;">
+                        <thead class="thead-dark">
+                          <tr>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">N° Caso</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">N° Suministro</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Cod. Tipo ENR</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Cod. Metodología ENR</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Dias de Cobro</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Fecha de Creación</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Usuario Creación</th>
+                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody style="background-color:#323259; color:white;text-align: center;font-size: 13px;">
+                            <tr *ngFor="let rep  of repositorioNoti">
+                               <td>{{rep.caso}}</td>
+                               <td>{{rep.usuario}}</td>
+                               <td>{{rep.codigoENR}}</td>
+                               <td>{{rep.metodologiaENR}}</td>
+                               <td>{{rep.diasCobrar}}</td>
+                               <td>{{rep.fechaCreacion}}</td>
+                               <td>{{rep.usuarioCreacion}}</td>
+                               <td>
+                                <button class="btn btn-default btn-circle btn1">
+                                    <i class="fas fa-edit"></i>
+                                 </button>
+                                     &nbsp;
+                                 <button class="btn btn-default btn-circle btn2">
+                                     <i class="fas fa-print"></i>
+                                 </button>
+                               </td>
+                            </tr>
+                        </tbody>
+                    </table><br><br>
+                </div>
+                <div class="col-lg-1"></div>
+            </div> 
+
+        </div>
+    </div>
+

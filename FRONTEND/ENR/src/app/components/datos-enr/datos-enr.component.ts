@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DatosENRService } from 'src/app/service/datos-enr.service';
-import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder, FormArray, NgForm } from '@angular/forms';
 import { DatosENR } from 'src/app/models/datos-enr';
 import notie from 'notie';
 import { CodigoENRService } from 'src/app/service/codigo-enr.service';
@@ -10,6 +10,10 @@ import { MetodologiaCalcService } from 'src/app/service/metodologia-calc.service
 import * as $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs4';
+import { HttpClient, HttpHeaders, HttpEventType } from '@angular/common/http';
+import { GlobalService } from 'src/app/service/global.service';
+import { Observable } from 'rxjs';
+import { DomSanitizer,SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-datos-enr',
@@ -22,17 +26,36 @@ export class DatosENRComponent implements OnInit {
   datos: DatosENR[] = new Array();
   dias: DatosENR[] = new Array();
   addForm: FormGroup;
+  frm_ArchivoOT: FormGroup;
+  frm_Archivo: FormGroup;
   codigosENR : codigos[];
   codigosMetENR : metodologia[];
   docForm: FormGroup;
   adjuntoOrdenesForm: FormGroup;
   dataTable: any;
   ordenes : DatosENR[];
+
+  adjuntosFile : DatosENR[];
+  extension : DatosENR[];
   ordenNumero : DatosENR = new DatosENR();
+  adjuntoVer : SafeResourceUrl;
+  urlArc : SafeResourceUrl;
+  fileData: File = null;
+  previewUrl:any = null;
+  previewUrl1:any = null;
+
+  archivo:any = null;
+
+  fileUploadProgress: string = null;
+  uploadedFilePath: string = null;
+ 
+
 
   constructor( private datosENR : DatosENRService, private chRef: ChangeDetectorRef,
     private fb: FormBuilder,private fb1: FormBuilder, 
-    private codigoENR: CodigoENRService, private codigoMetENR: MetodologiaCalcService) {
+    private codigoENR: CodigoENRService, private codigoMetENR: MetodologiaCalcService,
+    private http: HttpClient, private url: GlobalService,
+    public sanitizer: DomSanitizer) {
     
 
     this.frm_NIS = new FormGroup({
@@ -40,6 +63,20 @@ export class DatosENRComponent implements OnInit {
     });
 
 
+    this.frm_Archivo = new FormGroup({
+      
+      'tituloDocProbatorio' : new FormControl('',[Validators.required]),
+      'tipoPruebaProbatorio' : new FormControl(1,[Validators.required]),
+      'fileProbatorio' : new FormControl('',[Validators.required]),
+    });
+
+
+    this.frm_ArchivoOT = new FormGroup({
+      
+      'tituloDocProbatorioOT' : new FormControl('',[Validators.required]),
+      'tipoPruebaProbatorioOT' : new FormControl(1,[Validators.required]),
+      'fileProbatorioOT' : new FormControl('',[Validators.required]),
+    });
 
     this.frm_DatosNIS = new FormGroup({
       'usuario' : new FormControl(''),
@@ -74,6 +111,9 @@ export class DatosENRComponent implements OnInit {
      this.codigoENR.getCodigoENR().subscribe(data => {this.codigosENR = data;});
      this.codigoMetENR.getMetodologiaCalc().subscribe(data => {this.codigosMetENR = data;});
      this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
+
+     this.adjuntoVer= this.sanitizer.bypassSecurityTrustResourceUrl('');
+     this.urlArc = this.sanitizer.bypassSecurityTrustResourceUrl(this.url.getUrlBackEnd());
    }
 
    
@@ -98,9 +138,9 @@ export class DatosENRComponent implements OnInit {
     }
 
 
-    addDocOrden() {
+    addDocOrden(numero) {
       this.adjuntos.push(
-        this.fb1.group({nombreDocOrden:'',tipoAdjuntoOrden:1,archivoOrden:''}),    
+        this.fb1.group({ordenN:numero,nombreDocOrden:'',tipoAdjuntoOrden:1,file:''}),    
         );
     }
   
@@ -152,9 +192,9 @@ export class DatosENRComponent implements OnInit {
         this.chRef.detectChanges();
         
         this.dataTable = table.DataTable({
-       
+        'iDisplayLength' : 3,
         'responsive': true,
-          'order' :[[3,'desc']],
+          'order' :[[0,'desc']],
 
         'language' : {
           'sProcessing':     'Procesando...',
@@ -328,6 +368,7 @@ export class DatosENRComponent implements OnInit {
 
   public modalAdjuntar(orden){
     this.ordenNumero = orden;
+    this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
   }
 
  public cancelarGuardado(){
@@ -363,6 +404,22 @@ export class DatosENRComponent implements OnInit {
       console.log("no");
     },
     () => {
+      let datosENRdtoDoc : DatosENR = new DatosENR();
+
+      datosENRdtoDoc = this.docForm.value;
+      this.datosENR.saveDocProbatoria(datosENRdtoDoc).subscribe(
+        response => {
+          
+        },
+        err => {
+          console.log("no");
+        },
+        () => { 
+          
+
+        },
+      );
+
       notie.alert({
         type: 'success', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
         text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Caso guardado con éxito!',
@@ -374,7 +431,345 @@ export class DatosENRComponent implements OnInit {
       this.cancelarGuardado();
     },
   );
+
+
+  
+
  }
 
 
+ public guardarAdjuntosOT(){
+  let datosENRdtoDoc : DatosENR = new DatosENR();
+
+  datosENRdtoDoc = this.adjuntoOrdenesForm.value;
+
+  this.datosENR.saveDocOT(datosENRdtoDoc).subscribe(
+    response => {
+      
+    },
+    err => {
+      console.log("no");
+    },
+    () => { 
+      
+      notie.alert({
+        type: 'success', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Adjuntos guardados con éxito!',
+        stay: false, // optional, default = false
+        time: 2, // optional, default = 3, minimum = 1,
+        position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+      });
+
+      this.getOrdenNIS();
+    },
+  );
+
+
+  
+
+  
+ }
+
+ public getOrdenNIS(){
+  let datosENRdto : DatosENR = new DatosENR();
+
+  datosENRdto = this.frm_NIS.value;
+
+  this.datosENR.getOrdenesbyNIS(datosENRdto).subscribe(
+    response => {
+
+      this.ordenes = response;
+      const table: any = $('#ordenesTbl');
+      this.dataTable = table.DataTable();
+      this.dataTable.destroy();
+  
+      this.chRef.detectChanges();
+      
+      this.dataTable = table.DataTable({
+        'iDisplayLength' : 3,
+      'responsive': true,
+        'order' :[[0,'desc']],
+
+      'language' : {
+        'sProcessing':     'Procesando...',
+        'sLengthMenu':     'Mostrar _MENU_ registros',
+        'sZeroRecords':    'No se encontraron resultados',
+        'sEmptyTable':     'Ningún dato disponible en esta tabla',
+        'sInfo':           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
+        'sInfoEmpty':      'Mostrando registros del 0 al 0 de un total de 0 registros',
+        'sInfoFiltered':   '(filtrado de un total de _MAX_ registros)',
+        'sInfoPostFix':    '',
+        'sSearch':         'Buscar:',
+        'sUrl':            '',
+        'sInfoThousands':  ',',
+        'sLoadingRecords': 'Cargando...',
+        'oPaginate': {
+            'sFirst':    'Primero',
+            'sLast':     'Último',
+            'sNext':     'Siguiente',
+            'sPrevious': 'Anterior'
+        },
+        'oAria': {
+            'sSortAscending':  ': Activar para ordenar la columna de manera ascendente',
+            'sSortDescending': ': Activar para ordenar la columna de manera descendente'
+        }
+      }
+      });
+    },
+    err => {},
+    () => {
+      //console.log(this.cod);
+    }
+  );
+ }
+ 
+
+
+ fileProgress1(fileInput: any) {
+  this.fileData = <File>fileInput.target.files[0];
+  this.onSubmit1();
+}
+
+
+onSubmit1() {
+  const formData = new FormData();
+  formData.append('file', this.fileData);
+   
+  this.fileUploadProgress = '0%';
+
+ 
+  this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
+    reportProgress: true,
+    observe: 'events'   
+  })
+  .subscribe(events => {
+    if(events.type === HttpEventType.UploadProgress) {
+      this.fileUploadProgress = Math.round(events.loaded / events.total * 100) + '%';
+      console.log(this.fileUploadProgress);
+    } else if(events.type === HttpEventType.Response) {
+      this.fileUploadProgress = '';
+    }
+
+    
+       
+  });
+  
+  
+}
+  
+
+fileProgress2(fileInput: any) {
+  this.fileData = <File>fileInput.target.files[0];
+ this.preview2();
+}
+
+
+preview2() {
+  // Show preview 
+  var mimeType = this.fileData.type;
+  if (mimeType.match(/image\/*/) == null) {
+   
+   
+   var reader = new FileReader();      
+  reader.readAsDataURL(this.fileData); 
+  reader.onload = (_event) => { 
+    this.previewUrl1 = ''; 
+  }
+  return;
+  }
+
+  var reader = new FileReader();      
+  reader.readAsDataURL(this.fileData); 
+  reader.onload = (_event) => { 
+    this.previewUrl1 = reader.result; 
+  }
+}
+
+onSubmit2(numero) {
+  const formData = new FormData();
+  formData.append('file', this.fileData);
+   
+  //this.fileUploadProgress = '0%';
+
+ 
+  this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
+   // reportProgress: true,
+    observe: 'events'   
+  })
+  .subscribe(events => {
+    if(events.type === HttpEventType.UploadProgress) {
+      //this.fileUploadProgress = Math.round(events.loaded / events.total * 100) + '%';
+      console.log(this.fileUploadProgress);
+    } else if(events.type === HttpEventType.Response) {
+     // this.fileUploadProgress = '';
+
+      var str = this.frm_ArchivoOT.controls["fileProbatorioOT"].value;
+      this.adjuntos.push(
+        this.fb1.group({ordenN:numero,nombreDocOrden:this.frm_ArchivoOT.controls["tituloDocProbatorioOT"].value,
+        tipoAdjuntoOrden:this.frm_ArchivoOT.controls["tipoPruebaProbatorioOT"].value,
+        file:str.substring(12) }),    
+        );
+
+        notie.alert({
+          type: 'info', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/synchronization.png" width=40 height=40> Archivo cargado con éxito!',
+          stay: false, // optional, default = false
+          time: 2, // optional, default = 3, minimum = 1,
+          position: 'top',
+        });
+
+        this.frm_ArchivoOT.controls["tituloDocProbatorioOT"].setValue('');
+        this.frm_ArchivoOT.controls["tipoPruebaProbatorioOT"].setValue(1);
+        this.frm_ArchivoOT.controls["fileProbatorioOT"].setValue('');
+        this.previewUrl = '';
+
+    }
+
+    
+       
+  });
+  
+  
+}
+
+
+
+ fileProgress(fileInput: any) {
+       this.fileData = <File>fileInput.target.files[0];
+       this.preview();
+ }
+  
+ preview() {
+     // Show preview 
+     var mimeType = this.fileData.type;
+     if (mimeType.match(/image\/*/) == null) {
+      
+      
+      var reader = new FileReader();      
+     reader.readAsDataURL(this.fileData); 
+     reader.onload = (_event) => { 
+       this.previewUrl = ''; 
+     }
+     return;
+     }
+  
+     var reader = new FileReader();      
+     reader.readAsDataURL(this.fileData); 
+     reader.onload = (_event) => { 
+       this.previewUrl = reader.result; 
+     }
+ }
+  
+
+
+ onSubmit() {
+  const formData = new FormData();
+  formData.append('file', this.fileData);
+   
+  this.fileUploadProgress = '0%';
+
+ 
+  this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
+    reportProgress: true,
+    observe: 'events'   
+  })
+  .subscribe(events => {
+    if(events.type === HttpEventType.UploadProgress) {
+      this.fileUploadProgress = Math.round(events.loaded / events.total * 100) + '%';
+      console.log(this.fileUploadProgress);
+    } else if(events.type === HttpEventType.Response) {
+      this.fileUploadProgress = '';
+      var str = this.frm_Archivo.controls["fileProbatorio"].value;
+      this.documentos.push(
+        this.fb.group({nombreDoc:this.frm_Archivo.controls["tituloDocProbatorio"].value,
+        tipoPrueba:this.frm_Archivo.controls["tipoPruebaProbatorio"].value,
+        archivo:str.substring(12) }),    
+        );
+
+        notie.alert({
+          type: 'info', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/synchronization.png" width=40 height=40> Archivo cargado con éxito!',
+          stay: false, // optional, default = false
+          time: 2, // optional, default = 3, minimum = 1,
+          position: 'top',
+        });
+
+        this.frm_Archivo.controls["tituloDocProbatorio"].setValue('');
+        this.frm_Archivo.controls["tipoPruebaProbatorio"].setValue(1);
+        this.frm_Archivo.controls["fileProbatorio"].setValue('');
+        this.previewUrl = '';
+    }
+
+    
+       
+  });
+  
+  
+}
+
+public adjuntosOrdenesVer(adjunto, ext){
+  console.log(adjunto);
+  var url = 'http://localhost:8000/files/'+adjunto;
+
+  this.adjuntoVer =  this.sanitizer.bypassSecurityTrustResourceUrl(url);
+
+  this.extension = ext;
+}
+
+public adjuntosOrdenes(orden){
+  this.ordenNumero = orden;
+
+  let datosENRdto : DatosENR = new DatosENR();
+
+    datosENRdto = orden;
+
+
+  this.datosENR.getAdjuntosOrdenes(datosENRdto).subscribe(
+    response => {
+
+      this.adjuntosFile = response;
+      const table: any = $('#adjuntos_Tbl');
+      this.dataTable = table.DataTable();
+      this.dataTable.destroy();
+  
+      this.chRef.detectChanges();
+      
+      this.dataTable = table.DataTable({
+      'responsive': true,
+        'order' :[[0,'desc']],
+
+      'language' : {
+        'sProcessing':     'Procesando...',
+        'sLengthMenu':     'Mostrar _MENU_ registros',
+        'sZeroRecords':    'No se encontraron resultados',
+        'sEmptyTable':     'Ningún dato disponible en esta tabla',
+        'sInfo':           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
+        'sInfoEmpty':      'Mostrando registros del 0 al 0 de un total de 0 registros',
+        'sInfoFiltered':   '(filtrado de un total de _MAX_ registros)',
+        'sInfoPostFix':    '',
+        'sSearch':         'Buscar:',
+        'sUrl':            '',
+        'sInfoThousands':  ',',
+        'sLoadingRecords': 'Cargando...',
+        'oPaginate': {
+            'sFirst':    'Primero',
+            'sLast':     'Último',
+            'sNext':     'Siguiente',
+            'sPrevious': 'Anterior'
+        },
+        'oAria': {
+            'sSortAscending':  ': Activar para ordenar la columna de manera ascendente',
+            'sSortDescending': ': Activar para ordenar la columna de manera descendente'
+        }
+      }
+      });
+    },
+    err => {},
+    () => {
+      //console.log(this.cod);
+    }
+  );
+}
+
+ 
 }

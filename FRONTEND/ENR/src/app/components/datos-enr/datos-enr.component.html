@@ -79,7 +79,7 @@
                     Órdenes técnicas asociadas al suministro
                 </h4>
             </div>
-            <div class="col-md-12" style="max-height: 300px; overflow-y: auto;
+            <div class="col-md-12" style="max-height: 400px; overflow-y: auto;
             overflow-x: auto;
             margin-top: 25px;">
                 <table  id="ordenesTbl" class="table small mt-5" style="width: 99%;
@@ -101,13 +101,16 @@
                          class="text-center">Usuario resolución</th>
                          <th style="background-color:#323259; color:#51F749;"
                          class="text-center">Fecha de resolución</th>
+                         
                          <th style="background-color:#323259; color:#51F749;"
-                         class="text-center"></th>
+                         class="text-center">Acciones</th>
                     </tr>
                     </thead>
-                    <tbody style="background-color:#323259; color:white;text-align: center;font-size: 15px;">
-                      <tr *ngFor="let orden  of ordenes">                        
-                       <td>{{orden.orden}}</td>
+                    <tbody style="background-color:#323259; color:white;text-align: center;
+                    font-size: 13px;">
+                      <tr *ngFor="let orden  of ordenes" 
+                      [ngClass]="{adjuntos: orden.adjuntos > 0}">                        
+                       <td >{{orden.orden}}</td>
                        <td style="width: 50%;">{{orden.tipo}}</td>
                        <td>{{orden.asignado}}</td>
                        <td>{{orden.fechaAsig}}</td>
@@ -119,11 +122,17 @@
                         <td>{{orden.resolucion}}</td>
                        <td>{{orden.fechaRes}}</td>
                        <td>
-                           <button class="btn btn-success btn-circle" style="background-color: #51F749;
+                           <button class="btn btn-success btn-sm btn-circle" style="background-color: #51F749;
                            color:black" data-toggle="modal" data-target="#adjuntarArchivosOrden"
                            (click)="modalAdjuntar(orden)">
                                 <i class="fa fa-paperclip"></i>
-                           </button>
+                           </button> 
+                           &nbsp; 
+                           <button *ngIf="orden.adjuntos > 0"  data-toggle="modal" 
+                             data-target="#adjuntosOrden" (click)="adjuntosOrdenes(orden)"
+                            class="btn btn-info btn-sm btn-circle" style="background-color: #008EC4;color:white">
+                             <i class="fa fa-file"></i>
+                        </button>
                        </td>
                       
                         </tr>
@@ -151,7 +160,7 @@
             </div>
             <div class="col-md-6"><br>
                 <label><i class="fa fa-file"></i> Adjunto: Scan de notificacion inicial</label>          
-                <input type="file" class="form-control" style="height: 45px;" formControlName="adScanNoti">
+                <input (change)="fileProgress1($event)" type="file" class="form-control" style="height: 45px;" formControlName="adScanNoti">
            
             </div>
             <div class="col-md-6"><br>
@@ -163,10 +172,7 @@
                 <label><i class="fa fa-calendar"></i> Fecha de Regularización</label>          
                 <input type="date" (change)="asigFechaFin()" class="form-control" formControlName="fechaRegular">
            
-            </div>
-            
-           
-            
+            </div>  
             <div class="col-md-5"><br>
                 <label><i class="fa fa-archive"></i> Tipo de Caso ENR</label>          
                 <select (change)="asigDias()" class="form-control" formControlName="codTipoENR">
@@ -210,9 +216,6 @@
             </div>
         </div>
     </form>
-    
-
-
 
     <div class="col-lg-12"><br><br>
         <hr style="background-color: #D1D104 !important; height: 2px;">
@@ -221,48 +224,92 @@
             style="margin-bottom: 5px;">
             Documentación probatoria del caso
         </h4>
+        <form [formGroup]='frm_Archivo'>
+          <div class="row">
+            <div class="col-md-3">
+              <label><i class="fas fa-pencil"></i> Titulo del archivo</label>
+              <textarea  name="tituloDocProbatorio" formControlName="tituloDocProbatorio"  rows="2" class="form-control"
+              placeholder="Titulo del documento"></textarea>
+                 
+            </div>
+            <div class="col-md-3">
+              <label><i class="fas fa-file"></i> Tipo de archivo</label>
+              <select class="form-control" name="tipoPruebaProbatorio" formControlName="tipoPruebaProbatorio">
+                <option value="1">Seleccione</option>
+                <option value="Fotografía">Fotografía</option>
+                <option value="Documento">Documento</option>
+                <option value="Otro">Otro</option>
+            </select>
+            </div>
+            <div class="col-md-4">
+              <label><i class="fas fa-upload"></i> Seleccione el archivo</label>
+              <input type="file" name="file" (change)="fileProgress($event)" class="form-control"
+              formControlName="fileProbatorio" style="height:45px"/>
+              <br>
+              <div *ngIf="fileUploadProgress" style="color:white">
+                Upload progress: {{ fileUploadProgress }}
+            </div>
+            <div class="image-preview mb-3" *ngIf="previewUrl">
+                <img [src]="previewUrl" height="150" style="margin-left:25%;"/>    
+               
+            </div>
+            
+            <div class="mb-3" *ngIf="uploadedFilePath">
+                {{uploadedFilePath}}
+            </div>
+
+            </div>
+            <div class="col-md-2">
+              <label style="color: #1B1B38 !important"><i class="fas fa-upload"></i> Seleccione el archivo</label>
+              <button class="btn btn-warning"  (click)="onSubmit()">
+                <i class="fas fa-upload"></i> Cargar Archivo
+               </button>
+            </div>
+          </div><br>
+          
+        </form>
+        <h5 style="color: #FAC092;">Listado de archivos cargados</h5>
         <form [formGroup]="docForm">
-            <a (click)="addDoc()" class="btn btn-warning btn-sm" style="float: right;
-            font-weight: bold;color:black;background-color: #D1D104;"><i class="fa fa-plus"></i> Nuevo</a>
-            <br>
+            
             <table class="table small mt-3">
                 <thead class="thead-dark">
                     <tr >
-                        <th style="background-color:#323259; color:#B0B005;font-size: 16px;
+                        <th style="background-color:#323259; color:#B0B005;font-size: 14px;
                         border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center">
                             <label class="fa fa-pen" style="color:#B0B005 !important;"></label>
                             Título
                         </th>
-                        <th style="background-color:#323259; color:#B0B005;font-size: 16px;
+                        <th style="background-color:#323259; color:#B0B005;font-size: 14px;
                         border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center">
                             <label class="fa fa-archive" style="color:#B0B005 !important;"></label>
                             Tipo de prueba
                         </th>
-                        <th style="background-color:#323259; color:#B0B005;font-size: 16px;
+                        <th style="background-color:#323259; color:#B0B005;font-size: 14px;
                         border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center">
                             <label class="fa fa-file" style="color:#B0B005 !important;"></label>
                             Archivo
                         </th>
-                        <th style="background-color:#323259; color:#B0B005;font-size: 16px;
+                        <th style="background-color:#323259; color:#B0B005;font-size: 14px;
                         border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center"></th>
                     </tr>
                 </thead>
                 <tbody  formArrayName="documentacion"
-                style="background-color:#222245; color:white;text-align: center;font-size: 15px;">
+                style="background-color:#222245; color:white;text-align: center;
+                font-size: 14px;">
                     <tr *ngFor="let item of documentos.controls; let pointIndex=index" [formGroupName]="pointIndex">
                         <td style="border-bottom: 1px solid white;"><textarea 
-                            formControlName="nombreDoc"
+                            formControlName="nombreDoc" readonly="true"
                             name="tituloDoc"  rows="2" class="form-control" placeholder="Titulo del documento"></textarea></td>
                         <td style="border-bottom: 1px solid white;">
-                            <select class="form-control" name="tipoPrueba" formControlName="tipoPrueba">
+                            <select disabled class="form-control" name="tipoPrueba" formControlName="tipoPrueba">
                             <option value="1">Seleccione</option>
                             <option value="Fotografía">Fotografía</option>
                             <option value="Documento">Documento</option>
                             <option value="Otro">Otro</option>
                         </select></td>
                         <td style="border-bottom: 1px solid white;">
-                            <input class="form-control" type="file" formControlName="archivo"
-                            style="height: 45px;"></td>
+                            <input class="form-control" type="text" formControlName="archivo"
+                            style="height: 45px;" readonly="true"></td>
                         <td style="border-bottom: 1px solid white;">
                             <a class="btn btn-danger btn-sm" (click)="deleteDoc(pointIndex)"><i class="fa fa-trash"></i></a> </td>
                     </tr>
@@ -282,16 +329,11 @@
         <i class="fas fa-times"></i> Cancelar
     </button>
     </div>
-    
 
-
-
-
-
-    
-  
 </div>   
-<div class="modal animated flipInY" data-backdrop="static" data-keyboard="false" 
+
+<!--Modal para adjuntar archivos a las ordenes-->
+<div class="modal animated fadeInRight" data-backdrop="static" data-keyboard="false" 
 tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
     <div class="modal-dialog mw-100 w-75" >
       <div class="modal-content">
@@ -303,61 +345,109 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
         </h5>
         </div>
         <div class="modal-body">
-            <form [formGroup]="adjuntoOrdenesForm">
-                <a (click)="addDocOrden()" class="btn btn-info btn-sm" style="float: right;
-                font-weight: bold;color:black;background-color: #51F749;"><i class="fa fa-plus"></i> Nuevo</a>
+          <form [formGroup]='frm_ArchivoOT'>
+            <div class="row">
+              <div class="col-md-3">
+                <label><i class="fas fa-pencil"></i> Titulo del archivo</label>
+                <textarea  name="tituloDocProbatorioOT" formControlName="tituloDocProbatorioOT"  rows="2" class="form-control"
+                placeholder="Titulo del documento"></textarea>
+                   
+              </div>
+              <div class="col-md-3">
+                <label><i class="fas fa-file"></i> Tipo de archivo</label>
+                <select class="form-control" name="tipoPruebaProbatorioOT" formControlName="tipoPruebaProbatorioOT">
+                  <option value="1">Seleccione</option>
+                  <option value="Visita Inspección Técnica">Visita Inspección Técnica</option>
+                  <option value="Cambio de Medidor">Cambio de Medidor</option>
+                  <option value="Verificación de Lectura">Verificación de Lectura</option>
+            </select>
+              </div>
+              <div class="col-md-4">
+                <label><i class="fas fa-upload"></i> Seleccione el archivo</label>
+                <input type="file" name="file" (change)="fileProgress2($event)" class="form-control"
+                formControlName="fileProbatorioOT" style="height:45px"/>
                 <br>
+                
+              <div class="image-preview mb-3" *ngIf="previewUrl1">
+                  <img [src]="previewUrl1" height="150" style="margin-left:25%;"/>                  
+              </div>
+              </div>
+              <div class="col-md-2">
+                <label style="color: #1B1B38 !important"><i class="fas fa-upload"></i> Seleccione el archivo</label>
+                <button class="btn btn-warning"  (click)="onSubmit2(ordenNumero.orden)">
+                  <i class="fas fa-upload"></i> Cargar Archivo
+                 </button>
+              </div>
+            </div><br>
+            
+          </form>
+          <h5 style="color: #FAC092;">Listado de archivos cargados</h5>
+
+
+            <form [formGroup]="adjuntoOrdenesForm" enctype="multipart/form-data">
+              
                 <table class="table small mt-3">
                     <thead class="thead-dark">
                         <tr >
-                            <th style="background-color:#323259; color:#51F749;font-size: 16px;
+                            <th style="background-color:#323259; color:#51F749;font-size: 14px;
+                            border-bottom: 2px solid #51F749;font-weight: bold;" class="text-center">
+                                <label class="fa fa-pen" style="color:#51F749 !important;"></label>
+                                OT
+                            </th>
+                            <th style="background-color:#323259; color:#51F749;font-size: 14px;
                             border-bottom: 2px solid #51F749;font-weight: bold;" class="text-center">
                                 <label class="fa fa-pen" style="color:#51F749 !important;"></label>
                                 Título
                             </th>
-                            <th style="background-color:#323259; color:#51F749;font-size: 16px;
+                            <th style="background-color:#323259; color:#51F749;font-size: 14px;
                         border-bottom: 2px solid #51F749;font-weight: bold;" class="text-center">
                             <label class="fa fa-archive" style="color:#51F749 !important;"></label>
                             Tipo de adjunto
                         </th>
-                            <th style="background-color:#323259; color:#51F749;font-size: 16px;
+                            <th style="background-color:#323259; color:#51F749;font-size: 14px;
                             border-bottom: 2px solid #51F749;font-weight: bold;" class="text-center">
                                 <label class="fa fa-file" style="color:#51F749 !important;"></label>
                                 Archivo
                             </th>
-                            <th style="background-color:#323259; color:#51F749;font-size: 16px;
+                            <th style="background-color:#323259; color:#51F749;font-size: 14px;
                             border-bottom: 2px solid #51F749;font-weight: bold;" class="text-center"></th>
                         </tr>
                     </thead>
                     <tbody  formArrayName="documentacionOrden"
-                    style="background-color:#222245; color:white;text-align: center;font-size: 15px;">
+                    style="background-color:#222245; color:white;text-align: center;font-size: 13px;">
                        
                     <tr *ngFor="let item of adjuntos.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                        <td style="border-bottom: 1px solid white;">
+                            <input class="form-control" type="text" formControlName="ordenN" readonly="true">
+                        </td>
                         <td style="border-bottom: 1px solid white;"><textarea 
-                            formControlName="nombreDocOrden"
+                            formControlName="nombreDocOrden" readonly="true"
                              rows="2" class="form-control" placeholder="Titulo del documento"></textarea></td>
                              <td style="border-bottom: 1px solid white;">
-                                <select class="form-control" name="tipoAdjuntoOrden" formControlName="tipoAdjuntoOrden">
+                                <select disabled class="form-control" name="tipoAdjuntoOrden" formControlName="tipoAdjuntoOrden">
                                 <option value="1">Seleccione</option>
                                 <option value="Visita Inspección Técnica">Visita Inspección Técnica</option>
                                 <option value="Cambio de Medidor">Cambio de Medidor</option>
                                 <option value="Verificación de Lectura">Verificación de Lectura</option>
-                            </select></td>
+                            </select>
+                        </td>
                         <td style="border-bottom: 1px solid white;">
-                            <input class="form-control" type="file" formControlName="archivoOrden"
-                            style="height: 45px;"></td>
+                            <textarea class="form-control" rows="2" readonly="true"
+                             formControlName="file" name="file"></textarea>
+                        </td>
                         <td style="border-bottom: 1px solid white;">
-                            <a class="btn btn-danger btn-sm" (click)="deleteDocOrden(pointIndex)"><i class="fa fa-trash"></i></a> </td>
+                            <a class="btn btn-danger btn-sm" (click)="deleteDocOrden(pointIndex)"><i class="fa fa-trash"></i></a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
             </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#cancelarGuardadoAdjuntos">
             <i class="fas fa-times-circle"></i>  Cerrar
           </button>
-          <button type="button" class="btn btn-default save" data-dismiss="modal">
+          <button type="button" class="btn btn-default save" data-dismiss="modal" data-toggle="modal" data-target="#guardarAdjuntosConfirm" >
             <i class="fas fa-paperclip"></i>  Adjuntar
           </button>
           
@@ -369,7 +459,7 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
     
    
 
-
+<!---Modal de alerta para cancelar el guardado de caso ENR-->
 <div class="modal animated fadeInUp" id="cancelarGuardadoModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -398,11 +488,11 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
         </div>
       </div>
     </div>
-  </div>
+</div>
 
 
-
-  <div class="modal animated fadeInDown" id="guardarDatosConfirm" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!---Modal de alerta para confirmar guardado de caso ENR-->
+<div class="modal animated fadeInDown" id="guardarDatosConfirm" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -418,10 +508,10 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
         
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-info" data-dismiss="modal">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">
             <i class="fas fa-times-circle"></i>  No!
           </button>
-          <button type="button" class="btn btn-danger" data-dismiss="modal"  (click)="guardarDatos()">
+          <button type="button" class="btn btn-default save" data-dismiss="modal"  (click)="guardarDatos()">
             <i class="fas fa-thumbs-up"></i>  Si, guardar!
           </button>
           
@@ -429,4 +519,173 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
         </div>
       </div>
     </div>
+</div>
+
+
+<!---Modal de alerta para cancelar el adjunto de archivo a OT-->
+<div class="modal animated fadeInUp" id="cancelarGuardadoAdjuntos" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="title" style="color:#0CD902 !important;">
+            <img class="img-profile" src="../../../assets/imagenes/confirm.png" width=35 height=35>
+            Confirmación
+          </h5>
+          
+        </div>
+        <div class="modal-body">
+         
+          <h4 style="text-align: center;color: #67E1E1;">¿Desea cerrar la ventana?</h4>
+          <h5 style="text-align: center;color: #FC0505;">¡La información no guardada se perderá!</h5>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal"
+          data-toggle="modal" data-target="#adjuntarArchivosOrden">
+            <i class="fas fa-times-circle"></i>  No!
+          </button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">
+            <i class="fas fa-thumbs-up"></i>  Si, cerrar!
+          </button>
+          
+          
+        </div>
+      </div>
+    </div>
+</div>
+
+
+<!---Modal de alerta para confirmar guardado de adjuntos-->
+<div class="modal animated fadeInDown" id="guardarAdjuntosConfirm" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="title" style="color:#0CD902 !important;">
+            <img class="img-profile" src="../../../assets/imagenes/confirm.png" width=35 height=35>
+            Confirmación
+          </h5>
+          
+        </div>
+        <div class="modal-body">
+         
+          <h4 style="text-align: center;color: #67E1E1;">¿Desea adjuntar los archivos?</h4>
+        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#adjuntarArchivosOrden">
+            <i class="fas fa-times-circle"></i>  No!
+          </button>
+          <button type="button" class="btn btn-default save" data-dismiss="modal"  (click)="guardarAdjuntosOT()">
+            <i class="fas fa-thumbs-up"></i>  Si, adjuntar!
+          </button>
+          
+          
+        </div>
+      </div>
+    </div>
+</div>
+
+<!--Modal para ver adjuntos de las ordenes-->
+<div class="modal animated fadeInDown" id="adjuntosOrden" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  mw-100 w-75">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <img class="img-profile" src="../../../assets/imagenes/folder.png" width=45 height=45>
+            Adjuntar archivos a la orden : <a style="color: #51F749;">{{ordenNumero.orden}}</a> 
+            || Tipo de Orden : <a style="color: #51F749;">{{ordenNumero.tipo}}</a>
+        </h5>
+          
+        </div>
+        <div class="modal-body">
+
+          <table  id="adjuntos_Tbl" class="table small mt-5" style="width: 99%;
+                margin:auto">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th style="background-color:#323259; color:#51F749;"
+                         class="text-center">Título</th>
+                        <th style="background-color:#323259; color:#51F749;"
+                         class="text-center">Tipo de archivo</th>
+                        <th style="background-color:#323259; color:#51F749;"
+                         class="text-center">Fecha de Creación</th>
+                         <th style="background-color:#323259; color:#51F749;"
+                         class="text-center">Usuario Creador</th>
+                         <th style="background-color:#323259; color:#51F749;"
+                         class="text-center">Archivo</th>
+                         <th style="background-color:#323259; color:#51F749;"
+                         class="text-center">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody style="background-color:#323259; color:white;text-align: center;
+                    font-size: 13px;">
+                      <tr *ngFor="let ad  of adjuntosFile" >                        
+                       <td >{{ad.titulo}}</td>
+                       <td>{{ad.tipo}}</td>
+                       <td>{{ad.fechaCreacion}}</td>
+                       <td>{{ad.creador}}</td>
+                       <td>{{ad.ruta}}</td>
+                       <td>
+                           <button class="btn btn-success btn-sm btn-circle"  
+                           (click)="adjuntosOrdenesVer(ad.ruta, ad.ext)"
+                           data-toggle="modal" data-target="#verAdjuntosOrden">
+                                <i class="fa fa-eye"></i>
+                       </button> 
+                           &nbsp; 
+                        <a class="btn btn-info btn-sm btn-circle"  
+                           [href]="'http://localhost:8000/descargarArchivo?ruta='+ad.ruta">
+                                <i class="fa fa-download"></i>
+                        </a>
+                       &nbsp;
+                           <button data-toggle="modal" data-target="#adjuntosOrden"
+                            class="btn btn-danger btn-sm btn-circle">
+                             <i class="fa fa-trash"></i>
+                        </button>
+                       </td>
+                      
+                        </tr>
+                    </tbody>
+                  </table>
+       </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            <i class="fas fa-times-circle"></i>  Cerrar
+          </button>          
+        </div>
+      </div>
+    </div>
+</div>
+
+<!--Modal para ver detalle de adjunto-->
+<div class="modal animated fadeInDown" id="verAdjuntosOrden" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog  mw-100 w-75">
+    <div class="modal-content">
+      <div class="modal-header">
+      </div>
+      <div class="modal-body">
+        <div *ngIf="adjuntosOrdenesVer">
+          <div *ngIf="extension == 'pdf'">
+            <iframe [src]="adjuntoVer" width="100%" height="450px"></iframe>
+          </div>
+          <div *ngIf="extension == 'jpg' ">
+            <img [src]="adjuntoVer" width="650px" height="450px"
+            style="margin-left: 20%;"/>
+          </div>
+
+          <div *ngIf="extension == 'png' ">
+            <img [src]="adjuntoVer" width="650px" height="450px"
+            style="margin-left: 20%;"/>
+          </div>
+        </div>
+          
+        
+      
+     </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          <i class="fas fa-times-circle"></i>  Cerrar
+        </button>          
+      </div>
+    </div>
   </div>
+</div>

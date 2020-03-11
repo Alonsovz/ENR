@@ -37,3 +37,15 @@ Route::get('/', function () {
 
     
     Route::post('saveDatosNISGenerales', 'ENRController@saveDatosNISGenerales');
+
+    Route::post('saveDocProbatoria', 'ENRController@saveDocProbatoria');
+    Route::post('saveDocOT', 'ENRController@saveDocOT');
+    Route::post('moveDoc', 'ENRController@moveDoc');
+    Route::any('getRepositorioIngresados', 'ENRController@getRepositorioIngresados');
+    Route::any('getRepositorioNotificados', 'ENRController@getRepositorioNotificados');
+    Route::any('getRepositorioCalculados', 'ENRController@getRepositorioCalculados');
+    
+    Route::post('getAdjuntosOrdenes', 'ENRController@getAdjuntosOrdenes');
+
+
+    Route::any('descargarArchivo', 'ENRController@descargarArchivo');

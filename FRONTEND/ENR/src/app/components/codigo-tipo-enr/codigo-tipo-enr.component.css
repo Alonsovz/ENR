@@ -32,11 +32,13 @@ tbody tr{
   label{
     color: white !important;
     text-align: center !important;
+    font-size: 13px;
   }
 
   .form-control{
     background-color: #1B1B38 !important;
     color: #D4BEFB !important;
+    font-size: 13px;
   }
 
   .form-control:focus{
@@ -92,4 +94,7 @@ tbody tr{
   color: white !important;
   height: 100% !important;
   border: 1px solid #9B6AFC !important;
+}
+.btn{
+  font-size: 13px;
 }

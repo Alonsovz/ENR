@@ -178,6 +178,7 @@ export class CodigoTipoENRComponent implements OnInit {
             'visible':false,
             'searchable':false,
         }],
+        'iDisplayLength' : 5,
         'responsive': true,
           'order' :[[0,'desc']],
         'language' : {
@@ -233,6 +234,7 @@ export class CodigoTipoENRComponent implements OnInit {
             'visible':false,
             'searchable':false,
         }],
+        'iDisplayLength' : 5,
         'responsive': true,
           'order' :[[0,'desc']],
 

@@ -28,7 +28,25 @@ export class DatosENRService {
   }
 
   public saveDatosNISGenerales(datos: DatosENR): Observable<DatosENR> {
-    console.log(datos);
+    //console.log(datos);
     return this.http.post<DatosENR>(this.url.getUrlBackEnd() + 'saveDatosNISGenerales', datos).pipe(map(data => data as DatosENR));
   }
+
+
+  public saveDocProbatoria(datos: DatosENR): Observable<DatosENR> {
+    console.log(datos);
+    return this.http.post<DatosENR>(this.url.getUrlBackEnd() + 'saveDocProbatoria', datos).pipe(map(data => data as DatosENR));
+  }
+
+  public saveDocOT(datos: DatosENR): Observable<DatosENR> {
+    console.log(datos);
+    return this.http.post<DatosENR>(this.url.getUrlBackEnd() + 'saveDocOT', datos).pipe(map(data => data as DatosENR));
+  }
+
+
+  public getAdjuntosOrdenes(orden): Observable<DatosENR[]> {
+    //console.log(orden);
+    return this.http.post<DatosENR[]>(this.url.getUrlBackEnd() + 'getAdjuntosOrdenes', orden).pipe(map(data => data as DatosENR[]));
+  }
+  
 }

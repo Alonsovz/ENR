@@ -13,6 +13,8 @@ import { MetodologiaCalculoComponent } from './components/metodologia-calculo/me
 import { ReactiveFormsModule } from '@angular/forms';
 import { DatosENRComponent } from './components/datos-enr/datos-enr.component';
 import { NgxMaskModule } from 'ngx-mask';
+import { RepositorioENRComponent } from './components/repositorio-enr/repositorio-enr.component';
+
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import { NgxMaskModule } from 'ngx-mask';
     CodigoTipoENRComponent,
     MetodologiaCalculoComponent,
     DatosENRComponent,
+    RepositorioENRComponent,
     
   ],
   imports: [
