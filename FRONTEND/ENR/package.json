@@ -25,6 +25,8 @@
     "animate": "^1.0.0",
     "animate.css": "^3.7.2",
     "bootstrap": "^4.4.1",
+    "canvasjs": "^1.8.3",
+    "chart.js": "^2.9.3",
     "datatables.net-bs4": "^1.10.20",
     "datatables.net-dt": "^1.10.20",
     "fontawesome": "^5.6.3",

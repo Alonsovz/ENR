@@ -45,7 +45,8 @@
               "./node_modules/bootstrap/dist/js/bootstrap.js",
               "../ENR/node_modules/datatables.net/js/jquery.dataTables.js",
               
-              "../ENR/node_modules/notie/dist/notie.js"
+              "../ENR/node_modules/notie/dist/notie.js",
+              "../ENR/node_modules/canvasjs/dist/canvasjs.js"
             ]
           },
           "configurations": {

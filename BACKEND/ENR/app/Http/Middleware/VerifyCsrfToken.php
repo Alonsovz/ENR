@@ -36,6 +36,9 @@ class VerifyCsrfToken extends BaseVerifier
         'getRepositorioNotificados',
         'getRepositorioCalculados',
         'getAdjuntosOrdenes',
-        'descargarArchivo'
+        'descargarArchivo',
+        'eliminarArchivo',
+        'getAdjuntosOrdenesENR',
+        'eliminarArchivoENR'
     ];
 }

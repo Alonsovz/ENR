@@ -254,7 +254,7 @@ class ENRController extends Controller
 
     public function saveDocProbatoria(Request $request){
         $doc = json_encode($request["documentacion"]);
-
+        $usuario_creacion = 151;
         $documentacion = json_decode($doc);
        
         $contador = 0;
@@ -271,6 +271,8 @@ class ENRController extends Controller
                          'tipo' => $docSave->tipoPrueba,
                          'ruta' => $docSave->archivo,
                          'fechaCreacion'=>date('Ymd H:i:s'),
+                         'idEliminado'=>1,
+                         'usuarioCreacion'=>$usuario_creacion,
                          ]);
 
             $contador++;
@@ -320,10 +322,12 @@ class ENRController extends Controller
 
     public function getRepositorioIngresados(){
         $getDatos =  DB::connection('facturacion')->select("
-        select dg.id as caso, dg.num_suministro as usuario,
+        select dg.id as caso, dg.num_suministro as nis,
         dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
         convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
-        t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado from enr_datosGenerales dg
+        t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
+        (select count(id) from enr_documentacion where idCasoENR =
+        dg.id and idEliminado = 1) as adjuntos from enr_datosGenerales dg
         inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
         inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
         inner join comanda_db.dbo.users u on u.id = dg.usuario_creacion
@@ -336,10 +340,12 @@ class ENRController extends Controller
 
     public function getRepositorioCalculados(){
         $getDatos =  DB::connection('facturacion')->select("
-        select dg.id as caso, dg.num_suministro as usuario,
+        select dg.id as caso, dg.num_suministro as nis,
         dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
         convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
-        t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado from enr_datosGenerales dg
+        t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
+        (select count(id) from enr_documentacion where idCasoENR =
+        dg.id and idEliminado = 1) as adjuntos from enr_datosGenerales dg
         inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
         inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
         inner join comanda_db.dbo.users u on u.id = dg.usuario_creacion
@@ -353,10 +359,12 @@ class ENRController extends Controller
 
     public function getRepositorioNotificados(){
         $getDatos =  DB::connection('facturacion')->select("
-        select dg.id as caso, dg.num_suministro as usuario,
+        select dg.id as caso, dg.num_suministro as nis,
         dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
         convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
-        t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado from enr_datosGenerales dg
+        t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
+        (select count(id) from enr_documentacion where idCasoENR =
+        dg.id and idEliminado = 1) as adjuntos from enr_datosGenerales dg
         inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
         inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
         inner join comanda_db.dbo.users u on u.id = dg.usuario_creacion
@@ -388,12 +396,14 @@ class ENRController extends Controller
 
         $getDatos =  DB::connection('facturacion')->select("
         select d.titulo as titulo, d.tipo as tipo,
+        d.id as id,
+        d.correlativoOrden as orden,
         d.ruta as ruta,
         convert(varchar(10),d.fechaCreacion,103) as fechaCreacion,
         u.alias as creador,RIGHT(d.ruta,3) as ext
         from enr_documentacionOT d
         inner join comanda_db.dbo.users u on u.id = d.usuarioCreacion
-        where d.correlativoOrden = ?
+        where d.idEliminado = 1 and d.correlativoOrden = ?
         ",[$codigo]);
 
 
@@ -411,5 +421,61 @@ class ENRController extends Controller
             return response()->json('Archivo no encontrado');
         }
         
+    }
+
+
+    public function eliminarArchivo(Request $request){
+
+        $file = $request["rutaEliminar"];
+        $id = $request["idEliminar"];
+        $user = 151;
+        
+        $delete =  DB::connection('facturacion')->table('enr_documentacionOT')->where('id', $id)
+                         ->update([
+                             'idEliminado' => 2,
+                              'usuario_borrado' => $user,
+                              'fechaBorrado' => date('Ymd H:i:s'),
+                         ]);
+
+        //unlink(public_path('files/'.$file));
+        
+    }
+
+    
+    public function eliminarArchivoENR(Request $request){
+
+        $file = $request["rutaEliminar"];
+        $id = $request["idEliminar"];
+        $user = 151;
+        
+        $delete =  DB::connection('facturacion')->table('enr_documentacion')->where('id', $id)
+                         ->update([
+                             'idEliminado' => 2,
+                              'usuario_borrado' => $user,
+                              'fechaBorrado' => date('Ymd H:i:s'),
+                         ]);
+
+        unlink(public_path('files/'.$file));
+        
+    }
+
+
+    public function getAdjuntosOrdenesENR(Request $request){
+        $codigo = $request["caso"];
+
+        $getDatos =  DB::connection('facturacion')->select("
+        select d.titulo as titulo, d.tipo as tipo,
+        d.id as id,
+        d.idCasoENR as caso,
+        d.ruta as ruta,
+        convert(varchar(10),d.fechaCreacion,103) as fechaCreacion,
+        u.alias as creador,RIGHT(d.ruta,3) as ext
+        from enr_documentacion d
+        inner join comanda_db.dbo.users u on u.id = d.usuarioCreacion
+        where d.idEliminado = 1 and d.idCasoENR = ?
+        ",[$codigo]);
+
+
+        return response()->json($getDatos);
     }
 }

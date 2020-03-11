@@ -22,6 +22,7 @@ import { DomSanitizer,SafeResourceUrl } from '@angular/platform-browser';
 })
 export class DatosENRComponent implements OnInit {
   frm_NIS : FormGroup;
+  frm_ArchivoEliminar : FormGroup;
   frm_DatosNIS : FormGroup;
   datos: DatosENR[] = new Array();
   dias: DatosENR[] = new Array();
@@ -37,6 +38,7 @@ export class DatosENRComponent implements OnInit {
 
   adjuntosFile : DatosENR[];
   extension : DatosENR[];
+  archivoEliminar : DatosENR = new DatosENR();
   ordenNumero : DatosENR = new DatosENR();
   adjuntoVer : SafeResourceUrl;
   urlArc : SafeResourceUrl;
@@ -62,6 +64,10 @@ export class DatosENRComponent implements OnInit {
       'nis' : new FormControl('',[Validators.required]),
     });
 
+    this.frm_ArchivoEliminar = new FormGroup({
+      'idEliminar' : new FormControl(''),
+      'rutaEliminar' : new FormControl(''),
+    });
 
     this.frm_Archivo = new FormGroup({
       
@@ -621,7 +627,7 @@ onSubmit2(numero) {
         this.frm_ArchivoOT.controls["tituloDocProbatorioOT"].setValue('');
         this.frm_ArchivoOT.controls["tipoPruebaProbatorioOT"].setValue(1);
         this.frm_ArchivoOT.controls["fileProbatorioOT"].setValue('');
-        this.previewUrl = '';
+        this.previewUrl1 = '';
 
     }
 
@@ -709,7 +715,7 @@ onSubmit2(numero) {
 
 public adjuntosOrdenesVer(adjunto, ext){
   console.log(adjunto);
-  var url = 'http://localhost:8000/files/'+adjunto;
+  var url = this.url.getUrlBackEnd()+'files/'+adjunto;
 
   this.adjuntoVer =  this.sanitizer.bypassSecurityTrustResourceUrl(url);
 
@@ -768,6 +774,41 @@ public adjuntosOrdenes(orden){
     () => {
       //console.log(this.cod);
     }
+  );
+}
+
+public datosEliminarArch(ruta, id, datos){
+  this.archivoEliminar = datos;
+
+  this.frm_ArchivoEliminar.controls["idEliminar"].setValue(id);
+  this.frm_ArchivoEliminar.controls["rutaEliminar"].setValue(ruta);
+}
+
+
+public eliminarArchivo(orden){
+  let datosENRdto : DatosENR = new DatosENR();
+
+  datosENRdto = this.frm_ArchivoEliminar.value;
+
+  
+  this.datosENR.eliminarArchivo(datosENRdto).subscribe(
+    response => {
+      
+    },
+    err => {
+      console.log("no");
+    },
+    () => {
+      notie.alert({
+        type: 'info', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/eliminate.png" width=40 height=40> Archivo eliminado con éxito!',
+        stay: false, // optional, default = false
+        time: 3, // optional, default = 3, minimum = 1,
+        position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+      });
+      this.adjuntosOrdenes(orden);
+      this.getOrdenNIS();
+    },
   );
 }
 

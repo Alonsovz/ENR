@@ -49,3 +49,7 @@ Route::get('/', function () {
 
 
     Route::any('descargarArchivo', 'ENRController@descargarArchivo');
+    Route::post('eliminarArchivo', 'ENRController@eliminarArchivo');
+    Route::post('eliminarArchivoENR', 'ENRController@eliminarArchivoENR');
+    Route::any('getAdjuntosOrdenesENR', 'ENRController@getAdjuntosOrdenesENR');
+    

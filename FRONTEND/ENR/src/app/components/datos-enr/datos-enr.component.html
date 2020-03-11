@@ -131,7 +131,7 @@
                            <button *ngIf="orden.adjuntos > 0"  data-toggle="modal" 
                              data-target="#adjuntosOrden" (click)="adjuntosOrdenes(orden)"
                             class="btn btn-info btn-sm btn-circle" style="background-color: #008EC4;color:white">
-                             <i class="fa fa-file"></i>
+                             <i class="fa fa-eye"></i>
                         </button>
                        </td>
                       
@@ -289,8 +289,6 @@
                             <label class="fa fa-file" style="color:#B0B005 !important;"></label>
                             Archivo
                         </th>
-                        <th style="background-color:#323259; color:#B0B005;font-size: 14px;
-                        border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center"></th>
                     </tr>
                 </thead>
                 <tbody  formArrayName="documentacion"
@@ -310,9 +308,7 @@
                         <td style="border-bottom: 1px solid white;">
                             <input class="form-control" type="text" formControlName="archivo"
                             style="height: 45px;" readonly="true"></td>
-                        <td style="border-bottom: 1px solid white;">
-                            <a class="btn btn-danger btn-sm" (click)="deleteDoc(pointIndex)"><i class="fa fa-trash"></i></a> </td>
-                    </tr>
+                        </tr>
                     
                 </tbody>
             </table>
@@ -409,8 +405,6 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
                                 <label class="fa fa-file" style="color:#51F749 !important;"></label>
                                 Archivo
                             </th>
-                            <th style="background-color:#323259; color:#51F749;font-size: 14px;
-                            border-bottom: 2px solid #51F749;font-weight: bold;" class="text-center"></th>
                         </tr>
                     </thead>
                     <tbody  formArrayName="documentacionOrden"
@@ -435,9 +429,7 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
                             <textarea class="form-control" rows="2" readonly="true"
                              formControlName="file" name="file"></textarea>
                         </td>
-                        <td style="border-bottom: 1px solid white;">
-                            <a class="btn btn-danger btn-sm" (click)="deleteDocOrden(pointIndex)"><i class="fa fa-trash"></i></a>
-                        </td>
+                        
                     </tr>
                     </tbody>
                 </table>
@@ -592,14 +584,14 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
         <div class="modal-header">
           <h5 class="modal-title">
             <img class="img-profile" src="../../../assets/imagenes/folder.png" width=45 height=45>
-            Adjuntar archivos a la orden : <a style="color: #51F749;">{{ordenNumero.orden}}</a> 
+            Adjuntos de la orden : <a style="color: #51F749;">{{ordenNumero.orden}}</a> 
             || Tipo de Orden : <a style="color: #51F749;">{{ordenNumero.tipo}}</a>
         </h5>
           
         </div>
         <div class="modal-body">
 
-          <table  id="adjuntos_Tbl" class="table small mt-5" style="width: 99%;
+          <table  id="adjuntos_Tbl" class="table small mt-5" style="width: 100%;
                 margin:auto">
                     <thead class="thead-dark">
                       <tr>
@@ -626,7 +618,7 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
                        <td>{{ad.creador}}</td>
                        <td>{{ad.ruta}}</td>
                        <td>
-                           <button class="btn btn-success btn-sm btn-circle"  
+                           <button class="btn btn-success btn-sm btn-circle"  data-dismiss="modal"
                            (click)="adjuntosOrdenesVer(ad.ruta, ad.ext)"
                            data-toggle="modal" data-target="#verAdjuntosOrden">
                                 <i class="fa fa-eye"></i>
@@ -637,7 +629,9 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
                                 <i class="fa fa-download"></i>
                         </a>
                        &nbsp;
-                           <button data-toggle="modal" data-target="#adjuntosOrden"
+                           <button data-dismiss="modal" data-toggle="modal"
+                            data-target="#confirmarEliminarAdjunto"
+                           (click)="datosEliminarArch(ad.ruta, ad.id, ad)"
                             class="btn btn-danger btn-sm btn-circle">
                              <i class="fa fa-trash"></i>
                         </button>
@@ -645,7 +639,7 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
                       
                         </tr>
                     </tbody>
-                  </table>
+          </table>
        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
@@ -676,15 +670,64 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
             <img [src]="adjuntoVer" width="650px" height="450px"
             style="margin-left: 20%;"/>
           </div>
+          <div *ngIf="extension == 'txt' ">
+            <h2 style="color:yellow;text-align: center;">El formato .txt solo puede ser descargado</h2>
+          </div>
         </div>
           
         
       
      </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">
+        <button type="button" class="btn btn-danger" data-dismiss="modal"
+          data-toggle="modal" data-target="#adjuntosOrden">
           <i class="fas fa-times-circle"></i>  Cerrar
         </button>          
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal animated fadeInLeft" id="confirmarEliminarAdjunto" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h5 class="title" style="color:#0CD902 !important;">
+          <img class="img-profile" src="../../../assets/imagenes/confirm.png" width=35 height=35>
+          Confirmación
+        </h5>
+        
+      </div>
+      <div class="modal-body">
+        <form [formGroup]='frm_ArchivoEliminar'>
+          
+          <input type="hidden" class="form-control"
+          formControlName="idEliminar" name="idEliminar"> 
+          <input type="hidden" class="form-control"
+          formControlName="rutaEliminar" name="rutaEliminar"> 
+      </form>    
+
+        <h6 style="text-align: center;color: #67E1E1;">¿Desea eliminar el archivo 
+          <a style="color:yellow">"{{archivoEliminar.ruta}}"</a>
+          asociado a la orden 
+          <a style="color:yellow">"{{archivoEliminar.orden}}"</a>?</h6>
+        <h5 style="text-align: center;color: #FC0505;">¡Se borrará de todo el repositorio de archivos!</h5>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal" 
+        data-toggle="modal" data-target="#adjuntosOrden">
+          <i class="fas fa-times-circle"></i>  No!
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"
+        (click)="eliminarArchivo(archivoEliminar)"
+        data-toggle="modal" data-target="#adjuntosOrden">
+          <i class="fas fa-thumbs-up"></i>  Si, eliminar!
+        </button>
+        
+        
       </div>
     </div>
   </div>

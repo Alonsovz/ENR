@@ -74,13 +74,11 @@ label{
 
 
 .adjuntos{
-  background-color: #092A01 !important;
+  background-color: #082002 !important;
 }
 
 
-.adjuntos:hover{
-  background-color: #010500 !important;
-}
+
 
 .btn{
   font-size: 13px;

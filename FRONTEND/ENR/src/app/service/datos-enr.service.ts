@@ -48,5 +48,11 @@ export class DatosENRService {
     //console.log(orden);
     return this.http.post<DatosENR[]>(this.url.getUrlBackEnd() + 'getAdjuntosOrdenes', orden).pipe(map(data => data as DatosENR[]));
   }
+
+
+  public eliminarArchivo(datos: DatosENR): Observable<DatosENR> {
+    //console.log(datos);
+    return this.http.post<DatosENR>(this.url.getUrlBackEnd() + 'eliminarArchivo', datos).pipe(map(data => data as DatosENR));
+  }
   
 }
