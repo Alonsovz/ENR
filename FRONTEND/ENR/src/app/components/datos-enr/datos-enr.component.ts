@@ -42,6 +42,7 @@ export class DatosENRComponent implements OnInit {
   ordenNumero : DatosENR = new DatosENR();
   adjuntoVer : SafeResourceUrl;
   urlArc : SafeResourceUrl;
+  rutaFile : string;
   fileData: File = null;
   previewUrl:any = null;
   previewUrl1:any = null;
@@ -120,41 +121,21 @@ export class DatosENRComponent implements OnInit {
 
      this.adjuntoVer= this.sanitizer.bypassSecurityTrustResourceUrl('');
      this.urlArc = this.sanitizer.bypassSecurityTrustResourceUrl(this.url.getUrlBackEnd());
+     this.rutaFile = this.url.getUrlBackEnd()+'descargarArchivo?ruta=';
    }
 
    
-
+//inicialización de datos en el formulario de adjuntar archivos al caso ENR
     get documentos() {
       return this.docForm.get('documentacion') as FormArray;
     }
 
-    addDoc() {
-      this.documentos.push(
-        this.fb.group({nombreDoc:'',tipoPrueba:1,archivo:''}),    
-        );
-    }
-  
-    deleteDoc(index) {
-      this.documentos.removeAt(index);
-    }
-
-
+//inicialización de datos en el formulario de adjuntar archivos a las ordenes técnicas
     get adjuntos(){
       return this.adjuntoOrdenesForm.get('documentacionOrden') as FormArray;
     }
 
-
-    addDocOrden(numero) {
-      this.adjuntos.push(
-        this.fb1.group({ordenN:numero,nombreDocOrden:'',tipoAdjuntoOrden:1,file:''}),    
-        );
-    }
-  
-    deleteDocOrden(index) {
-      this.adjuntos.removeAt(index);
-    }
-
-  
+//extraccion de datos por NIS
   public obtenerDatos(){
     this.docForm = this.fb.group({documentacion: this.fb.array([]),});
 
@@ -236,14 +217,14 @@ export class DatosENRComponent implements OnInit {
 
   }
 
-
+//asignacion de fecha fin mediante la fecha de regularización
   public asigFechaFin(){
     var fecha = this.frm_DatosNIS.controls["fechaRegular"].value;
 
     this.frm_DatosNIS.controls["fechaFinENR"].setValue(fecha);
   }
 
-
+//validación de fecha inicio y fin 
   public validarFechas(){
     var fechaMax = this.frm_DatosNIS.controls["fechaRegular"].value;
 
@@ -281,6 +262,8 @@ export class DatosENRComponent implements OnInit {
 
   }
 
+  //validación de fecha inicio para que no sea mayor que la final ni la de regularización
+  
   public validarFechaInicio(){
     var fechaMax = this.frm_DatosNIS.controls["fechaRegular"].value;
     var fechaInicio = this.frm_DatosNIS.controls["fechaInicioENR"].value;
@@ -315,6 +298,7 @@ export class DatosENRComponent implements OnInit {
     }
   }
 
+    //método para obtener dias segun el codigo tipo enr
   public asigDias(){
     let datosENRdto : DatosENR = new DatosENR();
 
@@ -334,6 +318,8 @@ export class DatosENRComponent implements OnInit {
     );
   }
 
+  //método para obtener dias de cobro segun el codigo tipo enr y mensaje de alerta
+  //si sobrepasa el límite
   public calcularDias(){
     var fechaFin1 = new Date(this.frm_DatosNIS.controls["fechaFinENR"].value).getTime() ;
     var fechaInicio1 = new Date( this.frm_DatosNIS.controls["fechaInicioENR"].value).getTime();
@@ -371,12 +357,13 @@ export class DatosENRComponent implements OnInit {
 
   }
 
-
+//inicialización de datos en el formulario de adjuntar archivos a las ordenes técnicas
   public modalAdjuntar(orden){
     this.ordenNumero = orden;
     this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
   }
 
+  //reseteo de formulario si se cancela el guardado
  public cancelarGuardado(){
 
   
@@ -395,7 +382,7 @@ export class DatosENRComponent implements OnInit {
   $("#data").hide();
  }
 
-
+//inserción de datos a guarddar
  public guardarDatos(){
   let datosENRdto : DatosENR = new DatosENR();
 
@@ -443,7 +430,7 @@ export class DatosENRComponent implements OnInit {
 
  }
 
-
+//método para guardar los adjuntos de la orden tecnica
  public guardarAdjuntosOT(){
   let datosENRdtoDoc : DatosENR = new DatosENR();
 
@@ -476,6 +463,8 @@ export class DatosENRComponent implements OnInit {
   
  }
 
+
+ //método para obetener las ordenes tecnicas asociadas al NIS
  public getOrdenNIS(){
   let datosENRdto : DatosENR = new DatosENR();
 
@@ -530,7 +519,7 @@ export class DatosENRComponent implements OnInit {
  }
  
 
-
+//validacion del archivo seleccionado
  fileProgress1(fileInput: any) {
   this.fileData = <File>fileInput.target.files[0];
   this.onSubmit1();
@@ -563,13 +552,13 @@ onSubmit1() {
   
 }
   
-
+//validacion del archivo seleccionado  en la orden tecnica
 fileProgress2(fileInput: any) {
   this.fileData = <File>fileInput.target.files[0];
  this.preview2();
 }
 
-
+//control para el preview de la imagen en vista previa en la orden tecnica
 preview2() {
   // Show preview 
   var mimeType = this.fileData.type;
@@ -590,7 +579,7 @@ preview2() {
     this.previewUrl1 = reader.result; 
   }
 }
-
+//subir el archivo a la carpeta en la orden tecnica
 onSubmit2(numero) {
   const formData = new FormData();
   formData.append('file', this.fileData);
@@ -639,12 +628,13 @@ onSubmit2(numero) {
 }
 
 
-
+//validacion del archivo seleccionado  en el caso ENR
  fileProgress(fileInput: any) {
        this.fileData = <File>fileInput.target.files[0];
        this.preview();
  }
-  
+
+//control para el preview de la imagen en vista previa en la carga de archivo al caso ENR
  preview() {
      // Show preview 
      var mimeType = this.fileData.type;
@@ -667,7 +657,7 @@ onSubmit2(numero) {
  }
   
 
-
+//subir el archivo a la carpeta en el caso ENR
  onSubmit() {
   const formData = new FormData();
   formData.append('file', this.fileData);
@@ -713,6 +703,7 @@ onSubmit2(numero) {
   
 }
 
+//método que obtiene la URL del archivo a ver y valida el tipo de extension
 public adjuntosOrdenesVer(adjunto, ext){
   console.log(adjunto);
   var url = this.url.getUrlBackEnd()+'files/'+adjunto;
@@ -722,6 +713,7 @@ public adjuntosOrdenesVer(adjunto, ext){
   this.extension = ext;
 }
 
+//método para obtener los adjuntos de las ordenes
 public adjuntosOrdenes(orden){
   this.ordenNumero = orden;
 
@@ -777,6 +769,7 @@ public adjuntosOrdenes(orden){
   );
 }
 
+//método que obtiene los parametros del archivo a eliminar de la orden tecnica
 public datosEliminarArch(ruta, id, datos){
   this.archivoEliminar = datos;
 
@@ -784,7 +777,7 @@ public datosEliminarArch(ruta, id, datos){
   this.frm_ArchivoEliminar.controls["rutaEliminar"].setValue(ruta);
 }
 
-
+//método para eliminar adjuntos de las ordenes tecnicas
 public eliminarArchivo(orden){
   let datosENRdto : DatosENR = new DatosENR();
 

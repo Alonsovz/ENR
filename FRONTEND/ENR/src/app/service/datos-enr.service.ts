@@ -34,12 +34,12 @@ export class DatosENRService {
 
 
   public saveDocProbatoria(datos: DatosENR): Observable<DatosENR> {
-    console.log(datos);
+    //console.log(datos);
     return this.http.post<DatosENR>(this.url.getUrlBackEnd() + 'saveDocProbatoria', datos).pipe(map(data => data as DatosENR));
   }
 
   public saveDocOT(datos: DatosENR): Observable<DatosENR> {
-    console.log(datos);
+    //console.log(datos);
     return this.http.post<DatosENR>(this.url.getUrlBackEnd() + 'saveDocOT', datos).pipe(map(data => data as DatosENR));
   }
 

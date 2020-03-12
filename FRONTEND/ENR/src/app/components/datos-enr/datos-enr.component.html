@@ -4,6 +4,7 @@
   </head>
 <div class="row" style="margin-left: 30px;margin-right: 30px;">
     <div class="col-md-6 animated fadeInRight">  
+     
         <form [formGroup]='frm_NIS'>
             <label>
                 <img class="img-profile" src="../../../assets/imagenes/html.png">
@@ -22,9 +23,9 @@
 <div class="row animated fadeInDown" id="data" style="margin-left: 30px;margin-top: 25px;margin-right: 30px;" 
 *ngFor="let dat  of datos">
     <div class="col-lg-12">
-        <hr style="background-color: #A84DF4 !important;height: 2px;">
+        <hr style="background-color: #FB51EE !important;height: 2px;">
 
-        <h4 style="color: #A84DF4;">
+        <h4 style="color: #FB51EE;">
             <img class="img-profile" src="../../../assets/imagenes/result.png"
             style="margin-bottom: 5px;">
             Datos obtenidos
@@ -625,7 +626,7 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
                        </button> 
                            &nbsp; 
                         <a class="btn btn-info btn-sm btn-circle"  
-                           [href]="'http://localhost:8000/descargarArchivo?ruta='+ad.ruta">
+                           [href]="rutaFile+ad.ruta">
                                 <i class="fa fa-download"></i>
                         </a>
                        &nbsp;

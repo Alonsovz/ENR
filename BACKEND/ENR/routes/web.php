@@ -53,3 +53,4 @@ Route::get('/', function () {
     Route::post('eliminarArchivoENR', 'ENRController@eliminarArchivoENR');
     Route::any('getAdjuntosOrdenesENR', 'ENRController@getAdjuntosOrdenesENR');
     
+    Route::post('getDatosENR', 'ENRController@getDatosENR');

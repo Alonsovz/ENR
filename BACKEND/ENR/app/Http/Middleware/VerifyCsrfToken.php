@@ -39,6 +39,7 @@ class VerifyCsrfToken extends BaseVerifier
         'descargarArchivo',
         'eliminarArchivo',
         'getAdjuntosOrdenesENR',
-        'eliminarArchivoENR'
+        'eliminarArchivoENR',
+        'getDatosENR'
     ];
 }

@@ -327,7 +327,8 @@ class ENRController extends Controller
         convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
         t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
         (select count(id) from enr_documentacion where idCasoENR =
-        dg.id and idEliminado = 1) as adjuntos from enr_datosGenerales dg
+        dg.id and idEliminado = 1) as adjuntos,
+        dg.codigoTipoENR as codTipoENR from enr_datosGenerales dg
         inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
         inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
         inner join comanda_db.dbo.users u on u.id = dg.usuario_creacion
@@ -345,7 +346,8 @@ class ENRController extends Controller
         convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
         t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
         (select count(id) from enr_documentacion where idCasoENR =
-        dg.id and idEliminado = 1) as adjuntos from enr_datosGenerales dg
+        dg.id and idEliminado = 1) as adjuntos,
+        dg.codigoTipoENR as codTipoENR from enr_datosGenerales dg
         inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
         inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
         inner join comanda_db.dbo.users u on u.id = dg.usuario_creacion
@@ -364,7 +366,8 @@ class ENRController extends Controller
         convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
         t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
         (select count(id) from enr_documentacion where idCasoENR =
-        dg.id and idEliminado = 1) as adjuntos from enr_datosGenerales dg
+        dg.id and idEliminado = 1) as adjuntos,
+        dg.codigoTipoENR as codTipoENR from enr_datosGenerales dg
         inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
         inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
         inner join comanda_db.dbo.users u on u.id = dg.usuario_creacion
@@ -455,7 +458,7 @@ class ENRController extends Controller
                               'fechaBorrado' => date('Ymd H:i:s'),
                          ]);
 
-        unlink(public_path('files/'.$file));
+        //unlink(public_path('files/'.$file));
         
     }
 
@@ -464,18 +467,43 @@ class ENRController extends Controller
         $codigo = $request["caso"];
 
         $getDatos =  DB::connection('facturacion')->select("
-        select d.titulo as titulo, d.tipo as tipo,
+        select distinct d.titulo as titulo, d.tipo as tipo,
         d.id as id,
-        d.idCasoENR as caso,
         d.ruta as ruta,
         convert(varchar(10),d.fechaCreacion,103) as fechaCreacion,
-        u.alias as creador,RIGHT(d.ruta,3) as ext
+        u.alias as creador,RIGHT(d.ruta,3) as ext,
+        dg.id as caso, dg.num_suministro as nis,
+        dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
+        convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
+        t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
+        (select count(id) from enr_documentacion where idCasoENR =
+        dg.id and idEliminado = 1) as adjuntos,
+        dg.codigoTipoENR as codTipoENR
         from enr_documentacion d
         inner join comanda_db.dbo.users u on u.id = d.usuarioCreacion
+        inner join enr_datosGenerales dg on dg.id = d.idCasoENR
+        inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
+        inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
         where d.idEliminado = 1 and d.idCasoENR = ?
         ",[$codigo]);
 
 
+        return response()->json($getDatos);
+    }
+
+    public function getDatosENR(Request $request){
+        $codigo = $request["caso"];
+
+        $getDatos =  DB::connection('facturacion')->select("
+        select *, 
+        convert(varchar(10),fechaPrimerNoti,23) as fechaPri,
+        convert(varchar(10),fechaRegularizacion,23) as fechaR,
+        convert(varchar(10),fechaInicio,23) as fechaIn,
+        convert(varchar(10),fechaFin,23) as fechaFin,
+        convert(varchar,fechaCreacion, 103)+' '+substring(convert(varchar,fechaCreacion, 114),1,5) as fechaCreacionF
+        from enr_datosGenerales
+        where idEliminado = 1 and id =?
+        ",[$codigo]);
         return response()->json($getDatos);
     }
 }
