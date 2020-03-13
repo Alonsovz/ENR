@@ -54,5 +54,16 @@ export class DatosENRService {
     //console.log(datos);
     return this.http.post<DatosENR>(this.url.getUrlBackEnd() + 'eliminarArchivo', datos).pipe(map(data => data as DatosENR));
   }
+
+
+  public updateDatosNISGenerales(datos: DatosENR): Observable<DatosENR> {
+    //console.log(datos);
+    return this.http.post<DatosENR>(this.url.getUrlBackEnd() + 'updateDatosNISGenerales', datos).pipe(map(data => data as DatosENR));
+  }
   
+
+  public updateDocProbatoria(datos: DatosENR): Observable<DatosENR> {
+    //console.log(datos);
+    return this.http.post<DatosENR>(this.url.getUrlBackEnd() + 'updateDocProbatoria', datos).pipe(map(data => data as DatosENR));
+  }
 }

@@ -322,7 +322,7 @@ class ENRController extends Controller
 
     public function getRepositorioIngresados(){
         $getDatos =  DB::connection('facturacion')->select("
-        select dg.id as caso, dg.num_suministro as nis,
+        select dg.id as caso, dg.num_suministro as nis, dg.scanPrimerNoti as ruta,
         dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
         convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
         t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
@@ -341,7 +341,7 @@ class ENRController extends Controller
 
     public function getRepositorioCalculados(){
         $getDatos =  DB::connection('facturacion')->select("
-        select dg.id as caso, dg.num_suministro as nis,
+        select dg.id as caso, dg.num_suministro as nis,dg.scanPrimerNoti as ruta,
         dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
         convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
         t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
@@ -361,7 +361,7 @@ class ENRController extends Controller
 
     public function getRepositorioNotificados(){
         $getDatos =  DB::connection('facturacion')->select("
-        select dg.id as caso, dg.num_suministro as nis,
+        select dg.id as caso, dg.num_suministro as nis,dg.scanPrimerNoti as ruta,
         dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
         convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
         t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
@@ -440,7 +440,7 @@ class ENRController extends Controller
                               'fechaBorrado' => date('Ymd H:i:s'),
                          ]);
 
-        //unlink(public_path('files/'.$file));
+        unlink(public_path('files/'.$file));
         
     }
 
@@ -458,7 +458,7 @@ class ENRController extends Controller
                               'fechaBorrado' => date('Ymd H:i:s'),
                          ]);
 
-        //unlink(public_path('files/'.$file));
+        unlink(public_path('files/'.$file));
         
     }
 
@@ -496,6 +496,8 @@ class ENRController extends Controller
 
         $getDatos =  DB::connection('facturacion')->select("
         select *, 
+        scanPrimerNoti as ruta,
+        RIGHT(scanPrimerNoti,3) as ext,
         convert(varchar(10),fechaPrimerNoti,23) as fechaPri,
         convert(varchar(10),fechaRegularizacion,23) as fechaR,
         convert(varchar(10),fechaInicio,23) as fechaIn,
@@ -505,5 +507,131 @@ class ENRController extends Controller
         where idEliminado = 1 and id =?
         ",[$codigo]);
         return response()->json($getDatos);
+    }
+
+    public function cambiarScanENR(Request $request){
+
+        $file = $request["nuevoScanENR"];
+        $id = $request["idCambio"];
+        $fileViejo = $request["rutaVieja"];
+        
+        $delete =  DB::connection('facturacion')->table('enr_datosGenerales')->where('id', $id)
+                         ->update([
+                             'scanPrimerNoti' => substr($file,12),
+                         ]);
+
+       unlink(public_path('files/'.$fileViejo));
+       //return response()->json();
+    }
+
+    
+
+    public function getScan(Request $request){
+        $codigo = $request["caso"];
+
+        $getDatos =  DB::connection('facturacion')->select("
+        select *, 
+        id as caso,
+        scanPrimerNoti as ruta,
+        RIGHT(scanPrimerNoti,3) as ext,
+        convert(varchar(10),fechaPrimerNoti,23) as fechaPri,
+        convert(varchar(10),fechaRegularizacion,23) as fechaR,
+        convert(varchar(10),fechaInicio,23) as fechaIn,
+        convert(varchar(10),fechaFin,23) as fechaFin,
+        convert(varchar,fechaCreacion, 103)+' '+substring(convert(varchar,fechaCreacion, 114),1,5) as fechaCreacionF
+        from enr_datosGenerales
+        where idEliminado = 1 and id =?
+        ",[$codigo]);
+        return response()->json($getDatos);
+    }
+
+
+
+    public function updateDatosNISGenerales(Request $request){
+        $id = $request["caso"];
+        $nNotificacion = $request["nNotificacion"];
+        $fechaPrimeraNoti = $request["fechaPrimeraNoti"];
+       // $adScanNoti = $request["adScanNoti"];
+        $fechaRegular = $request["fechaRegular"];
+        $codTipoENR = $request["codTipoENR"];
+        $codTipoMetENR = $request["codTipoMetENR"];
+        $fechaInicioENR = $request["fechaInicioENR"];
+        $fechaFinENR = $request["fechaFinENR"];
+        $diasCobro = $request["diasCobro"];
+        //$usuario_creacion = 151;
+
+         //convertir fecha primer notificacion enr
+        $fecha1 = date_create_from_format('Y-m-d',$fechaPrimeraNoti);
+
+        $fecha1Noti = date_format($fecha1,'Ymd');
+
+         //convertir fecha regularozación enr
+        $fecha2 = date_create_from_format('Y-m-d',$fechaRegular);
+
+        $fecha2Regula = date_format($fecha2,'Ymd');
+
+         //convertir fecha inicio enr
+        $fecha3 = date_create_from_format('Y-m-d',$fechaInicioENR);
+
+        $fecha3Inicio = date_format($fecha3,'Ymd');
+
+        //convertir fecha fin enr
+        $fecha4 = date_create_from_format('Y-m-d',$fechaFinENR);
+
+        $fecha4Fin = date_format($fecha4,'Ymd');
+
+        $update =  DB::connection('facturacion')->table('enr_DatosGenerales')
+        ->where('id', $id)
+        ->update([
+                    
+                         'nNotiENR' => $nNotificacion,
+                         'fechaPrimerNoti' => $fecha1Noti,
+                         'fechaRegularizacion'=>$fecha2Regula,
+                         'codigoTipoENR'=>$codTipoENR,
+                         'codigoTipoMet'=>$codTipoMetENR,
+                         'fechaInicio'=>$fecha3Inicio,
+                         'fechaFin'=>$fecha4Fin,
+                         'diasCobro'=>$diasCobro,
+                         'estado'=>1,
+                         'idEliminado'=>1,
+                         ]);
+
+
+        return response()->json($update);
+
+    }
+
+    public function updateDocProbatoria(Request $request){
+        
+       
+        $doc = json_encode($request["documentacion"]);
+        $usuario_creacion = 151;
+        $documentacion = json_decode($doc);
+       
+        $contador = 0;
+        
+        $ultimoCaso = DB::connection('facturacion')->table('enr_DatosGenerales')
+        ->select('enr_DatosGenerales.id')->orderBy('enr_DatosGenerales.id','desc')->first();
+
+
+        foreach($documentacion as $docSave){
+            $insertar =  DB::connection('facturacion')->table('enr_Documentacion')
+                         ->insert([
+                        'idCasoENR' => $docSave->caso ,
+                         'titulo' => $docSave->nombreDoc,
+                         'tipo' => $docSave->tipoPrueba,
+                         'ruta' => $docSave->archivo,
+                         'fechaCreacion'=>date('Ymd H:i:s'),
+                         'idEliminado'=>1,
+                         'usuarioCreacion'=>$usuario_creacion,
+                         ]);
+
+            $contador++;
+        }     
+            
+        
+       if($contador == count($documentacion)){
+        return response()->json("ok");
+       }
     }
 }

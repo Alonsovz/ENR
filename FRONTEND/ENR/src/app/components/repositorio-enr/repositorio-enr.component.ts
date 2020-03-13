@@ -24,8 +24,11 @@ import { metodologia } from 'src/app/models/metodologiaCal';
 export class RepositorioENRComponent implements OnInit {
   repositorioIng : Repositorio[];
   frm_ArchivoEliminar : FormGroup;
+  frm_NuevoScan: FormGroup;
   frm_ArchivoEliminarOT : FormGroup;
+  frm_Archivo: FormGroup;
   frmDatosENR : FormGroup;
+  docForm: FormGroup;
   repositorioCalc : Repositorio[];
   repositorioNoti : Repositorio[];
   dataTable: any;
@@ -43,13 +46,16 @@ export class RepositorioENRComponent implements OnInit {
   frm_DatosNIS : FormGroup;
   datos: DatosENR[] = new Array();
   datosENRLista: Repositorio[] = new Array();
+  datosENRListaScan: Repositorio[] = new Array();
   ordenes : DatosENR[];
   dias: DatosENR[] = new Array();
   codigosENR : codigos[];
   codigosMetENR : metodologia[];
   rutaFile : string;
   frm_ArchivoOT: FormGroup;
+  previewUrl:any = null;
   previewUrl1:any = null;
+  previewUrl2:any = null;
   adjuntoOrdenesForm: FormGroup;
   fileData: File = null;
   fileUploadProgress: string = null;
@@ -60,16 +66,31 @@ export class RepositorioENRComponent implements OnInit {
     private datosENR : DatosENRService,
     public sanitizer: DomSanitizer,
     private codigoENR: CodigoENRService, private codigoMetENR: MetodologiaCalcService,
-    private fb1: FormBuilder) { 
+    private fb1: FormBuilder, private fb: FormBuilder,) { 
       this.frm_ArchivoEliminar = new FormGroup({
         'idEliminar' : new FormControl(''),
         'rutaEliminar' : new FormControl(''),
       });
 
+      this.frm_NuevoScan = new FormGroup({
+        'nuevoScanENR' : new FormControl(''),
+        'idCambio' : new FormControl(''),
+        'rutaVieja' : new FormControl(''),
+      });
 
       this.frm_ArchivoEliminarOT = new FormGroup({
         'idEliminar' : new FormControl(''),
         'rutaEliminar' : new FormControl(''),
+        
+        
+      });
+
+
+      this.frm_Archivo = new FormGroup({
+      
+        'tituloDocProbatorio' : new FormControl('',[Validators.required]),
+        'tipoPruebaProbatorio' : new FormControl(1,[Validators.required]),
+        'fileProbatorio' : new FormControl('',[Validators.required]),
       });
 
 
@@ -87,6 +108,7 @@ export class RepositorioENRComponent implements OnInit {
 
       this.frmDatosENR = new FormGroup({
         'nNotificacion' : new FormControl(''),
+        'caso' : new FormControl(''),
         'adScanNoti' : new FormControl(''),
         'fechaPrimeraNoti' : new FormControl(''),
         'fechaRegular' : new FormControl(''),
@@ -106,10 +128,12 @@ export class RepositorioENRComponent implements OnInit {
         'fileProbatorioOT' : new FormControl('',[Validators.required]),
       });
 
+     
 
     }
 
   ngOnInit() {
+    this.docForm = this.fb.group({documentacion: this.fb.array([]),});
     this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
     this.rutaFile = this.url.getUrlBackEnd()+'descargarArchivo?ruta=';
     
@@ -259,11 +283,18 @@ export class RepositorioENRComponent implements OnInit {
     console.log(ordenNumeroG);
     this.ordenNumeroGN = ordenNumeroG;
     this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
+    this.previewUrl1 = '';
+    this.frm_ArchivoOT.reset();
   }
 
   //declaracion de formulario de todos los adjuntos de las ordenes a subir de tipo ARRRAY
   get adjuntos(){
     return this.adjuntoOrdenesForm.get('documentacionOrden') as FormArray;
+  }
+
+//declaracion de formulario de todos los adjuntos de las ordenes a subir de tipo ARRRAY
+  get documentos() {
+    return this.docForm.get('documentacion') as FormArray;
   }
 
 //validacion del archivo seleccionado
@@ -341,6 +372,82 @@ export class RepositorioENRComponent implements OnInit {
     
     
   }
+
+
+  fileProgress(fileInput: any) {
+    this.fileData = <File>fileInput.target.files[0];
+    this.preview();
+}
+
+//control para el preview de la imagen en vista previa en la carga de archivo al caso ENR
+preview() {
+  // Show preview 
+  var mimeType = this.fileData.type;
+  if (mimeType.match(/image\/*/) == null) {
+   
+   
+   var reader = new FileReader();      
+  reader.readAsDataURL(this.fileData); 
+  reader.onload = (_event) => { 
+    this.previewUrl = ''; 
+  }
+  return;
+  }
+
+  var reader = new FileReader();      
+  reader.readAsDataURL(this.fileData); 
+  reader.onload = (_event) => { 
+    this.previewUrl = reader.result; 
+  }
+}
+
+
+//subir el archivo a la carpeta en el caso ENR
+onSubmit(caso) {
+const formData = new FormData();
+formData.append('file', this.fileData);
+
+this.fileUploadProgress = '0%';
+
+
+this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
+ reportProgress: true,
+ observe: 'events'   
+})
+.subscribe(events => {
+ if(events.type === HttpEventType.UploadProgress) {
+   this.fileUploadProgress = Math.round(events.loaded / events.total * 100) + '%';
+   console.log(this.fileUploadProgress);
+ } else if(events.type === HttpEventType.Response) {
+   this.fileUploadProgress = '';
+   var str = this.frm_Archivo.controls["fileProbatorio"].value;
+   this.documentos.push(
+     this.fb.group({caso:caso,nombreDoc:this.frm_Archivo.controls["tituloDocProbatorio"].value,
+     tipoPrueba:this.frm_Archivo.controls["tipoPruebaProbatorio"].value,
+     archivo:str.substring(12) }),    
+     );
+
+     notie.alert({
+       type: 'info', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+       text: '<img class="img-profile alertImg" src="../../../assets/imagenes/synchronization.png" width=40 height=40> Archivo cargado con éxito!',
+       stay: false, // optional, default = false
+       time: 2, // optional, default = 3, minimum = 1,
+       position: 'top',
+     });
+
+     this.frm_Archivo.controls["tituloDocProbatorio"].setValue('');
+     this.frm_Archivo.controls["tipoPruebaProbatorio"].setValue(1);
+     this.frm_Archivo.controls["fileProbatorio"].setValue('');
+     this.previewUrl = '';
+ }
+
+ 
+    
+});
+
+
+}
+
 
   //método para pasar parametros a otro modal
   public datosOrdenAdjuntos(datos){
@@ -705,6 +812,9 @@ export class RepositorioENRComponent implements OnInit {
   //Método para carga de datos en tablas y formularios en la vista para editar
   public datosEditar(caso){
     //console.log(caso);
+
+    this.docForm = this.fb.group({documentacion: this.fb.array([]),});
+
     this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
     this.ordenNumeroG = caso;
   
@@ -857,6 +967,175 @@ export class RepositorioENRComponent implements OnInit {
     );
 
   }
+
+
+  //Método para cambiar el scan de la primera notificacion en CASO ENR
+
+  public nuevoScan(data){
+    this.previewUrl2 = '';
+    this.frm_NuevoScan.reset();
+    let datosENRdto : DatosENR = new DatosENR();
+    this.frm_NuevoScan.controls["nuevoScanENR"].setValue('');
+    datosENRdto = data;
+
+    this.repositorioENR.getScan(datosENRdto).subscribe(
+      response => {
+      
+        this.datosENRListaScan = response;
+       // $("#dataNis").show();
+      },
+      err => {
+        console.log("no");
+      },
+      () => {
+        
+      },
+    );
+  }
+
+
+  //validacion del archivo seleccionado
+  fileProgress3(fileInput: any) {
+    this.fileData = <File>fileInput.target.files[0];
+   this.preview3();
+  }
+  
+  //control para el preview de la imagen en vista previa
+  preview3() {
+    // Show preview 
+    var mimeType = this.fileData.type;
+    if (mimeType.match(/image\/*/) == null) {
+     
+     
+     var reader = new FileReader();      
+    reader.readAsDataURL(this.fileData); 
+    reader.onload = (_event) => { 
+      this.previewUrl2 = ''; 
+    }
+    return;
+    }
+  
+    var reader = new FileReader();      
+    reader.readAsDataURL(this.fileData); 
+    reader.onload = (_event) => { 
+      this.previewUrl2 = reader.result; 
+    }
+  }
+  
+  //subir el archivo a la carpeta
+  onSubmit3(datosCaso) {
+    const formData = new FormData();
+    formData.append('file', this.fileData);
+     
+    //console.log(datosCaso);
+
+    let datos : DatosENR = new DatosENR();
+
+    datos = this.frm_NuevoScan.value;
+  
+   // console.log(datos);
+   
+
+     
+    this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
+      // reportProgress: true,
+       observe: 'events'   
+     })
+     .subscribe(events => {
+       if(events.type === HttpEventType.UploadProgress) {
+         //this.fileUploadProgress = Math.round(events.loaded / events.total * 100) + '%';
+         console.log(this.fileUploadProgress);
+       } else if(events.type === HttpEventType.Response) {
+        // this.fileUploadProgress = '';
+   
+        this.repositorioENR.cambiarScan(datos).subscribe(
+          response => {
+            
+          },
+          err => {
+            console.log("no");
+          },
+          () => {
+            notie.alert({
+              type: 'info', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+              text: '<img class="img-profile alertImg" src="../../../assets/imagenes/synchronization.png" width=40 height=40> Archivo cargado con éxito!',
+              stay: false, // optional, default = false
+              time: 2, // optional, default = 3, minimum = 1,
+              position: 'top',
+            });
+            this.previewUrl2 = '';
+            this.frm_NuevoScan.reset();
+            this.datosEditar(datosCaso);
+          },
+        );
+
+      
+         
+   
+       }
+   
+       
+          
+     });
+ 
+    
+    
+  }
+
+
+
+//editar datos ENR
+  public guardarDatos(datos){
+    let datosENRdto : DatosENR = new DatosENR();
+  
+    datosENRdto = this.frmDatosENR.value;
+  
+  
+    this.datosENR.updateDatosNISGenerales(datosENRdto).subscribe(
+      response => {
+        
+      },
+      err => {
+        console.log("no");
+      },
+      () => {
+        let datosENRdtoDoc : DatosENR = new DatosENR();
+  
+        datosENRdtoDoc = this.docForm.value;
+        this.datosENR.updateDocProbatoria(datosENRdtoDoc).subscribe(
+          response => {
+            
+          },
+          err => {
+            console.log("no");
+          },
+          () => { 
+            
+  
+          },
+        );
+  
+        notie.alert({
+          type: 'success', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Caso editado con éxito!',
+          stay: false, // optional, default = false
+          time: 2, // optional, default = 3, minimum = 1,
+          position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+        });
+  
+        this.docForm.reset();
+        this.datosEditar(datos);
+        this.getRepositorioCalc();
+        this.getRepositorioIng();
+        this.getRepositorioNoti();
+        this.ordenNumeroG = datosENRdto;
+      },
+    );
+  
+  
+    
+  
+   }
 
 
 }

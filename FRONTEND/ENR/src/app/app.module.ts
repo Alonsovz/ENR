@@ -14,6 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DatosENRComponent } from './components/datos-enr/datos-enr.component';
 import { NgxMaskModule } from 'ngx-mask';
 import { RepositorioENRComponent } from './components/repositorio-enr/repositorio-enr.component';
+import { LoginComponent } from './login/login.component';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { RepositorioENRComponent } from './components/repositorio-enr/repositori
     MetodologiaCalculoComponent,
     DatosENRComponent,
     RepositorioENRComponent,
+    LoginComponent,
     
   ],
   imports: [

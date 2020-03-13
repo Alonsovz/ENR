@@ -122,6 +122,8 @@ export class DatosENRComponent implements OnInit {
      this.adjuntoVer= this.sanitizer.bypassSecurityTrustResourceUrl('');
      this.urlArc = this.sanitizer.bypassSecurityTrustResourceUrl(this.url.getUrlBackEnd());
      this.rutaFile = this.url.getUrlBackEnd()+'descargarArchivo?ruta=';
+
+    
    }
 
    

@@ -47,4 +47,15 @@ export class RepositorioEnrService {
   }
 
 
+  public cambiarScan(datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'cambiarScanENR', datos).pipe(map(data => data as Repositorio));
+  }
+
+
+  public getScan(nis): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getScan', nis).pipe(map(data => data as Repositorio[]));
+  }
+
 }

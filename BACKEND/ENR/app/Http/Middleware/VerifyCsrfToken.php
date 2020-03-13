@@ -40,6 +40,10 @@ class VerifyCsrfToken extends BaseVerifier
         'eliminarArchivo',
         'getAdjuntosOrdenesENR',
         'eliminarArchivoENR',
-        'getDatosENR'
+        'getDatosENR',
+        'cambiarScanENR',
+        'getScan',
+        'updateDatosNISGenerales',
+        'updateDocProbatoria'
     ];
 }

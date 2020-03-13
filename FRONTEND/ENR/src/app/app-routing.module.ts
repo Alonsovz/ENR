@@ -7,6 +7,7 @@ import { CodigoTipoENRComponent } from './components/codigo-tipo-enr/codigo-tipo
 import { MetodologiaCalculoComponent } from './components/metodologia-calculo/metodologia-calculo.component';
 import { DatosENRComponent } from './components/datos-enr/datos-enr.component';
 import { RepositorioENRComponent } from './components/repositorio-enr/repositorio-enr.component';
+import { LoginComponent } from './login/login.component';
 
 
 const routes: Routes = [
@@ -15,7 +16,9 @@ const routes: Routes = [
   {path: 'gestiones', component: CodigoTipoENRComponent },
   {path: 'metodologiaCalc', component: MetodologiaCalculoComponent },
   {path: 'datosENR', component: DatosENRComponent },
-  {path: 'repositorioENR', component: RepositorioENRComponent }
+  {path: 'repositorioENR', component: RepositorioENRComponent },
+  {path: 'login', component: LoginComponent },
+  {path: '**', pathMatch: 'full', redirectTo: 'login' }
 ];
 
 @NgModule({

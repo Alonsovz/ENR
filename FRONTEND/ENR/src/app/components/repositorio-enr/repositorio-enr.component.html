@@ -79,6 +79,7 @@ background-color: #323259;">
                                <td>{{rep.fechaCreacion}}</td>
                                <td>
                                 <button class="btn btn-default btn-circle btn1"
+                                id="btnD{{rep.caso}}"
                                 data-toggle="modal"  data-target="#datosCaso"
                                 (click)="datosEditar(rep)">
                                     <i class="fas fa-edit"></i>
@@ -296,51 +297,52 @@ background-color: #323259;">
 <div class="modal animated fadeInDown" id="datosCaso" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog mw-100 w-75" >
     <div class="modal-content">
-      <div class="modal-header">
-        <h6 class="title" style="color:#B18AFF !important;">
-          <img class="img-profile" src="../../../assets/imagenes/editModal.png" width=35 height=35>
-          Caso N°: <a style="color: #0CD902;">{{ordenNumeroG.caso}}</a>
-          || Tipo ENR: <a style="color: #0CD902;">{{ordenNumeroG.codigoENR}}</a>
-          || Metodología de Cálculo: <a style="color: #0CD902;">{{ordenNumeroG.metodologiaENR}}</a>
-        </h6>
+      <div class="modal-header" >
         
-      </div>
-      <div class="modal-body" style="max-height: calc(100vh - 200px);
-      overflow-y: auto;overflow-x: hidden;">
-        <ul class="nav nav-tabs" id="myTab" role="tablist" 
-        style="margin-right: 30px;
-        margin-left: 30px;">
+        <div class="row" style="margin-left: 30px;">
+          <ul class="nav nav-tabs" id="myTab" role="tablist" >
           <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#datosNIS" role="tab" 
-            aria-controls="home" aria-selected="true" style="color:white;background-color: #1B1B38;">
+            <a class="nav-link active" data-toggle="tab" href="#datosNIS" role="tab"
+            aria-controls="home" aria-selected="true" style="color:#FB51EE;background-color: #1B1B38;">
             <i class="fas fa-cogs"></i>
             Datos del NIS
             </a>
           </li>
           <li class="nav-item" style="border-bottom:1px solid white;">
             <a class="nav-link"  data-toggle="tab" href="#ordenesNIS" role="tab"
-            aria-controls="profile" aria-selected="false" style="color:white;background-color: #1B1B38;">
+            aria-controls="profile" aria-selected="false" style="color:#51F749;background-color: #1B1B38;">
             <i class="fas fa-paperclip"></i>
-                Órdenes asociadas al NIS
+                Órdenes tec. del NIS
             </a>
           </li>
           <li class="nav-item" style="border-bottom:1px solid white;">
             <a class="nav-link"  data-toggle="tab" href="#datosENR" role="tab"
-            aria-controls="profile" aria-selected="false" style="color:white;background-color: #1B1B38;">
+            aria-controls="profile" aria-selected="false" style="color:#49F7DD;background-color: #1B1B38;">
             <i class="fas fa-money-bill-alt"></i>
                 Datos de ENR
             </a>
           </li>
           <li class="nav-item" style="border-bottom:1px solid white;">
             <a class="nav-link"  data-toggle="tab" href="#docAdjuntos" role="tab"
-            aria-controls="profile" aria-selected="false" style="color:white;background-color: #1B1B38;">
+            aria-controls="profile" aria-selected="false" style="color:#D1D104;background-color: #1B1B38;">
             <i class="fas fa-file"></i>
-                Documentos asociados al caso
+                Adjuntos
             </a>
           </li>
         </ul>
+        </div>
+        <h6 class="title" style="color:#B18AFF !important;margin-right: 40px;">
+          <img class="img-profile" src="../../../assets/imagenes/editModal.png" width=35 height=35>
+          Caso N°: <a style="color: #0CD902;">{{ordenNumeroG.caso}}</a>
+        </h6>
+      </div>
+      <div class="modal-body" style="max-height: calc(100vh - 200px);
+      overflow-y: auto;overflow-x: hidden;">
+        
         <div class="tab-content" id="myTabContent" style="background-color: #323259;margin-right: 30px;
-        margin-left: 30px;border: 1px solid white;">
+        margin-left: 30px;border: 1px solid white;
+       max-height: calc(100vh - 200px);
+      overflow-y: auto;overflow-x: hidden;">
             <div class="tab-pane fade show active" id="datosNIS" role="tabpanel" aria-labelledby="">
               <div class="row animated fadeInRight" *ngFor="let dat  of datos">
                 
@@ -394,6 +396,9 @@ background-color: #323259;">
                       </div>
                   </div>
                 </form>
+               
+
+                
               </div>
             </div>
 
@@ -490,10 +495,30 @@ background-color: #323259;">
                       <label><i class="fa fa-barcode"></i> Número de Notificación ENR</label>          
                       <input type="text" class="form-control"  placeholder="Número de Notificación ENR"
                       formControlName="nNotificacion" [(ngModel)]="data.nNotiENR">
+                      <input type="hidden" class="form-control" 
+                      formControlName="caso" [(ngModel)]="data.id">
                     </div>
                     <div class="col-md-6"><br>
                         <label><i class="fa fa-file"></i> Adjunto: Scan de notificacion inicial</label>          
-                        <input (change)="fileProgress1($event)" type="file" class="form-control" style="height: 45px;" formControlName="adScanNoti">
+                        <br>
+                        <h6 style="color: yellow;font-size: 13px;">{{data.ruta}}</h6>
+                        <button class="btn btn-success btn-sm btn-circle"  data-dismiss="modal"
+                        (click)="adjuntosOrdenesVer(data.ruta, data.ext)"
+                        data-toggle="modal" data-target="#verAdjuntosOrden">
+                                <i class="fa fa-eye"></i>
+                      </button> 
+                        &nbsp; 
+                        <a class="btn btn-info btn-sm btn-circle"  
+                        [href]="rutaFile+data.ruta">
+                                <i class="fa fa-download"></i>
+                        </a>
+                        &nbsp; 
+                        <button class="btn btn-warning btn-sm btn-circle"
+                        data-dismiss="modal"
+                        (click)="nuevoScan(ordenNumeroG)" 
+                        data-toggle="modal" data-target="#nuevoScan">
+                                <i class="fa fa-sync"></i>
+                      </button> 
                   
                     </div>
                     <div class="col-md-6"><br>
@@ -518,7 +543,13 @@ background-color: #323259;">
                             </option>
                         </select>         
                     </div>
-                    
+                    <div class="col-md-2" id="diasData"><br> 
+                      <div  *ngFor="let dia  of dias">
+                        <label><i class="fa fa-calendar"></i> T. Retroactivo</label>
+                        <input type="text" readonly="true" formControlName="diasRetroactivos" class="form-control" [(ngModel)]="dia.diasRetro">
+                    </div> 
+                    </div>
+                     
                    
                     <div class="col-md-5"><br>
                         <label><i class="fa fa-archive"></i> Tipo de Cálculo de metodología ENR</label>          
@@ -546,8 +577,120 @@ background-color: #323259;">
                         class="form-control" formControlName="diasCobro" readonly="true">
                     </div>
                   </div>
-                  
+                  <br>
                 </form>
+                
+                <div class="row">
+                  <div class="col-lg-12"><br>
+                    <hr style="background-color: #D1D104 !important; height: 2px;">
+                    <h4 style="color: #D1D104;">
+                        <img class="img-profile" src="../../../assets/imagenes/search.png"
+                        style="margin-bottom: 5px;">
+                        Agregar documentación probatoria del caso
+                    </h4>
+                    <form [formGroup]='frm_Archivo'>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <label><i class="fas fa-pencil"></i> Titulo del archivo</label>
+                          <textarea  name="tituloDocProbatorio" formControlName="tituloDocProbatorio"  rows="2" class="form-control"
+                          placeholder="Titulo del documento"></textarea>
+                             
+                        </div>
+                        <div class="col-md-3">
+                          <label><i class="fas fa-file"></i> Tipo de archivo</label>
+                          <select class="form-control" name="tipoPruebaProbatorio" formControlName="tipoPruebaProbatorio">
+                            <option value="1">Seleccione</option>
+                            <option value="Fotografía">Fotografía</option>
+                            <option value="Documento">Documento</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                        </div>
+                        <div class="col-md-5">
+                          <label><i class="fas fa-upload"></i> Seleccione el archivo</label>
+                          <input type="file" name="file" (change)="fileProgress($event)" class="form-control"
+                          formControlName="fileProbatorio" style="height:45px"/>
+                          <br>
+                          <div *ngIf="fileUploadProgress" style="color:white">
+                            Upload progress: {{ fileUploadProgress }}
+                        </div>
+                        <div class="image-preview mb-3" *ngIf="previewUrl">
+                            <img [src]="previewUrl" height="150" style="margin-left:25%;"/>    
+                           
+                        </div>
+                        
+                        <div class="mb-3" *ngIf="uploadedFilePath">
+                            {{uploadedFilePath}}
+                        </div>
+            
+                        </div>
+                        
+                      
+                      <div class="col-md-2"></div>
+                      <div class="col-md-8">  
+                        <button class="btn btn-warning btn-block"  (click)="onSubmit(ordenNumeroG.caso)">
+                          <i class="fas fa-upload"></i> Cargar Archivo
+                         </button>
+                      </div>
+                      <div class="col-md-2"></div>
+                    </div><br>
+                    </form>
+                    <h5 style="color: #FAC092;">Listado de archivos nuevos cargados</h5>
+                    <form [formGroup]="docForm">
+                        
+                        <table class="table small mt-3">
+                            <thead class="thead-dark">
+                                <tr >
+                                    <th style="background-color:#1B1B38; color:#B0B005;font-size: 14px;
+                                    border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center">
+                                        <label class="fa fa-pen" style="color:#B0B005 !important;"></label>
+                                        Título
+                                    </th>
+                                    <th style="background-color:#1B1B38; color:#B0B005;font-size: 14px;
+                                    border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center">
+                                        <label class="fa fa-archive" style="color:#B0B005 !important;"></label>
+                                        Tipo de prueba
+                                    </th>
+                                    <th style="background-color:#1B1B38; color:#B0B005;font-size: 14px;
+                                    border-bottom: 2px solid #B0B005;font-weight: bold;" class="text-center">
+                                        <label class="fa fa-file" style="color:#B0B005 !important;"></label>
+                                        Archivo
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody  formArrayName="documentacion"
+                            style="background-color:#222245; color:white;text-align: center;
+                            font-size: 14px;">
+                                <tr *ngFor="let item of documentos.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                    <td style="border-bottom: 1px solid white;"><textarea 
+                                        formControlName="nombreDoc" readonly="true"
+                                        name="tituloDoc"  rows="2" class="form-control" placeholder="Titulo del documento"></textarea>
+                                      <input type="hidden" name="caso" formControlName="caso" class="form-control"></td>
+                                    <td style="border-bottom: 1px solid white;">
+                                        <select disabled class="form-control" name="tipoPrueba" formControlName="tipoPrueba">
+                                        <option value="1">Seleccione</option>
+                                        <option value="Fotografía">Fotografía</option>
+                                        <option value="Documento">Documento</option>
+                                        <option value="Otro">Otro</option>
+                                    </select></td>
+                                    <td style="border-bottom: 1px solid white;">
+                                        <input class="form-control" type="text" formControlName="archivo"
+                                        style="height: 45px;" readonly="true"></td>
+                                    </tr>
+                                
+                            </tbody>
+                        </table>
+                    </form>
+                    <br><br>
+                    <hr style="background-color: #3AF415 !important; height: 2px;">
+                    <button class="btn btn-success btn-block" style="font-weight: bold !important;"
+                    data-dismiss="modal"
+                    data-toggle="modal" data-target="#guardarDatosConfirm">
+                      <i class="fas fa-save"></i> Guardar Todo
+                    </button>
+                
+                    
+                    </div>
+                </div>
               </div>
             </div>
             <div class="tab-pane" id="docAdjuntos" role="tabpanel" aria-labelledby="">
@@ -617,7 +760,8 @@ background-color: #323259;">
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+        data-toggle="modal" data-target="#cancelarGuardadoEditar">
           <i class="fas fa-times-circle"></i>  Cerrar!
         </button>
       </div>
@@ -973,3 +1117,121 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
     </div>
   </div>
 </div>
+
+
+<!---Modal de para cambio de scan-->
+<div class="modal animated fadeInRight" data-backdrop="static" data-keyboard="false" 
+tabindex="-1" role="dialog" id="nuevoScan">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" style="font-size: 15px;">
+            <img class="img-profile" src="../../../assets/imagenes/attach.png" width=45 height=45>
+            Nuevo Scan de notificación inicial para el caso: <a style="color: #51F749;">{{ordenNumeroG.caso}}</a> 
+            
+        </h5>
+        </div>
+        <div class="modal-body">
+         
+          <form [formGroup]='frm_NuevoScan'>
+            <div class="row" *ngFor="let dataScan  of datosENRListaScan">
+              <div class="col-md-12">
+                <label><i class="fas fa-upload"></i> Seleccione el archivo</label>
+                <input type="file" name="nuevoScanENR" (change)="fileProgress3($event)" class="form-control"
+                formControlName="nuevoScanENR" style="height:45px"/>
+                <input type="hidden" name="idCambio"  class="form-control"
+                formControlName="idCambio" [(ngModel)] ="dataScan.caso">
+
+                <input type="hidden" name="rutaVieja"  class="form-control"
+                formControlName="rutaVieja" [(ngModel)] ="dataScan.ruta">
+                <br>
+                
+              <div class="image-preview mb-3" *ngIf="previewUrl2">
+                  <img [src]="previewUrl2" height="150" style="margin-left:25%;"/>                  
+              </div>
+              </div>
+              <div class="col-md-12">
+                <label style="color: #1B1B38 !important"><i class="fas fa-upload"></i> Seleccione el archivo</label>
+                <button class="btn btn-warning btn-block"  (click)="onSubmit3(ordenNumeroG)"
+                data-dismiss="modal" data-toggle="modal" data-target="#datosCaso">
+                  <i class="fas fa-upload"></i> Cargar Archivo
+                 </button>
+              </div>
+            </div><br>
+            
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" 
+          data-toggle="modal" data-target="#datosCaso">
+            <i class="fas fa-times-circle"></i>  Cerrar
+          </button>
+      
+        </div>
+      </div>
+    </div>
+</div>
+
+<!---Modal de alerta para confirmar cancelado de edicion  de caso ENR-->
+<div class="modal animated fadeInUp" id="cancelarGuardadoEditar" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="title" style="color:#0CD902 !important;">
+          <img class="img-profile" src="../../../assets/imagenes/confirm.png" width=35 height=35>
+          Confirmación
+        </h5>
+        
+      </div>
+      <div class="modal-body">
+       
+        <h4 style="text-align: center;color: #67E1E1;">¿Desea cerrar la ventana?</h4>
+        <h5 style="text-align: center;color: #FC0505;">¡La información no guardada se perderá!</h5>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal"
+        data-toggle="modal" data-target="#datosCaso">
+          <i class="fas fa-times-circle"></i>  No!
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          <i class="fas fa-thumbs-up"></i>  Si, cerrar!
+        </button>
+        
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!---Modal de alerta para confirmar guardado de caso ENR-->
+<div class="modal animated fadeInDown" id="guardarDatosConfirm" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="title" style="color:#0CD902 !important;">
+          <img class="img-profile" src="../../../assets/imagenes/confirm.png" width=35 height=35>
+          Confirmación
+        </h5>
+        
+      </div>
+      <div class="modal-body">
+       
+        <h4 style="text-align: center;color: #67E1E1;">¿Desea editar el caso ENR?</h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal"
+        data-toggle="modal" data-target="#datosCaso">
+          <i class="fas fa-times-circle"></i>  No!
+        </button>
+        <button type="button" class="btn btn-default save" data-dismiss="modal"  
+        (click)="guardarDatos(ordenNumeroG)" data-toggle="modal" data-target="#datosCaso">
+          <i class="fas fa-thumbs-up"></i>  Si, guardar!
+        </button>
+        
+        
+      </div>
+    </div>
+  </div>
+</div>
+

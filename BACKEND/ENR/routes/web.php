@@ -54,3 +54,11 @@ Route::get('/', function () {
     Route::any('getAdjuntosOrdenesENR', 'ENRController@getAdjuntosOrdenesENR');
     
     Route::post('getDatosENR', 'ENRController@getDatosENR');
+    Route::post('cambiarScanENR', 'ENRController@cambiarScanENR');
+
+    
+    
+    Route::post('getScan', 'ENRController@getScan');
+    Route::post('updateDatosNISGenerales', 'ENRController@updateDatosNISGenerales');
+    
+    Route::post('updateDocProbatoria', 'ENRController@updateDocProbatoria');
