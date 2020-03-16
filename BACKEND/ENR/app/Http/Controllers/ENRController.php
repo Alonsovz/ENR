@@ -326,6 +326,7 @@ class ENRController extends Controller
         dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
         convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
         t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
+        m.codigo as codBase,
         (select count(id) from enr_documentacion where idCasoENR =
         dg.id and idEliminado = 1) as adjuntos,
         dg.codigoTipoENR as codTipoENR from enr_datosGenerales dg
@@ -345,6 +346,7 @@ class ENRController extends Controller
         dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
         convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
         t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
+        m.codigo as codBase,
         (select count(id) from enr_documentacion where idCasoENR =
         dg.id and idEliminado = 1) as adjuntos,
         dg.codigoTipoENR as codTipoENR from enr_datosGenerales dg
@@ -365,6 +367,7 @@ class ENRController extends Controller
         dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
         convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
         t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
+        m.codigo as codBase,
         (select count(id) from enr_documentacion where idCasoENR =
         dg.id and idEliminado = 1) as adjuntos,
         dg.codigoTipoENR as codTipoENR from enr_datosGenerales dg
@@ -496,12 +499,16 @@ class ENRController extends Controller
 
         $getDatos =  DB::connection('facturacion')->select("
         select *, 
+        (select voltaje_energia from fe_suministros where num_suministro =
+        enr_datosGenerales.num_suministro) as voltajeSuministro,
         scanPrimerNoti as ruta,
         RIGHT(scanPrimerNoti,3) as ext,
         convert(varchar(10),fechaPrimerNoti,23) as fechaPri,
         convert(varchar(10),fechaRegularizacion,23) as fechaR,
         convert(varchar(10),fechaInicio,23) as fechaIn,
         convert(varchar(10),fechaFin,23) as fechaFin,
+        convert(varchar(10),fechaInicio,103) as fechaIni,
+        convert(varchar(10),fechaFin,103) as fechaFini,
         convert(varchar,fechaCreacion, 103)+' '+substring(convert(varchar,fechaCreacion, 114),1,5) as fechaCreacionF
         from enr_datosGenerales
         where idEliminado = 1 and id =?

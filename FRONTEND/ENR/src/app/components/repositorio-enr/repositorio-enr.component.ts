@@ -38,6 +38,8 @@ export class RepositorioENRComponent implements OnInit {
   ordenNumeroAd : Repositorio = new Repositorio();
   ordenNumeroG : Repositorio = new Repositorio();
   ordenNumeroGN : Repositorio = new Repositorio();
+  ordenNumeroCalculo :  Repositorio[] = new Array();
+  datosGenerales : Repositorio = new Repositorio();
   adjuntoVer : SafeResourceUrl;
   extension : Repositorio[];
   archivoEliminar : Repositorio = new Repositorio();
@@ -60,6 +62,7 @@ export class RepositorioENRComponent implements OnInit {
   fileData: File = null;
   fileUploadProgress: string = null;
   uploadedFilePath: string = null;
+  frm_Caso1 : FormGroup;
 
   constructor(private repositorioENR : RepositorioEnrService,private chRef: ChangeDetectorRef,
     private http: HttpClient, private url: GlobalService,
@@ -129,10 +132,25 @@ export class RepositorioENRComponent implements OnInit {
       });
 
      
+      this.frm_Caso1 = new FormGroup({
+      
+        'amperaje1' : new FormControl('',[Validators.required]),
+        'voltaje1' : new FormControl('',[Validators.required]),
+        'amperaje2' : new FormControl('',[Validators.required]),
+        'voltaje2' : new FormControl('',[Validators.required]),
+        'voltajeSuministro' : new FormControl('',[Validators.required]),
+        'horasEstimadas' : new FormControl('',[Validators.required]),
+        'consumo1' : new FormControl('',[Validators.required]),
+        'consumo2' : new FormControl('',[Validators.required]),
+        'consumoTotal' : new FormControl('',[Validators.required]),
+        'diasCobroCaso1' : new FormControl('',[Validators.required]),
+        
+      });
 
     }
 
   ngOnInit() {
+    
     this.docForm = this.fb.group({documentacion: this.fb.array([]),});
     this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
     this.rutaFile = this.url.getUrlBackEnd()+'descargarArchivo?ruta=';
@@ -280,11 +298,13 @@ export class RepositorioENRComponent implements OnInit {
 //inicialización de datos en el formulario de adjuntar archivos a las ordenes técnicas
   public modalAdjuntar(orden, ordenNumeroG){
     this.ordenNumeroAd = orden;
-    console.log(ordenNumeroG);
+    //console.log(ordenNumeroG);
     this.ordenNumeroGN = ordenNumeroG;
     this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
     this.previewUrl1 = '';
-    this.frm_ArchivoOT.reset();
+    this.frm_ArchivoOT.controls["tipoPruebaProbatorioOT"].setValue(1);
+    this.frm_ArchivoOT.controls["tituloDocProbatorioOT"].setValue('');
+    this.frm_ArchivoOT.controls["fileProbatorioOT"].setValue('');
   }
 
   //declaracion de formulario de todos los adjuntos de las ordenes a subir de tipo ARRRAY
@@ -352,10 +372,10 @@ export class RepositorioENRComponent implements OnInit {
           );
   
           notie.alert({
-            type: 'info', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+            type: 'info',
             text: '<img class="img-profile alertImg" src="../../../assets/imagenes/synchronization.png" width=40 height=40> Archivo cargado con éxito!',
-            stay: false, // optional, default = false
-            time: 2, // optional, default = 3, minimum = 1,
+            stay: false, 
+            time: 2, 
             position: 'top',
           });
   
@@ -428,10 +448,10 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
      );
 
      notie.alert({
-       type: 'info', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+       type: 'info',
        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/synchronization.png" width=40 height=40> Archivo cargado con éxito!',
-       stay: false, // optional, default = false
-       time: 2, // optional, default = 3, minimum = 1,
+       stay: false, 
+       time: 2, 
        position: 'top',
      });
 
@@ -472,11 +492,11 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
       () => { 
         
         notie.alert({
-          type: 'success', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+          type: 'success',
           text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Adjuntos guardados con éxito!',
-          stay: false, // optional, default = false
-          time: 2, // optional, default = 3, minimum = 1,
-          position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+          stay: false, 
+          time: 2, 
+          position: 'top' 
         });
   
         this.datosEditar(ordenes);
@@ -593,11 +613,11 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
         this.getRepositorioCalc();
         this.getRepositorioNoti();
         notie.alert({
-          type: 'info', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+          type: 'info',
           text: '<img class="img-profile alertImg" src="../../../assets/imagenes/eliminate.png" width=40 height=40> Archivo eliminado con éxito!',
-          stay: false, // optional, default = false
-          time: 3, // optional, default = 3, minimum = 1,
-          position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+          stay: false, 
+          time: 3, 
+          position: 'top' 
         });
        
       },
@@ -625,11 +645,11 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
         this.adjuntosOrdenes(orden, datosPapa);
 
         notie.alert({
-          type: 'info', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+          type: 'info',
           text: '<img class="img-profile alertImg" src="../../../assets/imagenes/eliminate.png" width=40 height=40> Archivo eliminado con éxito!',
-          stay: false, // optional, default = false
-          time: 3, // optional, default = 3, minimum = 1,
-          position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+          stay: false, 
+          time: 3, 
+          position: 'top' 
         });
       },
     );
@@ -835,11 +855,11 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
       () => {
       if(this.datos.length < 1){
         notie.alert({
-          type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+          type: 'error',
           text: '<img class="img-profile alertImg" src="../../../assets/imagenes/nofound.png" width=40 height=40> No se encontró ningún resultado',
-          stay: false, // optional, default = false
-          time: 2, // optional, default = 3, minimum = 1,
-          position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+          stay: false, 
+          time: 2, 
+          position: 'top' 
         });
       }
       },
@@ -1057,10 +1077,10 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
           },
           () => {
             notie.alert({
-              type: 'info', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+              type: 'info',
               text: '<img class="img-profile alertImg" src="../../../assets/imagenes/synchronization.png" width=40 height=40> Archivo cargado con éxito!',
-              stay: false, // optional, default = false
-              time: 2, // optional, default = 3, minimum = 1,
+              stay: false, 
+              time: 2, 
               position: 'top',
             });
             this.previewUrl2 = '';
@@ -1116,11 +1136,11 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
         );
   
         notie.alert({
-          type: 'success', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+          type: 'success',
           text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Caso editado con éxito!',
-          stay: false, // optional, default = false
-          time: 2, // optional, default = 3, minimum = 1,
-          position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+          stay: false, 
+          time: 2, 
+          position: 'top' 
         });
   
         this.docForm.reset();
@@ -1136,6 +1156,134 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
     
   
    }
+
+
+
+   //metodo para mostrar ventana de cálculo del caso ENR
+
+   public calcularCaso(caso){
+    $("#titleCalculo").show();
+    $("#myTabContent").hide();
+    $("#myTab").hide();
+    $("#titleGlobal").hide();
+
+    this.datosGenerales = caso;
+
+    let datosENRdto : DatosENR = new DatosENR();
+
+    datosENRdto = caso;
+
+
+    this.repositorioENR.getDatosENR(datosENRdto).subscribe(
+      response => {
+      
+        this.ordenNumeroCalculo = response;
+       // $("#dataNis").show();
+      },
+      err => {
+        console.log("no");
+      },
+      () => {
+        
+      },
+    );
+
+   }
+
+
+   public cerrarCalculo(caso){
+    $("#titleCalculo").hide();
+    $("#myTabContent").show();
+    $("#myTab").show();
+    $("#titleGlobal").show();
+    $("#resultCaso1").hide();
+    this.frm_Caso1.reset();
+   }
+
+
+   public calcularENRCaso1(){
+    $("#resultCaso1").hide();
+
+     var diasCobro = this.frm_Caso1.controls["diasCobroCaso1"].value;
+     
+     var amperaje1 = this.frm_Caso1.controls["amperaje1"].value;
+     var voltaje1 = this.frm_Caso1.controls["voltaje1"].value;
+     var amperaje2 = this.frm_Caso1.controls["amperaje2"].value;
+     var voltaje2 = this.frm_Caso1.controls["voltaje2"].value;
+     var horas = this.frm_Caso1.controls["horasEstimadas"].value;
+
+     var totalConsumoL1 = (amperaje1 * voltaje1 * horas) / 1000;
+     var totalConsumoL2 = (amperaje2 * voltaje2 * horas) / 1000;
+
+     this.frm_Caso1.controls["consumo1"].setValue(totalConsumoL1);
+     this.frm_Caso1.controls["consumo2"].setValue(totalConsumoL2);
+
+     var consumoENR = (totalConsumoL1 + totalConsumoL2) * diasCobro;
+
+     
+     if(amperaje1 == '' && voltaje1 == '' && amperaje2 == '' && voltaje2 == ''){
+      notie.alert({
+        type: 'error',
+        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/nofound.png" width=40 height=40> Dígite al menos un amperaje y un voltaje para evaluar',
+        stay: false, 
+        time: 4, 
+        position: 'top' 
+      });
+     }
+     else if(amperaje1 != '' && voltaje1 == ''){
+      notie.alert({
+        type: 'error',
+        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/nofound.png" width=40 height=40> Si digitó el amperaje en línea 1, dígite también el voltaje en línea 1',
+        stay: false, 
+        time: 4, 
+        position: 'top' 
+      });
+     }
+
+     else if(amperaje1 == '' && voltaje1 != ''){
+      notie.alert({
+        type: 'error',
+        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/nofound.png" width=40 height=40> Si digitó el voltaje en línea 1, dígite también el amperaje en línea 1',
+        stay: false, 
+        time: 4, 
+        position: 'top' 
+      });
+     }
+     else if(amperaje2 != '' && voltaje2 == ''){
+      notie.alert({
+        type: 'error',
+        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/nofound.png" width=40 height=40> Si digitó el amperaje en línea 2, dígite también el voltaje en línea 2',
+        stay: false, 
+        time: 4, 
+        position: 'top' 
+      });
+     }
+
+     else if(amperaje2 == '' && voltaje2 != ''){
+      notie.alert({
+        type: 'error',
+        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/nofound.png" width=40 height=40> Si digitó el voltaje en línea 2, dígite también el amperaje en línea 2',
+        stay: false, 
+        time: 4, 
+        position: 'top' 
+      });
+     }else if(horas == ''){
+      $("#sHorasValidator").show();
+      }
+     else{
+     
+      this.frm_Caso1.controls["consumoTotal"].setValue(consumoENR.toFixed(2));
+      $("#resultCaso1").show();
+     }
+      
+     
+     
+   }
+
+
+  esconderSpan(){
+    $("#sHorasValidator").hide();
+  }
 
 
 }

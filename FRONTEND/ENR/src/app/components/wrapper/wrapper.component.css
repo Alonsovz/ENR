@@ -119,9 +119,9 @@ li {
 }
 
 .mx-background-top-linear {
-    background: -webkit-linear-gradient(135deg,#323259 50%, #222245 48%);
-    background: -webkit-linear-gradient(right,#323259 50%, #222245 48%);
-    background: linear-gradient(135deg,#323259 50%, #222245 48%);
+    background: -webkit-linear-gradient(135deg,#222245 50%, #323259 48%);
+    background: -webkit-linear-gradient(right,#222245 50%, #323259 48%);
+    background: linear-gradient(135deg,#222245 50%, #323259 48%);
 }
 
 .hover_ {

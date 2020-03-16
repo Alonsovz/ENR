@@ -100,3 +100,9 @@ tbody tr:hover{
 .btn{
   font-size: 13px;
 }
+
+.pull-right{
+  float:right;
+  margin-bottom: 10px;
+  margin-top: 5px;
+}
