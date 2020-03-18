@@ -15,6 +15,8 @@ import { CodigoENRService } from 'src/app/service/codigo-enr.service';
 import { MetodologiaCalcService } from 'src/app/service/metodologia-calc.service';
 import { codigos } from 'src/app/models/codigos';
 import { metodologia } from 'src/app/models/metodologiaCal';
+import { isNull } from 'util';
+import { count } from 'rxjs/operators';
 
 @Component({
   selector: 'app-repositorio-enr',
@@ -40,6 +42,7 @@ export class RepositorioENRComponent implements OnInit {
   ordenNumeroGN : Repositorio = new Repositorio();
   ordenNumeroCalculo :  Repositorio[] = new Array();
   datosGenerales : Repositorio = new Repositorio();
+  datosGeneralesLecturas : Repositorio = new Repositorio();
   adjuntoVer : SafeResourceUrl;
   extension : Repositorio[];
   archivoEliminar : Repositorio = new Repositorio();
@@ -63,13 +66,29 @@ export class RepositorioENRComponent implements OnInit {
   fileUploadProgress: string = null;
   uploadedFilePath: string = null;
   frm_Caso1 : FormGroup;
+  frm_Caso2 : FormGroup;
+  lecturasArray : Repositorio[];
+  consumoDiario = 0;
+  frm_LecturasEvaluar: FormGroup;
+  frm_LecturasEvaluarTotales : FormGroup;
+  indexLecturas : number;
+  totalSeleccion = 0;
 
   constructor(private repositorioENR : RepositorioEnrService,private chRef: ChangeDetectorRef,
     private http: HttpClient, private url: GlobalService,
     private datosENR : DatosENRService,
     public sanitizer: DomSanitizer,
     private codigoENR: CodigoENRService, private codigoMetENR: MetodologiaCalcService,
-    private fb1: FormBuilder, private fb: FormBuilder,) { 
+    private fb1: FormBuilder, private fb: FormBuilder,private fb2: FormBuilder,) { 
+      this.frm_LecturasEvaluarTotales = new FormGroup({
+        'totalDias' : new FormControl(''),
+        'totalConsumo' : new FormControl(''),
+        'totalConsumoNF' : new FormControl(''),
+        'totalDifConsumo' : new FormControl(''),
+        'consumoENRFacturar': new FormControl(''),
+        'consumoDiarioENR': new FormControl(''),
+      });
+
       this.frm_ArchivoEliminar = new FormGroup({
         'idEliminar' : new FormControl(''),
         'rutaEliminar' : new FormControl(''),
@@ -147,10 +166,21 @@ export class RepositorioENRComponent implements OnInit {
         
       });
 
+
+      this.frm_Caso2 = new FormGroup({
+      
+        'censoCarga' : new FormControl('',[Validators.required]),
+        'consumoEstimado' : new FormControl('',[Validators.required]),
+        'voltajeSuministro' : new FormControl('',[Validators.required]),
+        'diasCobroCaso2' : new FormControl('',[Validators.required]),
+      });
+
+
+     
     }
 
   ngOnInit() {
-    
+    this.frm_LecturasEvaluar = this.fb2.group({lecturas: this.fb2.array([]),});
     this.docForm = this.fb.group({documentacion: this.fb.array([]),});
     this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
     this.rutaFile = this.url.getUrlBackEnd()+'descargarArchivo?ruta=';
@@ -315,6 +345,11 @@ export class RepositorioENRComponent implements OnInit {
 //declaracion de formulario de todos los adjuntos de las ordenes a subir de tipo ARRRAY
   get documentos() {
     return this.docForm.get('documentacion') as FormArray;
+  }
+
+//declaracion de formulario de todos las lecturas de tipo ARRRAY
+  get lecturas(){
+    return this.frm_LecturasEvaluar.get('lecturas') as FormArray;
   }
 
 //validacion del archivo seleccionado
@@ -1173,6 +1208,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
     datosENRdto = caso;
 
+    console.log(caso);
 
     this.repositorioENR.getDatosENR(datosENRdto).subscribe(
       response => {
@@ -1188,6 +1224,57 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
       },
     );
 
+    this.repositorioENR.getLecturasbyNIS(datosENRdto).subscribe(
+      response => {
+  
+        this.lecturasArray = response;
+        const table: any = $('#lecturas_Tbl');
+        this.dataTable = table.DataTable();
+        this.dataTable.destroy();
+    
+        this.chRef.detectChanges();
+        
+        this.dataTable = table.DataTable({
+          "columnDefs": [
+            { "visible": false, "targets": 0 }
+          ],
+          'iDisplayLength' : 5,
+        'responsive': true,
+          order: [[ 0, 'desc' ]], 
+        'language' : {
+          'sProcessing':     'Procesando...',
+          'sLengthMenu':     'Mostrar _MENU_ registros',
+          'sZeroRecords':    'No se encontraron resultados',
+          'sEmptyTable':     'Ningún dato disponible en esta tabla',
+          'sInfo':           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
+          'sInfoEmpty':      'Mostrando registros del 0 al 0 de un total de 0 registros',
+          'sInfoFiltered':   '(filtrado de un total de _MAX_ registros)',
+          'sInfoPostFix':    '',
+          'sSearch':         'Buscar:',
+          'sUrl':            '',
+          'sInfoThousands':  ',',
+          'sLoadingRecords': 'Cargando...',
+          'oPaginate': {
+              'sFirst':    'Primero',
+              'sLast':     'Último',
+              'sNext':     'Siguiente',
+              'sPrevious': 'Anterior'
+          },
+          'oAria': {
+              'sSortAscending':  ': Activar para ordenar la columna de manera ascendente',
+              'sSortDescending': ': Activar para ordenar la columna de manera descendente'
+          }
+        }
+        });
+      },
+      err => {},
+      () => {
+        //console.log(this.cod);
+      }
+    );
+   
+  
+
    }
 
 
@@ -1198,6 +1285,9 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
     $("#titleGlobal").show();
     $("#resultCaso1").hide();
     this.frm_Caso1.reset();
+    this.frm_Caso2.reset();
+    $("#sHorasValidator").hide();
+    $("#censoCargaValidator").hide();
    }
 
 
@@ -1284,6 +1374,170 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
   esconderSpan(){
     $("#sHorasValidator").hide();
   }
+
+
+  public calcularConDiarioENR1(){
+    var censo = this.frm_Caso2.controls["censoCarga"].value;
+
+    var total = censo / 30;
+    this.frm_Caso2.controls["consumoEstimado"].setValue(total.toFixed(2));
+  }
+
+
+  public totalizarDatos(){
+    const dias = [];
+    const consumo = [];
+    const consumoNoFacturado = [];
+    const difConsumo = [];
+
+    //Calcular dias totales
+    $.each($('input[name=\'diasFacturados\']'), function(){
+      dias.push($(this).val());
+    });
+
+
+    var sumatoriaDias = dias.reduce(function(acumulador, siguienteValor){
+      return parseFloat(acumulador) + parseFloat(siguienteValor);
+    }, 0);
+
+
+    //calcular consumo total
+    $.each($('input[name=\'consumo\']'), function(){
+      consumo.push($(this).val());
+    });
+
+
+    var sumatoriaConsumo = consumo.reduce(function(acumulador, siguienteValor){
+      return parseFloat(acumulador) + parseFloat(siguienteValor);
+    }, 0);
+
+
+
+    //calcular consumo real no facturado total
+    $.each($('input[name=\'consumoNoFac\']'), function(){
+      consumoNoFacturado.push($(this).val());
+    });
+
+
+    var sumatoriaConsumoNF = consumoNoFacturado.reduce(function(acumulador, siguienteValor){
+      return parseFloat(acumulador) + parseFloat(siguienteValor);
+    }, 0);
+
+
+
+    //calcular diferencia de consumo total
+    $.each($('input[name=\'difConsumo\']'), function(){
+      difConsumo.push($(this).val());
+    });
+
+
+    var sumatoriaDifConsumo= difConsumo.reduce(function(acumulador, siguienteValor){
+      return parseFloat(acumulador) + parseFloat(siguienteValor);
+    }, 0);
+    
+
+
+    this.frm_LecturasEvaluarTotales.controls["totalDias"].setValue(sumatoriaDias);
+    this.frm_LecturasEvaluarTotales.controls["totalConsumo"].setValue(sumatoriaConsumo.toFixed(2));
+    this.frm_LecturasEvaluarTotales.controls["totalConsumoNF"].setValue(sumatoriaConsumoNF.toFixed(2));
+    this.frm_LecturasEvaluarTotales.controls["totalDifConsumo"].setValue(sumatoriaDifConsumo.toFixed(2));
+
+
+    var consumoENRDiario = (sumatoriaDifConsumo / sumatoriaDias).toFixed(2);
+
+    this.frm_LecturasEvaluarTotales.controls["consumoDiarioENR"].setValue(consumoENRDiario);
+
+    var consumoENRFacturar = ((sumatoriaDifConsumo / sumatoriaDias) *
+    this.frm_Caso2.controls["diasCobroCaso2"].value).toFixed(2);
+
+    this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(consumoENRFacturar);
+
+
+    this.totalSeleccion = dias.length;
+  }
+
+
+
+
+  //metodo para cargar lecturas del NIS 
+  public mostrarLecturas(datos){
+
+    
+
+    this.datosGeneralesLecturas =datos;
+
+    this.consumoDiario = this.frm_Caso2.controls["consumoEstimado"].value;
+
+    let datosENRdto : DatosENR = new DatosENR();
+
+    datosENRdto = datos;
+
+    var consumo =  this.frm_Caso2.controls["consumoEstimado"].value;
+
+    if(consumo == ''){
+      notie.alert({
+        type: 'error',
+        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/nofound.png" width=40 height=40> Debe calcular el Consumo Diario Estimado',
+        stay: false, 
+        time: 4, 
+        position: 'top' 
+      });
+    }else{
+      $("#mostrarLecturas").show();
+    }
+
+    
+
+  }
+
+  public hideModalLecturas(){
+    $("#mostrarLecturas").hide();
+    $("#frmLec").show();
+    $("#frmLecTotales").show();
+
+    this.totalizarDatos();
+
+  }
+ 
+
+  public agregarLectura(periodo,fechaLecturaAnt,fechaLectura,diasFacturados,consumoN,i){
+    $("#add"+periodo).hide();
+    $("#tr"+periodo).addClass("adjuntos");
+    $("#remove"+periodo).show();
+    
+    this.lecturas.push(
+      this.fb2.group({
+        periodo:periodo,
+        fechaLecturaAnt:fechaLecturaAnt,
+        fechaLectura:fechaLectura,
+        diasFacturados:diasFacturados,
+        consumo:consumoN,
+        consumoNoFac: (diasFacturados * this.consumoDiario).toFixed(2),
+        difConsumo : ((diasFacturados * this.consumoDiario)  - consumoN).toFixed(2)
+       }),  
+  );
+
+
+  this.totalizarDatos();
+
+  
+}
+
+public eliminarLecturaTbl(periodo){
+  $("#btnEl"+periodo).click();
+}
+
+public eliminarLectura(i, periodo){
+  this.lecturas.removeAt(i);
+  
+    $("#add"+periodo).show();
+    $("#tr"+periodo).removeClass("adjuntos");
+    $("#remove"+periodo).hide();
+}
+
+
+
+
 
 
 }

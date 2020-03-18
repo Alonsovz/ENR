@@ -58,4 +58,10 @@ export class RepositorioEnrService {
     return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getScan', nis).pipe(map(data => data as Repositorio[]));
   }
 
+
+  public getLecturasbyNIS(nis): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getLecturasbyNIS', nis).pipe(map(data => data as Repositorio[]));
+  }
+
 }

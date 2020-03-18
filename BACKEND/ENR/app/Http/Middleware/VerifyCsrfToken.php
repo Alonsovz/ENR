@@ -44,6 +44,7 @@ class VerifyCsrfToken extends BaseVerifier
         'cambiarScanENR',
         'getScan',
         'updateDatosNISGenerales',
-        'updateDocProbatoria'
+        'updateDocProbatoria',
+        'getLecturasbyNIS'
     ];
 }

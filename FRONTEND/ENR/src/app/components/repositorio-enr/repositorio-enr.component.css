@@ -94,11 +94,15 @@ tbody tr:hover{
 }
 
 .adjuntos{
-  background-color: #082002 !important;
+  background-color: #19002B !important;
 }
 
+.adjuntos:hover{
+  background-color: #0B0013 !important;
+}
 .btn{
   font-size: 13px;
+  font-weight: bold;
 }
 
 .pull-right{
@@ -106,3 +110,5 @@ tbody tr:hover{
   margin-bottom: 10px;
   margin-top: 5px;
 }
+
+

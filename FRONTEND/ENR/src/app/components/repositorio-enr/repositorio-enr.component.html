@@ -73,7 +73,8 @@
           </div>
         </div>
         
-            <form [formGroup]='frm_Caso1' *ngIf ="datosGenerales.codBase == 'CD'">
+        
+        <form [formGroup]='frm_Caso1' *ngIf ="datosGenerales.codBase == 'CD'">
               <div class="row" style="margin-left: 30px; margin-right: 30px;">
                 <div class="col-md-12">
                   <hr style="background-color: #A16EFF !important; height: 2px;">
@@ -81,14 +82,12 @@
                 <div class="col-md-3">
                   <label> Amperaje Línea 1</label>
                   <input type="number" step="0.01" min="0" class="form-control" autocomplete="off" placeholder="Amperaje Línea 1" formControlName="amperaje1" name="amperaje1">
-                  <span id="sAmperaje1Validator" class="badge badge-danger" style=" text-align:center; margin:auto;
-                  display: none;"> Completa este campo</span>
+                
                 </div>
                 <div class="col-md-3">
                   <label> Voltaje Línea 1</label>
                   <input type="number" step="0.01" min="0" class="form-control" autocomplete="off" placeholder="Amperaje Línea 1" formControlName="voltaje1" name="voltaje1">
-                  <span id="sVoltaje1Validator" class="badge badge-danger" style=" text-align:center; margin:auto;
-                  display: none;"> Completa este campo</span>
+                  
                 </div>
                 <div class="col-md-3">
                   <label> Amperaje Línea 2</label>
@@ -108,7 +107,7 @@
                 </div>
                 <div class="col-md-3 mt-5 mb-3">
                   <label> Horas estimadas (15 hrs máximo)</label>
-                  <input (keyup)="esconderSpan()" type="number" step="0.01" min="0" class="form-control" autocomplete="off" placeholder="Horas estimadas" formControlName="horasEstimadas" name="horasEstimadas">
+                  <input (keyup)="esconderSpan()" type="number" step="0.01" class="form-control" autocomplete="off" placeholder="Horas estimadas" formControlName="horasEstimadas" name="horasEstimadas">
                   <span id="sHorasValidator" class="badge badge-danger" style=" text-align:center; margin:auto;
                   display: none;"> Completa este campo</span>
                 </div>
@@ -121,29 +120,229 @@
           
               <div id="resultCaso1" class="row mt-5 animated flipInX" 
               style="margin-left: 30px; margin-right: 30px;display: none;">
-                <h4 style="color: #FF3600">
+                <h4 style="color: #FC4343">
                   <img src="../../../assets/imagenes/dataResult.png"
                   style="margin-bottom: 10px;margin-top: 7px;margin-left: 20px;" height=35>
                   Resultados obtenidos</h4>
                  <div class="col-md-12">
-                  <hr style="background-color: #FF3600 !important; height: 2px;">
+                  <hr style="background-color: #FC4343 !important; height: 2px;">
                  </div>
                  <div class="col-md-4 mb-5">
-                  <label style="font-size: 17px !important;color:#FF9B00 !important;font-weight: bold;">Consumo Diario Estimado_L1 (kwh)</label>
+                  <label style="font-size: 17px !important;color:#FB8181 !important;font-weight: bold;">Consumo Diario Estimado_L1 (kwh)</label>
                   <input type="text" class="form-control" formControlName="consumo1" name="consumo1" readonly>
                  </div>
                  <div class="col-md-4 mb-5">
-                  <label style="font-size: 17px !important;color:#FF9B00 !important;font-weight: bold;">Consumo Diario Estimado_L2 (kwh)</label>
+                  <label style="font-size: 17px !important;color:#FB8181 !important;font-weight: bold;">Consumo Diario Estimado_L2 (kwh)</label>
                   <input type="text" class="form-control" formControlName="consumo2" name="consumo2" readonly>
                  </div>
                  <div class="col-md-4 mb-5">
-                  <label style="font-size: 17px !important;color:#FF3600 !important;font-weight: bold;">Consumo Total ENR (kwh)</label>
+                  <label style="font-size: 17px !important;color:#FB8181 !important;font-weight: bold;">Consumo Total ENR (kwh)</label>
                   <input type="text" class="form-control" formControlName="consumoTotal" name="consumoTotal" readonly>
                  </div>
               </div>
               
-            </form>
-       
+        </form>
+        
+        <form [formGroup]='frm_Caso2' *ngIf="datosGenerales.codBase == 'CN'" style="width: 100% !important;">
+          <div class="row" style="margin-left: 30px; margin-right: 30px;">
+            <div class="col-lg-12">
+              <hr style="background-color: #A16EFF !important; height: 2px;">
+            </div>
+            <div class="col-md-4">
+              <label> Censo de Carga Estimado (Mensual en kwh)</label>
+              <input type="number" step="0.01" class="form-control"  (keyup)="calcularConDiarioENR1()"
+              autocomplete="off" placeholder=" Censo de Carga Estimado" formControlName="censoCarga" name="censoCarga">
+             
+            </div>
+            <div class="col-md-4">
+              <label> Consumo Diario Estimado (kwh)</label>
+              <input type="text" class="form-control" placeholder="Consumo Diario Estimado" formControlName="consumoEstimado" name="consumoEstimado">
+            </div>
+              
+            <div class="col-md-4">
+              <label> Voltaje del Suministro</label>
+                  <input type="text" class="form-control" formControlName="voltajeSuministro"
+                   name="voltajeSuministro" [(ngModel)]="dg.voltajeSuministro" readonly>
+                   <input type="hidden" class="form-control" formControlName="diasCobroCaso2"
+                   name="diasCobroCaso2" [(ngModel)]="dg.diasCobro" readonly>
+            </div>
+
+            <div class="col-md-12 mt-4">
+              <button class="btn btn-warning" (click)="mostrarLecturas(dg)" style="font-weight: bold;"> 
+              <i class="fas fa-search"></i>
+               Seleccione los períodos  de facturación a comparar 
+              </button>
+            </div>
+           
+          </div>
+          
+          <form [formGroup]="frm_LecturasEvaluar" class="animated fadeInDown" style="display: none;margin-left: 30px;margin-right: 30px;" id="frmLec">       
+            
+              <hr style="background-color: #4C9AFD !important; height: 2px;">
+            
+            <h4 style="color: #4C9AFD;margin-top: 5px;"> 
+              <img src="../../../assets/imagenes/light-bulb.png" height=35>
+              Períodos seleccionados  = <a style="color:yellow !important;">{{totalSeleccion}}</a></h4>
+            <table class="table small mt-3">
+                <thead class="thead-dark">
+                    <tr >
+                        <th style="background-color: #1B1B38;color:#1FE303;font-size: 13px;
+                        border-bottom: 2px solid #1FE303;font-weight: bold;" class="text-center">
+                            Período
+                        </th>
+                        <th style="background-color: #1B1B38;color:yellow;font-size: 13px;
+                        border-bottom: 2px solid yellow;font-weight: bold;" class="text-center">
+                         Fecha Lectura Ant.
+                        </th>
+                        <th style="background-color: #1B1B38;color:#1FE303;font-size: 13px;
+                        border-bottom: 2px solid #1FE303;font-weight: bold;" class="text-center">
+                            Fecha Lectura
+                        </th>
+                        <th style="background-color: #1B1B38;color:yellow;font-size: 13px;
+                        border-bottom: 2px solid yellow;font-weight: bold;" class="text-center">
+                            Días Facturados
+                        </th>
+                        <th style="background-color: #1B1B38;color:#1FE303;font-size: 13px;
+                        border-bottom: 2px solid #1FE303;font-weight: bold;" class="text-center">
+                            Consumo
+                        </th>
+                        <th style="background-color: #1B1B38;color:yellow;font-size: 13px;
+                        border-bottom: 2px solid yellow;font-weight: bold;" class="text-center">
+                            Consumo no Fact.
+                        </th>
+                        <th style="background-color: #1B1B38;color:#1FE303;font-size: 13px;
+                        border-bottom: 2px solid #1FE303;font-weight: bold;" class="text-center">
+                        
+                           Dif. de consumo
+                        </th>
+                    </tr>
+                </thead>
+                <tbody  formArrayName="lecturas"
+                style="background-color:#222245; color:white;text-align: center;
+                font-size: 14px;">
+                    <tr *ngFor="let item of lecturas.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                        <td style="border-bottom: 1px solid #A4FA98;">
+                          <input class="form-control" type="text" formControlName="periodo"
+                          style="text-align: center !important;color: #A4FA98 !important;" readonly="true">
+                        </td>
+                        <td style="border-bottom: 1px solid #FAFD4F;">
+                          <input class="form-control" type="text" formControlName="fechaLecturaAnt"
+                            style="text-align: center !important;color: #FAFD4F !important;" readonly="true">
+                        </td>
+                        <td style="border-bottom: 1px solid #A4FA98;">
+                            <input class="form-control" type="text" formControlName="fechaLectura"
+                            style="text-align: center !important;color: #A4FA98 !important;" readonly="true">
+                        </td>
+                        <td style="border-bottom: 1px solid #FAFD4F;">
+                          <input class="form-control" type="text" formControlName="diasFacturados" name="diasFacturados"
+                          style="text-align: center !important;color: #FAFD4F !important;" readonly="true">
+                        </td>
+                        <td style="border-bottom: 1px solid #A4FA98;">
+                          <input class="form-control" type="text" formControlName="consumo" name="consumo"
+                          style="text-align: center !important;color: #A4FA98 !important;" readonly="true">
+                        </td>
+                        <td style="border-bottom: 1px solid #FAFD4F;">
+                          <input class="form-control" type="text" formControlName="consumoNoFac" name="consumoNoFac"
+                          style="text-align: center !important;color: #FAFD4F !important;" readonly="true">
+                        </td>
+                        <td style="border-bottom: 1px solid #A4FA98;">
+                          <input class="form-control" type="text" formControlName="difConsumo" name="difConsumo"
+                          style="text-align: center !important;color: #A4FA98 !important;" readonly="true">
+                          <button class="btn btn-danger btn-sm btn-circle" id="btnEl{{item.value.periodo}}"
+                          style="display: none;"
+                          (click)="eliminarLectura(pointIndex,item.value.periodo)"><i class="fas fa-trash"></i></button>
+                        </td>
+                       
+                    </tr>
+                    
+                </tbody>
+                
+            </table>
+        </form>
+        
+        <form [formGroup]="frm_LecturasEvaluarTotales" style="display: none;" id="frmLecTotales">
+          <div class="row" style="margin-right: 30px;margin-left: 30px;margin-top: 10px;">
+            
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                    <th style="background-color: #1B1B38;color:#FF9B00;font-size: 13px;
+                    border-bottom: 2px solid #FF9B00;font-weight: bold;" class="text-center"></th>
+                    <th style="background-color: #1B1B38;color:#FF9B00;font-size: 13px;
+                    border-bottom: 2px solid #FF9B00;font-weight: bold;" class="text-center"></th>
+                    <th style="background-color: #1B1B38;color:#FF9B00;font-size: 13px;
+                    border-bottom: 2px solid #FF9B00;font-weight: bold;" class="text-center"></th>
+                    <th style="background-color: #1B1B38;color:#FF9B00;font-size: 13px;
+                          border-bottom: 2px solid #FF9B00;font-weight: bold;" class="text-center">
+                              Días Facturados
+                    </th>
+                    <th style="background-color: #1B1B38;color:#FF9B00;font-size: 13px;
+                    border-bottom: 2px solid #FF9B00;font-weight: bold;" class="text-center">
+                        Consumo
+                    </th>
+                    <th style="background-color: #1B1B38;color:#FF9B00;font-size: 13px;
+                    border-bottom: 2px solid #FF9B00;font-weight: bold;" class="text-center">
+                        Consumo no Fact.
+                    </th>
+                    <th style="background-color: #1B1B38;color:#FF9B00;font-size: 13px;
+                    border-bottom: 2px solid #FF9B00;font-weight: bold;" class="text-center">
+                    
+                       Dif. de consumo
+                    </th>
+                </tr>
+            </thead>
+            <tbody style="background-color: #1B1B38 !important;">
+              <tr style="background-color: #1B1B38 !important;">
+                <td colspan="3"> <h6 style="color:#FF9B00; font-size: 14px;text-align: right;
+                  font-weight: bold;"> Totales</h6></td>
+                <td>
+                  <input class="form-control" type="text" style="text-align: center !important;" readonly="true"
+                  formControlName="totalDias">
+                </td>
+                <td>
+                  <input class="form-control" type="text" style="text-align: center !important;" readonly="true"
+                  formControlName="totalConsumo">
+                </td>
+                <td>
+                  <input class="form-control" type="text" style="text-align: center !important;" readonly="true"
+                  formControlName="totalConsumoNF">
+                </td>
+                <td>
+                  <input class="form-control" type="text" style="text-align: center !important;" readonly="true"
+                  formControlName="totalDifConsumo">
+                </td>
+              </tr>
+            </tbody>
+             
+             
+              
+            </table>
+          </div>
+         
+
+          <div class="row" style="margin-right: 30px;margin-left: 30px;">
+            <div class="col-md-12">
+              <hr style="background-color: #4C9AFD !important; height: 2px;">
+              <h4 style="color: #FC4343">
+                <img src="../../../assets/imagenes/dataResult.png" height=35>
+                Resultados obtenidos</h4>
+            </div>
+              <div class="col-md-1"></div>
+              <div class="col-md-5">
+                <label style="font-size: 15px !important;color:#FB8181 !important;font-weight: bold;">Consumo ENR_Diario (kwh Diario)</label>
+                <input class="form-control" type="text" formControlName="consumoDiarioENR" name="consumoDiarioENR"
+                style="text-align: center !important;" readonly="true">
+              </div>
+              <div class="col-md-5">
+                <label style="font-size: 15px !important;color:#FB8181 !important;font-weight: bold;">Consumo ENR a facturar (kwh total)</label>
+                <input class="form-control" type="text" formControlName="consumoENRFacturar" name="consumoENRFacturar"
+                style="text-align: center !important;" readonly="true">
+              </div>
+              <div class="col-md-1"></div>
+            
+          </div>
+        </form>
+        </form>
          
           
       </div>
@@ -1421,3 +1620,73 @@ tabindex="-1" role="dialog" id="nuevoScan">
 
 
 
+<!--modal para detalles de lectura del NIS-->
+
+<div class="modal animated fadeInLeft" id="mostrarLecturas" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog mw-100 w-75" >
+    <div class="modal-content">
+      <div class="modal-header" >
+        <h6 class="title" style="color:#B18AFF !important;margin-right: 40px;">
+          <img class="img-profile" src="../../../assets/imagenes/editModal.png" width=35 height=35>
+          Lecturas del NIS: <a style="color: #0CD902;">{{datosGeneralesLecturas.num_suministro}}</a>
+        </h6>
+      </div>
+      <div class="modal-body" style="max-height: calc(100vh - 200px);
+      overflow-y: auto;overflow-x: hidden;">
+
+      <table  id="lecturas_Tbl" class="table small mt-5" style="width: 99%;
+      margin:auto">
+          <thead class="thead-dark">
+            <tr>
+              <th></th>
+              <th style="background-color:#323259; color:#51F749;"
+              class="text-center">Período </th>
+              <th style="background-color:#323259; color:#51F749;"
+              class="text-center">Fecha Lectura Ant.</th>
+            
+              <th style="background-color:#323259; color:#51F749;"
+              class="text-center">Fecha Lectura</th>
+              <th style="background-color:#323259; color:#51F749;"
+              class="text-center">Días Facturados</th>
+              <th style="background-color:#323259; color:#51F749;"
+              class="text-center">Consumo Facturado</th>
+              <th style="background-color:#323259; color:#51F749;"
+              class="text-center">Acciones</th>
+             
+          </tr>
+          </thead>
+          <tbody style="background-color:#323259; color:white;text-align: center;
+          font-size: 13px;">
+            <tr *ngFor="let lec  of lecturasArray, let i= index" id="tr{{lec.periodo}}">     
+            <td>{{lec.anio}}</td>                   
+            <td>{{lec.periodo}}</td>
+            <td>{{lec.fechaLecturaAnterior}}</td>          
+            <td>{{lec.fechaLectura}}</td>
+            <td>{{lec.diasFacturado}}</td>
+            <td>{{lec.consumo}}</td>
+            <td>
+            
+              <button id="add{{lec.periodo}}" class="btn btn-success btn-sm btn-circle" style="background-color: #51F749;
+            color:black" (click)="agregarLectura(lec.periodo,lec.fechaLecturaAnterior,lec.fechaLectura,
+            lec.diasFacturado,lec.consumo,i)">
+                  <i class="fa fa-hand-pointer"></i>
+            </button>  
+            <button id="remove{{lec.periodo}}" class="btn btn-danger btn-sm btn-circle" style="display:none"
+            (click)="eliminarLecturaTbl(lec.periodo)">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+            
+              </tr>
+          </tbody>
+        </table>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" (click)="hideModalLecturas()" style="color:black !important;">
+          <i class="fas fa-check"></i>  Finalizar selección! 
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

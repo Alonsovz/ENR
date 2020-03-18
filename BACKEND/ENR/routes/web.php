@@ -62,3 +62,5 @@ Route::get('/', function () {
     Route::post('updateDatosNISGenerales', 'ENRController@updateDatosNISGenerales');
     
     Route::post('updateDocProbatoria', 'ENRController@updateDocProbatoria');
+    
+    Route::post('getLecturasbyNIS', 'ENRController@getLecturasbyNIS');

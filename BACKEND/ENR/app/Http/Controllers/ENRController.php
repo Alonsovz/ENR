@@ -641,4 +641,24 @@ class ENRController extends Controller
         return response()->json("ok");
        }
     }
+
+
+
+    public function getLecturasbyNIS(Request $request){
+        $nis = $request["nis"];
+
+        $getDatos =  DB::connection('facturacion')->select("
+        select SUBSTRING ( periodo ,3 , 4 ) as anio,periodo as periodo,
+        convert(varchar, fecha_lectura_ant, 103)as fechaLecturaAnterior,
+        convert(varchar, fecha_lectura, 103)as fechaLectura,
+        DATEDIFF(day, fecha_lectura_ant, fecha_lectura) as diasFacturado,
+        CONVERT(decimal(18,2),sum (consumo * multiplicador)) as consumo  from fe_lecturas 
+        where (codigo_consumo = 'CO011' or codigo_consumo = 'CO012'
+        or codigo_consumo = 'CO013' or codigo_consumo = 'CO014' ) and num_suministro = ?	
+        group by periodo,fecha_lectura_ant,fecha_lectura
+        ORDER BY fecha_lectura DESC
+        ",[$nis]);
+
+        return response()->json($getDatos);
+    }
 }
