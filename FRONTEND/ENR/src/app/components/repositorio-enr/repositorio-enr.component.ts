@@ -54,6 +54,7 @@ export class RepositorioENRComponent implements OnInit {
   datosENRListaScan: Repositorio[] = new Array();
   ordenes : DatosENR[];
   dias: DatosENR[] = new Array();
+  consumo: DatosENR[] = new Array();
   codigosENR : codigos[];
   codigosMetENR : metodologia[];
   rutaFile : string;
@@ -73,6 +74,12 @@ export class RepositorioENRComponent implements OnInit {
   frm_LecturasEvaluarTotales : FormGroup;
   indexLecturas : number;
   totalSeleccion = 0;
+  frm_Caso3 : FormGroup;
+  frm_ConsumosReales3 : FormGroup;
+  frm_ConsumosReales3Totales : FormGroup;
+  casoEvaluado = '';
+
+  frm_Caso4 : FormGroup;
 
   constructor(private repositorioENR : RepositorioEnrService,private chRef: ChangeDetectorRef,
     private http: HttpClient, private url: GlobalService,
@@ -80,6 +87,7 @@ export class RepositorioENRComponent implements OnInit {
     public sanitizer: DomSanitizer,
     private codigoENR: CodigoENRService, private codigoMetENR: MetodologiaCalcService,
     private fb1: FormBuilder, private fb: FormBuilder,private fb2: FormBuilder,) { 
+
       this.frm_LecturasEvaluarTotales = new FormGroup({
         'totalDias' : new FormControl(''),
         'totalConsumo' : new FormControl(''),
@@ -87,6 +95,16 @@ export class RepositorioENRComponent implements OnInit {
         'totalDifConsumo' : new FormControl(''),
         'consumoENRFacturar': new FormControl(''),
         'consumoDiarioENR': new FormControl(''),
+        'consumoHistorioPromedio' : new FormControl(''),
+        'consumoENREstimado' : new FormControl(''),
+        'consumoENRRegistrado' : new FormControl(''),
+      });
+
+      this.frm_ConsumosReales3Totales = new FormGroup({
+        'totalDiasCT3' : new FormControl(''),
+        'totalConsumoCT3' : new FormControl(''),
+        'totalConsumoEstimadoCT3': new FormControl(''),
+        'promedioDiasCT3': new FormControl(''),
       });
 
       this.frm_ArchivoEliminar = new FormGroup({
@@ -176,6 +194,14 @@ export class RepositorioENRComponent implements OnInit {
       });
 
 
+
+      this.frm_Caso3 = new FormGroup({
+      'diasCobroCaso3':new FormControl('',[Validators.required]),
+       });
+
+       this.frm_Caso4 = new FormGroup({
+        'diasCobroCaso4':new FormControl('',[Validators.required]),
+         });
      
     }
 
@@ -350,6 +376,11 @@ export class RepositorioENRComponent implements OnInit {
 //declaracion de formulario de todos las lecturas de tipo ARRRAY
   get lecturas(){
     return this.frm_LecturasEvaluar.get('lecturas') as FormArray;
+  }
+
+
+  get consumosReales3(){
+    return this.frm_ConsumosReales3.get('consumosReales3') as FormArray;
   }
 
 //validacion del archivo seleccionado
@@ -1197,10 +1228,27 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
    //metodo para mostrar ventana de cálculo del caso ENR
 
    public calcularCaso(caso){
-    $("#titleCalculo").show();
     $("#myTabContent").hide();
     $("#myTab").hide();
     $("#titleGlobal").hide();
+    $("#totalesConsumoCT3").hide();
+    $("#btnSelecLecturasCaso2").hide();
+    $("#btnSelecLecturasCaso3").hide();
+    $("#titleCalculo").show();
+    
+
+    this.frm_LecturasEvaluar = this.fb2.group({lecturas: this.fb2.array([]),});
+    this.frm_ConsumosReales3 = this.fb2.group({consumosReales3: this.fb2.array([]),})
+    this.frm_ConsumosReales3Totales.reset();
+    this.frm_LecturasEvaluarTotales.reset();
+    this.consumosReales3.push(
+      this.fb2.group({
+        periodo:'',
+        consumoRegistradoCT3:0,
+        diasCT3:0,
+       }),  
+    );
+       
 
     this.datosGenerales = caso;
 
@@ -1280,14 +1328,12 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
    public cerrarCalculo(caso){
     $("#titleCalculo").hide();
-    $("#myTabContent").show();
-    $("#myTab").show();
-    $("#titleGlobal").show();
     $("#resultCaso1").hide();
     this.frm_Caso1.reset();
     this.frm_Caso2.reset();
-    $("#sHorasValidator").hide();
-    $("#censoCargaValidator").hide();
+    $("#myTabContent").show();
+    $("#myTab").show();
+    $("#titleGlobal").show();
    }
 
 
@@ -1381,6 +1427,8 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
     var total = censo / 30;
     this.frm_Caso2.controls["consumoEstimado"].setValue(total.toFixed(2));
+
+    $("#btnSelecLecturasCaso2").show();
   }
 
 
@@ -1390,79 +1438,106 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
     const consumoNoFacturado = [];
     const difConsumo = [];
 
-    //Calcular dias totales
-    $.each($('input[name=\'diasFacturados\']'), function(){
-      dias.push($(this).val());
-    });
+      //Calcular dias totales
+      $.each($('input[name=\'diasFacturados\']'), function(){
+        dias.push($(this).val());
+      });
 
 
-    var sumatoriaDias = dias.reduce(function(acumulador, siguienteValor){
-      return parseFloat(acumulador) + parseFloat(siguienteValor);
-    }, 0);
+      var sumatoriaDias = dias.reduce(function(acumulador, siguienteValor){
+        return parseFloat(acumulador) + parseFloat(siguienteValor);
+      }, 0);
 
 
-    //calcular consumo total
-    $.each($('input[name=\'consumo\']'), function(){
-      consumo.push($(this).val());
-    });
+      //calcular consumo total
+      $.each($('input[name=\'consumo\']'), function(){
+        consumo.push($(this).val());
+      });
 
 
-    var sumatoriaConsumo = consumo.reduce(function(acumulador, siguienteValor){
-      return parseFloat(acumulador) + parseFloat(siguienteValor);
-    }, 0);
-
-
-
-    //calcular consumo real no facturado total
-    $.each($('input[name=\'consumoNoFac\']'), function(){
-      consumoNoFacturado.push($(this).val());
-    });
-
-
-    var sumatoriaConsumoNF = consumoNoFacturado.reduce(function(acumulador, siguienteValor){
-      return parseFloat(acumulador) + parseFloat(siguienteValor);
-    }, 0);
+      var sumatoriaConsumo = consumo.reduce(function(acumulador, siguienteValor){
+        return parseFloat(acumulador) + parseFloat(siguienteValor);
+      }, 0);
 
 
 
-    //calcular diferencia de consumo total
-    $.each($('input[name=\'difConsumo\']'), function(){
-      difConsumo.push($(this).val());
-    });
+      //calcular consumo real no facturado total
+      $.each($('input[name=\'consumoNoFac\']'), function(){
+        consumoNoFacturado.push($(this).val());
+      });
 
 
-    var sumatoriaDifConsumo= difConsumo.reduce(function(acumulador, siguienteValor){
-      return parseFloat(acumulador) + parseFloat(siguienteValor);
-    }, 0);
+      var sumatoriaConsumoNF = consumoNoFacturado.reduce(function(acumulador, siguienteValor){
+        return parseFloat(acumulador) + parseFloat(siguienteValor);
+      }, 0);
+
+
+
+      //calcular diferencia de consumo total
+      $.each($('input[name=\'difConsumo\']'), function(){
+        difConsumo.push($(this).val());
+      });
+
+
+      var sumatoriaDifConsumo= difConsumo.reduce(function(acumulador, siguienteValor){
+        return parseFloat(acumulador) + parseFloat(siguienteValor);
+      }, 0);
+
+
+
+      this.frm_LecturasEvaluarTotales.controls["totalDias"].setValue(sumatoriaDias);
+      this.frm_LecturasEvaluarTotales.controls["totalConsumo"].setValue(sumatoriaConsumo.toFixed(2));
+      this.frm_LecturasEvaluarTotales.controls["totalConsumoNF"].setValue(sumatoriaConsumoNF.toFixed(2));
+      this.frm_LecturasEvaluarTotales.controls["totalDifConsumo"].setValue(sumatoriaDifConsumo.toFixed(2));
+
+      var consumoENRDiario = (sumatoriaDifConsumo / sumatoriaDias).toFixed(2);
+
+      this.frm_LecturasEvaluarTotales.controls["consumoDiarioENR"].setValue(consumoENRDiario);
+
+      if(this.casoEvaluado == '2'){
+       
+        var consumoENRFacturar = ((sumatoriaDifConsumo / sumatoriaDias) *
+        this.frm_Caso2.controls["diasCobroCaso2"].value).toFixed(2);
+  
+        this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(consumoENRFacturar);
+  
+  
+      }else if(this.casoEvaluado == '3'){
+        var consumoENRFacturar = ((sumatoriaDifConsumo / sumatoriaDias) *
+        this.frm_Caso3.controls["diasCobroCaso3"].value).toFixed(2);
+        
+        this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(consumoENRFacturar);
+  
+      }else if(this.casoEvaluado == '4'){
+        var diasHistorico = this.frm_LecturasEvaluarTotales.controls["totalDias"].value;
+        var consumoHistorico = this.frm_LecturasEvaluarTotales.controls["totalConsumo"].value;
+
+        var promedioConsumo = consumoHistorico / diasHistorico;
+
+        this.frm_LecturasEvaluarTotales.controls["consumoHistorioPromedio"].setValue(promedioConsumo.toFixed(2));
+
+
+        var consumoENREs = (consumoHistorico / diasHistorico)* this.frm_Caso4.controls["diasCobroCaso4"].value;
+        this.frm_LecturasEvaluarTotales.controls["consumoENREstimado"].setValue(consumoENREs.toFixed(2));
+
+      }
+     
+      this.totalSeleccion = dias.length;
+
+      //$("#btnSelecLecturasCaso2").show();
+     // 
     
-
-
-    this.frm_LecturasEvaluarTotales.controls["totalDias"].setValue(sumatoriaDias);
-    this.frm_LecturasEvaluarTotales.controls["totalConsumo"].setValue(sumatoriaConsumo.toFixed(2));
-    this.frm_LecturasEvaluarTotales.controls["totalConsumoNF"].setValue(sumatoriaConsumoNF.toFixed(2));
-    this.frm_LecturasEvaluarTotales.controls["totalDifConsumo"].setValue(sumatoriaDifConsumo.toFixed(2));
-
-
-    var consumoENRDiario = (sumatoriaDifConsumo / sumatoriaDias).toFixed(2);
-
-    this.frm_LecturasEvaluarTotales.controls["consumoDiarioENR"].setValue(consumoENRDiario);
-
-    var consumoENRFacturar = ((sumatoriaDifConsumo / sumatoriaDias) *
-    this.frm_Caso2.controls["diasCobroCaso2"].value).toFixed(2);
-
-    this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(consumoENRFacturar);
-
-
-    this.totalSeleccion = dias.length;
+    
+    
   }
 
 
 
 
-  //metodo para cargar lecturas del NIS 
-  public mostrarLecturas(datos){
+  //metodo para cargar lecturas del NIS
+  public mostrarLecturas(datos,caso){
 
-    
+    this.casoEvaluado = caso;
 
     this.datosGeneralesLecturas =datos;
 
@@ -1472,31 +1547,27 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
     datosENRdto = datos;
 
-    var consumo =  this.frm_Caso2.controls["consumoEstimado"].value;
+   
+      var consumo =  this.frm_Caso2.controls["consumoEstimado"].value;
 
-    if(consumo == ''){
-      notie.alert({
-        type: 'error',
-        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/nofound.png" width=40 height=40> Debe calcular el Consumo Diario Estimado',
-        stay: false, 
-        time: 4, 
-        position: 'top' 
-      });
-    }else{
-      $("#mostrarLecturas").show();
-    }
-
-    
-
+      if(consumo == ''){
+        notie.alert({
+          type: 'error',
+          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/nofound.png" width=40 height=40> Debe calcular el Consumo Diario Estimado',
+          stay: false, 
+          time: 4, 
+          position: 'top' 
+        });
+      }else{
+        $("#mostrarLecturas").show();
+      }
   }
 
   public hideModalLecturas(){
-    $("#mostrarLecturas").hide();
-    $("#frmLec").show();
-    $("#frmLecTotales").show();
-
     this.totalizarDatos();
-
+    $("#mostrarLecturas").hide();
+      $("#frmLec").show();
+      $("#frmLecTotales").show();
   }
  
 
@@ -1505,17 +1576,42 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
     $("#tr"+periodo).addClass("adjuntos");
     $("#remove"+periodo).show();
     
-    this.lecturas.push(
-      this.fb2.group({
-        periodo:periodo,
-        fechaLecturaAnt:fechaLecturaAnt,
-        fechaLectura:fechaLectura,
-        diasFacturados:diasFacturados,
-        consumo:consumoN,
-        consumoNoFac: (diasFacturados * this.consumoDiario).toFixed(2),
-        difConsumo : ((diasFacturados * this.consumoDiario)  - consumoN).toFixed(2)
-       }),  
-  );
+    if(this.casoEvaluado == '2'){
+      this.lecturas.push(
+        this.fb2.group({
+          periodo:periodo,
+          fechaLecturaAnt:fechaLecturaAnt,
+          fechaLectura:fechaLectura,
+          diasFacturados:diasFacturados,
+          consumo:consumoN,
+          consumoNoFac: (diasFacturados * this.consumoDiario).toFixed(2),
+          difConsumo : ((diasFacturados * this.consumoDiario)  - consumoN).toFixed(2)
+         }),  
+    );
+    }else if(this.casoEvaluado == '3'){
+      this.lecturas.push(
+        this.fb2.group({
+          periodo:periodo,
+          fechaLecturaAnt:fechaLecturaAnt,
+          fechaLectura:fechaLectura,
+          diasFacturados:diasFacturados,
+          consumo:consumoN,
+          consumoNoFac: (diasFacturados * this.frm_ConsumosReales3Totales.controls["promedioDiasCT3"].value).toFixed(2),
+          difConsumo : ((diasFacturados * this.frm_ConsumosReales3Totales.controls["promedioDiasCT3"].value) -consumoN).toFixed(2)
+         }),  
+    );
+    }else if(this.casoEvaluado == '4'){
+      this.lecturas.push(
+        this.fb2.group({
+          periodo:periodo,
+          fechaLecturaAnt:fechaLecturaAnt,
+          fechaLectura:fechaLectura,
+          diasFacturados:diasFacturados,
+          consumo:consumoN,
+         }),  
+    );
+    }
+    
 
 
   this.totalizarDatos();
@@ -1538,6 +1634,85 @@ public eliminarLectura(i, periodo){
 
 
 
+  //metodo para cargar lecturas del NIS
+  public mostrarLecturasCasos(datos, caso){
+    this.casoEvaluado = caso;
+    this.datosGeneralesLecturas =datos;
+    let datosENRdto : DatosENR = new DatosENR();
+    datosENRdto = datos;
+
+    $("#mostrarLecturas").show();
+      
+  }
 
 
+  public agregarConsumoReal(){
+    this.consumosReales3.push(
+      this.fb2.group({
+        periodo:'',
+        consumoRegistradoCT3:0,
+        diasCT3:0,
+       }),  
+    );
+    $("#totalesConsumoCT3").hide();
+    $("#btnSelecLecturasCaso3").hide();
+  }
+
+  public eliminarConsumoReal(i){
+    this.consumosReales3.removeAt(i);
+    $("#totalesConsumoCT3").hide();
+    $("#btnSelecLecturasCaso3").hide();
+  }
+
+  public totalizarConsumosReales3(){
+    const dias = [];
+    const consumo = [];
+
+    //Calcular dias totales
+    $.each($('input[name=\'diasCT3\']'), function(){
+      dias.push($(this).val());
+    });
+
+
+    var sumatoriaDias = dias.reduce(function(acumulador, siguienteValor){
+      return parseFloat(acumulador) + parseFloat(siguienteValor);
+    }, 0);
+
+
+    //calcular consumo total
+    $.each($('input[name=\'consumoRegistradoCT3\']'), function(){
+      consumo.push($(this).val());
+    });
+
+
+    var sumatoriaConsumo = consumo.reduce(function(acumulador, siguienteValor){
+      return parseFloat(acumulador) + parseFloat(siguienteValor);
+    }, 0);
+
+    if(this.dias.length == 0 && this.consumo.length == 0){
+
+    }
+
+    this.frm_ConsumosReales3Totales.controls["totalDiasCT3"].setValue(sumatoriaDias);
+    this.frm_ConsumosReales3Totales.controls["totalConsumoCT3"].setValue(sumatoriaConsumo.toFixed(2));
+   
+    var promedioDia = sumatoriaConsumo / sumatoriaDias;
+    var consumoEstimadoMensual = (sumatoriaConsumo / sumatoriaDias) * 30;
+    this.frm_ConsumosReales3Totales.controls["promedioDiasCT3"].setValue(promedioDia.toFixed(2));
+    this.frm_ConsumosReales3Totales.controls["totalConsumoEstimadoCT3"].setValue(consumoEstimadoMensual.toFixed(2));
+    $("#totalesConsumoCT3").show();
+    $("#btnSelecLecturasCaso3").show();
+    //$(".calc").click();
+    this.totalizarDatos();
+  }
+
+
+  calcularENRCaso4(){
+    var consumoEst = this.frm_LecturasEvaluarTotales.controls["consumoENREstimado"].value;
+    var consumoReg = this.frm_LecturasEvaluarTotales.controls["consumoENRRegistrado"].value;
+
+    var total = consumoEst - consumoReg;
+
+    this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(total.toFixed(2));
+  }
 }
