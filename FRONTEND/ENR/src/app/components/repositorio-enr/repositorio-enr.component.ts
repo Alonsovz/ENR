@@ -81,6 +81,8 @@ export class RepositorioENRComponent implements OnInit {
 
   frm_Caso4 : FormGroup;
 
+  frm_Caso5 : FormGroup;
+
   constructor(private repositorioENR : RepositorioEnrService,private chRef: ChangeDetectorRef,
     private http: HttpClient, private url: GlobalService,
     private datosENR : DatosENRService,
@@ -98,6 +100,8 @@ export class RepositorioENRComponent implements OnInit {
         'consumoHistorioPromedio' : new FormControl(''),
         'consumoENREstimado' : new FormControl(''),
         'consumoENRRegistrado' : new FormControl(''),
+        'consumoDebioFacturar' : new FormControl(''),
+        'consumoFuera': new FormControl(''),
       });
 
       this.frm_ConsumosReales3Totales = new FormGroup({
@@ -203,6 +207,13 @@ export class RepositorioENRComponent implements OnInit {
         'diasCobroCaso4':new FormControl('',[Validators.required]),
          });
      
+         this.frm_Caso5 = new FormGroup({
+          'diasCobroCaso5':new FormControl('',[Validators.required]),
+          'porcentajeExactitudOT':new FormControl('',[Validators.required]),
+          'porcentajeExactitudBase':new FormControl('100',[Validators.required]),
+          'diferenciaExactitud':new FormControl('',[Validators.required]),
+          });
+    
     }
 
   ngOnInit() {
@@ -1228,19 +1239,10 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
    //metodo para mostrar ventana de cálculo del caso ENR
 
    public calcularCaso(caso){
-    $("#myTabContent").hide();
-    $("#myTab").hide();
-    $("#titleGlobal").hide();
-    $("#totalesConsumoCT3").hide();
-    $("#btnSelecLecturasCaso2").hide();
-    $("#btnSelecLecturasCaso3").hide();
-    $("#titleCalculo").show();
-    
-
     this.frm_LecturasEvaluar = this.fb2.group({lecturas: this.fb2.array([]),});
     this.frm_ConsumosReales3 = this.fb2.group({consumosReales3: this.fb2.array([]),})
     this.frm_ConsumosReales3Totales.reset();
-    this.frm_LecturasEvaluarTotales.reset();
+    
     this.consumosReales3.push(
       this.fb2.group({
         periodo:'',
@@ -1248,6 +1250,18 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
         diasCT3:0,
        }),  
     );
+
+    $("#myTabContent").hide();
+    $("#myTab").hide();
+    $("#titleGlobal").hide();
+    $("#totalesConsumoCT3").hide();
+    $("#btnSelecLecturasCaso2").hide();
+    $("#btnSelecLecturasCaso3").hide();
+    $("#btnSelecLecturasCaso5").hide();
+    
+    
+
+    
        
 
     this.datosGenerales = caso;
@@ -1289,6 +1303,10 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
           'iDisplayLength' : 5,
         'responsive': true,
           order: [[ 0, 'desc' ]], 
+         
+          "initComplete": function(settings, json) {
+            $("#titleCalculo").show();
+          },
         'language' : {
           'sProcessing':     'Procesando...',
           'sLengthMenu':     'Mostrar _MENU_ registros',
@@ -1331,6 +1349,10 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
     $("#resultCaso1").hide();
     this.frm_Caso1.reset();
     this.frm_Caso2.reset();
+    
+    this.frm_Caso5.controls["porcentajeExactitudOT"].setValue('');
+    this.frm_Caso5.controls["diferenciaExactitud"].setValue('');
+
     $("#myTabContent").show();
     $("#myTab").show();
     $("#titleGlobal").show();
@@ -1521,6 +1543,40 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
         this.frm_LecturasEvaluarTotales.controls["consumoENREstimado"].setValue(consumoENREs.toFixed(2));
 
       }
+
+      else if(this.casoEvaluado == '5'){
+        const consumoFuera = [];
+        const consumoCorrecto = [];
+
+        //Calcular consumo fuera de rango
+        $.each($('input[name=\'consumoFuera\']'), function(){
+          consumoFuera.push($(this).val());
+        });
+  
+  
+        var sumatoriaConsumoFuera = consumoFuera.reduce(function(acumulador, siguienteValor){
+          return parseFloat(acumulador) + parseFloat(siguienteValor);
+        }, 0);
+
+
+        //Calcular debio facturar
+        $.each($('input[name=\'consumoCorrecto\']'), function(){
+          consumoCorrecto.push($(this).val());
+        });
+  
+  
+        var sumatoriaConsumoCorrecto = consumoCorrecto.reduce(function(acumulador, siguienteValor){
+          return parseFloat(acumulador) + parseFloat(siguienteValor);
+        }, 0);
+
+
+        this.frm_LecturasEvaluarTotales.controls["consumoFuera"].setValue(sumatoriaConsumoFuera.toFixed(2));
+        this.frm_LecturasEvaluarTotales.controls["consumoDebioFacturar"].setValue(sumatoriaConsumoCorrecto.toFixed(2));
+
+        var totalENR = sumatoriaConsumoCorrecto - sumatoriaConsumo;
+        
+        this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(totalENR.toFixed(2));
+      }
      
       this.totalSeleccion = dias.length;
 
@@ -1571,6 +1627,10 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
   }
  
 
+  public cancelarModalLecturas(){
+    $("#mostrarLecturas").hide();
+  }
+
   public agregarLectura(periodo,fechaLecturaAnt,fechaLectura,diasFacturados,consumoN,i){
     $("#add"+periodo).hide();
     $("#tr"+periodo).addClass("adjuntos");
@@ -1610,6 +1670,39 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
           consumo:consumoN,
          }),  
     );
+    }else if(this.casoEvaluado == '5'){
+      if(this.frm_Caso5.controls["diferenciaExactitud"].value > 0){
+        this.lecturas.push(
+          this.fb2.group({
+            periodo:periodo,
+            fechaLecturaAnt:fechaLecturaAnt,
+            fechaLectura:fechaLectura,
+            diasFacturados:diasFacturados,
+            consumo:consumoN,
+            consumoFuera : ((consumoN * this.frm_Caso5.controls["diferenciaExactitud"].value)/
+            this.frm_Caso5.controls["porcentajeExactitudOT"].value).toFixed(2),
+           
+            consumoCorrecto : (parseFloat(consumoN) - (Math.abs((consumoN * this.frm_Caso5.controls["diferenciaExactitud"].value)/
+            this.frm_Caso5.controls["porcentajeExactitudOT"].value))).toFixed(2),
+           }),  
+      );
+      }else{
+        this.lecturas.push(
+          this.fb2.group({
+            periodo:periodo,
+            fechaLecturaAnt:fechaLecturaAnt,
+            fechaLectura:fechaLectura,
+            diasFacturados:diasFacturados,
+            consumo:consumoN,
+            consumoFuera : ((consumoN * this.frm_Caso5.controls["diferenciaExactitud"].value)/
+            this.frm_Caso5.controls["porcentajeExactitudOT"].value).toFixed(2),
+           
+            consumoCorrecto : (parseFloat(consumoN) + (Math.abs((consumoN * this.frm_Caso5.controls["diferenciaExactitud"].value)/
+            this.frm_Caso5.controls["porcentajeExactitudOT"].value))).toFixed(2),
+           }),  
+      );
+      }
+     
     }
     
 
@@ -1714,5 +1807,17 @@ public eliminarLectura(i, periodo){
     var total = consumoEst - consumoReg;
 
     this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(total.toFixed(2));
+  }
+
+
+  calcularDiferenciaExactitud(){
+    var exOT =  this.frm_Caso5.controls["porcentajeExactitudOT"].value;
+    var exBase = this.frm_Caso5.controls["porcentajeExactitudBase"].value;
+
+    var total = exOT - exBase;
+
+    this.frm_Caso5.controls["diferenciaExactitud"].setValue(total.toFixed(2));
+
+    $("#btnSelecLecturasCaso5").show();
   }
 }

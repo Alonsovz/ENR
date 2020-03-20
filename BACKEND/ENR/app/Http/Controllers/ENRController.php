@@ -652,10 +652,11 @@ class ENRController extends Controller
         convert(varchar, fecha_lectura_ant, 103)as fechaLecturaAnterior,
         convert(varchar, fecha_lectura, 103)as fechaLectura,
         DATEDIFF(day, fecha_lectura_ant, fecha_lectura) as diasFacturado,
-        CONVERT(decimal(18,2),sum (consumo * multiplicador)) as consumo  from fe_lecturas 
+        CONVERT(decimal(18,2),sum (consumo * multiplicador)) as consumo,
+        numero_medidor as medidor  from fe_lecturas 
         where (codigo_consumo = 'CO011' or codigo_consumo = 'CO012'
         or codigo_consumo = 'CO013' or codigo_consumo = 'CO014' ) and num_suministro = ?	
-        group by periodo,fecha_lectura_ant,fecha_lectura
+        group by periodo,fecha_lectura_ant,fecha_lectura,numero_medidor
         ORDER BY fecha_lectura DESC
         ",[$nis]);
 
