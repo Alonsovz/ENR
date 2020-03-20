@@ -365,7 +365,7 @@ export class RepositorioENRComponent implements OnInit {
 //inicialización de datos en el formulario de adjuntar archivos a las ordenes técnicas
   public modalAdjuntar(orden, ordenNumeroG){
     this.ordenNumeroAd = orden;
-    //console.log(ordenNumeroG);
+    ////console.log(ordenNumeroG);
     this.ordenNumeroGN = ordenNumeroG;
     this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
     this.previewUrl1 = '';
@@ -437,7 +437,7 @@ export class RepositorioENRComponent implements OnInit {
     .subscribe(events => {
       if(events.type === HttpEventType.UploadProgress) {
         //this.fileUploadProgress = Math.round(events.loaded / events.total * 100) + '%';
-        console.log(this.fileUploadProgress);
+        ////console.log(this.fileUploadProgress);
       } else if(events.type === HttpEventType.Response) {
        // this.fileUploadProgress = '';
   
@@ -514,7 +514,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 .subscribe(events => {
  if(events.type === HttpEventType.UploadProgress) {
    this.fileUploadProgress = Math.round(events.loaded / events.total * 100) + '%';
-   console.log(this.fileUploadProgress);
+   ////console.log(this.fileUploadProgress);
  } else if(events.type === HttpEventType.Response) {
    this.fileUploadProgress = '';
    var str = this.frm_Archivo.controls["fileProbatorio"].value;
@@ -548,7 +548,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
   //método para pasar parametros a otro modal
   public datosOrdenAdjuntos(datos){
-   //console.log(datos);
+   ////console.log(datos);
     this.ordenNumeroGN = datos;
   }
 
@@ -557,14 +557,14 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
     let datosENRdtoDoc : DatosENR = new DatosENR();
   
     datosENRdtoDoc = this.adjuntoOrdenesForm.value;
-    //console.log(ordenes);
+    ////console.log(ordenes);
     
     this.datosENR.saveDocOT(datosENRdtoDoc).subscribe(
       response => {
         
       },
       err => {
-        console.log("no");
+       // //console.log("no");
       },
       () => { 
         
@@ -636,14 +636,14 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
       },
       err => {},
       () => {
-        //console.log(this.cod);
+        ////console.log(this.cod);
       }
     );
   }
 
 //método que obtiene la URL del archivo a ver y valida el tipo de extension
   public adjuntosOrdenesVer(adjunto, ext){
-    //console.log(adjunto);
+    ////console.log(adjunto);
     var url = this.url.getUrlBackEnd()+'files/'+adjunto;
   
     this.adjuntoVer =  this.sanitizer.bypassSecurityTrustResourceUrl(url);
@@ -682,7 +682,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
         
       },
       err => {
-        console.log("no");
+        ////console.log("no");
       },
       () => {
         this.datosEditar(orden);
@@ -714,7 +714,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
         
       },
       err => {
-        console.log("no");
+        ////console.log("no");
       },
       () => {
         
@@ -898,7 +898,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
         this.dias =response;
       },
       err => {
-        console.log("no");
+       // //console.log("no");
       },
       () => {
     
@@ -908,7 +908,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
   //Método para carga de datos en tablas y formularios en la vista para editar
   public datosEditar(caso){
-    //console.log(caso);
+    ////console.log(caso);
 
     this.docForm = this.fb.group({documentacion: this.fb.array([]),});
 
@@ -927,7 +927,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
        // $("#dataNis").show();
       },
       err => {
-        console.log("no");
+        ////console.log("no");
       },
       () => {
       if(this.datos.length < 1){
@@ -947,7 +947,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
         this.dias =response;
       },
       err => {
-        console.log("no");
+      // // //console.log("no");
       },
       () => {
     
@@ -962,7 +962,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
        // $("#dataNis").show();
       },
       err => {
-        console.log("no");
+        //console.log("no");
       },
       () => {
      
@@ -1012,7 +1012,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
       },
       err => {},
       () => {
-        //console.log(this.cod);
+        ////console.log(this.cod);
       }
     );
 
@@ -1059,7 +1059,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
       },
       err => {},
       () => {
-        //console.log(this.cod);
+        ////console.log(this.cod);
       }
     );
 
@@ -1082,7 +1082,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
        // $("#dataNis").show();
       },
       err => {
-        console.log("no");
+        //console.log("no");
       },
       () => {
         
@@ -1124,13 +1124,13 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
     const formData = new FormData();
     formData.append('file', this.fileData);
      
-    //console.log(datosCaso);
+    ////console.log(datosCaso);
 
     let datos : DatosENR = new DatosENR();
 
     datos = this.frm_NuevoScan.value;
   
-   // console.log(datos);
+   // //console.log(datos);
    
 
      
@@ -1141,7 +1141,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
      .subscribe(events => {
        if(events.type === HttpEventType.UploadProgress) {
          //this.fileUploadProgress = Math.round(events.loaded / events.total * 100) + '%';
-         console.log(this.fileUploadProgress);
+         //console.log(this.fileUploadProgress);
        } else if(events.type === HttpEventType.Response) {
         // this.fileUploadProgress = '';
    
@@ -1150,7 +1150,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
             
           },
           err => {
-            console.log("no");
+            //console.log("no");
           },
           () => {
             notie.alert({
@@ -1193,7 +1193,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
         
       },
       err => {
-        console.log("no");
+        //console.log("no");
       },
       () => {
         let datosENRdtoDoc : DatosENR = new DatosENR();
@@ -1204,7 +1204,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
             
           },
           err => {
-            console.log("no");
+            //console.log("no");
           },
           () => { 
             
@@ -1270,7 +1270,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
     datosENRdto = caso;
 
-    console.log(caso);
+    //console.log(caso);
 
     this.repositorioENR.getDatosENR(datosENRdto).subscribe(
       response => {
@@ -1279,7 +1279,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
        // $("#dataNis").show();
       },
       err => {
-        console.log("no");
+        //console.log("no");
       },
       () => {
         
@@ -1335,7 +1335,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
       },
       err => {},
       () => {
-        //console.log(this.cod);
+        ////console.log(this.cod);
       }
     );
    
