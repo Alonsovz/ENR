@@ -1,1 +1,67 @@
-<h1> Hola</h1>
+<head>
+    <link rel="stylesheet" href="../../../assets/imagenes/animate.min.css">
+    
+</head>
+
+<div class="row justify-content-center animated fadeInDown" style="background-color: #1B1B38 !important;
+height: 70vh !important;">
+
+
+
+        <div class="card o-hidden border-0 shadow-lg" style="background-color: #222245 !important;">
+          <div class="card-body p-0 ">
+            <!-- Nested Row within Card Body -->
+            <div class="row" style="width:500px;">
+            
+              <div class="col-lg-12" style="border: 5px solid #12FF03;">
+                <div class="p-5">
+                    <div class="text-center">
+                        <h1 style="color: #F4D05B; font-size: 40px; font-weight: bold;">
+                            <img class="img-profile" src="../../../assets/imagenes/distribucion.png" width=80 height=80>
+                            ENR
+                        </h1>
+                      </div>
+                      <hr style="background-color: #F4D05B !important; height: 1px;">
+                
+                    <form class="user" #loginForm="ngForm" (ngSubmit)="onClickSubmit(usuariodto)" style="margin-top: 25px" >
+                        <div class="form-group">
+                            <label><i class="fas fa-user"></i> Ingrese su usuario EDESAL: </label>
+                          <input #alias="ngModel" autocomplete="off" required id="alias"
+                            name="alias" [(ngModel)]="usuariodto.alias" type="text" 
+                            class="form-control"  placeholder="Usuario"  >
+                        </div>
+                        <div [hidden]="alias.valid || alias.pristine" class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle"></i> Alias es requerido
+                        </div>
+    
+                        <div class="form-group">
+                            <label><i class="fas fa-lock"></i> Ingrese su contraseña: </label>
+                          <input #password="ngModel" id="password"
+                           autocomplete="off" required name="password" 
+                           [(ngModel)]="usuariodto.password" type="password" 
+                           class="form-control"   placeholder="Contraseña">
+                        </div>
+                        <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle"></i> Password es requerido
+                        </div>
+    
+                        <button type="submit" [disabled]="!loginForm.form.valid"  class="btn btn-success btn-block">
+                          Iniciar sesión
+                        </button>
+    
+                      </form>
+                   
+                
+                      <div class="text-center mt-5">
+                        <a class="small" href="#"
+                        style="color: #1FE303;">¿Olvido su Contraseña?</a>
+                      </div>
+                </div>
+              
+              </div>
+            </div>
+          </div>
+        </div>
+
+    
+</div>

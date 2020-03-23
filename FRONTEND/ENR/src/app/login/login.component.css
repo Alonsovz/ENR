@@ -1,0 +1,41 @@
+.ng-valid[required], .ng-valid.required {
+    border-left: 5px solid #42A948;
+  }
+  
+  .ng-invalid:not(form) {
+    border-left: lightcoral solid 5px;
+  }
+
+
+  
+  .save{
+    background-color: #A16EFF !important;
+    color: black !important;
+  }
+  
+  .save:hover{
+    background-color: #8E61E9 !important;
+  }
+
+
+  label{
+    color: #D4BEFB !important;
+    text-align: center !important;
+    font-size: 15px;
+  }
+
+  .form-control:focus{
+    border: 2px solid #CEABFD !important;
+   } 
+
+  .form-control{
+    background-color: #1B1B38 !important;
+    color: #D4BEFB !important;
+    font-size: 15px;
+  }
+
+
+  .btn{
+    font-size: 15px;
+    font-weight: bold;
+  }

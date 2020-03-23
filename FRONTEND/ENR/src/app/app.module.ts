@@ -10,11 +10,12 @@ import { WrapperComponent } from './components/wrapper/wrapper.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CodigoTipoENRComponent } from './components/codigo-tipo-enr/codigo-tipo-enr.component';
 import { MetodologiaCalculoComponent } from './components/metodologia-calculo/metodologia-calculo.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DatosENRComponent } from './components/datos-enr/datos-enr.component';
 import { NgxMaskModule } from 'ngx-mask';
 import { RepositorioENRComponent } from './components/repositorio-enr/repositorio-enr.component';
 import { LoginComponent } from './login/login.component';
+import { CredencialesGuard } from './login/credenciales.guard';
 
 
 @NgModule({
@@ -29,7 +30,7 @@ import { LoginComponent } from './login/login.component';
     DatosENRComponent,
     RepositorioENRComponent,
     LoginComponent,
-    
+         
   ],
   imports: [
     BrowserModule,
@@ -37,10 +38,10 @@ import { LoginComponent } from './login/login.component';
     HttpClientModule,
     NgxMaskModule.forRoot(),
     ReactiveFormsModule,
-
+    FormsModule,
   ],
   providers: [
-    
+    CredencialesGuard
   ],
   bootstrap: [AppComponent]
 })

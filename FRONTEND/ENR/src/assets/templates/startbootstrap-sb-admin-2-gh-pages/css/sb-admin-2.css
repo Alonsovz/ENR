@@ -11643,9 +11643,8 @@ a:focus {
 }
 
 .bg-login-image {
-  background: url("../../../imagenes/distribucion.JPG");
-  background-position: center;
-  background-size: cover;
+  background: url("../../../imagenes/distribucion.png");
+  
 }
 
 .bg-register-image {
