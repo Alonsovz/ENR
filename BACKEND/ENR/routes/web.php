@@ -64,3 +64,12 @@ Route::get('/', function () {
     Route::post('updateDocProbatoria', 'ENRController@updateDocProbatoria');
     
     Route::post('getLecturasbyNIS', 'ENRController@getLecturasbyNIS');
+
+
+    Route::post('usuario', 'ENRController@validarUsuario');
+    
+    Route::post('getFechaInicioTarifa', 'ENRController@getFechaInicioTarifa');
+    
+    Route::post('getFechaFinTarifa', 'ENRController@getFechaFinTarifa');
+    
+    Route::post('getTarifasFechas', 'ENRController@getTarifasFechas');

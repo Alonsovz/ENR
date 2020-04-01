@@ -45,6 +45,10 @@ class VerifyCsrfToken extends BaseVerifier
         'getScan',
         'updateDatosNISGenerales',
         'updateDocProbatoria',
-        'getLecturasbyNIS'
+        'getLecturasbyNIS',
+        'usuario',
+        'getFechaInicioTarifa',
+        'getFechaFinTarifa',
+        'getTarifasFechas'
     ];
 }

@@ -1,0 +1,95 @@
+
+CREATE TABLE enr_gestionTipoEnr (
+    id int IDENTITY(1,1) PRIMARY KEY,
+    codigoTipo varchar(5) NOT NULL,
+    TipoENR varchar(255),
+    tiempoRetroactivo int,
+    idEliminado int
+);
+
+CREATE TABLE enr_metodologiaCalc (
+    id int IDENTITY(1,1) PRIMARY KEY,
+    codigo varchar(5) NOT NULL,
+    TipoENR varchar(255),
+    tipoEdesal varchar(255),
+    idEliminado int
+);
+
+insert into enr_gestionTipoEnr values('MM','Manipulacion de Medidor', 180, 1);
+insert into enr_metodologiaCalc values('CD','Medicion de corriente en derivacion', 'No definido', 1);
+
+create table enr_estadosCasos(
+id int IDENTITY(1,1) PRIMARY KEY,
+estado varchar(20) 
+);
+
+insert into enr_estadosCasos values('Ingresado');
+insert into enr_estadosCasos values('Calculado');
+insert into enr_estadosCasos values('Notificado');
+
+create table enr_DatosGenerales(
+id int IDENTITY(1,1) PRIMARY KEY,
+num_suministro numeric(8,0),
+nNotiENR varchar(50),
+fechaPrimerNoti datetime,
+scanPrimerNoti varchar(100),
+fechaRegularizacion datetime,
+codigoTipoENR int,
+codigoTipoMet int,
+fechaInicio datetime,
+fechaFin datetime,
+diasCobro int,
+usuario_creacion int,
+estado int,
+fechaCreacion datetime,
+idEliminado int
+);
+
+ALTER TABLE enr_DatosGenerales
+ADD FOREIGN KEY (estado) REFERENCES  FACTURACION.dbo.enr_estadosCasos(id);
+
+ALTER TABLE enr_DatosGenerales
+ADD FOREIGN KEY (num_suministro) REFERENCES  FACTURACION.dbo.fe_suministros(num_suministro);
+
+ALTER TABLE enr_DatosGenerales
+ADD FOREIGN KEY (codigoTipoENR) REFERENCES  FACTURACION.dbo.enr_gestionTipoEnr(id);
+
+ALTER TABLE enr_DatosGenerales
+ADD FOREIGN KEY (codigoTipoMet) REFERENCES  FACTURACION.dbo.enr_metodologiaCalc(id);
+
+create table enr_documentacion(
+id int IDENTITY(1,1) PRIMARY KEY,
+idCasoENR int,
+titulo varchar(500),
+tipo varchar(100),
+ruta varchar(100),
+fechaCreacion datetime,
+idEliminado int,
+usuario_borrado int,
+fechaBorrado datetime,
+usuario_borrado int,
+usuarioCreacion int
+);
+
+ALTER TABLE enr_documentacion
+ADD FOREIGN KEY (idCasoENR) REFERENCES  enr_DatosGenerales(id);
+
+
+
+
+
+create table enr_documentacionOT(
+id int IDENTITY(1,1) PRIMARY KEY,
+correlativoOrden numeric(9, 0),
+tipo varchar(100),
+ruta varchar(100),
+fechaCreacion datetime,
+titulo varchar(100),
+idEliminado int,
+usuario_borrado int,
+fechaBorrado datetime,
+usuarioCreacion int
+);
+
+ALTER TABLE enr_documentacionOT
+ADD FOREIGN KEY (num_suministro) REFERENCES  FACTURACION.dbo.fe_suministros(num_suministro);

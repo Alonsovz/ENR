@@ -41,6 +41,8 @@ export class RepositorioENRComponent implements OnInit {
   ordenNumeroG : Repositorio = new Repositorio();
   ordenNumeroGN : Repositorio = new Repositorio();
   ordenNumeroCalculo :  Repositorio[] = new Array();
+  fechaInicioTarifa :  Repositorio[] = new Array();
+  fechaFinTarifa :  Repositorio[] = new Array();
   datosGenerales : Repositorio = new Repositorio();
   datosGeneralesLecturas : Repositorio = new Repositorio();
   adjuntoVer : SafeResourceUrl;
@@ -69,6 +71,7 @@ export class RepositorioENRComponent implements OnInit {
   frm_Caso1 : FormGroup;
   frm_Caso2 : FormGroup;
   lecturasArray : Repositorio[];
+  tarifasFechas : Repositorio[];
   consumoDiario = 0;
   frm_LecturasEvaluar: FormGroup;
   frm_LecturasEvaluarTotales : FormGroup;
@@ -78,7 +81,7 @@ export class RepositorioENRComponent implements OnInit {
   frm_ConsumosReales3 : FormGroup;
   frm_ConsumosReales3Totales : FormGroup;
   casoEvaluado = '';
-
+  frm_tarifas : FormGroup;
   frm_Caso4 : FormGroup;
 
   frm_Caso5 : FormGroup;
@@ -129,6 +132,12 @@ export class RepositorioENRComponent implements OnInit {
         
       });
 
+      this.frm_tarifas = new FormGroup({
+        'fechaInicio' : new FormControl(''),
+        'fechaFin' : new FormControl(''),
+        
+        
+      });
 
       this.frm_Archivo = new FormGroup({
       
@@ -1235,6 +1244,118 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
    }
 
 
+   public validarFechaInicio(){
+    var fechaMax = this.frmDatosENR.controls["fechaRegular"].value;
+    var fechaInicio = this.frmDatosENR.controls["fechaInicioENR"].value;
+    var fechaFin = this.frmDatosENR.controls["fechaFinENR"].value;
+    if(fechaInicio > fechaMax){
+      notie.alert({
+        type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/problem.png" width=40 height=40> No debe ser mayor a la fecha de regularización!',
+        stay: false, // optional, default = false
+        time: 4, // optional, default = 3, minimum = 1,
+        position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+      });
+
+      this.frmDatosENR.controls["fechaInicioENR"].setValue('');
+      this.frmDatosENR.controls["diasCobro"].setValue('')
+    }
+    else if(fechaFin < fechaInicio){
+      notie.alert({
+        type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/problem.png" width=40 height=40> No debe ser mayor a la fecha fin!',
+        stay: false, // optional, default = false
+        time: 4, // optional, default = 3, minimum = 1,
+        position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+      });
+
+      this.frmDatosENR.controls["fechaInicioENR"].setValue('');
+      this.frmDatosENR.controls["diasCobro"].setValue('')
+    }
+    else{
+      $("#fechaf").prop("disabled",false);
+     this.calcularDias();
+    }
+  }
+
+    //método para obtener dias de cobro segun el codigo tipo enr y mensaje de alerta
+  //si sobrepasa el límite
+  public calcularDias(){
+    var fechaFin1 = new Date(this.frmDatosENR.controls["fechaFinENR"].value).getTime() ;
+    var fechaInicio1 = new Date( this.frmDatosENR.controls["fechaInicioENR"].value).getTime();
+
+    var diferencia = fechaFin1 - fechaInicio1;
+
+    var total = diferencia / (1000 * 60 * 60 * 24);
+
+    var diasRetroactivos = this.frmDatosENR.controls["diasRetroactivos"].value;
+
+    
+    var codigo = this.frmDatosENR.controls["codTipoENR"].value;
+   
+    if(codigo != '6'){
+      if(total > diasRetroactivos){
+        notie.alert({
+          type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/problem.png" width=40 height=40> El cálculo de días es mayor al permitido por el código Tipo ENR '+diasRetroactivos+'!',
+          stay: false, // optional, default = false
+          time: 5, // optional, default = 3, minimum = 1,
+          position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+        });
+      }
+      this.frmDatosENR.controls["diasCobro"].setValue(total);
+    }else{
+     
+        
+        this.frmDatosENR.controls["diasCobro"].setValue(total);
+      
+    }
+     
+      
+    
+  
+
+  }
+
+
+  
+//validación de fecha inicio y fin 
+public validarFechas(){
+  var fechaMax = this.frmDatosENR.controls["fechaRegular"].value;
+
+  var fechaFin = this.frmDatosENR.controls["fechaFinENR"].value;
+  var fechaInicio = this.frmDatosENR.controls["fechaInicioENR"].value;
+
+  if(fechaFin > fechaMax){
+    notie.alert({
+      type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+      text: '<img class="img-profile alertImg" src="../../../assets/imagenes/problem.png" width=40 height=40> No debe ser mayor a la fecha de regularización!',
+      stay: false, // optional, default = false
+      time: 4, // optional, default = 3, minimum = 1,
+      position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+    });
+    this.frmDatosENR.controls["fechaFinENR"].setValue(fechaMax);
+    this.calcularDias();
+  }
+
+  else if(fechaInicio > fechaFin){
+    notie.alert({
+      type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+      text: '<img class="img-profile alertImg" src="../../../assets/imagenes/problem.png" width=40 height=40> No debe ser menor a la fecha de inicio!',
+      stay: false, // optional, default = false
+      time: 4, // optional, default = 3, minimum = 1,
+      position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+    });
+    this.frmDatosENR.controls["fechaFinENR"].setValue(fechaMax);
+    this.calcularDias();
+  }
+
+  else{
+    this.calcularDias();
+  }
+
+
+}
 
    //metodo para mostrar ventana de cálculo del caso ENR
 
@@ -1259,7 +1380,8 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
     $("#btnSelecLecturasCaso3").hide();
     $("#btnSelecLecturasCaso5").hide();
     
-    
+    $("#btnFacturacion").hide();
+    $("#divTarifas").hide();
 
     
        
@@ -1285,6 +1407,37 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
         
       },
     );
+
+
+    this.repositorioENR.getFechaInicioTarifa(datosENRdto).subscribe(
+      response => {
+      
+        this.fechaInicioTarifa = response;
+       // $("#dataNis").show();
+      },
+      err => {
+        //console.log("no");
+      },
+      () => {
+        
+      },
+    );
+
+    this.repositorioENR.getFechaFinTarifa(datosENRdto).subscribe(
+      response => {
+      
+        this.fechaFinTarifa = response;
+       // $("#dataNis").show();
+      },
+      err => {
+        //console.log("no");
+      },
+      () => {
+        
+      },
+    );
+    
+
 
     this.repositorioENR.getLecturasbyNIS(datosENRdto).subscribe(
       response => {
@@ -1430,8 +1583,10 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
       }
      else{
      
-      this.frm_Caso1.controls["consumoTotal"].setValue(consumoENR.toFixed(2));
+      this.frm_Caso1.controls["consumoTotal"].setValue(consumoENR.toFixed(3));
       $("#resultCaso1").show();
+      $("#btnFacturacion").show();
+      $("#divTarifas").show();
      }
       
      
@@ -1448,7 +1603,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
     var censo = this.frm_Caso2.controls["censoCarga"].value;
 
     var total = censo / 30;
-    this.frm_Caso2.controls["consumoEstimado"].setValue(total.toFixed(2));
+    this.frm_Caso2.controls["consumoEstimado"].setValue(total.toFixed(3));
 
     $("#btnSelecLecturasCaso2").show();
   }
@@ -1508,25 +1663,25 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
 
       this.frm_LecturasEvaluarTotales.controls["totalDias"].setValue(sumatoriaDias);
-      this.frm_LecturasEvaluarTotales.controls["totalConsumo"].setValue(sumatoriaConsumo.toFixed(2));
-      this.frm_LecturasEvaluarTotales.controls["totalConsumoNF"].setValue(sumatoriaConsumoNF.toFixed(2));
-      this.frm_LecturasEvaluarTotales.controls["totalDifConsumo"].setValue(sumatoriaDifConsumo.toFixed(2));
+      this.frm_LecturasEvaluarTotales.controls["totalConsumo"].setValue(sumatoriaConsumo.toFixed(3));
+      this.frm_LecturasEvaluarTotales.controls["totalConsumoNF"].setValue(sumatoriaConsumoNF.toFixed(3));
+      this.frm_LecturasEvaluarTotales.controls["totalDifConsumo"].setValue(sumatoriaDifConsumo.toFixed(3));
 
-      var consumoENRDiario = (sumatoriaDifConsumo / sumatoriaDias).toFixed(2);
+      var consumoENRDiario = (sumatoriaDifConsumo / sumatoriaDias).toFixed(3);
 
       this.frm_LecturasEvaluarTotales.controls["consumoDiarioENR"].setValue(consumoENRDiario);
 
       if(this.casoEvaluado == '2'){
        
         var consumoENRFacturar = ((sumatoriaDifConsumo / sumatoriaDias) *
-        this.frm_Caso2.controls["diasCobroCaso2"].value).toFixed(2);
+        this.frm_Caso2.controls["diasCobroCaso2"].value).toFixed(3);
   
         this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(consumoENRFacturar);
   
   
       }else if(this.casoEvaluado == '3'){
         var consumoENRFacturar = ((sumatoriaDifConsumo / sumatoriaDias) *
-        this.frm_Caso3.controls["diasCobroCaso3"].value).toFixed(2);
+        this.frm_Caso3.controls["diasCobroCaso3"].value).toFixed(3);
         
         this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(consumoENRFacturar);
   
@@ -1536,11 +1691,11 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
         var promedioConsumo = consumoHistorico / diasHistorico;
 
-        this.frm_LecturasEvaluarTotales.controls["consumoHistorioPromedio"].setValue(promedioConsumo.toFixed(2));
+        this.frm_LecturasEvaluarTotales.controls["consumoHistorioPromedio"].setValue(promedioConsumo.toFixed(3));
 
 
         var consumoENREs = (consumoHistorico / diasHistorico)* this.frm_Caso4.controls["diasCobroCaso4"].value;
-        this.frm_LecturasEvaluarTotales.controls["consumoENREstimado"].setValue(consumoENREs.toFixed(2));
+        this.frm_LecturasEvaluarTotales.controls["consumoENREstimado"].setValue(consumoENREs.toFixed(3));
 
       }
 
@@ -1570,17 +1725,17 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
         }, 0);
 
 
-        this.frm_LecturasEvaluarTotales.controls["consumoFuera"].setValue(sumatoriaConsumoFuera.toFixed(2));
-        this.frm_LecturasEvaluarTotales.controls["consumoDebioFacturar"].setValue(sumatoriaConsumoCorrecto.toFixed(2));
+        this.frm_LecturasEvaluarTotales.controls["consumoFuera"].setValue(sumatoriaConsumoFuera.toFixed(3));
+        this.frm_LecturasEvaluarTotales.controls["consumoDebioFacturar"].setValue(sumatoriaConsumoCorrecto.toFixed(3));
 
         var totalENR = sumatoriaConsumoCorrecto - sumatoriaConsumo;
         
-        this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(totalENR.toFixed(2));
+        this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(totalENR.toFixed(3));
       }
      
       this.totalSeleccion = dias.length;
 
-      //$("#btnSelecLecturasCaso2").show();
+      
      // 
     
     
@@ -1624,6 +1779,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
     $("#mostrarLecturas").hide();
       $("#frmLec").show();
       $("#frmLecTotales").show();
+      $("#btnFacturacion").show();
   }
  
 
@@ -1644,8 +1800,8 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
           fechaLectura:fechaLectura,
           diasFacturados:diasFacturados,
           consumo:consumoN,
-          consumoNoFac: (diasFacturados * this.consumoDiario).toFixed(2),
-          difConsumo : ((diasFacturados * this.consumoDiario)  - consumoN).toFixed(2)
+          consumoNoFac: (diasFacturados * this.consumoDiario).toFixed(3),
+          difConsumo : ((diasFacturados * this.consumoDiario)  - consumoN).toFixed(3)
          }),  
     );
     }else if(this.casoEvaluado == '3'){
@@ -1656,8 +1812,8 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
           fechaLectura:fechaLectura,
           diasFacturados:diasFacturados,
           consumo:consumoN,
-          consumoNoFac: (diasFacturados * this.frm_ConsumosReales3Totales.controls["promedioDiasCT3"].value).toFixed(2),
-          difConsumo : ((diasFacturados * this.frm_ConsumosReales3Totales.controls["promedioDiasCT3"].value) -consumoN).toFixed(2)
+          consumoNoFac: (diasFacturados * this.frm_ConsumosReales3Totales.controls["promedioDiasCT3"].value).toFixed(3),
+          difConsumo : ((diasFacturados * this.frm_ConsumosReales3Totales.controls["promedioDiasCT3"].value) -consumoN).toFixed(3)
          }),  
     );
     }else if(this.casoEvaluado == '4'){
@@ -1680,10 +1836,10 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
             diasFacturados:diasFacturados,
             consumo:consumoN,
             consumoFuera : ((consumoN * this.frm_Caso5.controls["diferenciaExactitud"].value)/
-            this.frm_Caso5.controls["porcentajeExactitudOT"].value).toFixed(2),
+            this.frm_Caso5.controls["porcentajeExactitudOT"].value).toFixed(3),
            
             consumoCorrecto : (parseFloat(consumoN) - (Math.abs((consumoN * this.frm_Caso5.controls["diferenciaExactitud"].value)/
-            this.frm_Caso5.controls["porcentajeExactitudOT"].value))).toFixed(2),
+            this.frm_Caso5.controls["porcentajeExactitudOT"].value))).toFixed(3),
            }),  
       );
       }else{
@@ -1695,10 +1851,10 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
             diasFacturados:diasFacturados,
             consumo:consumoN,
             consumoFuera : ((consumoN * this.frm_Caso5.controls["diferenciaExactitud"].value)/
-            this.frm_Caso5.controls["porcentajeExactitudOT"].value).toFixed(2),
+            this.frm_Caso5.controls["porcentajeExactitudOT"].value).toFixed(3),
            
             consumoCorrecto : (parseFloat(consumoN) + (Math.abs((consumoN * this.frm_Caso5.controls["diferenciaExactitud"].value)/
-            this.frm_Caso5.controls["porcentajeExactitudOT"].value))).toFixed(2),
+            this.frm_Caso5.controls["porcentajeExactitudOT"].value))).toFixed(3),
            }),  
       );
       }
@@ -1787,12 +1943,12 @@ public eliminarLectura(i, periodo){
     }
 
     this.frm_ConsumosReales3Totales.controls["totalDiasCT3"].setValue(sumatoriaDias);
-    this.frm_ConsumosReales3Totales.controls["totalConsumoCT3"].setValue(sumatoriaConsumo.toFixed(2));
+    this.frm_ConsumosReales3Totales.controls["totalConsumoCT3"].setValue(sumatoriaConsumo.toFixed(3));
    
     var promedioDia = sumatoriaConsumo / sumatoriaDias;
     var consumoEstimadoMensual = (sumatoriaConsumo / sumatoriaDias) * 30;
-    this.frm_ConsumosReales3Totales.controls["promedioDiasCT3"].setValue(promedioDia.toFixed(2));
-    this.frm_ConsumosReales3Totales.controls["totalConsumoEstimadoCT3"].setValue(consumoEstimadoMensual.toFixed(2));
+    this.frm_ConsumosReales3Totales.controls["promedioDiasCT3"].setValue(promedioDia.toFixed(3));
+    this.frm_ConsumosReales3Totales.controls["totalConsumoEstimadoCT3"].setValue(consumoEstimadoMensual.toFixed(3));
     $("#totalesConsumoCT3").show();
     $("#btnSelecLecturasCaso3").show();
     //$(".calc").click();
@@ -1806,7 +1962,7 @@ public eliminarLectura(i, periodo){
 
     var total = consumoEst - consumoReg;
 
-    this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(total.toFixed(2));
+    this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(total.toFixed(3));
   }
 
 
@@ -1816,8 +1972,29 @@ public eliminarLectura(i, periodo){
 
     var total = exOT - exBase;
 
-    this.frm_Caso5.controls["diferenciaExactitud"].setValue(total.toFixed(2));
+    this.frm_Caso5.controls["diferenciaExactitud"].setValue(total.toFixed(3));
 
     $("#btnSelecLecturasCaso5").show();
+  }
+
+
+  public verTarifas(){
+    $("#divTarifas").show();
+
+    let datosENRdto : DatosENR = new DatosENR();
+
+    datosENRdto = this.frm_tarifas.value;
+    this.repositorioENR.getTarifasFechas(datosENRdto).subscribe(
+      response => {
+        this.tarifasFechas =response;
+      },
+      err => {
+      // // //console.log("no");
+      },
+      () => {
+    
+      },
+    );
+
   }
 }

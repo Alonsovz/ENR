@@ -46,6 +46,22 @@ export class RepositorioEnrService {
     return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getDatosENR', nis).pipe(map(data => data as Repositorio[]));
   }
 
+  public getFechaInicioTarifa(nis): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getFechaInicioTarifa', nis).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getFechaFinTarifa(nis): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getFechaFinTarifa', nis).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getTarifasFechas(nis): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getTarifasFechas', nis).pipe(map(data => data as Repositorio[]));
+  }
+
+
 
   public cambiarScan(datos: Repositorio): Observable<Repositorio> {
     //console.log(datos);

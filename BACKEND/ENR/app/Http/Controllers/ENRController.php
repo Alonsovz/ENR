@@ -329,10 +329,12 @@ class ENRController extends Controller
         m.codigo as codBase,
         (select count(id) from enr_documentacion where idCasoENR =
         dg.id and idEliminado = 1) as adjuntos,
-        dg.codigoTipoENR as codTipoENR from enr_datosGenerales dg
+        dg.codigoTipoENR as codTipoENR,
+        fes.codigo_tarifa as tarifa, dg.fechaInicio as fechaIn, dg.fechaFin as fechaFin from enr_datosGenerales dg
         inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
         inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
         inner join comanda_db.dbo.users u on u.id = dg.usuario_creacion
+        inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
         where dg.idEliminado = 1 and dg.estado = 1
         ");
 
@@ -342,17 +344,19 @@ class ENRController extends Controller
 
     public function getRepositorioCalculados(){
         $getDatos =  DB::connection('facturacion')->select("
-        select dg.id as caso, dg.num_suministro as nis,dg.scanPrimerNoti as ruta,
+        select dg.id as caso, dg.num_suministro as nis, dg.scanPrimerNoti as ruta,
         dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
         convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
         t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
         m.codigo as codBase,
         (select count(id) from enr_documentacion where idCasoENR =
         dg.id and idEliminado = 1) as adjuntos,
-        dg.codigoTipoENR as codTipoENR from enr_datosGenerales dg
+        dg.codigoTipoENR as codTipoENR,
+        fes.codigo_tarifa as tarifa, dg.fechaInicio as fechaIn, dg.fechaFin as fechaFin from enr_datosGenerales dg
         inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
         inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
         inner join comanda_db.dbo.users u on u.id = dg.usuario_creacion
+        inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
         where dg.idEliminado = 1 and dg.estado = 2
         ");
 
@@ -363,17 +367,19 @@ class ENRController extends Controller
 
     public function getRepositorioNotificados(){
         $getDatos =  DB::connection('facturacion')->select("
-        select dg.id as caso, dg.num_suministro as nis,dg.scanPrimerNoti as ruta,
+        select dg.id as caso, dg.num_suministro as nis, dg.scanPrimerNoti as ruta,
         dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
         convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
         t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
         m.codigo as codBase,
         (select count(id) from enr_documentacion where idCasoENR =
         dg.id and idEliminado = 1) as adjuntos,
-        dg.codigoTipoENR as codTipoENR from enr_datosGenerales dg
+        dg.codigoTipoENR as codTipoENR,
+        fes.codigo_tarifa as tarifa, dg.fechaInicio as fechaIn, dg.fechaFin as fechaFin from enr_datosGenerales dg
         inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
         inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
         inner join comanda_db.dbo.users u on u.id = dg.usuario_creacion
+        inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
         where dg.idEliminado = 1 and dg.estado = 3
         ");
 
@@ -515,6 +521,73 @@ class ENRController extends Controller
         ",[$codigo]);
         return response()->json($getDatos);
     }
+
+
+
+    public function getFechaInicioTarifa(Request $request){
+        $fecha = $request["fechaIn"];
+        $fechaFormat = strtotime($fecha);
+
+       $mes = date("m", $fechaFormat);
+       $dia = date("d", $fechaFormat);
+       $anio = date("Y", $fechaFormat);
+       $anioNext = $anio + 1;
+           
+       $getFechaInicio =  DB::connection('facturacion')->select(
+        "select convert(varchar(10),max(fecha_valida),120) as fechaInicio, convert(varchar,max(fecha_valida),103) as fechaInicioFormat   from 
+        fe_precios where fecha_valida <  '".$anio.$mes.$dia." 00:00:00' ");
+        
+
+
+
+            return response()->json($getFechaInicio);
+
+     
+        
+    }
+
+
+    public function getFechaFinTarifa(Request $request){
+        $fecha = $request["fechaFin"];
+        $fechaFormat = strtotime($fecha);
+
+        $mes = date("m", $fechaFormat);
+        $dia = date("d", $fechaFormat);
+        $anio = date("Y", $fechaFormat);
+
+        $getFechaFin =  DB::connection('facturacion')->select(
+            "select convert(varchar(10),max(fecha_valida),120) as fechaFin, convert(varchar,max(fecha_valida),103) as fechaFinFormat   from 
+            fe_precios where fecha_valida <  '".$anio.$mes.$dia." 00:00:00' ");
+            
+ 
+             return response()->json($getFechaFin);
+     
+        
+    }
+
+
+    public function getTarifasFechas(Request $request){
+        $fechaInicio = $request["fechaInicio"];
+        $fechaFin = $request["fechaFin"];
+
+        $fechaIn = date_create_from_format('Y-m-d',$fechaInicio);
+
+        $fechaIni = date_format($fechaIn,'Ymd');
+
+
+        $fechaF = date_create_from_format('Y-m-d',$fechaFin);
+
+        $fechaFi = date_format($fechaF,'Ymd');
+
+        $getFechas =  DB::connection('facturacion')->select(
+            "select distinct fecha_valida, convert(varchar,fecha_valida,103) as fechas from fe_precios where 
+            fecha_valida >= '".$fechaIni." 00:00:00' and fecha_valida <= '".$fechaFi." 00:00:00' 
+            order by 1 asc");
+            
+ 
+             return response()->json($getFechas);
+    }
+
 
     public function cambiarScanENR(Request $request){
 
@@ -661,5 +734,20 @@ class ENRController extends Controller
         ",[$nis]);
 
         return response()->json($getDatos);
+    }
+
+    public function validarUsuario(Request $request){
+        $usuario = $request["alias"];
+        $password = $request["password"];
+
+        $usuariosesion =  DB::connection('facturacion')->select("
+        select * from EDESAL_CALIDAD.dbo.SGT_usuarios where 
+        alias = '".$usuario."' and password = '".$password."'
+        ");
+
+     
+            return response()->json($usuariosesion);
+        
+       
     }
 }
