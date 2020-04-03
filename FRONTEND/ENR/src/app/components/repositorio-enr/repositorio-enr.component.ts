@@ -135,8 +135,8 @@ export class RepositorioENRComponent implements OnInit {
       this.frm_tarifas = new FormGroup({
         'fechaInicio' : new FormControl(''),
         'fechaFin' : new FormControl(''),
-        
-        
+        'fechasTarifa' : new FormControl(''),
+        'diasTarifa' : new FormControl(''),
       });
 
       this.frm_Archivo = new FormGroup({
@@ -1409,34 +1409,7 @@ public validarFechas(){
     );
 
 
-    this.repositorioENR.getFechaInicioTarifa(datosENRdto).subscribe(
-      response => {
-      
-        this.fechaInicioTarifa = response;
-       // $("#dataNis").show();
-      },
-      err => {
-        //console.log("no");
-      },
-      () => {
-        
-      },
-    );
-
-    this.repositorioENR.getFechaFinTarifa(datosENRdto).subscribe(
-      response => {
-      
-        this.fechaFinTarifa = response;
-       // $("#dataNis").show();
-      },
-      err => {
-        //console.log("no");
-      },
-      () => {
-        
-      },
-    );
-    
+  
 
 
     this.repositorioENR.getLecturasbyNIS(datosENRdto).subscribe(
@@ -1997,4 +1970,20 @@ public eliminarLectura(i, periodo){
     );
 
   }
+
+
+
+  public calcularDiasTarifas(){
+    var lastFecha = new Date($("#fechasTarifas th:last").text()).getTime();
+
+    var lastPrimero = new Date($("#fechasTarifas th:first").text()).getTime();
+
+    var fechaInicio = new Date( this.frm_tarifas.controls["fechaInicio"].value).getTime();
+    var fechaFin = new Date( this.frm_tarifas.controls["fechaFin"].value).getTime();
+
+    var diferencia = fechaFin - fechaInicio;
+
+    alert(diferencia);
+  }
+
 }

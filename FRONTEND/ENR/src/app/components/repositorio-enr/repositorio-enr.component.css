@@ -121,9 +121,17 @@ tbody tr:hover{
 }
 
 .tarifa1enc{
-  background-color: #1B1B38 !important;
-  color:#02FF20 !important;
+  background-color: #30304D !important;
+  color:#02FF20 !important; 
   font-size: 13px !important;
   border-bottom: 2px solid #02FF20 !important;
+  font-weight: bold !important;
+}
+
+.tarifa2enc{
+  background-color: #1B1B38 !important;
+  color:#00FFEA !important;
+  font-size: 13px !important;
+  border-bottom: 2px solid #00FFEA !important;
   font-weight: bold !important;
 }

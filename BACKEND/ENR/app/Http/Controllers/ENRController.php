@@ -524,46 +524,7 @@ class ENRController extends Controller
 
 
 
-    public function getFechaInicioTarifa(Request $request){
-        $fecha = $request["fechaIn"];
-        $fechaFormat = strtotime($fecha);
-
-       $mes = date("m", $fechaFormat);
-       $dia = date("d", $fechaFormat);
-       $anio = date("Y", $fechaFormat);
-       $anioNext = $anio + 1;
-           
-       $getFechaInicio =  DB::connection('facturacion')->select(
-        "select convert(varchar(10),max(fecha_valida),120) as fechaInicio, convert(varchar,max(fecha_valida),103) as fechaInicioFormat   from 
-        fe_precios where fecha_valida <  '".$anio.$mes.$dia." 00:00:00' ");
-        
-
-
-
-            return response()->json($getFechaInicio);
-
-     
-        
-    }
-
-
-    public function getFechaFinTarifa(Request $request){
-        $fecha = $request["fechaFin"];
-        $fechaFormat = strtotime($fecha);
-
-        $mes = date("m", $fechaFormat);
-        $dia = date("d", $fechaFormat);
-        $anio = date("Y", $fechaFormat);
-
-        $getFechaFin =  DB::connection('facturacion')->select(
-            "select convert(varchar(10),max(fecha_valida),120) as fechaFin, convert(varchar,max(fecha_valida),103) as fechaFinFormat   from 
-            fe_precios where fecha_valida <  '".$anio.$mes.$dia." 00:00:00' ");
-            
- 
-             return response()->json($getFechaFin);
-     
-        
-    }
+  
 
 
     public function getTarifasFechas(Request $request){
@@ -572,20 +533,23 @@ class ENRController extends Controller
 
         $fechaIn = date_create_from_format('Y-m-d',$fechaInicio);
 
-        $fechaIni = date_format($fechaIn,'Ymd');
+        $fechaIni = date_format($fechaIn,'Ymd').' 00:00:00';
 
 
         $fechaF = date_create_from_format('Y-m-d',$fechaFin);
 
-        $fechaFi = date_format($fechaF,'Ymd');
+        $fechaFi = date_format($fechaF,'Ymd').' 00:00:00';
 
-        $getFechas =  DB::connection('facturacion')->select(
-            "select distinct fecha_valida, convert(varchar,fecha_valida,103) as fechas from fe_precios where 
-            fecha_valida >= '".$fechaIni." 00:00:00' and fecha_valida <= '".$fechaFi." 00:00:00' 
-            order by 1 asc");
+       $getFechas =  DB::connection('facturacion')->statement(
+           "exec  [dbo].[fechasCiclosTarifas] '".$fechaIni."','".$fechaFi."'");
+
+
+       $getFechasQuery = DB::connection('facturacion')->select(
+           "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
+           dias from enr_tempCalculoTarifas order by 1 asc");
             
  
-             return response()->json($getFechas);
+             return response()->json($getFechasQuery);
     }
 
 
