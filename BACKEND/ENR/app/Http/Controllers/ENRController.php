@@ -523,36 +523,6 @@ class ENRController extends Controller
     }
 
 
-
-  
-
-
-    public function getTarifasFechas(Request $request){
-        $fechaInicio = $request["fechaInicio"];
-        $fechaFin = $request["fechaFin"];
-
-        $fechaIn = date_create_from_format('Y-m-d',$fechaInicio);
-
-        $fechaIni = date_format($fechaIn,'Ymd').' 00:00:00';
-
-
-        $fechaF = date_create_from_format('Y-m-d',$fechaFin);
-
-        $fechaFi = date_format($fechaF,'Ymd').' 00:00:00';
-
-       $getFechas =  DB::connection('facturacion')->statement(
-           "exec  [dbo].[fechasCiclosTarifas] '".$fechaIni."','".$fechaFi."'");
-
-
-       $getFechasQuery = DB::connection('facturacion')->select(
-           "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
-           dias from enr_tempCalculoTarifas order by 1 asc");
-            
- 
-             return response()->json($getFechasQuery);
-    }
-
-
     public function cambiarScanENR(Request $request){
 
         $file = $request["nuevoScanENR"];
@@ -713,5 +683,90 @@ class ENRController extends Controller
             return response()->json($usuariosesion);
         
        
+    }
+
+
+
+    public function getTarifasFechas(Request $request){
+        $fechaInicio = $request["fechaInicio"];
+        $fechaFin = $request["fechaFin"];
+        $caso = $request["numeroCaso"];
+
+        $fechaIn = date_create_from_format('Y-m-d',$fechaInicio);
+
+        $fechaIni = date_format($fechaIn,'Ymd').' 00:00:00';
+
+
+        $fechaF = date_create_from_format('Y-m-d',$fechaFin);
+
+        $fechaFi = date_format($fechaF,'Ymd').' 00:00:00';
+
+       $execProcedure =  DB::connection('facturacion')->statement(
+           "exec  [dbo].[enr_calculoTarifa] '".$fechaIni."','".$fechaFi."',".$caso."");
+
+
+       $getFechasQuery = DB::connection('facturacion')->select(
+           "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
+           dias from enr_calculoTarifas where casoENR = ".$caso." order by 1 asc");
+            
+ 
+             return response()->json($getFechasQuery);
+    }
+
+
+
+    public function getConsumoEstimado(Request $request){
+    
+        $consumo = $request["consumoENRFacturar"];
+        $caso = $request["numeroCaso"];
+
+       $execProcedure =  DB::connection('facturacion')->statement(
+           "exec  [dbo].[enr_consumoEstimadoKwh]  ".$consumo." , ".$caso." ");
+
+
+       $getConsumo = DB::connection('facturacion')->select(
+           "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
+           cast(consumo AS decimal(16,2)) as consumo from enr_consumoEstimado
+           where casoENR = ".$caso." order by 1 asc");
+            
+ 
+             return response()->json($getConsumo);
+    }
+
+    public function getConsumoRegistrado(Request $request){
+    
+        $consumo = $request["consumoENRRegistrado"];
+        $caso = $request["numeroCaso"];
+
+       $execProcedure =  DB::connection('facturacion')->statement(
+           "exec  [dbo].[enr_consumoRegistradoKwh]  ".$consumo." , ".$caso." ");
+
+
+       $getConsumo = DB::connection('facturacion')->select(
+           "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
+           cast(consumo AS decimal(16,2)) as consumo from enr_consumoRegistrado
+           where casoENR = ".$caso." order by 1 asc");
+            
+ 
+             return response()->json($getConsumo);
+    }
+
+
+    public function getConsumoENR(Request $request){
+    
+       // $consumo = $request["consumoENRRegistrado"];
+        $caso = $request["numeroCaso"];
+
+       $execProcedure =  DB::connection('facturacion')->statement(
+           "exec  [dbo].[enr_consumoENRKwh]  ".$caso." ");
+
+
+       $getConsumo = DB::connection('facturacion')->select(
+           "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
+           cast(consumo AS decimal(16,2)) as consumo from enr_consumoENR
+           where casoENR = ".$caso." order by 1 asc");
+            
+ 
+             return response()->json($getConsumo);
     }
 }

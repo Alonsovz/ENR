@@ -61,7 +61,21 @@ export class RepositorioEnrService {
     return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getTarifasFechas', nis).pipe(map(data => data as Repositorio[]));
   }
 
+  public getConsumoEstimado(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoEstimado', kwh).pipe(map(data => data as Repositorio[]));
+  }
 
+
+  public getConsumoRegistrado(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoRegistrado', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getConsumoENR(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR', kwh).pipe(map(data => data as Repositorio[]));
+  }
 
   public cambiarScan(datos: Repositorio): Observable<Repositorio> {
     //console.log(datos);

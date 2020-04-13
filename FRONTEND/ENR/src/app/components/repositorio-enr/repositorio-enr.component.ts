@@ -72,6 +72,9 @@ export class RepositorioENRComponent implements OnInit {
   frm_Caso2 : FormGroup;
   lecturasArray : Repositorio[];
   tarifasFechas : Repositorio[];
+  consumoEstimado : Repositorio[];
+  consumoRegistrado : Repositorio[];
+  consumoENR : Repositorio[];
   consumoDiario = 0;
   frm_LecturasEvaluar: FormGroup;
   frm_LecturasEvaluarTotales : FormGroup;
@@ -94,6 +97,7 @@ export class RepositorioENRComponent implements OnInit {
     private fb1: FormBuilder, private fb: FormBuilder,private fb2: FormBuilder,) { 
 
       this.frm_LecturasEvaluarTotales = new FormGroup({
+        'numeroCaso': new FormControl(''),
         'totalDias' : new FormControl(''),
         'totalConsumo' : new FormControl(''),
         'totalConsumoNF' : new FormControl(''),
@@ -105,6 +109,8 @@ export class RepositorioENRComponent implements OnInit {
         'consumoENRRegistrado' : new FormControl(''),
         'consumoDebioFacturar' : new FormControl(''),
         'consumoFuera': new FormControl(''),
+        'consumo1': new FormControl(''),
+        'consumo2': new FormControl(''),
       });
 
       this.frm_ConsumosReales3Totales = new FormGroup({
@@ -137,6 +143,7 @@ export class RepositorioENRComponent implements OnInit {
         'fechaFin' : new FormControl(''),
         'fechasTarifa' : new FormControl(''),
         'diasTarifa' : new FormControl(''),
+        'numeroCaso' : new FormControl(''),
       });
 
       this.frm_Archivo = new FormGroup({
@@ -192,7 +199,7 @@ export class RepositorioENRComponent implements OnInit {
         'horasEstimadas' : new FormControl('',[Validators.required]),
         'consumo1' : new FormControl('',[Validators.required]),
         'consumo2' : new FormControl('',[Validators.required]),
-        'consumoTotal' : new FormControl('',[Validators.required]),
+        'consumoENRFacturar' : new FormControl('',[Validators.required]),
         'diasCobroCaso1' : new FormControl('',[Validators.required]),
         
       });
@@ -1359,11 +1366,12 @@ public validarFechas(){
 
    //metodo para mostrar ventana de cálculo del caso ENR
 
-   public calcularCaso(caso){
+   public calcularCaso(caso, numero){
     this.frm_LecturasEvaluar = this.fb2.group({lecturas: this.fb2.array([]),});
     this.frm_ConsumosReales3 = this.fb2.group({consumosReales3: this.fb2.array([]),})
     this.frm_ConsumosReales3Totales.reset();
     
+    this.frm_LecturasEvaluarTotales.controls["numeroCaso"].setValue(numero);
     this.consumosReales3.push(
       this.fb2.group({
         periodo:'',
@@ -1482,10 +1490,12 @@ public validarFechas(){
     $("#myTabContent").show();
     $("#myTab").show();
     $("#titleGlobal").show();
+    $("#divTarifas").hide();
    }
 
 
    public calcularENRCaso1(){
+    this.casoEvaluado = '1';
     $("#resultCaso1").hide();
 
      var diasCobro = this.frm_Caso1.controls["diasCobroCaso1"].value;
@@ -1499,8 +1509,8 @@ public validarFechas(){
      var totalConsumoL1 = (amperaje1 * voltaje1 * horas) / 1000;
      var totalConsumoL2 = (amperaje2 * voltaje2 * horas) / 1000;
 
-     this.frm_Caso1.controls["consumo1"].setValue(totalConsumoL1);
-     this.frm_Caso1.controls["consumo2"].setValue(totalConsumoL2);
+     this.frm_LecturasEvaluarTotales.controls["consumo1"].setValue(totalConsumoL1);
+     this.frm_LecturasEvaluarTotales.controls["consumo2"].setValue(totalConsumoL2);
 
      var consumoENR = (totalConsumoL1 + totalConsumoL2) * diasCobro;
 
@@ -1556,10 +1566,9 @@ public validarFechas(){
       }
      else{
      
-      this.frm_Caso1.controls["consumoTotal"].setValue(consumoENR.toFixed(3));
+      this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(consumoENR.toFixed(3));
       $("#resultCaso1").show();
       $("#btnFacturacion").show();
-      $("#divTarifas").show();
      }
       
      
@@ -1952,12 +1961,17 @@ public eliminarLectura(i, periodo){
 
 
   public verTarifas(){
-    $("#divTarifas").show();
+    var caso = this.casoEvaluado;
+    let datosKwh :  DatosENR = new DatosENR();
+
+    datosKwh = this.frm_LecturasEvaluarTotales.value;
+   
+    
 
     let datosENRdto : DatosENR = new DatosENR();
 
     datosENRdto = this.frm_tarifas.value;
-    this.repositorioENR.getTarifasFechas(datosENRdto).subscribe(
+    this.repositorioENR.getTarifasFechas(datosENRdto ).subscribe(
       response => {
         this.tarifasFechas =response;
       },
@@ -1968,6 +1982,47 @@ public eliminarLectura(i, periodo){
     
       },
     );
+
+
+
+    this.repositorioENR.getConsumoEstimado(datosKwh).subscribe(
+      response => {
+        this.consumoEstimado =response;
+      },
+      err => {
+      // // //console.log("no");
+      },
+      () => {
+    
+      },
+    );
+
+    this.repositorioENR.getConsumoRegistrado(datosKwh).subscribe(
+      response => {
+        this.consumoRegistrado =response;
+      },
+      err => {
+      // // //console.log("no");
+      },
+      () => {
+    
+      },
+    );
+
+    this.repositorioENR.getConsumoENR(datosKwh).subscribe(
+      response => {
+        this.consumoENR =response;
+      },
+      err => {
+      // // //console.log("no");
+      },
+      () => {
+    
+      },
+    );
+
+
+    $("#divTarifas").show();
 
   }
 

@@ -128,9 +128,12 @@
                   style="font-weight: bold !important;"> <i class="fas fa-calculator"></i> Calcular ENR </button>
                 </div>
               </div>
-          
+            
+              <form [formGroup]="frm_LecturasEvaluarTotales" style="width: 100% !important;" id="frmLecTotales">
               <div id="resultCaso1" class="row mt-5 animated flipInX" 
               style="margin-left: 30px; margin-right: 30px;display: none;">
+             
+               
                 <h4 style="color: #FC4343">
                   <img src="../../../assets/imagenes/dataResult.png"
                   style="margin-bottom: 10px;margin-top: 7px;margin-left: 20px;" height=35>
@@ -148,11 +151,15 @@
                  </div>
                  <div class="col-md-4 mb-5">
                   <label style="font-size: 17px !important;color:#FB8181 !important;font-weight: bold;">Consumo Total ENR (kwh)</label>
-                  <input type="text" class="form-control" formControlName="consumoTotal" name="consumoTotal" readonly>
+                  <input type="text" class="form-control" formControlName="consumoENRFacturar" name="consumoENRFacturar" readonly>
+
+                  <input type="hidden" formControlName="numeroCaso">
                  </div>
+             
               </div>
+            </form>
               
-        </form>
+            </form>
         
         <form [formGroup]='frm_Caso2' *ngIf="datosGenerales.codBase == 'CN'" style="width: 100% !important;">
           <div class="row" style="margin-left: 30px; margin-right: 30px;">
@@ -350,6 +357,7 @@
                 <label style="font-size: 15px !important;color:#FB8181 !important;font-weight: bold;">Consumo ENR a facturar (kwh total)</label>
                 <input class="form-control" type="text" formControlName="consumoENRFacturar" name="consumoENRFacturar"
                 style="text-align: center !important;" readonly="true">
+                <input type="hidden" formControlName="numeroCaso">
               </div>
               <div class="col-md-1"></div>
             
@@ -640,6 +648,7 @@
                 <label style="font-size: 15px !important;color:#FB8181 !important;font-weight: bold;">Consumo ENR a facturar (kwh total)</label>
                 <input class="form-control" type="text" formControlName="consumoENRFacturar" name="consumoENRFacturar"
                 style="text-align: center !important;" readonly="true">
+                <input type="hidden" formControlName="numeroCaso">
               </div>
               <div class="col-md-1"></div>
             
@@ -764,6 +773,7 @@
                       <td colspan="3"> <h6 style="color:#FF9B00; font-size: 14px;text-align: right;
                         font-weight: bold;"> Totales</h6></td>
                       <td>
+                       
                         <input class="form-control" type="text" style="text-align: center !important;" readonly="true"
                         formControlName="totalDias">
                       </td>
@@ -816,7 +826,7 @@
                       </td>
                       <td>
                         <input type="text" class="form-control" formControlName="consumoENRFacturar" readonly>
-                
+                        <input type="hidden" formControlName="numeroCaso" >
                       </td>
                     </tr>
                   </tbody>
@@ -1001,7 +1011,7 @@
                       </td>
                       <td>
                         <input type="text" class="form-control" formControlName="consumoENRFacturar" readonly>
-                
+                        <input type="hidden" formControlName="numeroCaso">
                       </td>
                     </tr>
                   </tbody>
@@ -1026,18 +1036,19 @@
       
 
         <form [formGroup]="frm_tarifas" style="width: 98% !important;">
-          <div id="divTarifas" class="row mt-2 animated flipInX" style="display:none; width: 97% !important;margin-left: 30px;margin-right: 30px;">
+          <div id="divTarifas" class="row mt-2 animated flipInX" style="display:none;
+           width: 97% !important;margin-left: 30px;margin-right: 30px;">
            
     
               <input type="hidden" [(ngModel)]="dg.fechaIn" formControlName="fechaInicio">
             
               <input type="hidden" [(ngModel)]="dg.fechaFin" formControlName="fechaFin">
-           
+              <input type="hidden" [(ngModel)]="dg.id" formControlName="numeroCaso">
            
            <div class="col-lg-12">
             <hr style="background-color: yellow !important; height: 2px;">
             <h4 class="text-center tbTarifa"> Dias a Cobrar (Fecha incluye dias de vigencia de tarifa) </h4>
-            <table id="fechasTarifas" class="table small" style="width: 100%;">
+            <table id="" class="table small" style="width: 100%;">
               <thead class="thead-dark" >
                 <tr >
                   <th *ngFor="let tar  of tarifasFechas" class="text-center tarifa1enc">{{tar.fechasTarifa}}</th>
@@ -1047,6 +1058,59 @@
               <tbody style="background-color:#323259; color:white;text-align: center;font-size: 13px;">
                 <tr>
                   <td *ngFor="let tar  of tarifasFechas" class="text-center tarifa2enc">{{tar.dias}}</td>
+                </tr>
+              </tbody>
+          </table>
+           </div>
+
+
+           <div class="col-lg-12">
+            <h4 class="text-center tbTarifa"> Consumo Estimado </h4>
+            <table id="" class="table small" style="width: 100%;">
+              <thead class="thead-dark" >
+                <tr >
+                  <th *ngFor="let consumo  of consumoEstimado" class="text-center tarifa1enc">{{consumo.fechasTarifa}}</th>
+                </tr>
+                
+              </thead>
+              <tbody style="background-color:#323259; color:white;text-align: center;font-size: 13px;">
+                <tr>
+                  <td *ngFor="let consumo  of consumoEstimado" class="text-center tarifa2enc">{{consumo.consumo}}</td>
+                </tr>
+              </tbody>
+          </table>
+           </div>
+
+           <div class="col-lg-12">
+            <h4 class="text-center tbTarifa"> Consumo Registrado </h4>
+            <table id="" class="table small" style="width: 100%;">
+              <thead class="thead-dark" >
+                <tr >
+                  <th *ngFor="let consumo  of consumoRegistrado" class="text-center tarifa1enc">{{consumo.fechasTarifa}}</th>
+                </tr>
+                
+              </thead>
+              <tbody style="background-color:#323259; color:white;text-align: center;font-size: 13px;">
+                <tr>
+                  <td *ngFor="let consumo  of consumoRegistrado" class="text-center tarifa2enc">{{consumo.consumo}}</td>
+                </tr>
+              </tbody>
+          </table>
+           </div>
+
+
+           <div class="col-lg-12">
+            <h4 class="text-center tbTarifa"> Consumo ENR </h4>
+            <table id="" class="table small" style="width: 100%;">
+              <thead class="thead-dark" >
+                <tr >
+                  <th *ngFor="let consumo  of consumoENR" class="text-center tarifa1enc">{{consumo.fechasTarifa}}</th>
+                </tr>
+                
+              </thead>
+              <tbody style="background-color:#323259; color:white;text-align: center;font-size: 13px;">
+                <tr>
+                  <td *ngFor="let consumo  of consumoENR" class="text-center tarifa2enc">{{consumo.consumo}}</td>
                 </tr>
               </tbody>
           </table>
@@ -1148,7 +1212,7 @@ background-color: #323259;" id="titleGlobal">
                                  </button>
                                          &nbsp;
                                  <button class="btn btn-default btn-circle btn2"
-                                 (click)="calcularCaso(rep)">
+                                 (click)="calcularCaso(rep, rep.caso)">
                                      <i class="fas fa-calculator"></i>
                                  </button>
                                </td>

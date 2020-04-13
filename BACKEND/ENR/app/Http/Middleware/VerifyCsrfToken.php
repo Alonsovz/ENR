@@ -49,6 +49,9 @@ class VerifyCsrfToken extends BaseVerifier
         'usuario',
         'getFechaInicioTarifa',
         'getFechaFinTarifa',
-        'getTarifasFechas'
+        'getTarifasFechas',
+        'getConsumoEstimado',
+        'getConsumoRegistrado',
+        'getConsumoENR'
     ];
 }

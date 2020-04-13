@@ -73,3 +73,12 @@ Route::get('/', function () {
     Route::post('getFechaFinTarifa', 'ENRController@getFechaFinTarifa');
     
     Route::post('getTarifasFechas', 'ENRController@getTarifasFechas');
+
+    Route::post('getConsumoEstimado', 'ENRController@getConsumoEstimado');
+
+    Route::post('getConsumoRegistrado', 'ENRController@getConsumoRegistrado');
+    
+    Route::post('getConsumoENR', 'ENRController@getConsumoENR');
+
+    
+    
