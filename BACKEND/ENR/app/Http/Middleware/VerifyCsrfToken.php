@@ -52,6 +52,18 @@ class VerifyCsrfToken extends BaseVerifier
         'getTarifasFechas',
         'getConsumoEstimado',
         'getConsumoRegistrado',
-        'getConsumoENR'
+        'getConsumoENR',
+        'getTarifasFechasTotal',
+        'getConsumoEstimadoTotal',
+        'getConsumoRegistradoTotal',
+        'getConsumoENRTotal',
+        'getConsumoENR1erBloque',
+        'getConsumoENR2doBloque',
+        'getConsumoENR3erBloque',
+        'getConsumoENR1erBloqueTotal',
+        'getConsumoENR2doBloqueTotal',
+        'getConsumoENR3erBloqueTotal',
+        'getConsumoENRTotalGlobal',
+        'getConsumoENRTotalFechas'
     ];
 }

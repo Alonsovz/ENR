@@ -75,6 +75,20 @@ export class RepositorioENRComponent implements OnInit {
   consumoEstimado : Repositorio[];
   consumoRegistrado : Repositorio[];
   consumoENR : Repositorio[];
+  tarifasFechasTotal : Repositorio[];
+  consumoEstimadoTotal : Repositorio[];
+  consumoRegistradoTotal : Repositorio[];
+  consumoENRTotal : Repositorio[];
+  consumoENR1erBloque : Repositorio[];
+  consumoENR2doBloque : Repositorio[];
+  consumoENR3erBloque : Repositorio[];
+
+  consumoENR1erBloqueTotal : Repositorio[];
+  consumoENR2doBloqueTotal : Repositorio[];
+  consumoENR3erBloqueTotal : Repositorio[];
+  consumoENRTotalGlobal : Repositorio[];
+  consumoENRTotalGlobalFechas : Repositorio[];
+
   consumoDiario = 0;
   frm_LecturasEvaluar: FormGroup;
   frm_LecturasEvaluarTotales : FormGroup;
@@ -1971,7 +1985,7 @@ public eliminarLectura(i, periodo){
     let datosENRdto : DatosENR = new DatosENR();
 
     datosENRdto = this.frm_tarifas.value;
-    this.repositorioENR.getTarifasFechas(datosENRdto ).subscribe(
+    this.repositorioENR.getTarifasFechas(datosENRdto).subscribe(
       response => {
         this.tarifasFechas =response;
       },
@@ -1980,6 +1994,19 @@ public eliminarLectura(i, periodo){
       },
       () => {
     
+        this.repositorioENR.getTarifasFechasTotal(datosENRdto).subscribe(
+          response => {
+            this.tarifasFechasTotal =response;
+          },
+          err => {
+          // // //console.log("no");
+          },
+          () => {
+        
+          },
+        );
+
+
       },
     );
 
@@ -1994,6 +2021,18 @@ public eliminarLectura(i, periodo){
       },
       () => {
     
+        this.repositorioENR.getConsumoEstimadoTotal(datosKwh).subscribe(
+          response => {
+            this.consumoEstimadoTotal =response;
+          },
+          err => {
+          // // //console.log("no");
+          },
+          () => {
+        
+          },
+        );
+
       },
     );
 
@@ -2006,6 +2045,18 @@ public eliminarLectura(i, periodo){
       },
       () => {
     
+        this.repositorioENR.getConsumoRegistradoTotal(datosKwh).subscribe(
+          response => {
+            this.consumoRegistradoTotal =response;
+          },
+          err => {
+          // // //console.log("no");
+          },
+          () => {
+        
+          },
+        );
+
       },
     );
 
@@ -2017,9 +2068,126 @@ public eliminarLectura(i, periodo){
       // // //console.log("no");
       },
       () => {
+        this.repositorioENR.getConsumoENRTotal(datosKwh).subscribe(
+          response => {
+            this.consumoENRTotal =response;
+          },
+          err => {
+          // // //console.log("no");
+          },
+          () => {
+        
+          },
+        );
+
+
+        this.repositorioENR.getConsumoENR1erBloque(datosKwh).subscribe(
+          response => {
+            this.consumoENR1erBloque =response;
+          },
+          err => {
+          // // //console.log("no");
+          },
+          () => {
+        
+          },
+        );
+
+
+        this.repositorioENR.getConsumoENR2doBloque(datosKwh).subscribe(
+          response => {
+            this.consumoENR2doBloque =response;
+          },
+          err => {
+          // // //console.log("no");
+          },
+          () => {
+        
+          },
+        );
+
+
+        this.repositorioENR.getConsumoENR3erBloque(datosKwh).subscribe(
+          response => {
+            this.consumoENR3erBloque =response;
+          },
+          err => {
+          // // //console.log("no");
+          },
+          () => {
+
+            this.repositorioENR.getConsumoENR1erBloqueTotal(datosKwh).subscribe(
+              response => {
+                this.consumoENR1erBloqueTotal =response;
+              },
+              err => {
+              // // //console.log("no");
+              },
+              () => {
+            
+              },
+            );
     
+    
+            this.repositorioENR.getConsumoENR2doBloqueTotal(datosKwh).subscribe(
+              response => {
+                this.consumoENR2doBloqueTotal =response;
+              },
+              err => {
+              // // //console.log("no");
+              },
+              () => {
+            
+              },
+            );
+    
+    
+            this.repositorioENR.getConsumoENR3erBloqueTotal(datosKwh).subscribe(
+              response => {
+                this.consumoENR3erBloqueTotal =response;
+              },
+              err => {
+              // // //console.log("no");
+              },
+              () => {
+            
+                this.repositorioENR.getConsumoENRTotalFechas(datosKwh).subscribe(
+                  response => {
+                    this.consumoENRTotalGlobalFechas =response;
+                  },
+                  err => {
+                  // // //console.log("no");
+                  },
+                  () => {
+                
+                  },
+                );
+
+
+                this.repositorioENR.getConsumoENRTotalGlobal(datosKwh).subscribe(
+                  response => {
+                    this.consumoENRTotalGlobal =response;
+                  },
+                  err => {
+                  // // //console.log("no");
+                  },
+                  () => {
+                
+                  },
+                );
+
+              },
+            );
+
+
+          },
+        );
       },
     );
+
+
+
+
 
 
     $("#divTarifas").show();

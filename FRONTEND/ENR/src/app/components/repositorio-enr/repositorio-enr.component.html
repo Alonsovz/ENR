@@ -349,12 +349,12 @@
             </div>
               <div class="col-md-1"></div>
               <div class="col-md-5">
-                <label style="font-size: 15px !important;color:#FB8181 !important;font-weight: bold;">Consumo ENR_Diario (kwh Diario)</label>
+                <label style="font-size: 15px !important;color:#FC4343 !important;font-weight: bold;">Consumo ENR_Diario (kwh Diario)</label>
                 <input class="form-control" type="text" formControlName="consumoDiarioENR" name="consumoDiarioENR"
                 style="text-align: center !important;" readonly="true">
               </div>
               <div class="col-md-5">
-                <label style="font-size: 15px !important;color:#FB8181 !important;font-weight: bold;">Consumo ENR a facturar (kwh total)</label>
+                <label style="font-size: 15px !important;color:#FC4343 !important;font-weight: bold;">Consumo ENR a facturar (kwh total)</label>
                 <input class="form-control" type="text" formControlName="consumoENRFacturar" name="consumoENRFacturar"
                 style="text-align: center !important;" readonly="true">
                 <input type="hidden" formControlName="numeroCaso">
@@ -640,12 +640,12 @@
             </div>
               <div class="col-md-1"></div>
               <div class="col-md-5">
-                <label style="font-size: 15px !important;color:#FB8181 !important;font-weight: bold;">Consumo ENR_Diario (kwh Diario)</label>
+                <label style="font-size: 15px !important;color:#FC4343 !important;font-weight: bold;">Consumo ENR_Diario (kwh Diario)</label>
                 <input class="form-control" type="text" formControlName="consumoDiarioENR" name="consumoDiarioENR"
                 style="text-align: center !important;" readonly="true">
               </div>
               <div class="col-md-5">
-                <label style="font-size: 15px !important;color:#FB8181 !important;font-weight: bold;">Consumo ENR a facturar (kwh total)</label>
+                <label style="font-size: 15px !important;color:#FC4343 !important;font-weight: bold;">Consumo ENR a facturar (kwh total)</label>
                 <input class="form-control" type="text" formControlName="consumoENRFacturar" name="consumoENRFacturar"
                 style="text-align: center !important;" readonly="true">
                 <input type="hidden" formControlName="numeroCaso">
@@ -1052,12 +1052,14 @@
               <thead class="thead-dark" >
                 <tr >
                   <th *ngFor="let tar  of tarifasFechas" class="text-center tarifa1enc">{{tar.fechasTarifa}}</th>
+                  <th class="text-center tarifa3enc">Total</th>
                 </tr>
                 
               </thead>
-              <tbody style="background-color:#323259; color:white;text-align: center;font-size: 13px;">
+              <tbody style="color:white;text-align: center;font-size: 13px;">
                 <tr>
                   <td *ngFor="let tar  of tarifasFechas" class="text-center tarifa2enc">{{tar.dias}}</td>
+                  <td *ngFor="let tar  of tarifasFechasTotal" class="text-center tarifa3">{{tar.dias}}</td>
                 </tr>
               </tbody>
           </table>
@@ -1067,15 +1069,17 @@
            <div class="col-lg-12">
             <h4 class="text-center tbTarifa"> Consumo Estimado </h4>
             <table id="" class="table small" style="width: 100%;">
-              <thead class="thead-dark" >
+              <thead class="thead-dark">
                 <tr >
                   <th *ngFor="let consumo  of consumoEstimado" class="text-center tarifa1enc">{{consumo.fechasTarifa}}</th>
+                  <th class="text-center tarifa3enc">Total</th>
                 </tr>
                 
               </thead>
-              <tbody style="background-color:#323259; color:white;text-align: center;font-size: 13px;">
+              <tbody style="color:white;text-align: center;font-size: 13px;">
                 <tr>
                   <td *ngFor="let consumo  of consumoEstimado" class="text-center tarifa2enc">{{consumo.consumo}}</td>
+                  <td *ngFor="let consumo  of consumoEstimadoTotal" class="text-center tarifa3">{{consumo.consumo}}</td>
                 </tr>
               </tbody>
           </table>
@@ -1087,12 +1091,14 @@
               <thead class="thead-dark" >
                 <tr >
                   <th *ngFor="let consumo  of consumoRegistrado" class="text-center tarifa1enc">{{consumo.fechasTarifa}}</th>
+                  <th class="text-center tarifa3enc">Total</th>
                 </tr>
                 
               </thead>
-              <tbody style="background-color:#323259; color:white;text-align: center;font-size: 13px;">
+              <tbody style="color:white;text-align: center;font-size: 13px;">
                 <tr>
                   <td *ngFor="let consumo  of consumoRegistrado" class="text-center tarifa2enc">{{consumo.consumo}}</td>
+                  <td *ngFor="let consumo  of consumoRegistradoTotal" class="text-center tarifa3">{{consumo.consumo}}</td>
                 </tr>
               </tbody>
           </table>
@@ -1105,16 +1111,69 @@
               <thead class="thead-dark" >
                 <tr >
                   <th *ngFor="let consumo  of consumoENR" class="text-center tarifa1enc">{{consumo.fechasTarifa}}</th>
+                  <th class="text-center tarifa3enc">Total</th>
                 </tr>
                 
               </thead>
-              <tbody style="background-color:#323259; color:white;text-align: center;font-size: 13px;">
+              <tbody style=" color:white;text-align: center;font-size: 13px;">
                 <tr>
-                  <td *ngFor="let consumo  of consumoENR" class="text-center tarifa2enc">{{consumo.consumo}}</td>
+                  <td *ngFor="let consumo  of consumoENR" class="text-center tarifa2enc" rowspan="2">{{consumo.consumo}}</td>
+                  <td *ngFor="let consumo  of consumoENRTotal" class="text-center tarifa3">{{consumo.consumo}}</td>
                 </tr>
               </tbody>
           </table>
            </div>
+
+           <div class="col-lg-12">
+            <h4 class="text-center tbTarifa"> Consumo  KWH ENR	</h4>
+            <table id="" class="table small" style="width: 100%;">
+              <thead class="thead-dark" >
+                <tr >
+                  <th class="text-center tarifa1enc"></th>
+                  <th *ngFor="let consumo  of consumoENR" class="text-center tarifa1enc">{{consumo.fechasTarifa}}</th>
+                  <th class="text-center tarifa3enc">Total</th>
+                </tr>
+                
+              </thead>
+              <tbody style=" color:white;text-align: center;font-size: 13px;">
+                <tr>
+                 <td class="text-center tarifa4">Bloque 0 a 99 kwh</td>
+                 <td *ngFor="let consumo  of consumoENR1erBloque" class="text-center tarifa4M">
+                   {{consumo.consumo}}</td>
+                   <td *ngFor="let consumo  of consumoENR1erBloqueTotal" class="text-center tarifa4MF">
+                    {{consumo.consumo}}</td>
+                </tr>
+
+                <tr>
+                  <td class="text-center tarifa4">Bloque 100 a 199 kwh</td>
+                  <td *ngFor="let consumo  of consumoENR2doBloque" class="text-center tarifa4M">
+                    {{consumo.consumo}}</td>
+                    <td *ngFor="let consumo  of consumoENR2doBloqueTotal" class="text-center tarifa4MF">
+                      {{consumo.consumo}}</td>
+                </tr>
+
+                <tr>
+                  <td class="text-center tarifa4FS">Bloque mayor a 200 kwh</td>
+                  <td *ngFor="let consumo  of consumoENR3erBloque" class="text-center tarifa4MS">
+                    {{consumo.consumo}}</td>
+                    <td *ngFor="let consumo  of consumoENR3erBloqueTotal" class="text-center tarifa4MFS">
+                      {{consumo.consumo}}</td>
+                </tr>
+               
+                <tr>
+                  <td class="text-center tarifaTenc" >Totales</td>
+                  <td *ngFor="let consumo  of consumoENRTotalGlobalFechas" class="text-center tarifa4MFF">
+                    {{consumo.consumo}}</td>
+                    <td *ngFor="let consumo  of consumoENRTotalGlobal" class="text-center tarifa4MFT">
+                      {{consumo.consumo}}</td>
+                </tr>
+                 
+               
+              </tbody>
+          </table>
+           </div>
+
+
             
           </div>
         </form>

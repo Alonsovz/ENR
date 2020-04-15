@@ -132,5 +132,94 @@ tbody tr:hover{
   background-color: #1B1B38 !important;
   color:#00FFEA !important;
   font-size: 13px !important;
+}
+
+
+
+.tarifa3{
+  background-color: #1B1B38 !important;
+  color:white !important;
+  font-size: 13px !important;
+}
+
+
+.tarifa3enc{
+  background-color: #30304D !important;
+  color: #FF8C03 !important;
+  border-bottom: 2px solid #FF8C03 !important;
+  font-size: 13px !important;
   font-weight: bold !important;
+}
+
+
+.tarifa4{
+  background-color: #1B1B38 !important;
+  color:#00FFEA !important;
+  font-size: 13px !important;
+  border-bottom: 1px solid #00FFEA !important;
+}
+
+
+.tarifa4M{
+  background-color: #1B1B38 !important;
+  color:white !important;
+  font-size: 13px !important;
+  border-bottom: 1px solid white !important;
+}
+
+
+.tarifa4MF{
+  background-color: #1B1B38 !important;
+  color:yellow !important;
+  font-size: 13px !important;
+  border-bottom: 1px solid yellow !important;
+}
+
+
+.tarifa4MFF{
+  background-color: #1B1B38 !important;
+  color:white!important;
+  font-size: 13px !important;
+  border-bottom: 2px solid #FC4343 !important;
+  font-weight: bold !important;
+}
+
+.tarifa4MFT{
+  background-color: #1B1B38 !important;
+  color:yellow  !important;
+  font-size: 13px !important;
+  border-bottom: 2px solid #FC4343 !important;
+  font-weight: bold !important;
+}
+
+
+.tarifaTenc{
+  background-color: #1B1B38 !important;
+  color: #00FFEA !important;
+  border-bottom: 2px solid #FC4343 !important;
+  font-size: 13px !important;
+  font-weight: bold !important;
+}
+
+
+.tarifa4FS{
+  background-color: #1B1B38 !important;
+  color:#00FFEA !important;
+  font-size: 13px !important;
+  border-bottom: 2px solid #FC4343 !important;
+}
+
+.tarifa4MS{
+  background-color: #1B1B38 !important;
+  color:white !important;
+  font-size: 13px !important;
+  border-bottom: 2px solid #FC4343 !important;
+}
+
+
+.tarifa4MFS{
+  background-color: #1B1B38 !important;
+  color:yellow !important;
+  font-size: 13px !important;
+  border-bottom: 2px solid #FC4343 !important;
 }
