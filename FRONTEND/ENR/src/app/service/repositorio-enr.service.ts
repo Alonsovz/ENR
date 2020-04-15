@@ -151,6 +151,59 @@ export class RepositorioEnrService {
   }
   
 
+  
+
+  public getConsumoENR1erBloqueEnergia(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR1erBloqueEnergia', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+
+
+  public getConsumoENR2doBloqueEnergia(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR2doBloqueEnergia', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+
+  public getConsumoENR3erBloqueEnergia(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR3erBloqueEnergia', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+
+
+  public getConsumoENR1erBloqueTotalEnergia(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR1erBloqueTotalEnergia', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+
+
+  public getConsumoENR2doBloqueTotalEnergia(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR2doBloqueTotalEnergia', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+
+  public getConsumoENR3erBloqueTotalEnergia(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR3erBloqueTotalEnergia', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+
+
+
+  public getConsumoENRTotalGlobalEnergia(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRTotalGlobalEnergia', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getConsumoENRTotalFechasEnergia(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRTotalFechasEnergia', kwh).pipe(map(data => data as Repositorio[]));
+  }
+  
 
   public cambiarScan(datos: Repositorio): Observable<Repositorio> {
     //console.log(datos);

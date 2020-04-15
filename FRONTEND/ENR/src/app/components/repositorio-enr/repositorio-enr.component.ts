@@ -79,6 +79,7 @@ export class RepositorioENRComponent implements OnInit {
   consumoEstimadoTotal : Repositorio[];
   consumoRegistradoTotal : Repositorio[];
   consumoENRTotal : Repositorio[];
+
   consumoENR1erBloque : Repositorio[];
   consumoENR2doBloque : Repositorio[];
   consumoENR3erBloque : Repositorio[];
@@ -88,6 +89,18 @@ export class RepositorioENRComponent implements OnInit {
   consumoENR3erBloqueTotal : Repositorio[];
   consumoENRTotalGlobal : Repositorio[];
   consumoENRTotalGlobalFechas : Repositorio[];
+
+
+
+  consumoENR1erBloqueEnergia : Repositorio[];
+  consumoENR2doBloqueEnergia : Repositorio[];
+  consumoENR3erBloqueEnergia : Repositorio[];
+
+  consumoENR1erBloqueTotalEnergia : Repositorio[];
+  consumoENR2doBloqueTotalEnergia : Repositorio[];
+  consumoENR3erBloqueTotalEnergia : Repositorio[];
+  consumoENRTotalGlobalEnergia : Repositorio[];
+  consumoENRTotalGlobalFechasEnergia : Repositorio[];
 
   consumoDiario = 0;
   frm_LecturasEvaluar: FormGroup;
@@ -2173,8 +2186,116 @@ public eliminarLectura(i, periodo){
                   },
                   () => {
                 
+                    this.repositorioENR.getConsumoENR1erBloqueEnergia(datosKwh).subscribe(
+                      response => {
+                        this.consumoENR1erBloqueEnergia =response;
+                      },
+                      err => {
+                      // // //console.log("no");
+                      },
+                      () => {
+                    
+                      },
+                    );
+            
+            
+                    this.repositorioENR.getConsumoENR2doBloqueEnergia(datosKwh).subscribe(
+                      response => {
+                        this.consumoENR2doBloqueEnergia =response;
+                      },
+                      err => {
+                      // // //console.log("no");
+                      },
+                      () => {
+                    
+                      },
+                    );
+            
+            
+                    this.repositorioENR.getConsumoENR3erBloqueEnergia(datosKwh).subscribe(
+                      response => {
+                        this.consumoENR3erBloqueEnergia =response;
+                      },
+                      err => {
+                      // // //console.log("no");
+                      },
+                      () => {
+            
+                        this.repositorioENR.getConsumoENR1erBloqueTotalEnergia(datosKwh).subscribe(
+                          response => {
+                            this.consumoENR1erBloqueTotalEnergia =response;
+                          },
+                          err => {
+                          // // //console.log("no");
+                          },
+                          () => {
+                        
+                          },
+                        );
+                
+                
+                        this.repositorioENR.getConsumoENR2doBloqueTotalEnergia(datosKwh).subscribe(
+                          response => {
+                            this.consumoENR2doBloqueTotalEnergia =response;
+                          },
+                          err => {
+                          // // //console.log("no");
+                          },
+                          () => {
+                        
+                          },
+                        );
+                
+                
+                        this.repositorioENR.getConsumoENR3erBloqueTotalEnergia(datosKwh).subscribe(
+                          response => {
+                            this.consumoENR3erBloqueTotalEnergia =response;
+                          },
+                          err => {
+                          // // //console.log("no");
+                          },
+                          () => {
+                        
+                            this.repositorioENR.getConsumoENRTotalFechasEnergia(datosKwh).subscribe(
+                              response => {
+                                this.consumoENRTotalGlobalFechasEnergia =response;
+                              },
+                              err => {
+                              // // //console.log("no");
+                              },
+                              () => {
+                            
+                              },
+                            );
+            
+            
+                            this.repositorioENR.getConsumoENRTotalGlobalEnergia(datosKwh).subscribe(
+                              response => {
+                                this.consumoENRTotalGlobalEnergia =response;
+                              },
+                              err => {
+                              // // //console.log("no");
+                              },
+                              () => {
+                            
+                              },
+                            );
+            
+            
+                            
+            
+                          },
+                        );
+            
+            
+                      },
+                    );
+
                   },
                 );
+
+
+                
 
               },
             );

@@ -947,5 +947,124 @@ class ENRController extends Controller
     }
     
     
+    public function getConsumoENR1erBloqueEnergia(Request $request){
+
+    $caso = $request["numeroCaso"];
+
+
+    $execProcedure =  DB::connection('facturacion')->statement(
+        "exec  [dbo].[enr_calculoMontoEnergia]  ".$caso." ");
+
+
+    $getConsumo = DB::connection('facturacion')->select(
+        "select fechas, '$' + str(cobro,12,2) as consumo from enr_montoEnergiaENR  where casoENR = ".$caso."
+        and bloque = '1er bloque' order by 1 asc");
+         
+
+          return response()->json($getConsumo);
+    }
+
+
+public function getConsumoENR2doBloqueEnergia(Request $request){
+    $caso = $request["numeroCaso"];
+
+
+    $getConsumo = DB::connection('facturacion')->select(
+        "select fechas, '$' + str(cobro,12,2) as consumo from enr_montoEnergiaENR  where casoENR = ".$caso."
+        and bloque = '2do bloque' order by 1 asc");
+         
+
+          return response()->json($getConsumo);
+}
+
+
+
+public function getConsumoENR3erBloqueEnergia(Request $request){
+    $caso = $request["numeroCaso"];
+
+
+    $getConsumo = DB::connection('facturacion')->select(
+        "select fechas, '$' + str(cobro,12,2) as consumo from enr_montoEnergiaENR  where casoENR = ".$caso."
+        and bloque = '3er bloque' order by 1 asc");
+         
+
+          return response()->json($getConsumo);
+}
+
+
+
+
+public function getConsumoENR1erBloqueTotalEnergia(Request $request){
+    $caso = $request["numeroCaso"];
+
+
+    $execProcedure =  DB::connection('facturacion')->statement(
+        "exec  [dbo].[enr_calculoBloquesConsumo]  ".$caso." ");
+
+
+    $getConsumo = DB::connection('facturacion')->select(
+        "select '$' + str(sum(cobro),12,2) as consumo from 
+        enr_montoEnergiaENR where casoENR = ".$caso."
+        and bloque = '1er bloque' order by 1 asc");
+         
+
+          return response()->json($getConsumo);
+}
+
+
+public function getConsumoENR2doBloqueTotalEnergia(Request $request){
+    $caso = $request["numeroCaso"];
+
+
+    $getConsumo = DB::connection('facturacion')->select(
+        "select '$' + str(sum(cobro),12,2) as consumo from 
+        enr_montoEnergiaENR  where casoENR = ".$caso."
+        and bloque = '2do bloque' order by 1 asc");
+         
+
+          return response()->json($getConsumo);
+}
+
+
+
+public function getConsumoENR3erBloqueTotalEnergia(Request $request){
+    $caso = $request["numeroCaso"];
+
+
+    $getConsumo = DB::connection('facturacion')->select(
+        "select '$' + str(sum(cobro),12,2) as consumo from 
+        enr_montoEnergiaENR  where casoENR = ".$caso."
+        and bloque = '3er bloque' order by 1 asc");
+         
+
+          return response()->json($getConsumo);
+}
+
+
+public function getConsumoENRTotalGlobalEnergia(Request $request){
+    $caso = $request["numeroCaso"];
+
+
+    $getConsumo = DB::connection('facturacion')->select(
+        "select '$' + str(sum(cobro),12,2) as consumo from enr_montoEnergiaENR
+         where casoENR = ".$caso."");
+         
+
+          return response()->json($getConsumo);
+}
+
+
+public function getConsumoENRTotalFechasEnergia(Request $request){
+    $caso = $request["numeroCaso"];
+
+
+    $getConsumo = DB::connection('facturacion')->select(
+        "select fechas, '$' + str(sum(cobro),12,2) as consumo from enr_montoEnergiaENR
+         where casoENR = ".$caso."
+        group by fechas order by 1 asc");
+         
+
+          return response()->json($getConsumo);
+}
 
 }

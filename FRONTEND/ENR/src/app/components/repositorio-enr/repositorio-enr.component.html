@@ -1174,7 +1174,56 @@
            </div>
 
 
-            
+           <div class="col-lg-12">
+            <h4 class="text-center tbTarifa"> Consumo  Monto Energía ENR	</h4>
+            <table id="" class="table small" style="width: 100%;">
+              <thead class="thead-dark" >
+                <tr >
+                  <th class="text-center tarifa1enc"></th>
+                  <th *ngFor="let consumo  of consumoENR" class="text-center tarifa1enc">{{consumo.fechasTarifa}}</th>
+                  <th class="text-center tarifa3enc">Total</th>
+                </tr>
+                
+              </thead>
+              <tbody style=" color:white;text-align: center;font-size: 13px;">
+                <tr>
+                 <td class="text-center tarifa4">Energía 1er bloque</td>
+                 <td *ngFor="let consumo  of consumoENR1erBloqueEnergia" class="text-center tarifa4M">
+                   {{consumo.consumo}}</td>
+                   <td *ngFor="let consumo  of consumoENR1erBloqueTotalEnergia" class="text-center tarifa4MF">
+                    {{consumo.consumo}}</td>
+                </tr>
+
+                <tr>
+                  <td class="text-center tarifa4">Energía 2do bloque</td>
+                  <td *ngFor="let consumo  of consumoENR2doBloqueEnergia" class="text-center tarifa4M">
+                    {{consumo.consumo}}</td>
+                    <td *ngFor="let consumo  of consumoENR2doBloqueTotalEnergia" class="text-center tarifa4MF">
+                      {{consumo.consumo}}</td>
+                </tr>
+
+                <tr>
+                  <td class="text-center tarifa4FS">Energía 3er bloque</td>
+                  <td *ngFor="let consumo  of consumoENR3erBloqueEnergia" class="text-center tarifa4MS">
+                    {{consumo.consumo}}</td>
+                    <td *ngFor="let consumo  of consumoENR3erBloqueTotalEnergia" class="text-center tarifa4MFS">
+                      {{consumo.consumo}}</td>
+                </tr>
+               
+                <tr>
+                  <td class="text-center tarifaTenc" >Totales</td>
+                  <td *ngFor="let consumo  of consumoENRTotalGlobalFechasEnergia" class="text-center tarifa4MFF">
+                    {{consumo.consumo}}</td>
+                    <td *ngFor="let consumo  of consumoENRTotalGlobalEnergia" class="text-center tarifa4MFT">
+                      {{consumo.consumo}}</td>
+                </tr>
+                 
+               
+              </tbody>
+          </table>
+           </div>
+
+
           </div>
         </form>
 
