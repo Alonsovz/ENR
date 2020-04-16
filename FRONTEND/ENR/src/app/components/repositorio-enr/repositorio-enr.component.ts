@@ -102,6 +102,16 @@ export class RepositorioENRComponent implements OnInit {
   consumoENRTotalGlobalEnergia : Repositorio[];
   consumoENRTotalGlobalFechasEnergia : Repositorio[];
 
+  consumoENR1erBloqueDistribucion : Repositorio[];
+  consumoENR2doBloqueDistribucion : Repositorio[];
+  consumoENR3erBloqueDistribucion : Repositorio[];
+
+  consumoENR1erBloqueTotalDistribucion : Repositorio[];
+  consumoENR2doBloqueTotalDistribucion : Repositorio[];
+  consumoENR3erBloqueTotalDistribucion : Repositorio[];
+  consumoENRTotalGlobalDistribucion : Repositorio[];
+  consumoENRTotalGlobalFechasDistribucion : Repositorio[];
+
   consumoDiario = 0;
   frm_LecturasEvaluar: FormGroup;
   frm_LecturasEvaluarTotales : FormGroup;
@@ -1397,7 +1407,7 @@ public validarFechas(){
     this.frm_LecturasEvaluar = this.fb2.group({lecturas: this.fb2.array([]),});
     this.frm_ConsumosReales3 = this.fb2.group({consumosReales3: this.fb2.array([]),})
     this.frm_ConsumosReales3Totales.reset();
-    
+    this.frm_LecturasEvaluarTotales.reset();
     this.frm_LecturasEvaluarTotales.controls["numeroCaso"].setValue(numero);
     this.consumosReales3.push(
       this.fb2.group({
@@ -2278,6 +2288,111 @@ public eliminarLectura(i, periodo){
                               },
                               () => {
                             
+                              },
+                            );
+
+                            this.repositorioENR.getConsumoENR1erBloqueDistribucion(datosKwh).subscribe(
+                              response => {
+                                this.consumoENR1erBloqueDistribucion =response;
+                              },
+                              err => {
+                              // // //console.log("no");
+                              },
+                              () => {
+                            
+                              },
+                            );
+                    
+                    
+                            this.repositorioENR.getConsumoENR2doBloqueDistribucion(datosKwh).subscribe(
+                              response => {
+                                this.consumoENR2doBloqueDistribucion =response;
+                              },
+                              err => {
+                              // // //console.log("no");
+                              },
+                              () => {
+                            
+                              },
+                            );
+                    
+                    
+                            this.repositorioENR.getConsumoENR3erBloqueDistribucion(datosKwh).subscribe(
+                              response => {
+                                this.consumoENR3erBloqueDistribucion =response;
+                              },
+                              err => {
+                              // // //console.log("no");
+                              },
+                              () => {
+                    
+                                this.repositorioENR.getConsumoENR1erBloqueTotalDistribucion(datosKwh).subscribe(
+                                  response => {
+                                    this.consumoENR1erBloqueTotalDistribucion =response;
+                                  },
+                                  err => {
+                                  // // //console.log("no");
+                                  },
+                                  () => {
+                                
+                                  },
+                                );
+                        
+                        
+                                this.repositorioENR.getConsumoENR2doBloqueTotalDistribucion(datosKwh).subscribe(
+                                  response => {
+                                    this.consumoENR2doBloqueTotalDistribucion =response;
+                                  },
+                                  err => {
+                                  // // //console.log("no");
+                                  },
+                                  () => {
+                                
+                                  },
+                                );
+                        
+                        
+                                this.repositorioENR.getConsumoENR3erBloqueTotalDistribucion(datosKwh).subscribe(
+                                  response => {
+                                    this.consumoENR3erBloqueTotalDistribucion =response;
+                                  },
+                                  err => {
+                                  // // //console.log("no");
+                                  },
+                                  () => {
+                                
+                                    this.repositorioENR.getConsumoENRTotalFechasDistribucion(datosKwh).subscribe(
+                                      response => {
+                                        this.consumoENRTotalGlobalFechasDistribucion =response;
+                                      },
+                                      err => {
+                                      // // //console.log("no");
+                                      },
+                                      () => {
+                                    
+                                      },
+                                    );
+                    
+                    
+                                    this.repositorioENR.getConsumoENRTotalGlobalDistribucion(datosKwh).subscribe(
+                                      response => {
+                                        this.consumoENRTotalGlobalDistribucion =response;
+                                      },
+                                      err => {
+                                      // // //console.log("no");
+                                      },
+                                      () => {
+                                    
+                                      },
+                                    );
+                    
+                    
+                                    
+                    
+                                  },
+                                );
+                    
+                    
                               },
                             );
             

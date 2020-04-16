@@ -1036,7 +1036,7 @@
       
 
         <form [formGroup]="frm_tarifas" style="width: 98% !important;">
-          <div id="divTarifas" class="row mt-2 animated flipInX" style="display:none;
+          <div id="divTarifas" class="row mt-2 animated fadeInDown" style="display:none;
            width: 97% !important;margin-left: 30px;margin-right: 30px;">
            
     
@@ -1124,105 +1124,157 @@
           </table>
            </div>
 
-           <div class="col-lg-12">
-            <h4 class="text-center tbTarifa"> Consumo  KWH ENR	</h4>
-            <table id="" class="table small" style="width: 100%;">
-              <thead class="thead-dark" >
-                <tr >
-                  <th class="text-center tarifa1enc"></th>
-                  <th *ngFor="let consumo  of consumoENR" class="text-center tarifa1enc">{{consumo.fechasTarifa}}</th>
-                  <th class="text-center tarifa3enc">Total</th>
-                </tr>
-                
-              </thead>
-              <tbody style=" color:white;text-align: center;font-size: 13px;">
-                <tr>
-                 <td class="text-center tarifa4">Bloque 0 a 99 kwh</td>
-                 <td *ngFor="let consumo  of consumoENR1erBloque" class="text-center tarifa4M">
-                   {{consumo.consumo}}</td>
-                   <td *ngFor="let consumo  of consumoENR1erBloqueTotal" class="text-center tarifa4MF">
-                    {{consumo.consumo}}</td>
-                </tr>
-
-                <tr>
-                  <td class="text-center tarifa4">Bloque 100 a 199 kwh</td>
-                  <td *ngFor="let consumo  of consumoENR2doBloque" class="text-center tarifa4M">
-                    {{consumo.consumo}}</td>
-                    <td *ngFor="let consumo  of consumoENR2doBloqueTotal" class="text-center tarifa4MF">
+           <div *ngIf="datosGenerales.tarifa == '1R'" style="width: 100% !important;">
+            <div class="col-lg-12">
+              <h4 class="text-center tbTarifa"> Consumo  KWH ENR	</h4>
+              <table id="" class="table small" style="width: 100%;">
+                <thead class="thead-dark" >
+                  <tr >
+                    <th class="text-center tarifa1enc"></th>
+                    <th *ngFor="let consumo  of consumoENR" class="text-center tarifa1enc">{{consumo.fechasTarifa}}</th>
+                    <th class="text-center tarifa3enc">Total</th>
+                  </tr>
+                  
+                </thead>
+                <tbody style=" color:white;text-align: center;font-size: 13px;">
+                  <tr>
+                   <td class="text-center tarifa4">Bloque 0 a 99 kwh</td>
+                   <td *ngFor="let consumo  of consumoENR1erBloque" class="text-center tarifa4M">
+                     {{consumo.consumo}}</td>
+                     <td *ngFor="let consumo  of consumoENR1erBloqueTotal" class="text-center tarifa4MF">
                       {{consumo.consumo}}</td>
-                </tr>
-
-                <tr>
-                  <td class="text-center tarifa4FS">Bloque mayor a 200 kwh</td>
-                  <td *ngFor="let consumo  of consumoENR3erBloque" class="text-center tarifa4MS">
-                    {{consumo.consumo}}</td>
-                    <td *ngFor="let consumo  of consumoENR3erBloqueTotal" class="text-center tarifa4MFS">
+                  </tr>
+  
+                  <tr>
+                    <td class="text-center tarifa4">Bloque 100 a 199 kwh</td>
+                    <td *ngFor="let consumo  of consumoENR2doBloque" class="text-center tarifa4M">
                       {{consumo.consumo}}</td>
-                </tr>
-               
-                <tr>
-                  <td class="text-center tarifaTenc" >Totales</td>
-                  <td *ngFor="let consumo  of consumoENRTotalGlobalFechas" class="text-center tarifa4MFF">
-                    {{consumo.consumo}}</td>
-                    <td *ngFor="let consumo  of consumoENRTotalGlobal" class="text-center tarifa4MFT">
+                      <td *ngFor="let consumo  of consumoENR2doBloqueTotal" class="text-center tarifa4MF">
+                        {{consumo.consumo}}</td>
+                  </tr>
+  
+                  <tr>
+                    <td class="text-center tarifa4FS">Bloque mayor a 200 kwh</td>
+                    <td *ngFor="let consumo  of consumoENR3erBloque" class="text-center tarifa4MS">
                       {{consumo.consumo}}</td>
-                </tr>
+                      <td *ngFor="let consumo  of consumoENR3erBloqueTotal" class="text-center tarifa4MFS">
+                        {{consumo.consumo}}</td>
+                  </tr>
                  
-               
-              </tbody>
-          </table>
+                  <tr>
+                    <td class="text-center tarifaTenc" >Totales</td>
+                    <td *ngFor="let consumo  of consumoENRTotalGlobalFechas" class="text-center tarifa4MFF">
+                      {{consumo.consumo}}</td>
+                      <td *ngFor="let consumo  of consumoENRTotalGlobal" class="text-center tarifa4MFT">
+                        {{consumo.consumo}}</td>
+                  </tr>
+                   
+                 
+                </tbody>
+            </table>
+             </div>
+  
+  
+             <div class="col-lg-12">
+              <h4 class="text-center tbTarifa"> Consumo  Monto Energía ENR	</h4>
+              <table id="" class="table small" style="width: 100%;">
+                <thead class="thead-dark" >
+                  <tr >
+                    <th class="text-center tarifa1enc"></th>
+                    <th *ngFor="let consumo  of consumoENR" class="text-center tarifa1enc">{{consumo.fechasTarifa}}</th>
+                    <th class="text-center tarifa3enc">Total</th>
+                  </tr>
+                  
+                </thead>
+                <tbody style=" color:white;text-align: center;font-size: 13px;">
+                  <tr>
+                   <td class="text-center tarifa4">Energía 1er bloque</td>
+                   <td *ngFor="let consumo  of consumoENR1erBloqueEnergia" class="text-center tarifa4M">
+                     {{consumo.consumo}}</td>
+                     <td *ngFor="let consumo  of consumoENR1erBloqueTotalEnergia" class="text-center tarifa4MF">
+                      {{consumo.consumo}}</td>
+                  </tr>
+  
+                  <tr>
+                    <td class="text-center tarifa4">Energía 2do bloque</td>
+                    <td *ngFor="let consumo  of consumoENR2doBloqueEnergia" class="text-center tarifa4M">
+                      {{consumo.consumo}}</td>
+                      <td *ngFor="let consumo  of consumoENR2doBloqueTotalEnergia" class="text-center tarifa4MF">
+                        {{consumo.consumo}}</td>
+                  </tr>
+  
+                  <tr>
+                    <td class="text-center tarifa4FS">Energía 3er bloque</td>
+                    <td *ngFor="let consumo  of consumoENR3erBloqueEnergia" class="text-center tarifa4MS">
+                      {{consumo.consumo}}</td>
+                      <td *ngFor="let consumo  of consumoENR3erBloqueTotalEnergia" class="text-center tarifa4MFS">
+                        {{consumo.consumo}}</td>
+                  </tr>
+                 
+                  <tr>
+                    <td class="text-center tarifaTenc" >Totales</td>
+                    <td *ngFor="let consumo  of consumoENRTotalGlobalFechasEnergia" class="text-center tarifa4MFF">
+                      {{consumo.consumo}}</td>
+                      <td *ngFor="let consumo  of consumoENRTotalGlobalEnergia" class="text-center tarifa4MFT">
+                        {{consumo.consumo}}</td>
+                  </tr>
+                   
+                 
+                </tbody>
+            </table>
+             </div>
+  
+             <div class="col-lg-12">  
+              <h4 class="text-center tbTarifa"> Consumo  Monto Distribución ENR	</h4>
+              <table id="" class="table small" style="width: 100%;">
+                <thead class="thead-dark" >
+                  <tr >
+                    <th class="text-center tarifa1enc"></th>
+                    <th *ngFor="let consumo  of consumoENR" class="text-center tarifa1enc">{{consumo.fechasTarifa}}</th>
+                    <th class="text-center tarifa3enc">Total</th>
+                  </tr>
+                  
+                </thead>
+                <tbody style=" color:white;text-align: center;font-size: 13px;">
+                  <tr>
+                   <td class="text-center tarifa4">Distribución 1er bloque</td>
+                   <td *ngFor="let consumo  of consumoENR1erBloqueDistribucion" class="text-center tarifa4M">
+                     {{consumo.consumo}}</td>
+                     <td *ngFor="let consumo  of consumoENR1erBloqueTotalDistribucion" class="text-center tarifa4MF">
+                      {{consumo.consumo}}</td>
+                  </tr>
+  
+                  <tr>
+                    <td class="text-center tarifa4">Distribución 2do bloque</td>
+                    <td *ngFor="let consumo  of consumoENR2doBloqueDistribucion" class="text-center tarifa4M">
+                      {{consumo.consumo}}</td>
+                      <td *ngFor="let consumo  of consumoENR2doBloqueTotalDistribucion" class="text-center tarifa4MF">
+                        {{consumo.consumo}}</td>
+                  </tr>
+  
+                  <tr>
+                    <td class="text-center tarifa4FS">Distribución 3er bloque</td>
+                    <td *ngFor="let consumo  of consumoENR3erBloqueDistribucion" class="text-center tarifa4MS">
+                      {{consumo.consumo}}</td>
+                      <td *ngFor="let consumo  of consumoENR3erBloqueTotalDistribucion" class="text-center tarifa4MFS">
+                        {{consumo.consumo}}</td>
+                  </tr>
+                 
+                  <tr>
+                    <td class="text-center tarifaTenc" >Totales</td>
+                    <td *ngFor="let consumo  of consumoENRTotalGlobalFechasDistribucion" class="text-center tarifa4MFF">
+                      {{consumo.consumo}}</td>
+                      <td *ngFor="let consumo  of consumoENRTotalGlobalDistribucion" class="text-center tarifa4MFT">
+                        {{consumo.consumo}}</td>
+                  </tr>
+                   
+                 
+                </tbody>
+            </table>
+             </div>
            </div>
 
-
-           <div class="col-lg-12">
-            <h4 class="text-center tbTarifa"> Consumo  Monto Energía ENR	</h4>
-            <table id="" class="table small" style="width: 100%;">
-              <thead class="thead-dark" >
-                <tr >
-                  <th class="text-center tarifa1enc"></th>
-                  <th *ngFor="let consumo  of consumoENR" class="text-center tarifa1enc">{{consumo.fechasTarifa}}</th>
-                  <th class="text-center tarifa3enc">Total</th>
-                </tr>
-                
-              </thead>
-              <tbody style=" color:white;text-align: center;font-size: 13px;">
-                <tr>
-                 <td class="text-center tarifa4">Energía 1er bloque</td>
-                 <td *ngFor="let consumo  of consumoENR1erBloqueEnergia" class="text-center tarifa4M">
-                   {{consumo.consumo}}</td>
-                   <td *ngFor="let consumo  of consumoENR1erBloqueTotalEnergia" class="text-center tarifa4MF">
-                    {{consumo.consumo}}</td>
-                </tr>
-
-                <tr>
-                  <td class="text-center tarifa4">Energía 2do bloque</td>
-                  <td *ngFor="let consumo  of consumoENR2doBloqueEnergia" class="text-center tarifa4M">
-                    {{consumo.consumo}}</td>
-                    <td *ngFor="let consumo  of consumoENR2doBloqueTotalEnergia" class="text-center tarifa4MF">
-                      {{consumo.consumo}}</td>
-                </tr>
-
-                <tr>
-                  <td class="text-center tarifa4FS">Energía 3er bloque</td>
-                  <td *ngFor="let consumo  of consumoENR3erBloqueEnergia" class="text-center tarifa4MS">
-                    {{consumo.consumo}}</td>
-                    <td *ngFor="let consumo  of consumoENR3erBloqueTotalEnergia" class="text-center tarifa4MFS">
-                      {{consumo.consumo}}</td>
-                </tr>
-               
-                <tr>
-                  <td class="text-center tarifaTenc" >Totales</td>
-                  <td *ngFor="let consumo  of consumoENRTotalGlobalFechasEnergia" class="text-center tarifa4MFF">
-                    {{consumo.consumo}}</td>
-                    <td *ngFor="let consumo  of consumoENRTotalGlobalEnergia" class="text-center tarifa4MFT">
-                      {{consumo.consumo}}</td>
-                </tr>
-                 
-               
-              </tbody>
-          </table>
-           </div>
-
+          
 
           </div>
         </form>

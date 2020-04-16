@@ -119,6 +119,21 @@ Route::get('/', function () {
     Route::post('getConsumoENRTotalGlobalEnergia', 'ENRController@getConsumoENRTotalGlobalEnergia');
 
     Route::post('getConsumoENRTotalFechasEnergia', 'ENRController@getConsumoENRTotalFechasEnergia');
+
+
+    Route::post('getConsumoENR1erBloqueDistribucion', 'ENRController@getConsumoENR1erBloqueDistribucion');
+    Route::post('getConsumoENR2doBloqueDistribucion', 'ENRController@getConsumoENR2doBloqueDistribucion');
+    Route::post('getConsumoENR3erBloqueDistribucion', 'ENRController@getConsumoENR3erBloqueDistribucion');
+
+
+    Route::post('getConsumoENR1erBloqueTotalDistribucion', 'ENRController@getConsumoENR1erBloqueTotalDistribucion');
+    Route::post('getConsumoENR2doBloqueTotalDistribucion', 'ENRController@getConsumoENR2doBloqueTotalDistribucion');
+    Route::post('getConsumoENR3erBloqueTotalDistribucion', 'ENRController@getConsumoENR3erBloqueTotalDistribucion');
+
+
+    Route::post('getConsumoENRTotalGlobalDistribucion', 'ENRController@getConsumoENRTotalGlobalDistribucion');
+
+    Route::post('getConsumoENRTotalFechasDistribucion', 'ENRController@getConsumoENRTotalFechasDistribucion');
     
    
     

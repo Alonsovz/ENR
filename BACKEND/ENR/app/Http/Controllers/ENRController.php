@@ -877,9 +877,7 @@ class ENRController extends Controller
         $caso = $request["numeroCaso"];
 
 
-        $execProcedure =  DB::connection('facturacion')->statement(
-            "exec  [dbo].[enr_calculoBloquesConsumo]  ".$caso." ");
- 
+       
  
         $getConsumo = DB::connection('facturacion')->select(
             "select str(sum(consumo),12,2) as consumo from 
@@ -998,8 +996,6 @@ public function getConsumoENR1erBloqueTotalEnergia(Request $request){
     $caso = $request["numeroCaso"];
 
 
-    $execProcedure =  DB::connection('facturacion')->statement(
-        "exec  [dbo].[enr_calculoBloquesConsumo]  ".$caso." ");
 
 
     $getConsumo = DB::connection('facturacion')->select(
@@ -1066,5 +1062,128 @@ public function getConsumoENRTotalFechasEnergia(Request $request){
 
           return response()->json($getConsumo);
 }
+
+
+
+public function getConsumoENR1erBloqueDistribucion(Request $request){
+
+    $caso = $request["numeroCaso"];
+
+
+    $execProcedure =  DB::connection('facturacion')->statement(
+        "exec  [dbo].[enr_calculoDistribucion]  ".$caso." ");
+
+
+    $getConsumo = DB::connection('facturacion')->select(
+        "select fechas, '$' + str(cobro,12,2) as consumo from enr_montoDistribucionENR  where casoENR = ".$caso."
+        and bloque = '1er bloque' order by 1 asc");
+         
+
+          return response()->json($getConsumo);
+    }
+
+
+public function getConsumoENR2doBloqueDistribucion(Request $request){
+    $caso = $request["numeroCaso"];
+
+
+    $getConsumo = DB::connection('facturacion')->select(
+        "select fechas, '$' + str(cobro,12,2) as consumo from enr_montoDistribucionENR  where casoENR = ".$caso."
+        and bloque = '2do bloque' order by 1 asc");
+         
+
+          return response()->json($getConsumo);
+}
+
+
+
+public function getConsumoENR3erBloqueDistribucion(Request $request){
+    $caso = $request["numeroCaso"];
+
+
+    $getConsumo = DB::connection('facturacion')->select(
+        "select fechas, '$' + str(cobro,12,2) as consumo from enr_montoDistribucionENR  where casoENR = ".$caso."
+        and bloque = '3er bloque' order by 1 asc");
+         
+
+          return response()->json($getConsumo);
+}
+
+
+
+
+public function getConsumoENR1erBloqueTotalDistribucion(Request $request){
+    $caso = $request["numeroCaso"];
+
+
+
+
+
+    $getConsumo = DB::connection('facturacion')->select(
+        "select '$' + str(sum(cobro),12,2) as consumo from 
+        enr_montoDistribucionENR where casoENR = ".$caso."
+        and bloque = '1er bloque' order by 1 asc");
+         
+
+          return response()->json($getConsumo);
+}
+
+
+public function getConsumoENR2doBloqueTotalDistribucion(Request $request){
+    $caso = $request["numeroCaso"];
+
+
+    $getConsumo = DB::connection('facturacion')->select(
+        "select '$' + str(sum(cobro),12,2) as consumo from 
+        enr_montoDistribucionENR  where casoENR = ".$caso."
+        and bloque = '2do bloque' order by 1 asc");
+         
+
+          return response()->json($getConsumo);
+}
+
+
+
+public function getConsumoENR3erBloqueTotalDistribucion(Request $request){
+    $caso = $request["numeroCaso"];
+
+
+    $getConsumo = DB::connection('facturacion')->select(
+        "select '$' + str(sum(cobro),12,2) as consumo from 
+        enr_montoDistribucionENR  where casoENR = ".$caso."
+        and bloque = '3er bloque' order by 1 asc");
+         
+
+          return response()->json($getConsumo);
+}
+
+
+public function getConsumoENRTotalGlobalDistribucion(Request $request){
+    $caso = $request["numeroCaso"];
+
+
+    $getConsumo = DB::connection('facturacion')->select(
+        "select '$' + str(sum(cobro),12,2) as consumo from enr_montoDistribucionENR
+         where casoENR = ".$caso."");
+         
+
+          return response()->json($getConsumo);
+}
+
+
+public function getConsumoENRTotalFechasDistribucion(Request $request){
+    $caso = $request["numeroCaso"];
+
+
+    $getConsumo = DB::connection('facturacion')->select(
+        "select fechas, '$' + str(sum(cobro),12,2) as consumo from enr_montoDistribucionENR
+         where casoENR = ".$caso."
+        group by fechas order by 1 asc");
+         
+
+          return response()->json($getConsumo);
+}
+
+
 
 }
