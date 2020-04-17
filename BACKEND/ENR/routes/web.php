@@ -135,5 +135,26 @@ Route::get('/', function () {
 
     Route::post('getConsumoENRTotalFechasDistribucion', 'ENRController@getConsumoENRTotalFechasDistribucion');
     
-   
+    Route::post('saveDatosCalCaso1', 'ENRController@saveDatosCalCaso1');
+    Route::post('updateDatosCalCaso1', 'ENRController@updateDatosCalCaso1');
+    
+    Route::post('saveDatosCalCaso2', 'ENRController@saveDatosCalCaso2');
+    Route::post('updateDatosCalCaso2', 'ENRController@updateDatosCalCaso2');
+    Route::post('savePeriodosSeleccionadosCaso2', 'ENRController@savePeriodosSeleccionadosCaso2');
+    
+    Route::post('consumosRealesCaso3', 'ENRController@consumosRealesCaso3');
+    Route::post('consumosRealesCaso3Totales', 'ENRController@consumosRealesCaso3Totales');
+    Route::post('savePeriodosSeleccionadosCaso3', 'ENRController@savePeriodosSeleccionadosCaso3');
+    Route::post('updateDatosCalCaso3', 'ENRController@updateDatosCalCaso3');
+    
+
+
+    Route::post('savePeriodosSeleccionadosCaso4', 'ENRController@savePeriodosSeleccionadosCaso4');
+    Route::post('saveDatosCalCaso4', 'ENRController@saveDatosCalCaso4');
+
+    Route::post('saveDatosCalCaso5', 'ENRController@saveDatosCalCaso5');
+    Route::post('savePeriodosSeleccionadosCaso5', 'ENRController@savePeriodosSeleccionadosCaso5');
+
+    Route::post('updateDatosCalCaso5', 'ENRController@updateDatosCalCaso5');
+    
     

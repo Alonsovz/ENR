@@ -80,6 +80,20 @@ class VerifyCsrfToken extends BaseVerifier
         'getConsumoENR2doBloqueTotalDistribucion',
         'getConsumoENR3erBloqueTotalDistribucion',
         'getConsumoENRTotalGlobalDistribucion',
-        'getConsumoENRTotalFechasDistribucion'  
+        'getConsumoENRTotalFechasDistribucion',
+        'saveDatosCalCaso1',
+        'updateDatosCalCaso1',  
+        'saveDatosCalCaso2',
+        'updateDatosCalCaso2',
+        'savePeriodosSeleccionadosCaso2',
+        'consumosRealesCaso3',
+        'consumosRealesCaso3Totales',
+        'savePeriodosSeleccionadosCaso3', 
+        'updateDatosCalCaso3',
+        'savePeriodosSeleccionadosCaso4',
+        'saveDatosCalCaso4',
+        'saveDatosCalCaso5',
+        'savePeriodosSeleccionadosCaso5',
+        'updateDatosCalCaso5'
     ];
 }

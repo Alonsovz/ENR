@@ -273,4 +273,82 @@ export class RepositorioEnrService {
     return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getLecturasbyNIS', nis).pipe(map(data => data as Repositorio[]));
   }
 
+  public saveDatosCalCaso1(datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'saveDatosCalCaso1', datos).pipe(map(data => data as Repositorio));
+  }
+
+  public updateDatosCalCaso1(datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'updateDatosCalCaso1', datos).pipe(map(data => data as Repositorio));
+  }
+
+
+  public saveDatosCalCaso2(datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'saveDatosCalCaso2', datos).pipe(map(data => data as Repositorio));
+  }
+
+  public updateDatosCalCaso2(datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'updateDatosCalCaso2', datos).pipe(map(data => data as Repositorio));
+  }
+
+
+  public savePeriodosSeleccionadosCaso2 (datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'savePeriodosSeleccionadosCaso2', datos).pipe(map(data => data as Repositorio));
+  }
+
+  public consumosRealesCaso3 (datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'consumosRealesCaso3', datos).pipe(map(data => data as Repositorio));
+  }
+
+
+  public consumosRealesCaso3Totales (datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'consumosRealesCaso3Totales', datos).pipe(map(data => data as Repositorio));
+  }
+
+  public savePeriodosSeleccionadosCaso3 (datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'savePeriodosSeleccionadosCaso3', datos).pipe(map(data => data as Repositorio));
+  }
+
+
+  public updateDatosCalCaso3(datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'updateDatosCalCaso3', datos).pipe(map(data => data as Repositorio));
+  }
+
+
+  public savePeriodosSeleccionadosCaso4 (datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'savePeriodosSeleccionadosCaso4', datos).pipe(map(data => data as Repositorio));
+  }
+
+  public saveDatosCalCaso4(datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'saveDatosCalCaso4', datos).pipe(map(data => data as Repositorio));
+  }
+
+
+  public saveDatosCalCaso5(datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'saveDatosCalCaso5', datos).pipe(map(data => data as Repositorio));
+  }
+
+
+  public savePeriodosSeleccionadosCaso5 (datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'savePeriodosSeleccionadosCaso5', datos).pipe(map(data => data as Repositorio));
+  }
+
+
+  public updateDatosCalCaso5(datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'updateDatosCalCaso5', datos).pipe(map(data => data as Repositorio));
+  }
+
 }

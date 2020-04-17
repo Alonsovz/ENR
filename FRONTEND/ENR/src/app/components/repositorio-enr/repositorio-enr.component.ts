@@ -134,6 +134,7 @@ export class RepositorioENRComponent implements OnInit {
     private fb1: FormBuilder, private fb: FormBuilder,private fb2: FormBuilder,) { 
 
       this.frm_LecturasEvaluarTotales = new FormGroup({
+        'idCaso': new FormControl(''),
         'numeroCaso': new FormControl(''),
         'totalDias' : new FormControl(''),
         'totalConsumo' : new FormControl(''),
@@ -155,6 +156,7 @@ export class RepositorioENRComponent implements OnInit {
         'totalConsumoCT3' : new FormControl(''),
         'totalConsumoEstimadoCT3': new FormControl(''),
         'promedioDiasCT3': new FormControl(''),
+        'idCaso' : new FormControl(''),
       });
 
       this.frm_ArchivoEliminar = new FormGroup({
@@ -227,7 +229,7 @@ export class RepositorioENRComponent implements OnInit {
 
      
       this.frm_Caso1 = new FormGroup({
-      
+        'idCaso' : new FormControl('',[Validators.required]),
         'amperaje1' : new FormControl('',[Validators.required]),
         'voltaje1' : new FormControl('',[Validators.required]),
         'amperaje2' : new FormControl('',[Validators.required]),
@@ -243,7 +245,7 @@ export class RepositorioENRComponent implements OnInit {
 
 
       this.frm_Caso2 = new FormGroup({
-      
+        'idCaso' : new FormControl('',[Validators.required]),
         'censoCarga' : new FormControl('',[Validators.required]),
         'consumoEstimado' : new FormControl('',[Validators.required]),
         'voltajeSuministro' : new FormControl('',[Validators.required]),
@@ -253,14 +255,17 @@ export class RepositorioENRComponent implements OnInit {
 
 
       this.frm_Caso3 = new FormGroup({
-      'diasCobroCaso3':new FormControl('',[Validators.required]),
+        'idCaso' : new FormControl('',[Validators.required]),
+        'diasCobroCaso3':new FormControl('',[Validators.required]),
        });
 
        this.frm_Caso4 = new FormGroup({
+        'idCaso' : new FormControl('',[Validators.required]),
         'diasCobroCaso4':new FormControl('',[Validators.required]),
          });
      
          this.frm_Caso5 = new FormGroup({
+          'idCaso' : new FormControl('',[Validators.required]),
           'diasCobroCaso5':new FormControl('',[Validators.required]),
           'porcentajeExactitudOT':new FormControl('',[Validators.required]),
           'porcentajeExactitudBase':new FormControl('100',[Validators.required]),
@@ -1411,6 +1416,7 @@ public validarFechas(){
     this.frm_LecturasEvaluarTotales.controls["numeroCaso"].setValue(numero);
     this.consumosReales3.push(
       this.fb2.group({
+        idCaso : numero,
         periodo:'',
         consumoRegistradoCT3:0,
         diasCT3:0,
@@ -1427,7 +1433,7 @@ public validarFechas(){
     
     $("#btnFacturacion").hide();
     $("#divTarifas").hide();
-
+    $("#loading").hide();
     
        
 
@@ -1814,6 +1820,7 @@ public validarFechas(){
     if(this.casoEvaluado == '2'){
       this.lecturas.push(
         this.fb2.group({
+          idCaso: this.frm_Caso2.controls["idCaso"].value,
           periodo:periodo,
           fechaLecturaAnt:fechaLecturaAnt,
           fechaLectura:fechaLectura,
@@ -1826,6 +1833,7 @@ public validarFechas(){
     }else if(this.casoEvaluado == '3'){
       this.lecturas.push(
         this.fb2.group({
+          idCaso: this.frm_Caso3.controls["idCaso"].value,
           periodo:periodo,
           fechaLecturaAnt:fechaLecturaAnt,
           fechaLectura:fechaLectura,
@@ -1838,6 +1846,7 @@ public validarFechas(){
     }else if(this.casoEvaluado == '4'){
       this.lecturas.push(
         this.fb2.group({
+          idCaso: this.frm_Caso4.controls["idCaso"].value,
           periodo:periodo,
           fechaLecturaAnt:fechaLecturaAnt,
           fechaLectura:fechaLectura,
@@ -1849,6 +1858,7 @@ public validarFechas(){
       if(this.frm_Caso5.controls["diferenciaExactitud"].value > 0){
         this.lecturas.push(
           this.fb2.group({
+            idCaso: this.frm_Caso5.controls["idCaso"].value,
             periodo:periodo,
             fechaLecturaAnt:fechaLecturaAnt,
             fechaLectura:fechaLectura,
@@ -1864,6 +1874,7 @@ public validarFechas(){
       }else{
         this.lecturas.push(
           this.fb2.group({
+            idCaso: this.frm_Caso5.controls["idCaso"].value,
             periodo:periodo,
             fechaLecturaAnt:fechaLecturaAnt,
             fechaLectura:fechaLectura,
@@ -1917,6 +1928,7 @@ public eliminarLectura(i, periodo){
   public agregarConsumoReal(){
     this.consumosReales3.push(
       this.fb2.group({
+        idCaso: this.frm_Caso3.controls["idCaso"].value,
         periodo:'',
         consumoRegistradoCT3:0,
         diasCT3:0,
@@ -1996,8 +2008,10 @@ public eliminarLectura(i, periodo){
     $("#btnSelecLecturasCaso5").show();
   }
 
-
+//Metodo que calcula todos los cuadros de facturación
   public verTarifas(){
+    $("#loading").fadeIn();
+    $("#divTarifas").hide();
     var caso = this.casoEvaluado;
     let datosKwh :  DatosENR = new DatosENR();
 
@@ -2382,7 +2396,11 @@ public eliminarLectura(i, periodo){
                                       // // //console.log("no");
                                       },
                                       () => {
-                                    
+                                        $("#loading").fadeOut();
+                                        $("#divTarifas").show();
+                                        
+                                        
+                                       
                                       },
                                     );
                     
@@ -2426,7 +2444,7 @@ public eliminarLectura(i, periodo){
 
 
 
-    $("#divTarifas").show();
+    
 
   }
 
@@ -2445,4 +2463,304 @@ public eliminarLectura(i, periodo){
     alert(diferencia);
   }
 
+
+
+  public guardarDatosFinales(){
+    var caso = this.casoEvaluado;
+
+    if(caso == '1'){  
+      
+      let datosCalculados1 : DatosENR = new DatosENR();
+  
+      datosCalculados1 = this.frm_Caso1.value;
+
+      this.repositorioENR.saveDatosCalCaso1(datosCalculados1).subscribe(
+        response => {
+          
+        },
+        err => {
+         // //console.log("no");
+        },
+        () => { 
+          let datosCalculados2 : DatosENR = new DatosENR();
+  
+          datosCalculados2 = this.frm_LecturasEvaluarTotales.value;
+
+          this.repositorioENR.updateDatosCalCaso1(datosCalculados2).subscribe(
+            response => {
+              
+            },
+            err => {
+             // //console.log("no");
+            },
+            () => { 
+              
+              notie.alert({
+                type: 'success',
+                text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
+                stay: false, 
+                time: 2, 
+                position: 'top' 
+              });
+        
+             
+            },
+          );
+
+        },
+      );
+
+    }
+
+    if(caso == '2'){
+      let datosCalculados1 : DatosENR = new DatosENR();
+  
+      datosCalculados1 = this.frm_Caso2.value;
+
+      this.repositorioENR.saveDatosCalCaso2(datosCalculados1).subscribe(
+        response => {
+          
+        },
+        err => {
+         // //console.log("no");
+        },
+        () => { 
+          let datosCalculados2 : DatosENR = new DatosENR();
+  
+          datosCalculados2 = this.frm_LecturasEvaluarTotales.value;
+
+          this.repositorioENR.updateDatosCalCaso2(datosCalculados2).subscribe(
+            response => {
+              
+            },
+            err => {
+             // //console.log("no");
+            },
+            () => { 
+              
+              let periodosSeleccionados : DatosENR = new DatosENR();
+  
+              periodosSeleccionados = this.frm_LecturasEvaluar.value;
+
+          this.repositorioENR.savePeriodosSeleccionadosCaso2(periodosSeleccionados).subscribe(
+            response => {
+              
+            },
+            err => {
+             // //console.log("no");
+            },
+            () => { 
+              
+              notie.alert({
+                type: 'success',
+                text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
+                stay: false, 
+                time: 2, 
+                position: 'top' 
+              });
+        
+             
+            },
+          );
+        
+             
+            },
+          );
+
+          
+
+        },
+      );
+
+    }
+
+
+
+
+    if(caso == '3'){
+      let consumosReales : DatosENR = new DatosENR();
+  
+      consumosReales = this.frm_ConsumosReales3.value;
+
+      this.repositorioENR.consumosRealesCaso3(consumosReales).subscribe(
+        response => {
+          
+        },
+        err => {
+         // //console.log("no");
+        },
+        () => { 
+          let consumosRealesTotales : DatosENR = new DatosENR();
+  
+          consumosRealesTotales = this.frm_ConsumosReales3Totales.value;
+
+          this.repositorioENR.consumosRealesCaso3Totales(consumosRealesTotales).subscribe(
+            response => {
+              
+            },
+            err => {
+             // //console.log("no");
+            },
+            () => { 
+              
+              let periodosSeleccionados : DatosENR = new DatosENR();
+  
+              periodosSeleccionados = this.frm_LecturasEvaluar.value;
+
+          this.repositorioENR.savePeriodosSeleccionadosCaso3(periodosSeleccionados).subscribe(
+            response => {
+              
+            },
+            err => {
+             // //console.log("no");
+            },
+            () => { 
+              
+              let periodosSeleccionados : DatosENR = new DatosENR();
+  
+              periodosSeleccionados = this.frm_LecturasEvaluarTotales.value;
+
+          this.repositorioENR.updateDatosCalCaso3(periodosSeleccionados).subscribe(
+            response => {
+              
+            },
+            err => {
+             // //console.log("no");
+            },
+            () => { 
+              
+              notie.alert({
+                type: 'success',
+                text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
+                stay: false, 
+                time: 2, 
+                position: 'top' 
+              });
+        
+             
+            },
+          );
+        
+             
+            },
+          );
+        
+             
+            },
+          );
+        },
+      );
+
+    }
+
+
+    if(caso == '4'){
+      let periodosSeleccionados : DatosENR = new DatosENR();
+  
+              periodosSeleccionados = this.frm_LecturasEvaluar.value;
+
+          this.repositorioENR.savePeriodosSeleccionadosCaso4(periodosSeleccionados).subscribe(
+            response => {
+              
+            },
+            err => {
+             // //console.log("no");
+            },
+            () => { 
+              
+              let datosCalculados4 : DatosENR = new DatosENR();
+  
+          datosCalculados4 = this.frm_LecturasEvaluarTotales.value;
+
+          this.repositorioENR.saveDatosCalCaso4(datosCalculados4).subscribe(
+            response => {
+              
+            },
+            err => {
+             // //console.log("no");
+            },
+            () => { 
+              
+              notie.alert({
+                type: 'success',
+                text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
+                stay: false, 
+                time: 2, 
+                position: 'top' 
+              });
+        
+             
+            },
+          );
+        
+             
+            },
+          );
+    }
+
+
+    if(caso == '5'){
+      let datosCalculados5 : DatosENR = new DatosENR();
+  
+          datosCalculados5 = this.frm_Caso5.value;
+
+          this.repositorioENR.saveDatosCalCaso5(datosCalculados5).subscribe(
+            response => {
+              
+            },
+            err => {
+             // //console.log("no");
+            },
+            () => { 
+              let periodosSeleccionados : DatosENR = new DatosENR();
+  
+              periodosSeleccionados = this.frm_LecturasEvaluar.value;
+
+          this.repositorioENR.savePeriodosSeleccionadosCaso5(periodosSeleccionados).subscribe(
+            response => {
+              
+            },
+            err => {
+             // //console.log("no");
+            },
+            () => { 
+
+              let datosCalculados5 : DatosENR = new DatosENR();
+  
+              datosCalculados5 = this.frm_LecturasEvaluarTotales.value;
+
+          this.repositorioENR.updateDatosCalCaso5(datosCalculados5).subscribe(
+            response => {
+              
+            },
+            err => {
+             // //console.log("no");
+            },
+            () => { 
+
+              notie.alert({
+                type: 'success',
+                text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
+                stay: false, 
+                time: 2, 
+                position: 'top' 
+              });
+
+              },
+            );
+
+              },
+            );
+             
+            },
+          );
+    }
+
+
+
+  }
+
 }
+
+
+
