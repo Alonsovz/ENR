@@ -1,110 +1,113 @@
 <!-- Sidebar -->
-<ul  class="navbar-nav toggled   sidebar sidebar-dark accordion right"
- id="accordionSidebar" style="background-color: #323259;position: sticky;
- top: 0;
- z-index: 1000;
-  ">
+<div *ngFor ="let us of usuario">
+  <ul  *ngIf="contenedor===true"  class="navbar-nav toggled   sidebar sidebar-dark accordion right"
+  id="accordionSidebar" style="background-color: #323259;position: sticky;
+  top: 0;
+  z-index: 1000;
+   ">
+ 
+     <!-- Sidebar - Brand -->
+     <a class="sidebar-brand d-flex align-items-center justify-content-center">
+       <img class="img-profile" src="../../../assets/imagenes/blanco_atomo.png" width=60 height=60>
+     </a>
+ 
+     <!-- Divider -->
+     <hr class="sidebar-divider my-0">
+     <a style="text-align: center;">EDESAL</a>
+     <hr class="sidebar-divider my-0">
+ 
+     <!-- Nav Item - Dashboard -->
+     <li class="nav-item">
+       <a [routerLink]="['/dashboard']" class="nav-link">
+           
+         <img class="img-profile" src="../../../assets/imagenes/main.png" width=35 height=35>
+         <span style="color: #C5A7FD;font-size: 15px; font-weight: bold;"> Inicio</span>
+       </a>
+ 
+ 
+ 
+     </li>
+ 
+     <!-- Divider -->
+     <hr class="sidebar-divider">
+ 
+     <!-- Heading -->
+     <div class="sidebar-heading">
+       Administración
+     </div>
+ 
+ 
+     <li class="nav-item">
+       <a [routerLink]="['/gestiones']" class="nav-link">
+           
+         <img class="img-profile" src="../../../assets/imagenes/know-how.png" width=35 height=35>
+         <span style="font-size: 13px;;">Gestiones</span>
+       </a>
+ 
+ 
+ 
+     </li>
+ 
+ <!---<li class="nav-item">
+       <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+         
+         <img class="img-profile" src="../../../assets/imagenes/know-how.png" width=35 height=35>
+         <span style="font-size: 13px;;">Gestiones</span>
+       </a>
+       <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" 
+       data-parent="#accordionSidebar"  style="border: 1px solid #A16EFF;">
+         <div class=" collapse-inner rounded">
+ 
+           <a class="collapse-item" [routerLink]="['/codigoTipoENR']">
+             <img class="img-profile" src="../../../assets/imagenes/work.png" width=25 height=25>
+             Códigos tipo de ENR</a>
+           <a class="collapse-item" [routerLink]="['/metodologiaCalc']">
+             <img class="img-profile" src="../../../assets/imagenes/statistics.png" width=25 height=25>
+             Metodología de Cálculo</a>
+         </div>
+       </div>
+     </li>--->
+ 
+ 
+ 
+     <!-- Divider -->
+     <hr class="sidebar-divider">
+ 
+     <!-- Heading -->
+     <div class="sidebar-heading">
+       ENR
+     </div>
+ 
+ 
+ 
+ 
+ 
+     <li class="nav-item">
+       <a class="nav-link" [routerLink]="['/datosENR']">
+         <img class="img-profile" src="../../../assets/imagenes/money.png" width=35 height=35>
+           <span style="font-size: 13px;">Ingreso de Datos</span>
+       </a>
+     </li>
+ 
+     <li class="nav-item">
+       <a class="nav-link" [routerLink]="['/repositorioENR']">
+         <img class="img-profile" src="../../../assets/imagenes/folder.png" width=35 height=35>
+           <span style="font-size: 13px;">Repositorio de Casos</span>
+       </a>
+     </li>
+     
+     <!-- Nav Item - Tables -->
+ 
+ 
+     <!-- Divider -->
+     <hr class="sidebar-divider d-none d-md-block">
+ 
+ 
+ 
+ 
+   </ul>
+</div>
 
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center">
-      <img class="img-profile" src="../../../assets/imagenes/blanco_atomo.png" width=60 height=60>
-    </a>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
-    <a style="text-align: center;">EDESAL</a>
-    <hr class="sidebar-divider my-0">
-
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item">
-      <a [routerLink]="['/dashboard']" class="nav-link">
-          
-        <img class="img-profile" src="../../../assets/imagenes/main.png" width=35 height=35>
-        <span style="color: #C5A7FD;font-size: 15px; font-weight: bold;"> Inicio</span>
-      </a>
-
-
-
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-      Administración
-    </div>
-
-
-    <li class="nav-item">
-      <a [routerLink]="['/gestiones']" class="nav-link">
-          
-        <img class="img-profile" src="../../../assets/imagenes/know-how.png" width=35 height=35>
-        <span style="font-size: 13px;;">Gestiones</span>
-      </a>
-
-
-
-    </li>
-
-<!---<li class="nav-item">
-      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-        
-        <img class="img-profile" src="../../../assets/imagenes/know-how.png" width=35 height=35>
-        <span style="font-size: 13px;;">Gestiones</span>
-      </a>
-      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" 
-      data-parent="#accordionSidebar"  style="border: 1px solid #A16EFF;">
-        <div class=" collapse-inner rounded">
-
-          <a class="collapse-item" [routerLink]="['/codigoTipoENR']">
-            <img class="img-profile" src="../../../assets/imagenes/work.png" width=25 height=25>
-            Códigos tipo de ENR</a>
-          <a class="collapse-item" [routerLink]="['/metodologiaCalc']">
-            <img class="img-profile" src="../../../assets/imagenes/statistics.png" width=25 height=25>
-            Metodología de Cálculo</a>
-        </div>
-      </div>
-    </li>--->
-
-
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-      ENR
-    </div>
-
-
-
-
-
-    <li class="nav-item">
-      <a class="nav-link" [routerLink]="['/datosENR']">
-        <img class="img-profile" src="../../../assets/imagenes/money.png" width=35 height=35>
-          <span style="font-size: 13px;">Ingreso de Datos</span>
-      </a>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link" [routerLink]="['/repositorioENR']">
-        <img class="img-profile" src="../../../assets/imagenes/folder.png" width=35 height=35>
-          <span style="font-size: 13px;">Repositorio de Casos</span>
-      </a>
-    </li>
-    
-    <!-- Nav Item - Tables -->
-
-
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
-
-
-
-
-  </ul>
   <!-- End of Sidebar -->
 
 

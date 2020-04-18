@@ -680,7 +680,7 @@ class ENRController extends Controller
         ");
 
      
-            return response()->json($usuariosesion);
+    return response()->json($usuariosesion);
         
        
     }
