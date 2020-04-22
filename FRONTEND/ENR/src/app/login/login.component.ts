@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
     // establecemos el submit del formulario en false
     submitted = false;
     contenedor = false;
-
+    @ViewChild(SidebarComponent, {static: false}) side: SidebarComponent;
   
 constructor(private usuarioservice: CredencialesService, private router: Router) { 
   

@@ -1,10 +1,9 @@
 <!-- Sidebar -->
-<div *ngFor ="let us of usuario">
-  <ul  *ngIf="contenedor===true"  class="navbar-nav toggled   sidebar sidebar-dark accordion right"
-  id="accordionSidebar" style="background-color: #323259;position: sticky;
-  top: 0;
-  z-index: 1000;
-   ">
+<div  *ngIf="contenedor===true" style="background-color: #323259;position: sticky;
+top: 0;
+z-index: 1000;">
+  <ul    *ngFor ="let us of usuario" class="navbar-nav toggled   sidebar sidebar-dark accordion right"
+  id="accordionSidebar">
  
      <!-- Sidebar - Brand -->
      <a class="sidebar-brand d-flex align-items-center justify-content-center">

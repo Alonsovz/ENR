@@ -157,6 +157,7 @@ export class RepositorioENRComponent implements OnInit {
         'totalConsumoEstimadoCT3': new FormControl(''),
         'promedioDiasCT3': new FormControl(''),
         'idCaso' : new FormControl(''),
+        'consumoENRRegistrado': new FormControl(''),
       });
 
       this.frm_ArchivoEliminar = new FormGroup({
@@ -240,6 +241,7 @@ export class RepositorioENRComponent implements OnInit {
         'consumo2' : new FormControl('',[Validators.required]),
         'consumoENRFacturar' : new FormControl('',[Validators.required]),
         'diasCobroCaso1' : new FormControl('',[Validators.required]),
+        'consumoENRRegistrado': new FormControl('',[Validators.required]),
         
       });
 
@@ -250,6 +252,7 @@ export class RepositorioENRComponent implements OnInit {
         'consumoEstimado' : new FormControl('',[Validators.required]),
         'voltajeSuministro' : new FormControl('',[Validators.required]),
         'diasCobroCaso2' : new FormControl('',[Validators.required]),
+        'consumoENRRegistrado': new FormControl('',[Validators.required]),
       });
 
 
@@ -257,6 +260,7 @@ export class RepositorioENRComponent implements OnInit {
       this.frm_Caso3 = new FormGroup({
         'idCaso' : new FormControl('',[Validators.required]),
         'diasCobroCaso3':new FormControl('',[Validators.required]),
+       
        });
 
        this.frm_Caso4 = new FormGroup({
@@ -270,11 +274,13 @@ export class RepositorioENRComponent implements OnInit {
           'porcentajeExactitudOT':new FormControl('',[Validators.required]),
           'porcentajeExactitudBase':new FormControl('100',[Validators.required]),
           'diferenciaExactitud':new FormControl('',[Validators.required]),
+          'consumoENRRegistrado': new FormControl('',[Validators.required]),
           });
     
     }
 
   ngOnInit() {
+    
     this.frm_LecturasEvaluar = this.fb2.group({lecturas: this.fb2.array([]),});
     this.docForm = this.fb.group({documentacion: this.fb.array([]),});
     this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
@@ -1552,10 +1558,15 @@ public validarFechas(){
      var totalConsumoL1 = (amperaje1 * voltaje1 * horas) / 1000;
      var totalConsumoL2 = (amperaje2 * voltaje2 * horas) / 1000;
 
+     var consRegi = this.frm_Caso1.controls["consumoENRRegistrado"].value;
+
+
      this.frm_LecturasEvaluarTotales.controls["consumo1"].setValue(totalConsumoL1);
      this.frm_LecturasEvaluarTotales.controls["consumo2"].setValue(totalConsumoL2);
 
-     var consumoENR = (totalConsumoL1 + totalConsumoL2) * diasCobro;
+     this.frm_LecturasEvaluarTotales.controls["consumoENRRegistrado"].setValue(consRegi);
+
+     var consumoENR = ((totalConsumoL1 + totalConsumoL2) * diasCobro)- consRegi;
 
      
      if(amperaje1 == '' && voltaje1 == '' && amperaje2 == '' && voltaje2 == ''){
@@ -1626,6 +1637,7 @@ public validarFechas(){
 
   public calcularConDiarioENR1(){
     var censo = this.frm_Caso2.controls["censoCarga"].value;
+    
 
     var total = censo / 30;
     this.frm_Caso2.controls["consumoEstimado"].setValue(total.toFixed(3));
@@ -1697,19 +1709,24 @@ public validarFechas(){
       this.frm_LecturasEvaluarTotales.controls["consumoDiarioENR"].setValue(consumoENRDiario);
 
       if(this.casoEvaluado == '2'){
-       
+        var consRegi = this.frm_Caso2.controls["consumoENRRegistrado"].value;
+
         var consumoENRFacturar = ((sumatoriaDifConsumo / sumatoriaDias) *
-        this.frm_Caso2.controls["diasCobroCaso2"].value).toFixed(3);
+        this.frm_Caso2.controls["diasCobroCaso2"].value - consRegi).toFixed(3);
   
         this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(consumoENRFacturar);
-  
+        this.frm_LecturasEvaluarTotales.controls["consumoENRRegistrado"].setValue(consRegi);
   
       }else if(this.casoEvaluado == '3'){
+
+        var consRegi = this.frm_ConsumosReales3Totales.controls["consumoENRRegistrado"].value;
+
         var consumoENRFacturar = ((sumatoriaDifConsumo / sumatoriaDias) *
-        this.frm_Caso3.controls["diasCobroCaso3"].value).toFixed(3);
+        this.frm_Caso3.controls["diasCobroCaso3"].value - consRegi).toFixed(3);
         
         this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(consumoENRFacturar);
-  
+        this.frm_LecturasEvaluarTotales.controls["consumoENRRegistrado"].setValue(consRegi);
+
       }else if(this.casoEvaluado == '4'){
         var diasHistorico = this.frm_LecturasEvaluarTotales.controls["totalDias"].value;
         var consumoHistorico = this.frm_LecturasEvaluarTotales.controls["totalConsumo"].value;
@@ -1749,11 +1766,14 @@ public validarFechas(){
           return parseFloat(acumulador) + parseFloat(siguienteValor);
         }, 0);
 
+        var consRegi = this.frm_Caso5.controls["consumoENRRegistrado"].value;
 
         this.frm_LecturasEvaluarTotales.controls["consumoFuera"].setValue(sumatoriaConsumoFuera.toFixed(3));
         this.frm_LecturasEvaluarTotales.controls["consumoDebioFacturar"].setValue(sumatoriaConsumoCorrecto.toFixed(3));
+        this.frm_LecturasEvaluarTotales.controls["consumoENRRegistrado"].setValue(consRegi);
+       
 
-        var totalENR = sumatoriaConsumoCorrecto - sumatoriaConsumo;
+        var totalENR = sumatoriaConsumoCorrecto - sumatoriaConsumo - consRegi;
         
         this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(totalENR.toFixed(3));
       }
@@ -2758,6 +2778,16 @@ public eliminarLectura(i, periodo){
 
 
 
+  }
+
+
+  hideTotales1(){
+    $("#resultCaso1").hide();
+    $("#btnFacturacion").hide();
+  }
+
+  totalizarDato(){
+    this.totalizarDatos();
   }
 
 }

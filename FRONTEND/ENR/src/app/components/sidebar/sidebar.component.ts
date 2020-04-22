@@ -14,8 +14,10 @@ export class SidebarComponent implements OnInit {
   constructor(private router: Router, private crf: ChangeDetectorRef) { }
 
   ngOnInit() {
-    localStorage.clear();
-    this.usuario = JSON.parse(localStorage.getItem('usuario'));
+  //SlocalStorage.clear();
+
+ this.contenedor = false;
+
   }
   ngDoCheck(): void {
     if (JSON.parse(localStorage.getItem('usuario'))) {
@@ -26,8 +28,6 @@ export class SidebarComponent implements OnInit {
 
   public hideContenedor() {
     this.contenedor = false;
-
-
   }
 
 

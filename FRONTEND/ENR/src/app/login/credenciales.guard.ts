@@ -12,6 +12,7 @@ export class CredencialesGuard implements CanActivate {
 
   canActivate(): boolean {
     if (localStorage.getItem('usuario') === null) {
+      localStorage.clear();
       this.router.navigate(['login']);
       
       return false;

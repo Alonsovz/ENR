@@ -17,26 +17,27 @@ export class WrapperComponent implements OnInit {
   
   constructor(private router: Router) { }
   ngOnInit() {
-    localStorage.clear();
+    //localStorage.clear();
     this.usuario = JSON.parse(localStorage.getItem('usuario'));
   }
   
   ngDoCheck(): void {
     if (JSON.parse(localStorage.getItem('usuario'))) {
       this.contenedor = true;
-     this.usuario = JSON.parse(localStorage.getItem('usuario'));
+      this.usuario = JSON.parse(localStorage.getItem('usuario'));
     }
   }
 
-
+  public hideContenedor() {
+    this.contenedor = false;
+    localStorage.clear();
+  }
 
   
   public cerrarSesion() {
 
     this.contenedor = false;
-
-    localStorage.removeItem('usuario');
-    localStorage.removeItem('rol');
+    localStorage.clear();
     this.router.navigate(['login']);
 
    this.side.hideContenedor();

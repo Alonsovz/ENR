@@ -14,57 +14,57 @@
    
         <!--HEADER-->
    <div *ngIf="contenedor===true">
-    <nav *ngFor ="let us of usuario" class="navbar navbar-expand-lg navbar-dark mx-background-top-linear 
-    shadow p-1 mb-15 bg-white" style="position: fixed;width: 100%;z-index: 100">
-      <div class="container">
-        <a class="navbar-brand" href="index.html" style="text-transform: uppercase;
-        font-size: 25px;color: #A84DF4;font-weight: bold;">
-         <img class="img-profile" src="../../../assets/imagenes/fraud.png" width=50 height=50>
-         <img class="img-profile" src="../../../assets/imagenes/foco.png" width=30 height=30
-         style="margin-bottom: 20px;">
-         Energía no registrada</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" 
-       style="background-color: #323259;" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-
-          <ul class="navbar-nav ml-auto">
-
-             <!-- Nav Item - Alerts -->
-
-
-
-             <li class="nav-item dropdown no-arrow">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  
-                  <img class="img-profile rounded-circle" src="../../../assets/imagenes/student.png" width=50 height=50>
-                  <span class="mr-2 d-none d-lg-inline text-white font-weight-bold "
-                  *ngFor ="let us of usuario"> {{us.nombre}} {{us.apellido}}</span>
-                </a>
-                <!-- Dropdown - User Information -->
-                <div class="dropdown-menu dropdown-menu-right shadow animated flipInY pb-0 perfil" aria-labelledby="userDropdown">
-                  <a class="dropdown-item hover_ ">
-                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Perfil
-                  </a>
-
-
-
-                    <a class=" dropdown-item hover_  mt-2 hover_"  (click)="cerrarSesion()" >
-                      <i class="fas fa-times-circle fa-sm fa-fw mr-2 text-gray-400 " ></i> Cerrar Sesión
-                    </a>
-
-                </div>
-              </li>
-
-
-
-            <div class="topbar-divider d-none d-sm-block"></div>
-          </ul>
-        </div>
-      </div>
-    </nav>
+            <nav   *ngFor ="let us of usuario" class="navbar navbar-expand-lg navbar-dark mx-background-top-linear 
+           shadow p-1 mb-15 bg-white" style="position: fixed;width: 100%;z-index: 100">
+             <div class="container">
+               <div class="navbar-brand" style="text-transform: uppercase;
+               font-size: 25px;color: #A84DF4;font-weight: bold;">
+                <img class="img-profile" src="../../../assets/imagenes/fraud.png" width=50 height=50>
+                <img class="img-profile" src="../../../assets/imagenes/foco.png" width=30 height=30
+                style="margin-bottom: 20px;">
+                Energía no registrada</div>
+               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" 
+              style="background-color: #323259;" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                 <span class="navbar-toggler-icon"></span>
+               </button>
+               <div class="collapse navbar-collapse" id="navbarResponsive">
+   
+                 <ul class="navbar-nav ml-auto">
+   
+                    <!-- Nav Item - Alerts -->
+   
+   
+   
+                    <li class="nav-item dropdown no-arrow">
+                       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         
+                         <img class="img-profile rounded-circle" src="../../../assets/imagenes/student.png" width=50 height=50>
+                         <span class="mr-2 d-none d-lg-inline text-white font-weight-bold "
+                         *ngFor ="let us of usuario"> {{us.nombre}} {{us.apellido}}</span>
+                       </a>
+                       <!-- Dropdown - User Information -->
+                       <div class="dropdown-menu dropdown-menu-right shadow animated flipInY pb-0 perfil" aria-labelledby="userDropdown">
+                         <a class="dropdown-item hover_ ">
+                           <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                           Perfil
+                         </a>
+   
+   
+   
+                           <a class=" dropdown-item hover_  mt-2 hover_"  (click)="cerrarSesion()" >
+                             <i class="fas fa-times-circle fa-sm fa-fw mr-2 text-gray-400 " ></i> Cerrar Sesión
+                           </a>
+   
+                       </div>
+                     </li>
+   
+   
+   
+                   <div class="topbar-divider d-none d-sm-block"></div>
+                 </ul>
+               </div>
+             </div>
+           </nav>
    </div>
          
    
