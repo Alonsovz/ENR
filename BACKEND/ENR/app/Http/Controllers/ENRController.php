@@ -208,6 +208,7 @@ class ENRController extends Controller
         $fechaFinENR = $request["fechaFinENR"];
         $diasCobro = $request["diasCobro"];
         $usuario_creacion = 151;
+        $datosAdicionales = $request["datosAdicionales"];
 
          //convertir fecha primer notificacion enr
         $fecha1 = date_create_from_format('Y-m-d',$fechaPrimeraNoti);
@@ -245,6 +246,7 @@ class ENRController extends Controller
                          'estado'=>1,
                          'idEliminado'=>1,
                          'fechaCreacion'=>date('Ymd H:i:s'),
+                         'datosAdicionales'=>$datosAdicionales,
                          ]);
 
 
@@ -572,6 +574,7 @@ class ENRController extends Controller
         $fechaInicioENR = $request["fechaInicioENR"];
         $fechaFinENR = $request["fechaFinENR"];
         $diasCobro = $request["diasCobro"];
+        $datosAdicionales = $request["datosAdicionales"];
         //$usuario_creacion = 151;
 
          //convertir fecha primer notificacion enr
@@ -608,6 +611,7 @@ class ENRController extends Controller
                          'diasCobro'=>$diasCobro,
                          'estado'=>1,
                          'idEliminado'=>1,
+                         'datosAdicionales'=>$datosAdicionales,
                          ]);
 
 
@@ -1583,6 +1587,24 @@ class ENRController extends Controller
          ]);
         
           return response()->json($idCaso); 
+        
+    }
+
+
+    public function cobroMedidor(Request $request){
+        $idCaso = $request["idCaso"];
+        $cantidadCobrar = $request["cantidadCobrar"];
+
+      
+      
+
+         $insertar =  DB::connection('facturacion')->table('enr_totalPagos')
+         ->insert([
+        'casoENR' => $idCaso ,
+        'cobro_medidor' => $cantidadCobrar,
+         ]);
+        
+          return response()->json($insertar); 
         
     }
 

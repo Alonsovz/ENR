@@ -156,5 +156,6 @@ Route::get('/', function () {
     Route::post('savePeriodosSeleccionadosCaso5', 'ENRController@savePeriodosSeleccionadosCaso5');
 
     Route::post('updateDatosCalCaso5', 'ENRController@updateDatosCalCaso5');
+    Route::post('cobroMedidor', 'ENRController@cobroMedidor');
     
     

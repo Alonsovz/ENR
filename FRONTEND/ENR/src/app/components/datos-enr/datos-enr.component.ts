@@ -104,7 +104,7 @@ export class DatosENRComponent implements OnInit {
       'fechaInicioENR' : new FormControl(''),
       'fechaFinENR' : new FormControl(''),
       'diasRetroactivos' : new FormControl(''),
-
+      'datosAdicionales' : new FormControl(''),
     });
 
 

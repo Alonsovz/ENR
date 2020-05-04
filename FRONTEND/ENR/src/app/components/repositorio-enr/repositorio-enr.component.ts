@@ -125,6 +125,7 @@ export class RepositorioENRComponent implements OnInit {
   frm_Caso4 : FormGroup;
 
   frm_Caso5 : FormGroup;
+  cobroMedidor : FormGroup;
 
   constructor(private repositorioENR : RepositorioEnrService,private chRef: ChangeDetectorRef,
     private http: HttpClient, private url: GlobalService,
@@ -206,6 +207,7 @@ export class RepositorioENRComponent implements OnInit {
   
       });
 
+
       this.frmDatosENR = new FormGroup({
         'nNotificacion' : new FormControl(''),
         'caso' : new FormControl(''),
@@ -218,7 +220,7 @@ export class RepositorioENRComponent implements OnInit {
         'fechaInicioENR' : new FormControl(''),
         'fechaFinENR' : new FormControl(''),
         'diasRetroactivos' : new FormControl(''),
-  
+        'datosAdicionales' : new FormControl(''),
       });
 
       this.frm_ArchivoOT = new FormGroup({
@@ -277,6 +279,12 @@ export class RepositorioENRComponent implements OnInit {
           'consumoENRRegistrado': new FormControl('',[Validators.required]),
           });
     
+
+          
+      this.cobroMedidor = new FormGroup({
+        'idCaso' : new FormControl(''),
+        'cantidadCobrar' : new FormControl(''),
+      });
     }
 
   ngOnInit() {
@@ -1419,6 +1427,8 @@ public validarFechas(){
     this.frm_ConsumosReales3 = this.fb2.group({consumosReales3: this.fb2.array([]),})
     this.frm_ConsumosReales3Totales.reset();
     this.frm_LecturasEvaluarTotales.reset();
+    this.cobroMedidor.reset();
+
     this.frm_LecturasEvaluarTotales.controls["numeroCaso"].setValue(numero);
     this.consumosReales3.push(
       this.fb2.group({
@@ -2514,7 +2524,7 @@ public eliminarLectura(i, periodo){
              // //console.log("no");
             },
             () => { 
-              
+              this.cobrarMedidor();
               notie.alert({
                 type: 'success',
                 text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
@@ -2570,7 +2580,7 @@ public eliminarLectura(i, periodo){
              // //console.log("no");
             },
             () => { 
-              
+              this.cobrarMedidor();
               notie.alert({
                 type: 'success',
                 text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
@@ -2648,7 +2658,7 @@ public eliminarLectura(i, periodo){
              // //console.log("no");
             },
             () => { 
-              
+              this.cobrarMedidor();
               notie.alert({
                 type: 'success',
                 text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
@@ -2700,7 +2710,7 @@ public eliminarLectura(i, periodo){
              // //console.log("no");
             },
             () => { 
-              
+              this.cobrarMedidor();
               notie.alert({
                 type: 'success',
                 text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
@@ -2757,7 +2767,7 @@ public eliminarLectura(i, periodo){
              // //console.log("no");
             },
             () => { 
-
+              this.cobrarMedidor();
               notie.alert({
                 type: 'success',
                 text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
@@ -2775,11 +2785,33 @@ public eliminarLectura(i, periodo){
             },
           );
     }
+    
 
 
 
   }
 
+
+  public cobrarMedidor(){
+
+    let cobroMedidor : DatosENR = new DatosENR();
+  
+    cobroMedidor = this.cobroMedidor.value;
+
+      this.repositorioENR.cobroMedidor(cobroMedidor).subscribe(
+        response => {
+          
+        },
+        err => {
+        // //console.log("no");
+        },
+        () => { 
+
+
+
+    },
+  );
+  }
 
   hideTotales1(){
     $("#resultCaso1").hide();

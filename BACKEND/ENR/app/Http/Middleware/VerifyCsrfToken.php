@@ -94,6 +94,7 @@ class VerifyCsrfToken extends BaseVerifier
         'saveDatosCalCaso4',
         'saveDatosCalCaso5',
         'savePeriodosSeleccionadosCaso5',
-        'updateDatosCalCaso5'
+        'updateDatosCalCaso5',
+        'cobroMedidor'
     ];
 }

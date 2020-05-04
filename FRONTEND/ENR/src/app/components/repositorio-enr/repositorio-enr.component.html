@@ -1354,6 +1354,21 @@
             </table>
              </div>
            </div>
+
+           <form [formGroup]="cobroMedidor" style="width: 100% !important;">
+            <div class="col-lg-12">
+              <hr style="background-color: #4C9AFD !important; height: 2px;">
+              <h5 style="color:#00FFEA; font-weight: bold;font-size: 15px;">
+                Llenar este campo únicamente si se cobrará cambio de medidor</h5>
+              <div class="col-md-4">
+                <label><i class="fas fa-dollar-sign"></i> Cantidad a cobrar</label>
+                <input class="form-control" formControlName="cantidadCobrar"
+                placeholder="Cobro por mediddor">
+              </div>
+              <input type="hidden" [(ngModel)]="dg.id" formControlName="idCaso">
+            </div>
+            
+           </form>
           <div class="col-lg-12">
             <hr style="background-color: #8655EA !important; height: 2px;">
            <button class="btn btn-lg btn-block btn btn-default save" 
@@ -1955,6 +1970,11 @@ background-color: #323259;" id="titleGlobal">
                         <input type="text" placeholder="Días de Cobro ENR" [(ngModel)]="data.diasCobro"
                         class="form-control" formControlName="diasCobro" readonly="true">
                     </div>
+                    <div class="col-md-6"><br>
+                      <label><i class="fa fa-comments"></i> Datos adicionales</label>
+                      <textarea rows="3" placeholder="Comentarios o datos adicionales" [(ngModel)]="data.datosAdicionales"
+                      class="form-control" formControlName="datosAdicionales"></textarea>
+                  </div>
                   </div>
                   <br>
                 </form>

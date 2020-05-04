@@ -351,4 +351,9 @@ export class RepositorioEnrService {
     return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'updateDatosCalCaso5', datos).pipe(map(data => data as Repositorio));
   }
 
+  public cobroMedidor(datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'cobroMedidor', datos).pipe(map(data => data as Repositorio));
+  }
+
 }
