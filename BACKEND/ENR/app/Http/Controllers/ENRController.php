@@ -730,7 +730,7 @@ class ENRController extends Controller
 
        $getConsumo = DB::connection('facturacion')->select(
            "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
-           cast(consumo AS decimal(16,2)) as consumo from enr_consumoEstimado
+           str(consumo,12,2) as consumo from enr_consumoEstimado
            where casoENR = ".$caso." order by 1 asc");
             
  
@@ -748,7 +748,7 @@ class ENRController extends Controller
 
        $getConsumo = DB::connection('facturacion')->select(
            "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
-           cast(consumo AS decimal(16,2)) as consumo from enr_consumoRegistrado
+           str(consumo,12,2) as consumo from enr_consumoRegistrado
            where casoENR = ".$caso." order by 1 asc");
             
  
@@ -767,7 +767,7 @@ class ENRController extends Controller
 
        $getConsumo = DB::connection('facturacion')->select(
            "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
-           cast(consumo AS decimal(16,2)) as consumo from enr_consumoENR
+           str(consumo,12,2) as consumo from enr_consumoENR
            where casoENR = ".$caso." order by 1 asc");
             
  
@@ -794,7 +794,7 @@ class ENRController extends Controller
  
  
         $getConsumo = DB::connection('facturacion')->select(
-            "select cast(sum(consumo) as decimal(16,2)) as consumo from enr_consumoEstimado
+            "select str(sum(consumo),12,2) as consumo from enr_consumoEstimado
             where casoENR = ".$caso."");
              
   
@@ -806,7 +806,7 @@ class ENRController extends Controller
  
  
         $getConsumo = DB::connection('facturacion')->select(
-            "select cast(sum(consumo) as decimal(16,2)) as consumo from enr_consumoRegistrado
+            "select str(sum(consumo),12,2) as consumo from enr_consumoRegistrado
             where casoENR = ".$caso."");
              
   
@@ -818,7 +818,7 @@ class ENRController extends Controller
  
  
         $getConsumo = DB::connection('facturacion')->select(
-            "select cast(sum(consumo) as decimal(16,2)) as consumo from enr_consumoENR
+            "select str(sum(consumo),12,2) as consumo from enr_consumoENR
             where casoENR = ".$caso."");
              
   
@@ -1606,6 +1606,70 @@ class ENRController extends Controller
         
           return response()->json($insertar); 
         
+    }
+
+
+
+
+    public function getConsumoENRBloqueEnergia1G(Request $request){
+
+        $caso = $request["numeroCaso"];
+
+
+        $execProcedure =  DB::connection('facturacion')->statement(
+            "exec  [dbo].[enr_montoEnergiaENR1G]  ".$caso." ");
+ 
+ 
+        $getConsumo = DB::connection('facturacion')->select(
+            "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
+            '$' + str(cobro,12,2) as consumo from enr_montoEnergiaENR
+            where casoENR = ".$caso." order by 1 asc");
+
+            return response()->json($getConsumo);
+    }
+
+
+    
+    public function getConsumoENRBloqueDistribucion1G(Request $request){
+
+        $caso = $request["numeroCaso"];
+
+
+        $execProcedure =  DB::connection('facturacion')->statement(
+            "exec  [dbo].[enr_calculoDistribucion1G]  ".$caso." ");
+ 
+ 
+        $getConsumo = DB::connection('facturacion')->select(
+            "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
+            '$' + str(cobro,12,2) as consumo from enr_montoDistribucionENR 
+            where casoENR = ".$caso." order by 1 asc");
+
+            return response()->json($getConsumo);
+    }
+
+
+    public function getConsumoENRBloqueEnergia1GTotal(Request $request){
+
+        $caso = $request["numeroCaso"];
+ 
+        $getConsumo = DB::connection('facturacion')->select(
+            "select '$' + str(sum(cobro),12,2) as consumo from enr_montoEnergiaENR
+            where casoENR = ".$caso." order by 1 asc");
+
+            return response()->json($getConsumo);
+    }
+
+
+    
+    public function getConsumoENRBloqueDistribucion1GTotal(Request $request){
+
+        $caso = $request["numeroCaso"];
+
+        $getConsumo = DB::connection('facturacion')->select(
+            "select '$' + str(sum(cobro),12,2) as consumo from enr_montoDistribucionENR 
+            where casoENR = ".$caso." order by 1 asc");
+
+            return response()->json($getConsumo);
     }
 
 }

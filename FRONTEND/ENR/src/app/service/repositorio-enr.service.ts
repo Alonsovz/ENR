@@ -246,6 +246,8 @@ export class RepositorioEnrService {
 
 
 
+
+
   public getConsumoENRTotalGlobalDistribucion(kwh): Observable<Repositorio[]> {
     //console.log(nis);
     return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRTotalGlobalDistribucion', kwh).pipe(map(data => data as Repositorio[]));
@@ -255,6 +257,32 @@ export class RepositorioEnrService {
     //console.log(nis);
     return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRTotalFechasDistribucion', kwh).pipe(map(data => data as Repositorio[]));
   }
+
+  public getConsumoENRBloqueEnergia1G(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRBloqueEnergia1G', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getConsumoENRBloqueDistribucion1G(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRBloqueDistribucion1G', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getConsumoENRBloqueDistribucion1GTotal(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRBloqueDistribucion1GTotal', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getConsumoENRBloqueEnergia1GTotal(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRBloqueEnergia1GTotal', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  
+
+  
+
+  
 
   public cambiarScan(datos: Repositorio): Observable<Repositorio> {
     //console.log(datos);

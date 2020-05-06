@@ -126,6 +126,7 @@ export class RepositorioENRComponent implements OnInit {
 
   frm_Caso5 : FormGroup;
   cobroMedidor : FormGroup;
+  tarifaE : '';
 
   constructor(private repositorioENR : RepositorioEnrService,private chRef: ChangeDetectorRef,
     private http: HttpClient, private url: GlobalService,
@@ -2039,7 +2040,9 @@ public eliminarLectura(i, periodo){
   }
 
 //Metodo que calcula todos los cuadros de facturación
-  public verTarifas(){
+  public verTarifas(tarifa){
+ 
+    
     $("#loading").fadeIn();
     $("#divTarifas").hide();
     var caso = this.casoEvaluado;
@@ -2147,7 +2150,9 @@ public eliminarLectura(i, periodo){
           },
         );
 
+          if(tarifa === '1R'){
 
+          
         this.repositorioENR.getConsumoENR1erBloque(datosKwh).subscribe(
           response => {
             this.consumoENR1erBloque =response;
@@ -2466,6 +2471,63 @@ public eliminarLectura(i, periodo){
 
           },
         );
+          }
+
+          if(tarifa == '1G'){
+           
+
+            
+            this.repositorioENR.getConsumoENRBloqueDistribucion1G(datosKwh).subscribe(
+              response => {
+                this.consumoENRTotalGlobalFechasDistribucion =response;
+              },
+              err => {
+              // // //console.log("no");
+              },
+              () => {
+            
+              },
+            );
+
+            this.repositorioENR.getConsumoENRBloqueEnergia1G(datosKwh).subscribe(
+              response => {
+                this.consumoENR3erBloqueTotalEnergia =response;
+              },
+              err => {
+              // // //console.log("no");
+              },
+              () => {
+                this.repositorioENR.getConsumoENRBloqueEnergia1GTotal(datosKwh).subscribe(
+                  response => {
+                    this.consumoENR1erBloqueTotalEnergia =response;
+                  },
+                  err => {
+                  // // //console.log("no");
+                  },
+                  () => {
+                    this.repositorioENR.getConsumoENRBloqueDistribucion1GTotal(datosKwh).subscribe(
+                      response => {
+                        this.consumoENR1erBloqueTotalDistribucion =response;
+                      },
+                      err => {
+                      // // //console.log("no");
+                      },
+                      () => {
+                        $("#loading").fadeOut();
+                        $("#divTarifas").show();
+                        
+                        
+                       
+                      },
+                    );
+                    
+                   
+                  },
+                );
+               
+              },
+            );
+          }
       },
     );
 

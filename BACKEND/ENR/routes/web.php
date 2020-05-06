@@ -157,5 +157,16 @@ Route::get('/', function () {
 
     Route::post('updateDatosCalCaso5', 'ENRController@updateDatosCalCaso5');
     Route::post('cobroMedidor', 'ENRController@cobroMedidor');
+    Route::post('getConsumoENRBloqueEnergia1G', 'ENRController@getConsumoENRBloqueEnergia1G');
+    Route::post('getConsumoENRBloqueDistribucion1G', 'ENRController@getConsumoENRBloqueDistribucion1G');
+
+    Route::post('getConsumoENRBloqueEnergia1GTotal', 'ENRController@getConsumoENRBloqueEnergia1GTotal');
+    Route::post('getConsumoENRBloqueDistribucion1GTotal', 'ENRController@getConsumoENRBloqueDistribucion1GTotal');
+
+    
+
+    
+    
+    
     
     

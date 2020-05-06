@@ -95,6 +95,10 @@ class VerifyCsrfToken extends BaseVerifier
         'saveDatosCalCaso5',
         'savePeriodosSeleccionadosCaso5',
         'updateDatosCalCaso5',
-        'cobroMedidor'
+        'cobroMedidor',
+        'getConsumoENRBloqueEnergia1G',
+        'getConsumoENRBloqueDistribucion1G',
+        'getConsumoENRBloqueDistribucion1GTotal',
+        'getConsumoENRBloqueEnergia1GTotal'
     ];
 }
