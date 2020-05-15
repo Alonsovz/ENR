@@ -26,13 +26,15 @@ export class WrapperComponent implements OnInit {
   }
   
   ngAfterViewInit(){
-  
-      this.isusuarioLogueado$.subscribe(response => {
-        this.user = response;
-        console.log(response);
-      });
+    if(localStorage.getItem('usuario') !== null){
+      this.usuarioservice.loggedIn.next(true);
+      this.isLoggedIn$ = this.usuarioservice.isLoggedIn;
       
- 
+    
+      
+    }else{
+     this.usuarioservice.loggedIn.next(false);
+    }
   }
 
   
