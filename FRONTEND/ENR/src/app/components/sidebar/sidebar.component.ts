@@ -1,6 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Usuario } from 'src/app/models/usuario';
+import { Observable } from 'rxjs';
+import { CredencialesService } from 'src/app/service/credenciales.service';
+declare const $;
 
 @Component({
   selector: 'app-sidebar',
@@ -10,35 +13,26 @@ import { Usuario } from 'src/app/models/usuario';
 export class SidebarComponent implements OnInit {
   contenedor = false;
   usuario: Usuario = new Usuario();
+
+  isLoggedIn$ : Observable<boolean>;
   
-  constructor(private router: Router, private crf: ChangeDetectorRef) { }
+  constructor(private router: Router, private crf: ChangeDetectorRef,
+    private usuarioservice : CredencialesService) { }
 
   ngOnInit() {
-  //SlocalStorage.clear();
-
- this.contenedor = false;
-
-  }
-  ngDoCheck(): void {
-    if (JSON.parse(localStorage.getItem('usuario'))) {
-      this.contenedor = true;
-     this.usuario = JSON.parse(localStorage.getItem('usuario'));
-    }
+    this.isLoggedIn$ = this.usuarioservice.isLoggedIn;
   }
 
-  public hideContenedor() {
-    this.contenedor = false;
-  }
+ ngAfterViewInit(){
+   if(localStorage.getItem('usuario') !== null){
+     this.usuarioservice.loggedIn.next(true);
+     this.isLoggedIn$ = this.usuarioservice.isLoggedIn;
+   }else{
+    this.usuarioservice.loggedIn.next(false);
+   }
+ }
 
 
-  public cerrarSesion() {
-
-    this.crf.detectChanges();
-
-    localStorage.clear();
-    this.router.navigate(['login']);
-    this.contenedor = false;
-    //this.rol = '';
-  }
+ 
 
 }

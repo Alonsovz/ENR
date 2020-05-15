@@ -384,4 +384,16 @@ export class RepositorioEnrService {
     return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'cobroMedidor', datos).pipe(map(data => data as Repositorio));
   }
 
+
+  public getDatosImprimir(caso): Observable<Repositorio[]> {
+    //console.log(orden);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getDatosImprimir', caso).pipe(map(data => data as Repositorio[]));
+  }
+
+
+  public multiplesArchivos(caso): Observable<Repositorio[]> {
+    //console.log(orden);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'multiplesArchivos', caso).pipe(map(data => data as Repositorio[]));
+  }
+
 }

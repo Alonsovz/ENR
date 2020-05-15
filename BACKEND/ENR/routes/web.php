@@ -163,6 +163,10 @@ Route::get('/', function () {
     Route::post('getConsumoENRBloqueEnergia1GTotal', 'ENRController@getConsumoENRBloqueEnergia1GTotal');
     Route::post('getConsumoENRBloqueDistribucion1GTotal', 'ENRController@getConsumoENRBloqueDistribucion1GTotal');
 
+    Route::post('getDatosImprimir', 'ENRController@getDatosImprimir');
+    Route::post('multiplesArchivos', 'ENRController@multiplesArchivos');
+    
+
     
 
     

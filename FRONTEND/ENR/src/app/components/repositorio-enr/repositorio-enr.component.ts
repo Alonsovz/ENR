@@ -60,6 +60,7 @@ export class RepositorioENRComponent implements OnInit {
   codigosENR : codigos[];
   codigosMetENR : metodologia[];
   rutaFile : string;
+  rutaFilePDF : string;
   frm_ArchivoOT: FormGroup;
   previewUrl:any = null;
   previewUrl1:any = null;
@@ -127,13 +128,19 @@ export class RepositorioENRComponent implements OnInit {
   frm_Caso5 : FormGroup;
   cobroMedidor : FormGroup;
   tarifaE : '';
+  datoImprimir : Repositorio = new Repositorio();
+  datoImprimirObj : Repositorio[];
+  frm_PdfEvaluar: FormGroup;
+  verPDF : SafeResourceUrl;
+  
 
   constructor(private repositorioENR : RepositorioEnrService,private chRef: ChangeDetectorRef,
     private http: HttpClient, private url: GlobalService,
     private datosENR : DatosENRService,
     public sanitizer: DomSanitizer,
     private codigoENR: CodigoENRService, private codigoMetENR: MetodologiaCalcService,
-    private fb1: FormBuilder, private fb: FormBuilder,private fb2: FormBuilder,) { 
+    private fb1: FormBuilder, private fb: FormBuilder,private fb2: FormBuilder,
+    private fbpdf: FormBuilder,) { 
 
       this.frm_LecturasEvaluarTotales = new FormGroup({
         'idCaso': new FormControl(''),
@@ -289,11 +296,13 @@ export class RepositorioENRComponent implements OnInit {
     }
 
   ngOnInit() {
-    
+    this.frm_PdfEvaluar = this.fbpdf.group({pdfs: this.fbpdf.array([]),});
     this.frm_LecturasEvaluar = this.fb2.group({lecturas: this.fb2.array([]),});
     this.docForm = this.fb.group({documentacion: this.fb.array([]),});
     this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
     this.rutaFile = this.url.getUrlBackEnd()+'descargarArchivo?ruta=';
+
+    this.rutaFilePDF = this.url.getUrlBackEnd()+"public_path('files/reporteCaso";
     
     this.codigoENR.getCodigoENR().subscribe(data => {this.codigosENR = data;});
     this.codigoMetENR.getMetodologiaCalc().subscribe(data => {this.codigosMetENR = data;});
@@ -460,6 +469,11 @@ export class RepositorioENRComponent implements OnInit {
 //declaracion de formulario de todos las lecturas de tipo ARRRAY
   get lecturas(){
     return this.frm_LecturasEvaluar.get('lecturas') as FormArray;
+  }
+
+
+  get pdfs(){
+    return this.frm_PdfEvaluar.get('pdfs') as FormArray;
   }
 
 
@@ -1538,7 +1552,7 @@ public validarFechas(){
    }
 
 
-   public cerrarCalculo(caso){
+   public cerrarCalculo(){
     $("#titleCalculo").hide();
     $("#resultCaso1").hide();
     this.frm_Caso1.reset();
@@ -2594,6 +2608,10 @@ public eliminarLectura(i, periodo){
                 time: 2, 
                 position: 'top' 
               });
+              this.cerrarCalculo();   
+              this.getRepositorioIng();
+              this.getRepositorioCalc();
+              this.getRepositorioNoti();
         
              
             },
@@ -2650,7 +2668,10 @@ public eliminarLectura(i, periodo){
                 time: 2, 
                 position: 'top' 
               });
-        
+              this.cerrarCalculo();   
+              this.getRepositorioIng();
+              this.getRepositorioCalc();
+              this.getRepositorioNoti();
              
             },
           );
@@ -2728,7 +2749,10 @@ public eliminarLectura(i, periodo){
                 time: 2, 
                 position: 'top' 
               });
-        
+              this.cerrarCalculo();   
+              this.getRepositorioIng();
+              this.getRepositorioCalc();
+              this.getRepositorioNoti();
              
             },
           );
@@ -2780,7 +2804,10 @@ public eliminarLectura(i, periodo){
                 time: 2, 
                 position: 'top' 
               });
-        
+              this.cerrarCalculo();
+              this.getRepositorioIng();
+              this.getRepositorioCalc();
+              this.getRepositorioNoti();
              
             },
           );
@@ -2837,7 +2864,11 @@ public eliminarLectura(i, periodo){
                 time: 2, 
                 position: 'top' 
               });
-
+              this.cerrarCalculo();
+                 
+              this.getRepositorioIng();
+              this.getRepositorioCalc();
+              this.getRepositorioNoti();
               },
             );
 
@@ -2848,7 +2879,7 @@ public eliminarLectura(i, periodo){
           );
     }
     
-
+ 
 
 
   }
@@ -2884,7 +2915,137 @@ public eliminarLectura(i, periodo){
     this.totalizarDatos();
   }
 
+
+  public datosImprimir(caso){
+    this.datoImprimir = caso;
+    this.frm_PdfEvaluar = this.fbpdf.group({pdfs: this.fbpdf.array([]),});
+    
+
+    let casoEvaluado : Repositorio = new Repositorio();
+  
+    casoEvaluado = caso;
+
+    this.repositorioENR.getDatosImprimir(casoEvaluado).subscribe(
+      response => {
+
+        this.datoImprimirObj = response;
+
+        const table: any = $('#filePrint');
+        this.dataTable = table.DataTable();
+        this.dataTable.destroy();
+    
+        this.chRef.detectChanges();
+        
+        this.dataTable = table.DataTable({
+        'responsive': true,
+          'order' :[[0,'desc']],
+  
+        'language' : {
+          'sProcessing':     'Procesando...',
+          'sLengthMenu':     'Mostrar _MENU_ registros',
+          'sZeroRecords':    'No se encontraron resultados',
+          'sEmptyTable':     'Ningún dato disponible en esta tabla',
+          'sInfo':           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
+          'sInfoEmpty':      'Mostrando registros del 0 al 0 de un total de 0 registros',
+          'sInfoFiltered':   '(filtrado de un total de _MAX_ registros)',
+          'sInfoPostFix':    '',
+          'sSearch':         'Buscar:',
+          'sUrl':            '',
+          'sInfoThousands':  ',',
+          'sLoadingRecords': 'Cargando...',
+          'oPaginate': {
+              'sFirst':    'Primero',
+              'sLast':     'Último',
+              'sNext':     'Siguiente',
+              'sPrevious': 'Anterior'
+          },
+          'oAria': {
+              'sSortAscending':  ': Activar para ordenar la columna de manera ascendente',
+              'sSortDescending': ': Activar para ordenar la columna de manera descendente'
+          }
+        }
+        });
+
+      },
+      err => {
+       // //console.log("no");
+      },
+      () => { 
+      },
+    );
+    
+  }
+
+
+  public agregarPDF(id, ruta){
+    $("#addPDF"+id).hide();
+    $("#trPDF"+id).addClass("adjuntos");
+    $("#removePDF"+id).show();
+
+    this.pdfs.push(
+      this.fbpdf.group({
+       archivo : ruta,
+        id : id,
+      })
+  
+    );
+
+  } 
+
+
+  public eliminarPDF(i,id){
+
+    this.pdfs.removeAt(i);
+
+    $("#addPDF"+id).show();
+    $("#trPDF"+id).removeClass("adjuntos");
+    $("#removePDF"+id).hide();
+  }
+
+
+  public eliminarPdfTbl(id){
+    $("#btnElPDF"+id).click();
+  }
+  
+
+
+
+
+  public fusionarPDF(caso, id){
+
+
+    var url = this.url.getUrlBackEnd()+'files/reporteCaso'+id+'.pdf';
+
+    this.verPDF =  this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  
+    console.log(this.verPDF);
+
+    let documentosSeleccionados : DatosENR = new DatosENR();
+  
+    documentosSeleccionados = Object.assign(this.frm_PdfEvaluar.value, caso);
+
+    
+    this.repositorioENR.multiplesArchivos(documentosSeleccionados).subscribe(
+      response => {
+      
+      
+      },
+      err => {
+      // //console.log("no");
+      },
+      () => { 
+        window.open(url, '_blank');
+  },
+);
+     
+  }
+
+
+
+  
 }
+
+
 
 
 

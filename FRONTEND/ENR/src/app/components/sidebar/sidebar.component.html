@@ -1,8 +1,8 @@
 <!-- Sidebar -->
-<div  *ngIf="contenedor===true" style="background-color: #323259;position: sticky;
+<div  *ngIf = "isLoggedIn$ | async as isLoggedIn" style="background-color: #323259;position: sticky;
 top: 0;
 z-index: 1000;">
-  <ul    *ngFor ="let us of usuario" class="navbar-nav toggled   sidebar sidebar-dark accordion right"
+  <ul  class="navbar-nav toggled   sidebar sidebar-dark accordion right"
   id="accordionSidebar">
  
      <!-- Sidebar - Brand -->

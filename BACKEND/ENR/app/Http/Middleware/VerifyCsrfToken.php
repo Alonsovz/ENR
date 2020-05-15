@@ -99,6 +99,8 @@ class VerifyCsrfToken extends BaseVerifier
         'getConsumoENRBloqueEnergia1G',
         'getConsumoENRBloqueDistribucion1G',
         'getConsumoENRBloqueDistribucion1GTotal',
-        'getConsumoENRBloqueEnergia1GTotal'
+        'getConsumoENRBloqueEnergia1GTotal',
+        'getDatosImprimir',
+        'multiplesArchivos'
     ];
 }

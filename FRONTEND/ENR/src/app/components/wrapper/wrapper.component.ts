@@ -2,7 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Usuario } from 'src/app/models/usuario';
 import { Router } from '@angular/router';
 import { SidebarComponent } from '../sidebar/sidebar.component';
-
+import { CredencialesService } from 'src/app/service/credenciales.service';
+import { Observable } from 'rxjs';
+declare const $;
 
 @Component({
   selector: 'app-wrapper',
@@ -10,37 +12,35 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   styleUrls: ['./wrapper.component.css']
 })
 export class WrapperComponent implements OnInit {
+  user: Usuario = new Usuario();
 
-  contenedor = false;
-  usuario: Usuario = new Usuario();
-  @ViewChild(SidebarComponent, {static: false}) side: SidebarComponent;
-  
-  constructor(private router: Router) { }
+  isLoggedIn$ : Observable<boolean>;
+  isusuarioLogueado$ : Observable<Usuario>;
+
+  constructor(private router: Router, private usuarioservice : CredencialesService) { }
+ 
   ngOnInit() {
-    //localStorage.clear();
-    this.usuario = JSON.parse(localStorage.getItem('usuario'));
+    
+    this.isLoggedIn$ = this.usuarioservice.isLoggedIn;
+   this.isusuarioLogueado$ = this.usuarioservice.isusuarioLogueado;
   }
   
-  ngDoCheck(): void {
-    if (JSON.parse(localStorage.getItem('usuario'))) {
-      this.contenedor = true;
-      this.usuario = JSON.parse(localStorage.getItem('usuario'));
-    }
-  }
-
-  public hideContenedor() {
-    this.contenedor = false;
-    localStorage.clear();
+  ngAfterViewInit(){
+  
+      this.isusuarioLogueado$.subscribe(response => {
+        this.user = response;
+        console.log(response);
+      });
+      
+ 
   }
 
   
   public cerrarSesion() {
 
-    this.contenedor = false;
+   this.usuarioservice.loggedIn.next(false);
     localStorage.clear();
     this.router.navigate(['login']);
-
-   this.side.hideContenedor();
   }
 
   

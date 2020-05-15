@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use DB;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as FacadeResponse;
-
+use LynX39\LaraPdfMerger\Facades\PdfMerger;
 
 date_default_timezone_set("America/El_Salvador");
 
@@ -438,6 +438,32 @@ class ENRController extends Controller
     }
 
 
+    public function multiplesArchivos(Request $request){
+
+
+        $docs = json_encode($request["pdfs"]);
+
+        $caso = $request["caso"];
+
+
+        $docsSeleccionados = json_decode($docs);
+
+     
+        $pdfMerger = PDFMerger::init();
+
+        foreach($docsSeleccionados as $p){
+            $pdfMerger->addPDF(public_path('files/'.$p->archivo), '1');
+        }     
+
+        $pdfMerger->merge();
+
+        $pdfMerger->save(public_path('files/reporteCaso'.$caso.'.pdf'), "file");
+
+
+        return response()->json($docs);
+    }
+
+
     public function eliminarArchivo(Request $request){
 
         $file = $request["rutaEliminar"];
@@ -609,7 +635,6 @@ class ENRController extends Controller
                          'fechaInicio'=>$fecha3Inicio,
                          'fechaFin'=>$fecha4Fin,
                          'diasCobro'=>$diasCobro,
-                         'estado'=>1,
                          'idEliminado'=>1,
                          'datosAdicionales'=>$datosAdicionales,
                          ]);
@@ -1202,8 +1227,12 @@ class ENRController extends Controller
       
         $usuario_creacion = 151;
 
+        $notificar =  DB::connection('facturacion')->table('enr_datosGenerales')
+        ->where('id', $idCaso)
+        ->update(['estado' => 2]);
       
-      
+        $eliminar =  DB::connection('facturacion')->table('enr_datosCalculados')
+        ->where('casoENR', $idCaso)->delete();
 
           $insertar =  DB::connection('facturacion')->table('enr_datosCalculados')
                        ->insert([
@@ -1255,7 +1284,12 @@ class ENRController extends Controller
       
         $usuario_creacion = 151;
 
-      
+        $notificar =  DB::connection('facturacion')->table('enr_datosGenerales')
+        ->where('id', $idCaso)
+        ->update(['estado' => 2]);
+
+        $eliminar =  DB::connection('facturacion')->table('enr_datosCalculados')
+        ->where('casoENR', $idCaso)->delete();
       
 
           $insertar =  DB::connection('facturacion')->table('enr_datosCalculados')
@@ -1372,6 +1406,8 @@ class ENRController extends Controller
         $usuario_creacion = 151;
 
       
+       $eliminar =  DB::connection('facturacion')->table('enr_datosCalculados')
+        ->where('casoENR', $idCaso)->delete();
       
 
          $insertar =  DB::connection('facturacion')->table('enr_datosCalculados')
@@ -1429,7 +1465,9 @@ class ENRController extends Controller
       
         $usuario_creacion = 151;
 
-      
+        $notificar =  DB::connection('facturacion')->table('enr_datosGenerales')
+        ->where('id', $idCaso)
+        ->update(['estado' => 2]);
       
 
          $insertar =  DB::connection('facturacion')->table('enr_datosCalculados')
@@ -1488,6 +1526,12 @@ class ENRController extends Controller
       
         $usuario_creacion = 151;
 
+        $notificar =  DB::connection('facturacion')->table('enr_datosGenerales')
+        ->where('id', $idCaso)
+        ->update(['estado' => 2]);
+      
+        $eliminar =  DB::connection('facturacion')->table('enr_datosCalculados')
+        ->where('casoENR', $idCaso)->delete();
       
       
 
@@ -1516,6 +1560,13 @@ class ENRController extends Controller
         $usuario_creacion = 151;
 
       
+      $notificar =  DB::connection('facturacion')->table('enr_datosGenerales')
+        ->where('id', $idCaso)
+        ->update(['estado' => 2]);
+
+
+        $eliminar =  DB::connection('facturacion')->table('enr_datosCalculados')
+        ->where('casoENR', $idCaso)->delete();
       
 
          $insertar =  DB::connection('facturacion')->table('enr_datosCalculados')
@@ -1670,6 +1721,21 @@ class ENRController extends Controller
             where casoENR = ".$caso." order by 1 asc");
 
             return response()->json($getConsumo);
+    }
+
+
+
+    public function getDatosImprimir(Request $request){
+        $id = $request["caso"];
+
+        $getDatos =  DB::connection('facturacion')->select("
+        select 0 as id, 'Notificación inicial' as titulo, scanPrimerNoti as ruta 
+        from enr_datosGenerales where id = ".$id."
+        union 
+        select id as id, titulo as titulo, ruta as ruta from enr_documentacion 
+        where idCasoENR =  ".$id." ");
+
+        return response()->json($getDatos);
     }
 
 }

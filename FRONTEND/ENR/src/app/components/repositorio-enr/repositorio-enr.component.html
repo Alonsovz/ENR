@@ -1421,7 +1421,8 @@
           <div class="col-lg-12">
             <hr style="background-color: #8655EA !important; height: 2px;">
            <button class="btn btn-lg btn-block btn btn-default save" 
-           style="font-size: 15px !important" (click)="guardarDatosFinales()">
+           style="font-size: 15px !important" data-toggle="modal" 
+           data-target="#guardarDatosFinalesConfirm">
             <i class="fas fa-save"></i> Guardar todos los datos
           </button>
           
@@ -1577,12 +1578,13 @@ background-color: #323259;" id="titleGlobal">
                                <td>{{rep.fechaCreacion}}</td>
                                <td>
                                 <button class="btn btn-default btn-circle btn1"
-                                data-toggle="modal"  data-target="#datosCaso">
+                                data-toggle="modal"  data-target="#datosCaso" (click)="datosEditar(rep)">
                                     <i class="fas fa-edit"></i>
                                  </button>
                                          &nbsp;
-                                 <button class="btn btn-default btn-circle btn2">
-                                     <i class="fas fa-calculator"></i>
+                                 <button class="btn btn-default btn-circle btn2"
+                                  data-toggle="modal"  data-target="#datosImprimir" (click)="datosImprimir(rep)">
+                                     <i class="fas fa-bell"></i>
                                  </button>
                                 </td>
                             </tr>
@@ -2793,3 +2795,138 @@ tabindex="-1" role="dialog" id="nuevoScan">
     </div>
   </div>
 </div>
+
+
+<!--modal de confirmación para guardar calculos-->
+<div class="modal animated fadeInDown" id="guardarDatosFinalesConfirm" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="title" style="color:#0CD902 !important;">
+          <img class="img-profile" src="../../../assets/imagenes/confirm.png" width=35 height=35>
+          Confirmación
+        </h5>
+        
+      </div>
+      <div class="modal-body">
+       
+        <h4 style="text-align: center;color: #67E1E1;">¿Desea guardar el cálculo del caso ENR?</h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          <i class="fas fa-times-circle"></i>  No!
+        </button>
+        <button type="button" class="btn btn-default save" data-dismiss="modal"  
+        (click)="guardarDatosFinales()">
+          <i class="fas fa-thumbs-up"></i>  Si, guardar!
+        </button>
+        
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--modal de selección de archivos a imprimir-->
+
+<div class="modal animated fadeInLeft" id="datosImprimir" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog mw-100 w-75" >
+    <div class="modal-content">
+      <div class="modal-header" >
+        <h5 class="modal-title">
+          <img class="img-profile" src="../../../assets/imagenes/print.png" width=45 height=45>
+          Caso N°:  <a style="color: #51F749;">{{datoImprimir.caso}}</a> 
+          || Metodología de cálculo : <a style="color: #51F749;">{{datoImprimir.metodologiaENR}}</a> 
+          || NIS : <a style="color: #51F749;">{{datoImprimir.nis}}</a> 
+        </h5>
+       
+      </div>
+      <div class="modal-body" style="max-height: calc(100vh - 200px);
+      overflow-y: auto;overflow-x: hidden;">
+
+        <h5 style="font-weight: bold;color: #00FFEA;text-align: center;">
+          <img class="img-profile" src="../../../assets/imagenes/education.png" width=45 height=45>
+          Documentos disponibles para adjuntar en reporte de notificación</h5>
+          <hr style="height:2px; background-color: #00FFEA;">
+        <table  id="filePrint" class="table small mt-5" style="width: 100%;margin:auto">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th style="background-color:#323259; color:#51F749;"
+                      class="text-center">Título</th>
+                      <th style="background-color:#323259; color:#51F749;"
+                      class="text-center">Archivo</th>
+                      <th style="background-color:#323259; color:#51F749;"
+                      class="text-center">Acciones</th>
+                  </tr>
+                  </thead>
+                  <tbody style="background-color:#323259; color:white;text-align: center;
+                  font-size: 13px;">
+                    <tr *ngFor="let file  of datoImprimirObj, let i= index" id="trPDF{{file.id}}">                        
+                    <td >{{file.titulo}}</td>
+                    <td>{{file.ruta}}</td>
+                    <td>
+                      <button id="addPDF{{file.id}}" class="calc btn btn-success btn-sm btn-circle" style="background-color: #51F749;
+                    color:black" (click)="agregarPDF(file.id, file.ruta)">
+                          <i class="fa fa-hand-pointer"></i>
+                    </button>  
+                    <button id="removePDF{{file.id}}" class="btn btn-danger btn-sm btn-circle" style="display:none"
+                    (click)="eliminarPdfTbl(file.id)">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                    </td>
+                    
+                      </tr>
+                  </tbody>
+        </table>
+
+        <form [formGroup]="frm_PdfEvaluar" style="display: none;">
+          <table class="table small mt-3">
+            <thead class="thead-dark">
+                <tr >
+                    <th style="background-color: #1B1B38;color:#1FE303;font-size: 13px;
+                    border-bottom: 2px solid #1FE303;font-weight: bold;" class="text-center">
+                        Archivo
+                    </th>
+                   
+                </tr>
+            </thead>
+            <tbody  formArrayName="pdfs"
+            style="background-color:#222245; color:white;text-align: center;
+            font-size: 14px;">
+                <tr *ngFor="let item of pdfs.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                   
+                    <td style="border-bottom: 1px solid #A4FA98;">
+                      <input class="form-control" type="text" formControlName="archivo" name="archivo"
+                      style="text-align: center !important;color: #A4FA98 !important;" readonly="true">
+                     
+                      <button class="btn btn-danger btn-sm btn-circle" id="btnElPDF{{item.value.id}}"
+                      style="display: none;"
+                      (click)="eliminarPDF(pointIndex,item.value.id)"><i class="fas fa-trash"></i></button>
+                  
+                    </td>
+                   
+                  
+                </tr>
+                
+            </tbody>
+            
+        </table>
+        </form>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          <i class="fas fa-times-circle"></i>  Cancelar!
+        </button>
+        <button type="button" class="btn btn-info"  style="color:black !important;"
+        (click)="fusionarPDF(datoImprimir, datoImprimir.caso)">
+          <i class="fas fa-print"></i>  Generar reporte! 
+        </button>
+
+     
+      </div>
+    </div>
+  </div>
+</div>
+
