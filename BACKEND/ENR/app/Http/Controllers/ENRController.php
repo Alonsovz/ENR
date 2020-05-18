@@ -438,31 +438,6 @@ class ENRController extends Controller
     }
 
 
-    public function multiplesArchivos(Request $request){
-
-
-        $docs = json_encode($request["pdfs"]);
-
-        $caso = $request["caso"];
-
-
-        $docsSeleccionados = json_decode($docs);
-
-     
-        $pdfMerger = PDFMerger::init();
-
-        foreach($docsSeleccionados as $p){
-            $pdfMerger->addPDF(public_path('files/'.$p->archivo), '1');
-        }     
-
-        $pdfMerger->merge();
-
-        $pdfMerger->save(public_path('files/reporteCaso'.$caso.'.pdf'), "file");
-
-
-        return response()->json($docs);
-    }
-
 
     public function eliminarArchivo(Request $request){
 
@@ -1646,7 +1621,8 @@ class ENRController extends Controller
         $idCaso = $request["idCaso"];
         $cantidadCobrar = $request["cantidadCobrar"];
 
-      
+        $eliminar =  DB::connection('facturacion')->table('enr_datosCalculados')
+        ->where('casoENR', $idCaso)->delete();
       
 
          $insertar =  DB::connection('facturacion')->table('enr_totalPagos')
@@ -1736,6 +1712,130 @@ class ENRController extends Controller
         where idCasoENR =  ".$id." ");
 
         return response()->json($getDatos);
+    }
+
+
+    
+    public function multiplesArchivos(Request $request){
+
+
+        $docs = json_encode($request["pdfs"]);
+
+        $caso = $request["caso"];
+
+
+        $docsSeleccionados = json_decode($docs);
+
+     
+        $pdfMerger = PDFMerger::init();
+        $pdfMerger->addPDF(public_path('files/anexoCalculo'.$caso.'.pdf'), '1');
+
+        foreach($docsSeleccionados as $p){
+            $pdfMerger->addPDF(public_path('files/'.$p->archivo), '1');
+        }     
+
+        $pdfMerger->merge();
+
+        $pdfMerger->save(public_path('files/reporteCaso'.$caso.'.pdf'), "file");
+
+
+        return response()->json($docs);
+    }
+
+
+
+    public function anexoCalculo(Request $request){
+
+        $caso = $request["caso"];
+
+
+        $data =  DB::connection('facturacion')->select(
+            "select distinct dg.num_suministro as nis,
+            cli.nombres+' '+cli.apellidos as cliente,
+            met.TipoENR as resultado,
+            convert(varchar(10), dg.fechaRegularizacion, 103) as fechaRegularizacion,
+            dg.diasCobro as diasHistorico,
+            cal.consENRDiario as consumoDiario,
+            tip.tiempoRetroactivo as diasCobrar,
+            convert(varchar(10), dg.fechaInicio, 103) as fechaInicio,
+            convert(varchar(10), dg.fechaFin, 103) as fechaFin,
+            str(cal.consEstimadoMensual,12,3) as consumoEstimado,
+            str(cal.consEstimadoMensual,12,3) as consumoEstimado,
+            case when cal.consRegistrado  = 0 or cal.consRegistrado is null
+            then 
+            str(0.000,12,3)
+            else 
+            str(cal.consRegistrado,12,2)
+            end as consumoRegistrado,
+            cal.consumoENRFacturar as consumoENR,
+            (select '$'+str(sum(cobro),12,2) from enr_montoDistribucionENR where casoENR =
+            dg.id) as montoDistribucion,
+            (select '$'+str(sum(cobro),12,2) from enr_montoEnergiaENR where casoENR =
+            dg.id) as montoEnergia,
+            (select '$'+str(cobro_medidor,12,2) from enr_totalPagos where casoENR = dg.id)
+            as cobroEquipo,
+            '$'+str(
+            (select sum(cobro) from enr_montoDistribucionENR where casoENR =
+            dg.id) +
+            (select sum(cobro) from enr_montoEnergiaENR where casoENR =
+            dg.id)
+            +
+            (select case when cobro_medidor = '' or cobro_medidor is null
+            then 0
+            else
+            cobro_medidor
+            end from enr_totalPagos where casoENR = dg.id)
+
+            ,12,2) as subtotal,
+            '$'+str(
+            ((select sum(cobro) from enr_montoDistribucionENR where casoENR =
+            dg.id) 
+            +
+            (select case when cobro_medidor = '' or cobro_medidor is null
+            then 0
+            else
+            cobro_medidor
+            end from enr_totalPagos where casoENR = dg.id)
+            +
+            (select sum(cobro) from enr_montoEnergiaENR where casoENR =
+            dg.id)) * 0.13,12,2) as iva,
+
+
+            '$' + str(
+            (select case when cobro_medidor = '' or cobro_medidor is null
+            then 0
+            else
+            cobro_medidor
+            end from enr_totalPagos where casoENR = dg.id)
+            +
+            (select sum(cobro) from enr_montoDistribucionENR where casoENR =
+            dg.id) +
+            (select sum(cobro) from enr_montoEnergiaENR where casoENR =
+            dg.id)
+            +
+            ((select sum(cobro) from enr_montoDistribucionENR where casoENR =
+            dg.id) +
+            (select sum(cobro) from enr_montoEnergiaENR where casoENR =
+            dg.id)
+            +
+            (select case when cobro_medidor = '' or cobro_medidor is null
+            then 0
+            else
+            cobro_medidor
+            end from enr_totalPagos where casoENR = dg.id)
+            ) * 0.13,12,2) as total
+            from enr_datosGenerales dg 
+            inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
+            inner join fe_cliente as cli on cli.CODIGO_CLIENTE = fes.CODIGO_CLIENTE
+            inner join enr_metodologiaCalc met on met.id = dg.codigoTipoMet
+            inner join enr_datosCalculados cal on cal.casoENR = dg.id
+            inner join enr_gestionTipoENR tip on tip.id = dg.codigoTipoENR
+            where dg.id = ".$caso."");
+
+
+    $pdf = \PDF::loadView('Reportes.anexoCalculo', compact('data'))->save( public_path('files/anexoCalculo'.$caso.'.pdf' )); ;
+ 
+    return response()->json($data);
     }
 
 }

@@ -30,7 +30,9 @@ export class WrapperComponent implements OnInit {
       this.usuarioservice.loggedIn.next(true);
       this.isLoggedIn$ = this.usuarioservice.isLoggedIn;
       
-    
+      this.isusuarioLogueado$.subscribe(response => {
+        this.user = JSON.parse(localStorage.getItem('usuario'));
+      });
       
     }else{
      this.usuarioservice.loggedIn.next(false);

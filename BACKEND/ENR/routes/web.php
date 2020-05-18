@@ -165,6 +165,9 @@ Route::get('/', function () {
 
     Route::post('getDatosImprimir', 'ENRController@getDatosImprimir');
     Route::post('multiplesArchivos', 'ENRController@multiplesArchivos');
+
+    Route::post('anexoCalculo', 'ENRController@anexoCalculo');
+    
     
 
     

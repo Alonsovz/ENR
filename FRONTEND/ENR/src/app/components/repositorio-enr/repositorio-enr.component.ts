@@ -3018,25 +3018,47 @@ public eliminarLectura(i, periodo){
 
     this.verPDF =  this.sanitizer.bypassSecurityTrustResourceUrl(url);
   
-    console.log(this.verPDF);
+   // console.log(this.verPDF);
 
-    let documentosSeleccionados : DatosENR = new DatosENR();
+
+   this.repositorioENR.anexoCalculo(caso).subscribe(
+    response => {
+
+   
+
+    },
+    err => {
+     // //console.log("no");
+    },
+    () => { 
+
+      let documentosSeleccionados : DatosENR = new DatosENR();
   
-    documentosSeleccionados = Object.assign(this.frm_PdfEvaluar.value, caso);
-
+      documentosSeleccionados = Object.assign(this.frm_PdfEvaluar.value, caso);
     
-    this.repositorioENR.multiplesArchivos(documentosSeleccionados).subscribe(
-      response => {
       
-      
-      },
-      err => {
-      // //console.log("no");
-      },
-      () => { 
-        window.open(url, '_blank');
-  },
-);
+      this.repositorioENR.multiplesArchivos(documentosSeleccionados).subscribe(
+        response => {
+        
+        
+        },
+        err => {
+        // //console.log("no");
+        },
+        () => { 
+          window.open(url, '_blank');
+        },
+        );
+
+        
+    },
+  );
+
+
+
+
+
+   
      
   }
 

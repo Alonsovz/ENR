@@ -175,7 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         LynX39\LaraPdfMerger\PdfMergerServiceProvider::class,
-
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -227,6 +227,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'PdfMerger' => LynX39\LaraPdfMerger\Facades\PdfMerger::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

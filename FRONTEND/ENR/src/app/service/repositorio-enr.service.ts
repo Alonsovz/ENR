@@ -396,4 +396,9 @@ export class RepositorioEnrService {
     return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'multiplesArchivos', caso).pipe(map(data => data as Repositorio[]));
   }
 
+  public anexoCalculo(caso): Observable<Repositorio[]> {
+    //console.log(orden);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'anexoCalculo',caso).pipe(map(data => data as Repositorio[]));
+  }
+  
 }
