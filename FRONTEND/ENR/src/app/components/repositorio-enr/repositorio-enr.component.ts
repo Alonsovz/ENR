@@ -229,6 +229,7 @@ export class RepositorioENRComponent implements OnInit {
         'fechaFinENR' : new FormControl(''),
         'diasRetroactivos' : new FormControl(''),
         'datosAdicionales' : new FormControl(''),
+        'datosIrregularidades' : new FormControl(''),
       });
 
       this.frm_ArchivoOT = new FormGroup({

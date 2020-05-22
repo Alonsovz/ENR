@@ -209,6 +209,7 @@ class ENRController extends Controller
         $diasCobro = $request["diasCobro"];
         $usuario_creacion = 151;
         $datosAdicionales = $request["datosAdicionales"];
+        $datosIrregulares = $request["datosIrregularidades"];
 
          //convertir fecha primer notificacion enr
         $fecha1 = date_create_from_format('Y-m-d',$fechaPrimeraNoti);
@@ -247,6 +248,7 @@ class ENRController extends Controller
                          'idEliminado'=>1,
                          'fechaCreacion'=>date('Ymd H:i:s'),
                          'datosAdicionales'=>$datosAdicionales,
+                         'datosIrregulares'=>$datosIrregulares,
                          ]);
 
 
@@ -576,6 +578,7 @@ class ENRController extends Controller
         $fechaFinENR = $request["fechaFinENR"];
         $diasCobro = $request["diasCobro"];
         $datosAdicionales = $request["datosAdicionales"];
+        $datosIrregulares = $request["datosIrregularidades"];
         //$usuario_creacion = 151;
 
          //convertir fecha primer notificacion enr
@@ -612,6 +615,7 @@ class ENRController extends Controller
                          'diasCobro'=>$diasCobro,
                          'idEliminado'=>1,
                          'datosAdicionales'=>$datosAdicionales,
+                         'datosIrregulares'=>$datosIrregulares,
                          ]);
 
 
@@ -1621,7 +1625,7 @@ class ENRController extends Controller
         $idCaso = $request["idCaso"];
         $cantidadCobrar = $request["cantidadCobrar"];
 
-        $eliminar =  DB::connection('facturacion')->table('enr_datosCalculados')
+        $eliminar =  DB::connection('facturacion')->table('enr_totalPagos')
         ->where('casoENR', $idCaso)->delete();
       
 
@@ -1728,11 +1732,18 @@ class ENRController extends Controller
 
      
         $pdfMerger = PDFMerger::init();
-        $pdfMerger->addPDF(public_path('files/anexoCalculo'.$caso.'.pdf'), '1');
+        $pdfMerger->addPDF(public_path('files/infoGenAutoFraude'.$caso.'.pdf'), 'all');
+        $pdfMerger->addPDF(public_path('files/rptCondicionIrregular'.$caso.'.pdf'), 'all');
+        $pdfMerger->addPDF(public_path('files/rptInformeTecnico'.$caso.'.pdf'), 'all');
+        $pdfMerger->addPDF(public_path('files/rptCobroFraude'.$caso.'.pdf'), 'all');
+        $pdfMerger->addPDF(public_path('files/rptCobroCero'.$caso.'.pdf'), 'all');
+        $pdfMerger->addPDF(public_path('files/infoGenAutoConsumoCero'.$caso.'.pdf'), 'all');
 
         foreach($docsSeleccionados as $p){
-            $pdfMerger->addPDF(public_path('files/'.$p->archivo), '1');
+            $pdfMerger->addPDF(public_path('files/'.$p->archivo), 'all');
         }     
+
+        $pdfMerger->addPDF(public_path('files/anexoCalculo'.$caso.'.pdf'), 'all');
 
         $pdfMerger->merge();
 
@@ -1750,17 +1761,25 @@ class ENRController extends Controller
 
 
         $data =  DB::connection('facturacion')->select(
-            "select distinct dg.num_suministro as nis,
+            "select distinct dg.id as nCaso,dg.num_suministro as nis,
             cli.nombres+' '+cli.apellidos as cliente,
+            feMun.nombre_municipio as municipio,
+            fes.anexo_direccion as direccion,
+            feApa.numero_medidor as medidor,
             met.TipoENR as resultado,
+            tip.TipoENR as codigoENR,
+            dg.datosIrregulares as irregularidades,
             convert(varchar(10), dg.fechaRegularizacion, 103) as fechaRegularizacion,
-            dg.diasCobro as diasHistorico,
-            cal.consENRDiario as consumoDiario,
+            (select sum(diasFacturados) from enr_periodosEvaluados where casoENR = dg.id) as diasHistorico,
+            str(((select sum(consFacturado) from enr_periodosEvaluados where casoENR = dg.id)
+            /
+            (select sum(diasFacturados) from enr_periodosEvaluados where casoENR = dg.id)
+            ),12,3) as consumoDiario ,
             tip.tiempoRetroactivo as diasCobrar,
             convert(varchar(10), dg.fechaInicio, 103) as fechaInicio,
             convert(varchar(10), dg.fechaFin, 103) as fechaFin,
-            str(cal.consEstimadoMensual,12,3) as consumoEstimado,
-            str(cal.consEstimadoMensual,12,3) as consumoEstimado,
+            str((select sum(consumo) from enr_consumoEstimado where casoENR= dg.id)
+            + (cal.consRegistrado),12,2) as consumoEstimado,
             case when cal.consRegistrado  = 0 or cal.consRegistrado is null
             then 
             str(0.000,12,3)
@@ -1830,11 +1849,30 @@ class ENRController extends Controller
             inner join enr_metodologiaCalc met on met.id = dg.codigoTipoMet
             inner join enr_datosCalculados cal on cal.casoENR = dg.id
             inner join enr_gestionTipoENR tip on tip.id = dg.codigoTipoENR
-            where dg.id = ".$caso."");
+			inner join fe_municipios feMun on feMun.codigo_municipio = fes.codigo_municipio
+			and feMun.codigo_departamento = fes.codigo_departamento
+			inner join fe_aparatos feApa on feApa.num_suministro = fes.num_suministro
+            where (feApa.bandera_activo = 1) and dg.id = ".$caso."");
 
 
+    
     $pdf = \PDF::loadView('Reportes.anexoCalculo', compact('data'))->save( public_path('files/anexoCalculo'.$caso.'.pdf' )); ;
  
+
+    $pdf = \PDF::loadView('Reportes.infoGenAutoConsumoCero', compact('data'))->save( public_path('files/infoGenAutoConsumoCero'.$caso.'.pdf' )); ;
+
+    $pdf = \PDF::loadView('Reportes.rptCobroCero', compact('data'))->save( public_path('files/rptCobroCero'.$caso.'.pdf' )); ;
+
+    $pdf = \PDF::loadView('Reportes.rptCobroFraude', compact('data'))->save( public_path('files/rptCobroFraude'.$caso.'.pdf' )); ;
+
+    $pdf = \PDF::loadView('Reportes.rptInformeTecnico', compact('data'))->save( public_path('files/rptInformeTecnico'.$caso.'.pdf' )); ;
+    
+
+    $pdf = \PDF::loadView('Reportes.rptCondicionIrregular', compact('data'))->save( public_path('files/rptCondicionIrregular'.$caso.'.pdf' )); ;
+    
+    $pdf = \PDF::loadView('Reportes.infoGenAutoFraude', compact('data'))->save( public_path('files/infoGenAutoFraude'.$caso.'.pdf' )); ;
+
+
     return response()->json($data);
     }
 
