@@ -14,6 +14,7 @@ import { HttpClient, HttpHeaders, HttpEventType } from '@angular/common/http';
 import { GlobalService } from 'src/app/service/global.service';
 import { Observable } from 'rxjs';
 import { DomSanitizer,SafeResourceUrl } from '@angular/platform-browser';
+import { Usuario } from 'src/app/models/usuario';
 
 @Component({
   selector: 'app-datos-enr',
@@ -21,6 +22,7 @@ import { DomSanitizer,SafeResourceUrl } from '@angular/platform-browser';
   styleUrls: ['./datos-enr.component.css']
 })
 export class DatosENRComponent implements OnInit {
+  user: Usuario = new Usuario();
   frm_NIS : FormGroup;
   frm_ArchivoEliminar : FormGroup;
   frm_DatosNIS : FormGroup;
@@ -123,6 +125,8 @@ export class DatosENRComponent implements OnInit {
      this.adjuntoVer= this.sanitizer.bypassSecurityTrustResourceUrl('');
      this.urlArc = this.sanitizer.bypassSecurityTrustResourceUrl(this.url.getUrlBackEnd());
      this.rutaFile = this.url.getUrlBackEnd()+'descargarArchivo?ruta=';
+
+     this.user = JSON.parse(localStorage.getItem('usuario'));
 
     
    }
@@ -386,10 +390,11 @@ export class DatosENRComponent implements OnInit {
  }
 
 //inserción de datos a guarddar
- public guardarDatos(){
+ public guardarDatos(usuario){
   let datosENRdto : DatosENR = new DatosENR();
 
-  datosENRdto = this.frm_DatosNIS.value;
+
+  datosENRdto = Object.assign(this.frm_DatosNIS.value,usuario);
 
 
   this.datosENR.saveDatosNISGenerales(datosENRdto).subscribe(
@@ -402,7 +407,7 @@ export class DatosENRComponent implements OnInit {
     () => {
       let datosENRdtoDoc : DatosENR = new DatosENR();
 
-      datosENRdtoDoc = this.docForm.value;
+      datosENRdtoDoc = Object.assign(this.docForm.value,usuario);
       this.datosENR.saveDocProbatoria(datosENRdtoDoc).subscribe(
         response => {
           
@@ -437,7 +442,7 @@ export class DatosENRComponent implements OnInit {
  public guardarAdjuntosOT(){
   let datosENRdtoDoc : DatosENR = new DatosENR();
 
-  datosENRdtoDoc = this.adjuntoOrdenesForm.value;
+  datosENRdtoDoc = Object.assign(this.adjuntoOrdenesForm.value, this.user);
 
   this.datosENR.saveDocOT(datosENRdtoDoc).subscribe(
     response => {

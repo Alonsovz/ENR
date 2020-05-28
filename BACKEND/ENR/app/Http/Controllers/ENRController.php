@@ -207,7 +207,7 @@ class ENRController extends Controller
         $fechaInicioENR = $request["fechaInicioENR"];
         $fechaFinENR = $request["fechaFinENR"];
         $diasCobro = $request["diasCobro"];
-        $usuario_creacion = 151;
+        $usuario_creacion = $request["id"];
         $datosAdicionales = $request["datosAdicionales"];
         $datosIrregulares = $request["datosIrregularidades"];
 
@@ -258,7 +258,7 @@ class ENRController extends Controller
 
     public function saveDocProbatoria(Request $request){
         $doc = json_encode($request["documentacion"]);
-        $usuario_creacion = 151;
+        $usuario_creacion = $request["id"];
         $documentacion = json_decode($doc);
        
         $contador = 0;
@@ -297,7 +297,7 @@ class ENRController extends Controller
         $documentacion = json_decode($doc);
        
         $contador = 0;
-        $usuario_creacion = 151;
+        $usuario_creacion = $request["id"];
 
       
       
@@ -351,7 +351,7 @@ class ENRController extends Controller
         select dg.id as caso, dg.num_suministro as nis, dg.scanPrimerNoti as ruta,
         dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
         convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
-        t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
+        t.tipoENR as codigoENR,t.codigoTipo as codigoTipoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
         m.codigo as codBase,
         (select count(id) from enr_documentacion where idCasoENR =
         dg.id and idEliminado = 1) as adjuntos,
@@ -1261,7 +1261,7 @@ class ENRController extends Controller
         $voltajeSuministro = $request["voltajeSuministro"];
 
       
-        $usuario_creacion = 151;
+        $usuario_creacion = saveDocOT;
 
         $notificar =  DB::connection('facturacion')->table('enr_datosGenerales')
         ->where('id', $idCaso)
@@ -1350,9 +1350,10 @@ class ENRController extends Controller
        
         $contador = 0;
         
-        //$ultimoCaso = DB::connection('facturacion')->table('enr_DatosGenerales')
-        //->select('enr_DatosGenerales.id')->orderBy('enr_DatosGenerales.id','desc')->first();
-
+        foreach($periodosDes as $p){
+            $eliminar =  DB::connection('facturacion')->table('enr_consumosReales')
+            ->where('casoENR', $p->idCaso)->delete();
+        }   
 
         foreach($periodosDes as $p){
             $insertar =  DB::connection('facturacion')->table('enr_consumosReales')
@@ -1408,8 +1409,13 @@ class ENRController extends Controller
        
         $contador = 0;
         
-        //$ultimoCaso = DB::connection('facturacion')->table('enr_DatosGenerales')
-        //->select('enr_DatosGenerales.id')->orderBy('enr_DatosGenerales.id','desc')->first();
+       
+
+
+        foreach($periodosDes as $p){
+            $eliminar =  DB::connection('facturacion')->table('enr_periodosEvaluados')
+            ->where('casoENR', $p->idCaso)->delete();
+        }   
 
 
         foreach($periodosDes as $p){
@@ -1726,31 +1732,79 @@ class ENRController extends Controller
         $docs = json_encode($request["pdfs"]);
 
         $caso = $request["caso"];
-
+        $codigoENR = $request["codigoTipoENR"];
+        $tipoENR = $request["codigoENR"];
 
         $docsSeleccionados = json_decode($docs);
 
      
         $pdfMerger = PDFMerger::init();
-        $pdfMerger->addPDF(public_path('files/infoGenAutoFraude'.$caso.'.pdf'), 'all');
-        $pdfMerger->addPDF(public_path('files/rptCondicionIrregular'.$caso.'.pdf'), 'all');
-        $pdfMerger->addPDF(public_path('files/rptInformeTecnico'.$caso.'.pdf'), 'all');
-        $pdfMerger->addPDF(public_path('files/rptCobroFraude'.$caso.'.pdf'), 'all');
-        $pdfMerger->addPDF(public_path('files/rptCobroCero'.$caso.'.pdf'), 'all');
-        $pdfMerger->addPDF(public_path('files/infoGenAutoConsumoCero'.$caso.'.pdf'), 'all');
+
+        if($codigoENR == 'OT' && $tipoENR == 'Medidor con fallas internas'){
+            $pdfMerger->addPDF(public_path('files/rptCobroCero'.$caso.'.pdf'), 'all');
+            $pdfMerger->addPDF(public_path('files/infoGenAutoConsumoCero'.$caso.'.pdf'), 'all');
+
+        
+        }
+
+        if($codigoENR == 'LD' || $codigoENR == 'MM' || $codigoENR == 'PE' || $codigoENR == 'AM'){
+            $pdfMerger->addPDF(public_path('files/infoGenAutoFraude'.$caso.'.pdf'), 'all');
+            $pdfMerger->addPDF(public_path('files/rptCondicionIrregular'.$caso.'.pdf'), 'all');
+            $pdfMerger->addPDF(public_path('files/rptInformeTecnico'.$caso.'.pdf'), 'all');
+            $pdfMerger->addPDF(public_path('files/rptCobroFraude'.$caso.'.pdf'), 'all');
+
+      
+        }
+
+
+        if($codigoENR == 'OT' && $tipoENR == 'Varias'){
+            $pdfMerger->addPDF(public_path('files/infoGenAutoFraude'.$caso.'.pdf'), 'all');
+            $pdfMerger->addPDF(public_path('files/rptCondicionIrregular'.$caso.'.pdf'), 'all');
+            $pdfMerger->addPDF(public_path('files/rptInformeTecnico'.$caso.'.pdf'), 'all');
+            $pdfMerger->addPDF(public_path('files/rptCobroFraude'.$caso.'.pdf'), 'all');
+
+        }
+        $pdfMerger->addPDF(public_path('files/anexoCalculo'.$caso.'.pdf'), 'all');
 
         foreach($docsSeleccionados as $p){
             $pdfMerger->addPDF(public_path('files/'.$p->archivo), 'all');
         }     
 
-        $pdfMerger->addPDF(public_path('files/anexoCalculo'.$caso.'.pdf'), 'all');
+     
 
         $pdfMerger->merge();
+
+        
+     
 
         $pdfMerger->save(public_path('files/reporteCaso'.$caso.'.pdf'), "file");
 
 
-        return response()->json($docs);
+        if($codigoENR == 'OT' && $tipoENR == 'Medidor con fallas internas'){
+         unlink(public_path('files/infoGenAutoConsumoCero'.$caso.'.pdf'));
+            unlink(public_path('files/rptCobroCero'.$caso.'.pdf'));
+        }
+
+        if($codigoENR == 'LD' || $codigoENR == 'MM' || $codigoENR == 'PE' || $codigoENR == 'AM'){
+     
+            unlink(public_path('files/infoGenAutoFraude'.$caso.'.pdf'));
+            unlink(public_path('files/rptCondicionIrregular'.$caso.'.pdf'));
+            unlink(public_path('files/rptInformeTecnico'.$caso.'.pdf'));
+            unlink(public_path('files/rptCobroFraude'.$caso.'.pdf'));
+        }
+
+
+        if($codigoENR == 'OT' && $tipoENR == 'Varias'){
+       
+            
+            unlink(public_path('files/infoGenAutoFraude'.$caso.'.pdf'));
+            unlink(public_path('files/rptCondicionIrregular'.$caso.'.pdf'));
+            unlink(public_path('files/rptInformeTecnico'.$caso.'.pdf'));
+            unlink(public_path('files/rptCobroFraude'.$caso.'.pdf'));
+        }
+
+        unlink(public_path('files/anexoCalculo'.$caso.'.pdf'));
+
     }
 
 
@@ -1758,7 +1812,8 @@ class ENRController extends Controller
     public function anexoCalculo(Request $request){
 
         $caso = $request["caso"];
-
+        $codigoENR = $request["codigoTipoENR"];
+        $tipoENR = $request["codigoENR"];
 
         $data =  DB::connection('facturacion')->select(
             "select distinct dg.id as nCaso,dg.num_suministro as nis,
@@ -1778,20 +1833,23 @@ class ENRController extends Controller
             tip.tiempoRetroactivo as diasCobrar,
             convert(varchar(10), dg.fechaInicio, 103) as fechaInicio,
             convert(varchar(10), dg.fechaFin, 103) as fechaFin,
-            str((select sum(consumo) from enr_consumoEstimado where casoENR= dg.id)
-            + (cal.consRegistrado),12,2) as consumoEstimado,
-            case when cal.consRegistrado  = 0 or cal.consRegistrado is null
-            then 
-            str(0.000,12,3)
-            else 
-            str(cal.consRegistrado,12,2)
-            end as consumoRegistrado,
-            cal.consumoENRFacturar as consumoENR,
+            (select str(sum(consumo),12,2) from enr_consumoEstimado where casoENR= dg.id)
+            as consumoEstimado,
+            (select str(sum(consumo),12,2) from enr_consumoRegistrado where casoENR= dg.id)
+            as consumoRegistrado,
+             (select str(sum(consumo),12,2) from enr_consumoENR where casoENR= dg.id)
+            as consumoENR,
             (select '$'+str(sum(cobro),12,2) from enr_montoDistribucionENR where casoENR =
             dg.id) as montoDistribucion,
             (select '$'+str(sum(cobro),12,2) from enr_montoEnergiaENR where casoENR =
             dg.id) as montoEnergia,
-            (select '$'+str(cobro_medidor,12,2) from enr_totalPagos where casoENR = dg.id)
+           
+            (select  case when cobro_medidor is null 
+            then 
+            '$ 0.00'
+            else
+            '$'+str(cobro_medidor,12,2)
+            end from enr_totalPagos where casoENR = dg.id)
             as cobroEquipo,
             '$'+str(
             (select sum(cobro) from enr_montoDistribucionENR where casoENR =
@@ -1856,22 +1914,30 @@ class ENRController extends Controller
 
 
     
-    $pdf = \PDF::loadView('Reportes.anexoCalculo', compact('data'))->save( public_path('files/anexoCalculo'.$caso.'.pdf' )); ;
+    $pdf = \PDF::loadView('Reportes.anexoCalculo', compact('data'))->save( public_path('files/anexoCalculo'.$caso.'.pdf' )); 
  
+    if($codigoENR == 'OT' && $tipoENR == 'Medidor con fallas internas'){
+        $pdf = \PDF::loadView('Reportes.infoGenAutoConsumoCero', compact('data'))->save( public_path('files/infoGenAutoConsumoCero'.$caso.'.pdf' )); 
+        $pdf = \PDF::loadView('Reportes.rptCobroCero', compact('data'))->save( public_path('files/rptCobroCero'.$caso.'.pdf' )); 
 
-    $pdf = \PDF::loadView('Reportes.infoGenAutoConsumoCero', compact('data'))->save( public_path('files/infoGenAutoConsumoCero'.$caso.'.pdf' )); ;
+    }
 
-    $pdf = \PDF::loadView('Reportes.rptCobroCero', compact('data'))->save( public_path('files/rptCobroCero'.$caso.'.pdf' )); ;
+    if($codigoENR == 'LD' || $codigoENR == 'MM' || $codigoENR == 'PE' || $codigoENR == 'AM'){
+        $pdf = \PDF::loadView('Reportes.rptCobroFraude', compact('data'))->save( public_path('files/rptCobroFraude'.$caso.'.pdf' )); 
+      
+        $pdf = \PDF::loadView('Reportes.infoGenAutoFraude', compact('data'))->save( public_path('files/infoGenAutoFraude'.$caso.'.pdf' )); 
+        $pdf = \PDF::loadView('Reportes.rptInformeTecnico', compact('data'))->save( public_path('files/rptInformeTecnico'.$caso.'.pdf' )); 
+        $pdf = \PDF::loadView('Reportes.rptCondicionIrregular', compact('data'))->save( public_path('files/rptCondicionIrregular'.$caso.'.pdf' )); 
+ 
+    }
 
-    $pdf = \PDF::loadView('Reportes.rptCobroFraude', compact('data'))->save( public_path('files/rptCobroFraude'.$caso.'.pdf' )); ;
-
-    $pdf = \PDF::loadView('Reportes.rptInformeTecnico', compact('data'))->save( public_path('files/rptInformeTecnico'.$caso.'.pdf' )); ;
-    
-
-    $pdf = \PDF::loadView('Reportes.rptCondicionIrregular', compact('data'))->save( public_path('files/rptCondicionIrregular'.$caso.'.pdf' )); ;
-    
-    $pdf = \PDF::loadView('Reportes.infoGenAutoFraude', compact('data'))->save( public_path('files/infoGenAutoFraude'.$caso.'.pdf' )); ;
-
+    if($codigoENR == 'OT' && $tipoENR == 'Varias'){
+        $pdf = \PDF::loadView('Reportes.rptCobroFraude', compact('data'))->save( public_path('files/rptCobroFraude'.$caso.'.pdf' )); 
+        $pdf = \PDF::loadView('Reportes.infoGenAutoFraude', compact('data'))->save( public_path('files/infoGenAutoFraude'.$caso.'.pdf' )); 
+        $pdf = \PDF::loadView('Reportes.rptInformeTecnico', compact('data'))->save( public_path('files/rptInformeTecnico'.$caso.'.pdf' )); 
+        $pdf = \PDF::loadView('Reportes.rptCondicionIrregular', compact('data'))->save( public_path('files/rptCondicionIrregular'.$caso.'.pdf' )); 
+ 
+    }
 
     return response()->json($data);
     }

@@ -7,7 +7,7 @@
                         style="width: 80px; height: 80px">
                     </th>
                     <th >
-                        <b style="margin-left:420px; font-size:14px;">
+                        <b style="margin-left:400px; font-size:14px;">
                             <?php
 
                                 $nombresDias = array("Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado" );

@@ -514,11 +514,11 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
           <h4 style="text-align: center;color: #67E1E1;">¿Desea guardar el caso ENR?</h4>
         
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" *ngFor ="let us of user">
           <button type="button" class="btn btn-danger" data-dismiss="modal">
             <i class="fas fa-times-circle"></i>  No!
           </button>
-          <button type="button" class="btn btn-default save" data-dismiss="modal"  (click)="guardarDatos()">
+          <button type="button" class="btn btn-default save" data-dismiss="modal"  (click)="guardarDatos(user)">
             <i class="fas fa-thumbs-up"></i>  Si, guardar!
           </button>
           
