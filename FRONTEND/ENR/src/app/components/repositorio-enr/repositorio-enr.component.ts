@@ -3056,12 +3056,10 @@ public eliminarLectura(i, periodo){
   );
 
 
-
-
-
-   
-     
   }
+
+
+
 
 
 

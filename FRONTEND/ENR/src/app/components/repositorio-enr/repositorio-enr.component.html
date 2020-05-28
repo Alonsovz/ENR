@@ -1462,21 +1462,21 @@ background-color: #323259;" id="titleGlobal">
     style="margin-right: 30px;
     margin-left: 30px;">
       <li class="nav-item">
-        <a class="nav-link active"  data-toggle="tab" href="#ingresados" role="tab" 
+        <a class="nav-link active"  data-toggle="tab" href="#ingresados" role="tab" (click)="getRepositorioIng()"
         aria-controls="home" aria-selected="true" style="color:white;background-color: #1B1B38;">
         <i class="fas fa-save"></i>
         Ingresado
          </a>
       </li>
       <li class="nav-item" style="border-bottom:1px solid white;">
-        <a class="nav-link"  data-toggle="tab" href="#calculados" role="tab"
+        <a class="nav-link"  data-toggle="tab" href="#calculados" role="tab" (click)="getRepositorioCalc()"
         aria-controls="profile" aria-selected="false" style="color:white;background-color: #1B1B38;">
          <i class="fas fa-calculator"></i>
             Calculado
         </a>
       </li>
       <li class="nav-item" style="border-bottom:1px solid white;">
-        <a class="nav-link"  data-toggle="tab" href="#notificados" role="tab"
+        <a class="nav-link"  data-toggle="tab" href="#notificados" role="tab" (click)="getRepositorioNoti()"
         aria-controls="profile" aria-selected="false" style="color:white;background-color: #1B1B38;">
          <i class="fas fa-bell"></i>
             Notificado

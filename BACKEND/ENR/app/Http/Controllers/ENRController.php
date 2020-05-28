@@ -1315,8 +1315,10 @@ class ENRController extends Controller
        
         $contador = 0;
         
-        //$ultimoCaso = DB::connection('facturacion')->table('enr_DatosGenerales')
-        //->select('enr_DatosGenerales.id')->orderBy('enr_DatosGenerales.id','desc')->first();
+        foreach($periodosDes as $p){
+            $eliminar =  DB::connection('facturacion')->table('enr_periodosEvaluados')
+            ->where('casoENR', $p->idCaso)->delete();
+        }   
 
 
         foreach($periodosDes as $p){
@@ -1475,9 +1477,10 @@ class ENRController extends Controller
        
         $contador = 0;
         
-        //$ultimoCaso = DB::connection('facturacion')->table('enr_DatosGenerales')
-        //->select('enr_DatosGenerales.id')->orderBy('enr_DatosGenerales.id','desc')->first();
-
+        foreach($periodosDes as $p){
+            $eliminar =  DB::connection('facturacion')->table('enr_periodosEvaluados')
+            ->where('casoENR', $p->idCaso)->delete();
+        }  
 
         foreach($periodosDes as $p){
             $insertar =  DB::connection('facturacion')->table('enr_periodosEvaluados')
@@ -1574,9 +1577,10 @@ class ENRController extends Controller
        
         $contador = 0;
         
-        //$ultimoCaso = DB::connection('facturacion')->table('enr_DatosGenerales')
-        //->select('enr_DatosGenerales.id')->orderBy('enr_DatosGenerales.id','desc')->first();
-
+          foreach($periodosDes as $p){
+            $eliminar =  DB::connection('facturacion')->table('enr_periodosEvaluados')
+            ->where('casoENR', $p->idCaso)->delete();
+        }  
 
         foreach($periodosDes as $p){
             $insertar =  DB::connection('facturacion')->table('enr_periodosEvaluados')
