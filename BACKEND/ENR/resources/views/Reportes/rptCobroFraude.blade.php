@@ -61,7 +61,6 @@ Informe Técnico de Condición encontrada Medidor defectuoso por fallas internas
     ?>-{{$dat->nCaso}}
 </p>
 
-
 <br>
 <p align="justify" style="font-size:14px;margin-left:10px;margin-right:10px;">Estimado(a) usuario(a):</p>
 

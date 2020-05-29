@@ -1,10 +1,13 @@
 @foreach($data as $dat)
 
-<table style="margin-left:10px;margin-right:10px;">
+<table>
     <thead>
         <tr>
-            <th style="font-size:14px;text-align:left;"><b>Fecha:</b></th>
-            <th style="font-size:14px;text-align:left;font-weight:normal;">
+            <th style="margin-left:10px;width:440px !important;text-align:left;">
+                <img  src="C:\xampp\htdocs\ENR\backend\ENR\public\images\logo2.png"
+                style="width: 250px; height: 90px;">
+            </th>
+            <th style="font-size:14px;text-align:right;font-weight:normal;">
                 {{$dat->municipio}},
                 <?php
 
@@ -23,10 +26,12 @@
                     echo ''.$numeroDia.' de '.$nombreMes.' de '.$anyo.' ';
                 ?>
             </th>
-        </tr>
+            </tr>
+    </thead>
 
-        </thead>
 </table>
+
+
 <br>
 <table style="margin-left:10px;margin-right:10px;">
     <thead>
@@ -45,30 +50,16 @@
     </thead>
 </table>
 
+<p align="justify" style="font-size:14px;margin-left:400px;margin-right:10px;">
+<b>Asunto:</b>
+Informe Técnico de Condición encontrada Medidor defectuoso por fallas internas.
 <br>
-<table style="margin-left:10px;margin-right:10px;">
-    <thead>
-        <tr>
-            <th style="font-size:14px;text-align:left;"><b>Asunto:</b></th>
-            <th style="font-size:14px;text-align:left;font-weight:normal;"> 
-            Informe Técnico de Condición encontrada Medidor defectuoso por fallas internas.</th>
-        </tr>
-        <tr>
-            <th style="font-size:14px;text-align:left;"><b>Ref:</b></th>
-            <th style="font-size:14px;text-align:left;font-weight:normal;">
-            ENR-<?php 
-            $fecha = new DateTime('now', new DateTimeZone('America/El_Salvador'));
-            echo $fecha->format('d').$fecha->format('m');
-            ?>-{{$dat->nCaso}} </th>
-        </tr>
-        <tr>
-            <th style="font-size:14px;text-align:left;"><b>N° Caso ENR:</b></th>
-            <th style="font-size:14px;text-align:left;font-weight:normal;"> {{$dat->nCaso}} </th>
-        </tr>
-    </thead>
-</table>
-
-
+<b>Ref:</b>
+    ENR-<?php 
+    $fecha = new DateTime('now', new DateTimeZone('America/El_Salvador'));
+    echo $fecha->format('d').$fecha->format('m');
+    ?>-{{$dat->nCaso}}
+</p>
 <br>
 <p align="justify" style="font-size:14px;margin-left:10px;margin-right:10px;">Estimado(a) usuario(a):</p>
 
@@ -87,7 +78,7 @@ condición irregular a consecuencia de encontrar:<br>
 
 
 <p align="justify" style="font-size:14px;margin-left:10px;margin-right:10px;">
-Por dicha razón, hemos procedido a calcularle la energía no registrada, la cual asciende a <b> {{$dat->consumoENR}}</b> que
+Por dicha razón, hemos procedido a calcularle la energía no registrada, la cual asciende a <b> {{$dat->consumoENR}} kwh</b> que
 corresponde a <b>{{$dat->total}} IVA incluido</b>, correspondiente al periodo desde <b>{{$dat->fechaInicio}}</b>
 hasta el <b> {{$dat->fechaFin}}</b>.
 Dicho periodo y cálculo se estima de acuerdo con lo que establece el “Procedimiento para investigar

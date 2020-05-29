@@ -1745,28 +1745,19 @@ class ENRController extends Controller
         $pdfMerger = PDFMerger::init();
 
         if($codigoENR == 'OT' && $tipoENR == 'Medidor con fallas internas'){
-            $pdfMerger->addPDF(public_path('files/rptCobroCero'.$caso.'.pdf'), 'all');
+         //   $pdfMerger->addPDF(public_path('files/rptCobroCero'.$caso.'.pdf'), 'all');
             $pdfMerger->addPDF(public_path('files/infoGenAutoConsumoCero'.$caso.'.pdf'), 'all');
-
-        
         }
 
         if($codigoENR == 'LD' || $codigoENR == 'MM' || $codigoENR == 'PE' || $codigoENR == 'AM'){
-            $pdfMerger->addPDF(public_path('files/infoGenAutoFraude'.$caso.'.pdf'), 'all');
             $pdfMerger->addPDF(public_path('files/rptCondicionIrregular'.$caso.'.pdf'), 'all');
-            $pdfMerger->addPDF(public_path('files/rptInformeTecnico'.$caso.'.pdf'), 'all');
-            $pdfMerger->addPDF(public_path('files/rptCobroFraude'.$caso.'.pdf'), 'all');
-
-      
+           $pdfMerger->addPDF(public_path('files/infoGenAutoFraude'.$caso.'.pdf'), 'all');
         }
 
 
         if($codigoENR == 'OT' && $tipoENR == 'Varias'){
-            $pdfMerger->addPDF(public_path('files/infoGenAutoFraude'.$caso.'.pdf'), 'all');
             $pdfMerger->addPDF(public_path('files/rptCondicionIrregular'.$caso.'.pdf'), 'all');
-            $pdfMerger->addPDF(public_path('files/rptInformeTecnico'.$caso.'.pdf'), 'all');
-            $pdfMerger->addPDF(public_path('files/rptCobroFraude'.$caso.'.pdf'), 'all');
-
+            $pdfMerger->addPDF(public_path('files/infoGenAutoFraude'.$caso.'.pdf'), 'all');
         }
         $pdfMerger->addPDF(public_path('files/anexoCalculo'.$caso.'.pdf'), 'all');
 

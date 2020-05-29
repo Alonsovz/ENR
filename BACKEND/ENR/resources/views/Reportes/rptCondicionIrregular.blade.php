@@ -52,7 +52,7 @@
 
 <p align="justify" style="font-size:14px;margin-left:400px;margin-right:10px;">
 <b>Asunto:</b>
-Informe Técnico de Condición encontrada Medidor defectuoso por fallas internas.
+Informe Técnico de Condición irregular encontrada.
 <br>
 <b>Ref:</b>
     ENR-<?php 
@@ -105,12 +105,12 @@ El siguiente informe contiene lo siguiente: <br>
 <b>1.</b>&nbsp;&nbsp;Los registros históricos de facturación.<br>
 <b>2.</b>&nbsp;&nbsp;Órdenes de servicio relacionadas con la detección de la condición irregular.<br>
 <b>3.</b>&nbsp;&nbsp;Fotografías de la Condición encontrada.
-<br><br>
+<br>
 
 Para mayor información puede llamar al teléfono 2441-7019; 2345-6601 ó visitarnos en la agencia EDESAL más cercana.
-<br><br>
+<br>
 Sin otro particular aprovecho la oportunidad para saludarle y suscribirme.
-<br><br>
+<br>
 Atentamente.
 <br><br><br><br><br><br><br>
 Área de Control de Incidencias ENR
