@@ -25,7 +25,7 @@
          <h5 style="color:#02FF20; text-align: right;">Base de cálculo </h5>
         </div>
         <div class="col-lg-9">
-          <h5 style="color:#00EB79; text-align: left;"> {{datosGenerales.codBase}} -- 
+          <h6 style="color:#00EB79; text-align: left;"> {{datosGenerales.codBase}} -- 
             {{datosGenerales.metodologiaENR}}
           <a style="float: right !important; color: yellow;"> NIS:
              <a style="float: right !important; color: #00FFEA;"> &nbsp; {{datosGenerales.nis}}
@@ -35,8 +35,13 @@
           <a style="float: right !important; color: yellow;"> Tarifa:
             <a style="float: right !important; color: #00FFEA;" id="tarifaNis"> &nbsp; {{datosGenerales.tarifa}}
            </a>
-       </a>
-        </h5>
+          </a>
+          <br>
+          <a style="float: right !important; color: yellow;"> Usuario creación:
+            <a style="float: right !important; color: #00FFEA;" id="tarifaNis"> &nbsp; {{datosGenerales.usuarioCreacion}}
+           </a>
+           </a>
+        </h6>
         </div>
       </div>
 
@@ -1779,8 +1784,8 @@ background-color: #323259;" id="titleGlobal">
         </ul>
         </div>
         <h6 class="title" style="color:#B18AFF !important;margin-right: 40px;">
-          <img class="img-profile" src="../../../assets/imagenes/editModal.png" width=35 height=35>
-          Caso N°: <a style="color: #0CD902;">{{ordenNumeroG.caso}}</a>
+          Caso N°: <a style="color: #0CD902;">{{ordenNumeroG.caso}}</a><br>
+          Usuario creacion: <a style="color: #0CD902;">{{ordenNumeroG.usuarioCreacion}}</a> 
         </h6>
       </div>
       <div class="modal-body" style="max-height: calc(100vh - 200px);

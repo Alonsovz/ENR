@@ -223,10 +223,15 @@
           </div>
 
           <div class="col-md-6"><br>
-            <label><i class="fa fa-bolt"></i> Irregularidades presentadas:</label>
+            <label><i class="fas fa-bolt"></i> Irregularidades presentadas:</label>
             <textarea rows="3" formControlName="datosIrregularidades" 
             placeholder="Irregularidades que se adjuntarán a las cartas" class="form-control">
             </textarea>
+
+            <div *ngFor="let us of user">
+              <input type="hidden" formControlName="idUsuario" class="form-control" [(ngModel)]="us.id">
+            </div>
+            
         </div>
 
         </div>
@@ -383,9 +388,9 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
                   <img [src]="previewUrl1" height="150" style="margin-left:25%;"/>                  
               </div>
               </div>
-              <div class="col-md-2">
+              <div class="col-md-2" *ngFor="let us of user">
                 <label style="color: #1B1B38 !important"><i class="fas fa-upload"></i> Seleccione el archivo</label>
-                <button class="btn btn-warning"  (click)="onSubmit2(ordenNumero.orden)">
+                <button class="btn btn-warning"  (click)="onSubmit2(ordenNumero.orden, us.id)">
                   <i class="fas fa-upload"></i> Cargar Archivo
                  </button>
               </div>
@@ -443,6 +448,7 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
                         <td style="border-bottom: 1px solid white;">
                             <textarea class="form-control" rows="2" readonly="true"
                              formControlName="file" name="file"></textarea>
+                             <input type="text" formControlName="idUsuario" class="form-control">
                         </td>
                         
                     </tr>
@@ -514,11 +520,11 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
           <h4 style="text-align: center;color: #67E1E1;">¿Desea guardar el caso ENR?</h4>
         
         </div>
-        <div class="modal-footer" *ngFor ="let us of user">
+        <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal">
             <i class="fas fa-times-circle"></i>  No!
           </button>
-          <button type="button" class="btn btn-default save" data-dismiss="modal"  (click)="guardarDatos(user)">
+          <button type="button" class="btn btn-default save" data-dismiss="modal"  (click)="guardarDatos()">
             <i class="fas fa-thumbs-up"></i>  Si, guardar!
           </button>
           

@@ -108,6 +108,7 @@ export class DatosENRComponent implements OnInit {
       'diasRetroactivos' : new FormControl(''),
       'datosAdicionales' : new FormControl(''),
       'datosIrregularidades': new FormControl(''),
+      'idUsuario' : new FormControl(''),
     });
 
 
@@ -125,10 +126,8 @@ export class DatosENRComponent implements OnInit {
      this.adjuntoVer= this.sanitizer.bypassSecurityTrustResourceUrl('');
      this.urlArc = this.sanitizer.bypassSecurityTrustResourceUrl(this.url.getUrlBackEnd());
      this.rutaFile = this.url.getUrlBackEnd()+'descargarArchivo?ruta=';
-
-     this.user = JSON.parse(localStorage.getItem('usuario'));
-
-    
+    this.user = JSON.parse(localStorage.getItem('usuario'));
+   // this.frm_DatosNIS.controls["idUsuario"].setValue(this.user.id);
    }
 
    
@@ -390,11 +389,10 @@ export class DatosENRComponent implements OnInit {
  }
 
 //inserción de datos a guarddar
- public guardarDatos(usuario){
+ public guardarDatos(){
   let datosENRdto : DatosENR = new DatosENR();
 
-
-  datosENRdto = Object.assign(this.frm_DatosNIS.value,usuario);
+  datosENRdto = this.frm_DatosNIS.value;
 
 
   this.datosENR.saveDatosNISGenerales(datosENRdto).subscribe(
@@ -407,7 +405,7 @@ export class DatosENRComponent implements OnInit {
     () => {
       let datosENRdtoDoc : DatosENR = new DatosENR();
 
-      datosENRdtoDoc = Object.assign(this.docForm.value,usuario);
+      datosENRdtoDoc = this.docForm.value;
       this.datosENR.saveDocProbatoria(datosENRdtoDoc).subscribe(
         response => {
           
@@ -442,7 +440,7 @@ export class DatosENRComponent implements OnInit {
  public guardarAdjuntosOT(){
   let datosENRdtoDoc : DatosENR = new DatosENR();
 
-  datosENRdtoDoc = Object.assign(this.adjuntoOrdenesForm.value, this.user);
+  datosENRdtoDoc = this.adjuntoOrdenesForm.value;
 
   this.datosENR.saveDocOT(datosENRdtoDoc).subscribe(
     response => {
@@ -588,7 +586,8 @@ preview2() {
   }
 }
 //subir el archivo a la carpeta en la orden tecnica
-onSubmit2(numero) {
+onSubmit2(numero,user) {
+  
   const formData = new FormData();
   formData.append('file', this.fileData);
    
@@ -610,7 +609,9 @@ onSubmit2(numero) {
       this.adjuntos.push(
         this.fb1.group({ordenN:numero,nombreDocOrden:this.frm_ArchivoOT.controls["tituloDocProbatorioOT"].value,
         tipoAdjuntoOrden:this.frm_ArchivoOT.controls["tipoPruebaProbatorioOT"].value,
-        file:str.substring(12) }),    
+        file:str.substring(12),
+        idUsuario: user, }),    
+        
         );
 
         notie.alert({

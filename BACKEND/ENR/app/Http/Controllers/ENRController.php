@@ -8,6 +8,7 @@ use DB;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as FacadeResponse;
 use LynX39\LaraPdfMerger\Facades\PdfMerger;
+use Session;
 
 date_default_timezone_set("America/El_Salvador");
 
@@ -207,7 +208,7 @@ class ENRController extends Controller
         $fechaInicioENR = $request["fechaInicioENR"];
         $fechaFinENR = $request["fechaFinENR"];
         $diasCobro = $request["diasCobro"];
-        $usuario_creacion = $request["id"];
+        $usuario_creacion = $request["idUsuario"];
         $datosAdicionales = $request["datosAdicionales"];
         $datosIrregulares = $request["datosIrregularidades"];
 
@@ -258,7 +259,6 @@ class ENRController extends Controller
 
     public function saveDocProbatoria(Request $request){
         $doc = json_encode($request["documentacion"]);
-        $usuario_creacion = $request["id"];
         $documentacion = json_decode($doc);
        
         $contador = 0;
@@ -266,6 +266,8 @@ class ENRController extends Controller
         $ultimoCaso = DB::connection('facturacion')->table('enr_DatosGenerales')
         ->select('enr_DatosGenerales.id')->orderBy('enr_DatosGenerales.id','desc')->first();
 
+        $user = DB::connection('facturacion')->table('enr_DatosGenerales')
+        ->select('enr_DatosGenerales.usuario_creacion')->orderBy('enr_DatosGenerales.id','desc')->first();
 
         foreach($documentacion as $docSave){
             $insertar =  DB::connection('facturacion')->table('enr_Documentacion')
@@ -276,7 +278,7 @@ class ENRController extends Controller
                          'ruta' => $docSave->archivo,
                          'fechaCreacion'=>date('Ymd H:i:s'),
                          'idEliminado'=>1,
-                         'usuarioCreacion'=>$usuario_creacion,
+                         'usuarioCreacion'=>$user->usuario_creacion,
                          ]);
 
             $contador++;
@@ -297,7 +299,6 @@ class ENRController extends Controller
         $documentacion = json_decode($doc);
        
         $contador = 0;
-        $usuario_creacion = $request["id"];
 
       
       
@@ -310,7 +311,7 @@ class ENRController extends Controller
                        'fechaCreacion'=>date('Ymd H:i:s'),
                        'titulo'=>$docSave->nombreDocOrden,
                        'idEliminado'=>1,
-                       'usuarioCreacion'=>$usuario_creacion,
+                       'usuarioCreacion'=>$docSave->idUsuario,
                        ]);
             $contador++;
         }     
@@ -337,7 +338,7 @@ class ENRController extends Controller
         fes.codigo_tarifa as tarifa, dg.fechaInicio as fechaIn, dg.fechaFin as fechaFin from enr_datosGenerales dg
         inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
         inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
-        inner join comanda_db.dbo.users u on u.id = dg.usuario_creacion
+        inner join EDESAL_CALIDAD.dbo.SGT_Usuarios u on u.id = dg.usuario_creacion
         inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
         where dg.idEliminado = 1 and dg.estado = 1
         ");
@@ -359,7 +360,7 @@ class ENRController extends Controller
         fes.codigo_tarifa as tarifa, dg.fechaInicio as fechaIn, dg.fechaFin as fechaFin from enr_datosGenerales dg
         inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
         inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
-        inner join comanda_db.dbo.users u on u.id = dg.usuario_creacion
+        inner join EDESAL_CALIDAD.dbo.SGT_Usuarios u on u.id = dg.usuario_creacion
         inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
         where dg.idEliminado = 1 and dg.estado = 2
         ");
@@ -382,7 +383,7 @@ class ENRController extends Controller
         fes.codigo_tarifa as tarifa, dg.fechaInicio as fechaIn, dg.fechaFin as fechaFin from enr_datosGenerales dg
         inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
         inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
-        inner join comanda_db.dbo.users u on u.id = dg.usuario_creacion
+        inner join EDESAL_CALIDAD.dbo.SGT_Usuarios u on u.id = dg.usuario_creacion
         inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
         where dg.idEliminado = 1 and dg.estado = 3
         ");
@@ -579,7 +580,6 @@ class ENRController extends Controller
         $diasCobro = $request["diasCobro"];
         $datosAdicionales = $request["datosAdicionales"];
         $datosIrregulares = $request["datosIrregularidades"];
-        //$usuario_creacion = 151;
 
          //convertir fecha primer notificacion enr
         $fecha1 = date_create_from_format('Y-m-d',$fechaPrimeraNoti);
@@ -627,7 +627,6 @@ class ENRController extends Controller
         
        
         $doc = json_encode($request["documentacion"]);
-        $usuario_creacion = 151;
         $documentacion = json_decode($doc);
        
         $contador = 0;
@@ -686,6 +685,12 @@ class ENRController extends Controller
         select * from EDESAL_CALIDAD.dbo.SGT_usuarios where 
         alias = '".$usuario."' and password = '".$password."'
         ");
+
+        $idUser = DB::connection('facturacion')->table('EDESAL_CALIDAD.dbo.SGT_usuarios as u')
+        ->select('u.id as idUser')->where('u.alias',$usuario)->where('u.password',$password)->first();
+
+
+        Session::put('idUsuario',$idUser->idUser);
 
      
     return response()->json($usuariosesion);
@@ -1204,7 +1209,7 @@ class ENRController extends Controller
         $horasEstimadas = $request["horasEstimadas"];
         $voltajeSuministro = $request["voltajeSuministro"];
       
-        $usuario_creacion = 151;
+       
 
         $notificar =  DB::connection('facturacion')->table('enr_datosGenerales')
         ->where('id', $idCaso)
@@ -1237,7 +1242,7 @@ class ENRController extends Controller
         $consumoENRFacturar = $request["consumoENRFacturar"];
 
       
-        $usuario_creacion = 151;
+       
 
       
       
@@ -1260,8 +1265,6 @@ class ENRController extends Controller
         $consumoEstimado = $request["consumoEstimado"];
         $voltajeSuministro = $request["voltajeSuministro"];
 
-      
-        $usuario_creacion = saveDocOT;
 
         $notificar =  DB::connection('facturacion')->table('enr_datosGenerales')
         ->where('id', $idCaso)
@@ -1290,8 +1293,6 @@ class ENRController extends Controller
         $consENRDiario = $request["consumoDiarioENR"];
         $consumoENRFacturar = $request["consumoENRFacturar"];
 
-      
-        $usuario_creacion = 151;
 
       
       
@@ -1310,7 +1311,6 @@ class ENRController extends Controller
 
     public function savePeriodosSeleccionadosCaso2(Request $request){
         $periodos = json_encode($request["lecturas"]);
-        $usuario_creacion = 151;
         $periodosDes = json_decode($periodos);
        
         $contador = 0;
@@ -1347,7 +1347,6 @@ class ENRController extends Controller
 
     public function consumosRealesCaso3(Request $request){
         $periodos = json_encode($request["consumosReales3"]);
-        $usuario_creacion = 151;
         $periodosDes = json_decode($periodos);
        
         $contador = 0;
@@ -1385,7 +1384,7 @@ class ENRController extends Controller
         $totalConsumoEstimadoCT3 = $request["totalConsumoEstimadoCT3"];
 
       
-        $usuario_creacion = 151;
+   
 
       
        $eliminar =  DB::connection('facturacion')->table('enr_datosCalculados')
@@ -1406,7 +1405,6 @@ class ENRController extends Controller
 
     public function savePeriodosSeleccionadosCaso3(Request $request){
         $periodos = json_encode($request["lecturas"]);
-        $usuario_creacion = 151;
         $periodosDes = json_decode($periodos);
        
         $contador = 0;
@@ -1450,7 +1448,6 @@ class ENRController extends Controller
         $consumoENRFacturar = $request["consumoENRFacturar"];
 
       
-        $usuario_creacion = 151;
 
         $notificar =  DB::connection('facturacion')->table('enr_datosGenerales')
         ->where('id', $idCaso)
@@ -1472,7 +1469,6 @@ class ENRController extends Controller
 
     public function savePeriodosSeleccionadosCaso4(Request $request){
         $periodos = json_encode($request["lecturas"]);
-        $usuario_creacion = 151;
         $periodosDes = json_decode($periodos);
        
         $contador = 0;
@@ -1511,8 +1507,6 @@ class ENRController extends Controller
         $consumoENREstimado = $request["consumoENREstimado"];
         $consumoENRRegistrado = $request["consumoENRRegistrado"];
         $consumoENRFacturar = $request["consumoENRFacturar"];
-      
-        $usuario_creacion = 151;
 
         $notificar =  DB::connection('facturacion')->table('enr_datosGenerales')
         ->where('id', $idCaso)
@@ -1545,7 +1539,7 @@ class ENRController extends Controller
         $porcentajeExactitudBase = $request["porcentajeExactitudBase"];
         $diferenciaExactitud = $request["diferenciaExactitud"];
       
-        $usuario_creacion = 151;
+        
 
       
       $notificar =  DB::connection('facturacion')->table('enr_datosGenerales')
@@ -1572,7 +1566,6 @@ class ENRController extends Controller
 
     public function savePeriodosSeleccionadosCaso5(Request $request){
         $periodos = json_encode($request["lecturas"]);
-        $usuario_creacion = 151;
         $periodosDes = json_decode($periodos);
        
         $contador = 0;
@@ -1611,12 +1604,7 @@ class ENRController extends Controller
         $consFacturado  = $request["totalConsumo"];
         $consFueraRango  = $request["consumoFuera"];
         $consDFacturado  = $request["consumoDebioFacturar"];
-        $consumoENRFacturar  = $request["consumoENRFacturar"];
-      
-        $usuario_creacion = 151;
-
-      
-      
+        $consumoENRFacturar  = $request["consumoENRFacturar"]; 
 
          $insertar =  DB::connection('facturacion')->table('enr_datosCalculados')
          ->where('casoENR', $idCaso)
