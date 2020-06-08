@@ -46,7 +46,7 @@ export class RepositorioENRComponent implements OnInit {
   datosGenerales : Repositorio = new Repositorio();
   datosGeneralesLecturas : Repositorio = new Repositorio();
   adjuntoVer : SafeResourceUrl;
-  extension : Repositorio[];
+  extension : string;
   archivoEliminar : Repositorio = new Repositorio();
   datosPadre : Repositorio = new Repositorio();
   archivoEliminarOT : Repositorio = new Repositorio();
@@ -2888,7 +2888,7 @@ public eliminarLectura(i, periodo){
 
   public cobrarMedidor(){
 
-    let cobroMedidor : DatosENR = new DatosENR();
+    let cobroMedidor : Repositorio = new Repositorio();
   
     cobroMedidor = this.cobroMedidor.value;
 

@@ -39,7 +39,7 @@ export class DatosENRComponent implements OnInit {
   ordenes : DatosENR[];
 
   adjuntosFile : DatosENR[];
-  extension : DatosENR[];
+  extension : string;
   archivoEliminar : DatosENR = new DatosENR();
   ordenNumero : DatosENR = new DatosENR();
   adjuntoVer : SafeResourceUrl;

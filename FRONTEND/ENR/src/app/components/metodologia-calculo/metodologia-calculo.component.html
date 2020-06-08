@@ -165,12 +165,12 @@
         </h5>
         
       </div>
-      <div class="modal-body eliminarModal">
+      <div class="modal-body eliminarModal" *ngFor="let elM of eliMetCodigo">
         <img class="img-profile" src="../../../assets/imagenes/correct.png" width=45 height=45>
         <h4 style="color: #B18AFF;">Confirmación</h4>
         <hr style="background-color: #B18AFF !important;">
-        ¿Desea eliminar el código: <a style="color: yellow;">{{eliMetCodigo.codigo}}
-        ({{eliMetCodigo.TipoENR}})</a> ?
+        ¿Desea eliminar el código: <a style="color: yellow;">{{elM.codigo}}
+        ({{elM.TipoENR}})</a> ?
         <form [formGroup] = "frmEliminarMetodologiaCalc">
           <div class="row">
             <div class="col-md-4">

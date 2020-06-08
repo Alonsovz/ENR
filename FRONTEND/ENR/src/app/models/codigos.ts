@@ -1,6 +1,6 @@
 export class codigos {
     id: number;
     codigoTipo: string;
-    tipoENR: string;
+    TipoENR: string;
     tiempoRetroactivo : number;
 }
