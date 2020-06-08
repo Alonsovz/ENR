@@ -38,8 +38,8 @@ export class RepositorioENRComponent implements OnInit {
   adjuntosFileOrdenes: DatosENR[];
   ordenNumero : Repositorio = new Repositorio();
   ordenNumeroAd : Repositorio = new Repositorio();
-  ordenNumeroG : Repositorio = new Repositorio();
-  ordenNumeroGN : Repositorio = new Repositorio();
+  ordenNumeroG : DatosENR = new DatosENR();
+  ordenNumeroGN : DatosENR = new DatosENR();
   ordenNumeroCalculo :  Repositorio[] = new Array();
   fechaInicioTarifa :  Repositorio[] = new Array();
   fechaFinTarifa :  Repositorio[] = new Array();
@@ -760,7 +760,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
   //método para eliminar adjuntos del caso ENR
   public eliminarArchivo(orden){
-    let datosENRdto : DatosENR = new DatosENR();
+    let datosENRdto : Repositorio = new Repositorio();
   
     datosENRdto = this.frm_ArchivoEliminar.value;
   
@@ -792,7 +792,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
 //método para eliminar adjuntos de las ordenes tecnicas
   public eliminarArchivoOT(orden,datosPapa){
-    let datosENRdto : DatosENR = new DatosENR();
+    let datosENRdto : Repositorio = new Repositorio();
   
     datosENRdto = this.frm_ArchivoEliminarOT.value;
   
@@ -1214,7 +1214,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
      
     ////console.log(datosCaso);
 
-    let datos : DatosENR = new DatosENR();
+    let datos : Repositorio = new Repositorio();
 
     datos = this.frm_NuevoScan.value;
   
@@ -2577,7 +2577,7 @@ public eliminarLectura(i, periodo){
 
     if(caso == '1'){  
       
-      let datosCalculados1 : DatosENR = new DatosENR();
+      let datosCalculados1 : Repositorio = new Repositorio();
   
       datosCalculados1 = this.frm_Caso1.value;
 
@@ -2589,7 +2589,7 @@ public eliminarLectura(i, periodo){
          // //console.log("no");
         },
         () => { 
-          let datosCalculados2 : DatosENR = new DatosENR();
+          let datosCalculados2 : Repositorio = new Repositorio();
   
           datosCalculados2 = this.frm_LecturasEvaluarTotales.value;
 
@@ -2624,7 +2624,7 @@ public eliminarLectura(i, periodo){
     }
 
     if(caso == '2'){
-      let datosCalculados1 : DatosENR = new DatosENR();
+      let datosCalculados1 : Repositorio = new Repositorio();
   
       datosCalculados1 = this.frm_Caso2.value;
 
@@ -2636,7 +2636,7 @@ public eliminarLectura(i, periodo){
          // //console.log("no");
         },
         () => { 
-          let datosCalculados2 : DatosENR = new DatosENR();
+          let datosCalculados2 : Repositorio = new Repositorio();
   
           datosCalculados2 = this.frm_LecturasEvaluarTotales.value;
 
@@ -2649,7 +2649,7 @@ public eliminarLectura(i, periodo){
             },
             () => { 
               
-              let periodosSeleccionados : DatosENR = new DatosENR();
+              let periodosSeleccionados : Repositorio = new Repositorio();
   
               periodosSeleccionados = this.frm_LecturasEvaluar.value;
 
@@ -2692,7 +2692,7 @@ public eliminarLectura(i, periodo){
 
 
     if(caso == '3'){
-      let consumosReales : DatosENR = new DatosENR();
+      let consumosReales : Repositorio = new Repositorio();
   
       consumosReales = this.frm_ConsumosReales3.value;
 
@@ -2704,7 +2704,7 @@ public eliminarLectura(i, periodo){
          // //console.log("no");
         },
         () => { 
-          let consumosRealesTotales : DatosENR = new DatosENR();
+          let consumosRealesTotales : Repositorio = new Repositorio();
   
           consumosRealesTotales = this.frm_ConsumosReales3Totales.value;
 
@@ -2717,7 +2717,7 @@ public eliminarLectura(i, periodo){
             },
             () => { 
               
-              let periodosSeleccionados : DatosENR = new DatosENR();
+              let periodosSeleccionados : Repositorio = new Repositorio();
   
               periodosSeleccionados = this.frm_LecturasEvaluar.value;
 
@@ -2730,7 +2730,7 @@ public eliminarLectura(i, periodo){
             },
             () => { 
               
-              let periodosSeleccionados : DatosENR = new DatosENR();
+              let periodosSeleccionados : Repositorio = new Repositorio();
   
               periodosSeleccionados = this.frm_LecturasEvaluarTotales.value;
 
@@ -2772,7 +2772,7 @@ public eliminarLectura(i, periodo){
 
 
     if(caso == '4'){
-      let periodosSeleccionados : DatosENR = new DatosENR();
+      let periodosSeleccionados : Repositorio = new Repositorio();
   
               periodosSeleccionados = this.frm_LecturasEvaluar.value;
 
@@ -2785,7 +2785,7 @@ public eliminarLectura(i, periodo){
             },
             () => { 
               
-              let datosCalculados4 : DatosENR = new DatosENR();
+              let datosCalculados4 : Repositorio = new Repositorio();
   
           datosCalculados4 = this.frm_LecturasEvaluarTotales.value;
 
@@ -2820,7 +2820,7 @@ public eliminarLectura(i, periodo){
 
 
     if(caso == '5'){
-      let datosCalculados5 : DatosENR = new DatosENR();
+      let datosCalculados5 : Repositorio = new Repositorio();
   
           datosCalculados5 = this.frm_Caso5.value;
 
@@ -2832,7 +2832,7 @@ public eliminarLectura(i, periodo){
              // //console.log("no");
             },
             () => { 
-              let periodosSeleccionados : DatosENR = new DatosENR();
+              let periodosSeleccionados : Repositorio = new Repositorio();
   
               periodosSeleccionados = this.frm_LecturasEvaluar.value;
 
@@ -2845,7 +2845,7 @@ public eliminarLectura(i, periodo){
             },
             () => { 
 
-              let datosCalculados5 : DatosENR = new DatosENR();
+              let datosCalculados5 : Repositorio = new Repositorio();
   
               datosCalculados5 = this.frm_LecturasEvaluarTotales.value;
 

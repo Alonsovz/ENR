@@ -28,14 +28,12 @@
               "src/styles.css",
               "../ENR/src/assets/templates/startbootstrap-sb-admin-2-gh-pages/css/sb-admin-2.css",
               "./node_modules/bootstrap/dist/css/bootstrap.css",
-              
               "../ENR/node_modules/@fortawesome/fontawesome-free/css/all.css",
               "../ENR/node_modules/@fortawesome/fontawesome-free/css/fontawesome.css",
-              
               "../ENR/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css",
               "../ENR/node_modules/notie/dist/notie.css",
+              "../ENR/node_modules/animate.css/animate.css"
               
-              "../ENR/node_modules/ng-pick-datetime/assets/style/picker.min.css"
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.js",
