@@ -32,7 +32,7 @@
               "../ENR/node_modules/@fortawesome/fontawesome-free/css/fontawesome.css",
               "../ENR/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css",
               "../ENR/node_modules/notie/dist/notie.css",
-              "../ENR/node_modules/animate.css/animate.css"
+              "../ENR/node_modules/animate.css/animate.min.css"
               
             ],
             "scripts": [
