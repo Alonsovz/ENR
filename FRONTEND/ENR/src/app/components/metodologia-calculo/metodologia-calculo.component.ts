@@ -24,7 +24,7 @@ export class MetodologiaCalculoComponent implements OnInit {
   frmEliminarMetodologiaCalc : FormGroup;
 
   metCodigo : metodologia = new metodologia();
-  eliMetCodigo : metodologia[] = new Array();
+  eliMetCodigo : metodologia = new metodologia();
 
   constructor( private metodologiaENR : MetodologiaCalcService,private chRef: ChangeDetectorRef) {
 
