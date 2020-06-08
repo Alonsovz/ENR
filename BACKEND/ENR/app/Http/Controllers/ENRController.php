@@ -446,13 +446,11 @@ class ENRController extends Controller
 
         $file = $request["rutaEliminar"];
         $id = $request["idEliminar"];
-        $user = 151;
+       
         
         $delete =  DB::connection('facturacion')->table('enr_documentacionOT')->where('id', $id)
                          ->update([
                              'idEliminado' => 2,
-                              'usuario_borrado' => $user,
-                              'fechaBorrado' => date('Ymd H:i:s'),
                          ]);
 
         unlink(public_path('files/'.$file));
@@ -469,8 +467,6 @@ class ENRController extends Controller
         $delete =  DB::connection('facturacion')->table('enr_documentacion')->where('id', $id)
                          ->update([
                              'idEliminado' => 2,
-                              'usuario_borrado' => $user,
-                              'fechaBorrado' => date('Ymd H:i:s'),
                          ]);
 
         unlink(public_path('files/'.$file));
@@ -495,7 +491,7 @@ class ENRController extends Controller
         dg.id and idEliminado = 1) as adjuntos,
         dg.codigoTipoENR as codTipoENR
         from enr_documentacion d
-        inner join comanda_db.dbo.users u on u.id = d.usuarioCreacion
+        inner join EDESAL_CALIDAD.dbo.SGT_usuarios u on u.id = d.usuarioCreacion
         inner join enr_datosGenerales dg on dg.id = d.idCasoENR
         inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
         inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
@@ -636,6 +632,11 @@ class ENRController extends Controller
 
 
         foreach($documentacion as $docSave){
+
+            $user = DB::connection('facturacion')->table('enr_DatosGenerales')
+            ->select('enr_DatosGenerales.usuario_creacion')->where('enr_DatosGenerales.id',$docSave->caso )->first();
+
+            
             $insertar =  DB::connection('facturacion')->table('enr_Documentacion')
                          ->insert([
                         'idCasoENR' => $docSave->caso ,
@@ -644,7 +645,7 @@ class ENRController extends Controller
                          'ruta' => $docSave->archivo,
                          'fechaCreacion'=>date('Ymd H:i:s'),
                          'idEliminado'=>1,
-                         'usuarioCreacion'=>$usuario_creacion,
+                         'usuarioCreacion'=>$user->usuario_creacion,
                          ]);
 
             $contador++;
@@ -1711,7 +1712,7 @@ class ENRController extends Controller
         from enr_datosGenerales where id = ".$id."
         union 
         select id as id, titulo as titulo, ruta as ruta from enr_documentacion 
-        where idCasoENR =  ".$id." ");
+        where idCasoENR =  ".$id." and idEliminado = 1");
 
         return response()->json($getDatos);
     }

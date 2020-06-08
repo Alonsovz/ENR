@@ -2433,9 +2433,9 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
                   <img [src]="previewUrl1" height="150" style="margin-left:25%;"/>                  
               </div>
               </div>
-              <div class="col-md-2">
+              <div class="col-md-2" *ngFor="let us of user">
                 <label style="color: #1B1B38 !important"><i class="fas fa-upload"></i> Seleccione el archivo</label>
-                <button class="btn btn-warning"  (click)="onSubmit2(ordenNumeroAd.orden)">
+                <button class="btn btn-warning"  (click)="onSubmit2(ordenNumeroAd.orden, us.id)">
                   <i class="fas fa-upload"></i> Cargar Archivo
                  </button>
               </div>
@@ -2493,6 +2493,7 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
                         <td style="border-bottom: 1px solid white;">
                             <textarea class="form-control" rows="2" readonly="true"
                              formControlName="file" name="file"></textarea>
+                             <input type="hidden" formControlName="idUsuario">
                         </td>
                         
                     </tr>

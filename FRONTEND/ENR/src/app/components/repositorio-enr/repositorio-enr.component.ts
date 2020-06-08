@@ -17,6 +17,7 @@ import { codigos } from 'src/app/models/codigos';
 import { metodologia } from 'src/app/models/metodologiaCal';
 import { isNull } from 'util';
 import { count } from 'rxjs/operators';
+import { Usuario } from 'src/app/models/usuario';
 
 @Component({
   selector: 'app-repositorio-enr',
@@ -24,6 +25,7 @@ import { count } from 'rxjs/operators';
   styleUrls: ['./repositorio-enr.component.css']
 })
 export class RepositorioENRComponent implements OnInit {
+  user: Usuario = new Usuario();
   repositorioIng : Repositorio[];
   frm_ArchivoEliminar : FormGroup;
   frm_NuevoScan: FormGroup;
@@ -297,6 +299,7 @@ export class RepositorioENRComponent implements OnInit {
     }
 
   ngOnInit() {
+    this.user = JSON.parse(localStorage.getItem('usuario'));
     this.frm_PdfEvaluar = this.fbpdf.group({pdfs: this.fbpdf.array([]),});
     this.frm_LecturasEvaluar = this.fb2.group({lecturas: this.fb2.array([]),});
     this.docForm = this.fb.group({documentacion: this.fb.array([]),});
@@ -511,7 +514,7 @@ export class RepositorioENRComponent implements OnInit {
   }
   
   //subir el archivo a la carpeta
-  onSubmit2(numero) {
+  onSubmit2(numero,user) {
     const formData = new FormData();
     formData.append('file', this.fileData);
      
@@ -533,7 +536,8 @@ export class RepositorioENRComponent implements OnInit {
         this.adjuntos.push(
           this.fb1.group({ordenN:numero,nombreDocOrden:this.frm_ArchivoOT.controls["tituloDocProbatorioOT"].value,
           tipoAdjuntoOrden:this.frm_ArchivoOT.controls["tipoPruebaProbatorioOT"].value,
-          file:str.substring(12) }),    
+          file:str.substring(12),
+          idUsuario:user, }),    
           );
   
           notie.alert({
