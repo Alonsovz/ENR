@@ -9,6 +9,6 @@ ruta: string;
 caso: string;
 orden: string;
 tipo: string;
-
+num_suministro: string;
 
 }

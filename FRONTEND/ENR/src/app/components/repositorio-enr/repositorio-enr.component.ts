@@ -2885,6 +2885,11 @@ public eliminarLectura(i, periodo){
 
   }
 
+  public asigFechaFin(){
+    var fecha = this.frmDatosENR.controls["fechaRegular"].value;
+
+    this.frmDatosENR.controls["fechaFinENR"].setValue(fecha);
+  }
 
   public cobrarMedidor(){
 
