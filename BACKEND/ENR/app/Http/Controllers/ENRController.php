@@ -419,7 +419,7 @@ class ENRController extends Controller
         convert(varchar(10),d.fechaCreacion,103) as fechaCreacion,
         u.alias as creador,RIGHT(d.ruta,3) as ext
         from enr_documentacionOT d
-        inner join comanda_db.dbo.users u on u.id = d.usuarioCreacion
+        inner join EDESAL_CALIDAD.dbo.SGT_Usuarios u on u.id = d.usuarioCreacion
         where d.idEliminado = 1 and d.correlativoOrden = ?
         ",[$codigo]);
 
