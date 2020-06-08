@@ -89,7 +89,7 @@ export class MetodologiaCalculoComponent implements OnInit {
 
     metodologiaDTO = this.frmEditarMetodologiaCalc.value;
     
-    console.log(metodologiaDTO);
+   // console.log(metodologiaDTO);
     this.metodologiaENR.updateMetodologia(metodologiaDTO).subscribe(
       response => {},
       err => {
@@ -117,7 +117,7 @@ export class MetodologiaCalculoComponent implements OnInit {
 
     metodologiaDTO = this.frmEliminarMetodologiaCalc.value;
     
-    console.log(metodologiaDTO);
+    //console.log(metodologiaDTO);
     this.metodologiaENR.deleteMetodologia(metodologiaDTO).subscribe(
       response => {},
       err => {
