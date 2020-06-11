@@ -3056,6 +3056,7 @@ public eliminarLectura(i, periodo){
         // //console.log("no");
         },
         () => { 
+          this.getRepositorioCalc();
           window.open(url, '_blank');
         },
         );

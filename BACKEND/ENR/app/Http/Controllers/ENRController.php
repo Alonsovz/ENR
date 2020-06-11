@@ -1799,6 +1799,11 @@ class ENRController extends Controller
         $codigoENR = $request["codigoTipoENR"];
         $tipoENR = $request["codigoENR"];
 
+
+        $execProcedure =  DB::connection('facturacion')->statement(
+            "exec  [dbo].[enr_pagosTotales] ".$caso."");
+
+
         $data =  DB::connection('facturacion')->select(
             "select distinct dg.id as nCaso,dg.num_suministro as nis,
             cli.nombres+' '+cli.apellidos as cliente,
@@ -1835,56 +1840,11 @@ class ENRController extends Controller
             '$'+str(cobro_medidor,12,2)
             end from enr_totalPagos where casoENR = dg.id)
             as cobroEquipo,
-            '$'+str(
-            (select sum(cobro) from enr_montoDistribucionENR where casoENR =
-            dg.id) +
-            (select sum(cobro) from enr_montoEnergiaENR where casoENR =
-            dg.id)
-            +
-            (select case when cobro_medidor = '' or cobro_medidor is null
-            then 0
-            else
-            cobro_medidor
-            end from enr_totalPagos where casoENR = dg.id)
-
-            ,12,2) as subtotal,
-            '$'+str(
-            ((select sum(cobro) from enr_montoDistribucionENR where casoENR =
-            dg.id) 
-            +
-            (select case when cobro_medidor = '' or cobro_medidor is null
-            then 0
-            else
-            cobro_medidor
-            end from enr_totalPagos where casoENR = dg.id)
-            +
-            (select sum(cobro) from enr_montoEnergiaENR where casoENR =
-            dg.id)) * 0.13,12,2) as iva,
+            '$' + str((select subtotal from enr_totalPagos where casoENR = dg.id),12,2) as subtotal,
+             '$' + str((select iva from enr_totalPagos where casoENR = dg.id),12,2) as iva,
 
 
-            '$' + str(
-            (select case when cobro_medidor = '' or cobro_medidor is null
-            then 0
-            else
-            cobro_medidor
-            end from enr_totalPagos where casoENR = dg.id)
-            +
-            (select sum(cobro) from enr_montoDistribucionENR where casoENR =
-            dg.id) +
-            (select sum(cobro) from enr_montoEnergiaENR where casoENR =
-            dg.id)
-            +
-            ((select sum(cobro) from enr_montoDistribucionENR where casoENR =
-            dg.id) +
-            (select sum(cobro) from enr_montoEnergiaENR where casoENR =
-            dg.id)
-            +
-            (select case when cobro_medidor = '' or cobro_medidor is null
-            then 0
-            else
-            cobro_medidor
-            end from enr_totalPagos where casoENR = dg.id)
-            ) * 0.13,12,2) as total
+            '$' + str((select totalPagar from enr_totalPagos where casoENR = dg.id),12,2) as total
             from enr_datosGenerales dg 
             inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
             inner join fe_cliente as cli on cli.CODIGO_CLIENTE = fes.CODIGO_CLIENTE

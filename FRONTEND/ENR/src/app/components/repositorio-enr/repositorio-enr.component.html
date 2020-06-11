@@ -1625,7 +1625,6 @@ background-color: #323259;" id="titleGlobal">
                             <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Cod. Metodología ENR</th>
                             <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Dias de Cobro</th>
                             <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Fecha de Creación</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;" class="text-center">Acciones</th>
                         </tr>
                         </thead>
                         <tbody style="background-color:#323259; color:white;text-align: center;font-size: 13px;">
@@ -1637,16 +1636,7 @@ background-color: #323259;" id="titleGlobal">
                                <td>{{rep.metodologiaENR}}</td>
                                <td>{{rep.diasCobrar}}</td>
                                <td>{{rep.fechaCreacion}}</td>
-                               <td>
-                                <button class="btn btn-default btn-circle btn1"
-                                data-toggle="modal"  data-target="#datosCaso">
-                                    <i class="fas fa-edit"></i>
-                                 </button>
-                                         &nbsp;
-                                 <button class="btn btn-default btn-circle btn2">
-                                     <i class="fas fa-calculator"></i>
-                                 </button>
-                               </td>
+                               
                             </tr>
                         </tbody>
                     </table><br><br>
@@ -2933,7 +2923,7 @@ tabindex="-1" role="dialog" id="nuevoScan">
           <i class="fas fa-times-circle"></i>  Cancelar!
         </button>
         <button type="button" class="btn btn-info"  style="color:black !important;"
-        (click)="fusionarPDF(datoImprimir, datoImprimir.caso)">
+        (click)="fusionarPDF(datoImprimir, datoImprimir.caso)" data-dismiss="modal">
           <i class="fas fa-print"></i>  Generar reporte! 
         </button>
 
