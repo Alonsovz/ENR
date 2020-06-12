@@ -1886,4 +1886,87 @@ class ENRController extends Controller
     return response()->json($data);
     }
 
+
+    public function repositorioGlobal(Request $request){
+
+        $fecha1r = $request["fechaInicio"];
+        $fecha2r = $request["fechaFin"];
+
+
+        $fecha1 = date_create_from_format('Y-m-d',$fecha1r);
+
+        $fechaIn = date_format($fecha1,'Ymd');
+
+        $fecha2 = date_create_from_format('Y-m-d',$fecha2r);
+
+        $fechaFin = date_format($fecha2,'Ymd');
+
+
+        $data =  DB::connection('facturacion')->select(
+            "
+            select convert(varchar(10),dg.fechaRegularizacion, 103) as fechaIrregular,
+                case when month(dg.fechaRegularizacion) = 1
+                then
+                'Enero'
+                when month(dg.fechaRegularizacion) = 2
+                then
+                'Febrero'
+                when month(dg.fechaRegularizacion) = 3
+                then
+                'Marzo'
+                when month(dg.fechaRegularizacion) = 4
+                then
+                'Abril'
+                when month(dg.fechaRegularizacion) = 5
+                then
+                'Mayo'
+                when month(dg.fechaRegularizacion) = 6
+                then
+                'Junio'
+                when month(dg.fechaRegularizacion) = 7
+                then
+                'Julio'
+                when month(dg.fechaRegularizacion) = 8
+                then
+                'Agosto'
+                when month(dg.fechaRegularizacion) = 9
+                then
+                'Septiembre'
+                when month(dg.fechaRegularizacion) = 10
+                then
+                'Octubre'
+                when month(dg.fechaRegularizacion) = 11
+                then
+                'Noviembre'
+                when month(dg.fechaRegularizacion) = 12
+                then
+                'Diciembre'
+                end as mesIrregular,convert(varchar(10),dg.fechaCreacion,103) as fechaAnalisis,
+                dg.num_suministro as nis, cod.TipoENR as expCodENR, met.TipoENR as expMetCal,
+                convert(varchar(10), dg.fechaPrimerNoti, 103) as fechaPrimerNoti,
+                (select str(sum(consumo),12,2) from enr_consumoENR where casoENR= dg.id)
+                as consumoENR,
+                (select '$'+str(sum(cobro),12,2) from enr_montoDistribucionENR where casoENR =
+                dg.id) as montoDistribucion,
+                (select '$'+str(sum(cobro),12,2) from enr_montoEnergiaENR where casoENR =
+                dg.id) as montoEnergia,
+                (select  case when cobro_medidor is null 
+                then 
+                '$ 0.00'
+                else
+                '$'+str(cobro_medidor,12,2)
+                end from enr_totalPagos where casoENR = dg.id)
+                as cobroMedicion,
+                '$' + str((select iva from enr_totalPagos where casoENR = dg.id),12,2) as iva,
+                '$' + str((select totalPagar from enr_totalPagos where casoENR = dg.id),12,2) as total
+                from enr_datosGenerales dg 
+                inner join enr_gestionTipoEnr as cod on cod.id = dg.codigoTipoENR
+                inner join enr_metodologiaCalc as met on met.id = dg.codigoTipoMet
+                where dg.estado = 3
+                and fechaRegularizacion between '".$fechaIn." 00:00:00' and '".$fechaFin." 23:59:59' 
+            ");
+
+
+            return response()->json($data);
+    }
 }

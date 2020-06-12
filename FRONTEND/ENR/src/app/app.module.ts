@@ -16,6 +16,7 @@ import { NgxMaskModule } from 'ngx-mask';
 import { RepositorioENRComponent } from './components/repositorio-enr/repositorio-enr.component';
 import { LoginComponent } from './login/login.component';
 import { CredencialesGuard } from './login/credenciales.guard';
+import { RepositorioGlobalComponent } from './components/repositorio-global/repositorio-global.component';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { CredencialesGuard } from './login/credenciales.guard';
     DatosENRComponent,
     RepositorioENRComponent,
     LoginComponent,
+    RepositorioGlobalComponent,
          
   ],
   imports: [

@@ -400,5 +400,11 @@ export class RepositorioEnrService {
     //console.log(orden);
     return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'anexoCalculo',caso).pipe(map(data => data as Repositorio[]));
   }
+ 
+  public repositorioGlobal(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'repositorioGlobal', kwh).pipe(map(data => data as Repositorio[]));
+  }
   
 }
+

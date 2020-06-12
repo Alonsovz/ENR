@@ -9,10 +9,11 @@ import { DatosENRComponent } from './components/datos-enr/datos-enr.component';
 import { RepositorioENRComponent } from './components/repositorio-enr/repositorio-enr.component';
 import { LoginComponent } from './login/login.component';
 import { CredencialesGuard } from './login/credenciales.guard';
+import { RepositorioGlobalComponent } from './components/repositorio-global/repositorio-global.component';
 
 
 const routes: Routes = [
-  {path: 'testlaravel1', component: TestComponent },
+  {path: 'repositorioGlobal', component: RepositorioGlobalComponent },
   {path: 'dashboard', component: DashboardComponent },
   {path: 'gestiones', component: CodigoTipoENRComponent },
   {path: 'metodologiaCalc', component: MetodologiaCalculoComponent },

@@ -167,6 +167,9 @@ Route::get('/', function () {
     Route::post('multiplesArchivos', 'ENRController@multiplesArchivos');
 
     Route::post('anexoCalculo', 'ENRController@anexoCalculo');
+
+    Route::post('repositorioGlobal', 'ENRController@repositorioGlobal');
+    
     
     
 

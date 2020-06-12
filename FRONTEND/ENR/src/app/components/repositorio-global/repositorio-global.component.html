@@ -1,0 +1,91 @@
+<div class="row" style="margin-left: 20px; margin-right: 20px;">
+    <div class="col-lg-1">
+        <img src="./assets/imagenes/global2.png" style="float: right;">
+    </div>
+    <div class="col-lg-11">
+        <div class="col-lg-12">
+            <h2 style="font-size: 20px;color:#49F7DD;font-weight: bold;">
+                Repositorio global de Casos ENR
+           </h2>
+      
+            <hr style="background-color: #49F7DD !important; height: 2px;">
+        </div><br>
+    </div>
+
+    <h3 style="color:#9AFB4D;margin-left: 20px; margin-right: 20px;font-size:15px;
+    font-weight: bold;">Seleccione un rango de fechas de regularización para generar la tabla</h3>
+    <form [formGroup]="frmRangoFechas" style="width: 100% !important;margin-left: 20px; margin-right: 20px;">
+        <div class="row">
+            <div class="col-lg-4">
+              <label> <i class="fas fa-calendar"></i> Fecha inicio:</label>
+              <input type="date" class="form-control" formControlName="fechaInicio" name="fechaInicio">
+            </div>
+            <div class="col-lg-4">
+              <label> <i class="fas fa-calendar"></i> Fecha fin: </label>
+              <input type="date"  class="form-control" formControlName="fechaFin" name="fechaFin">
+              
+            </div>
+            <div class="col-lg-4">
+                <button type="submit" [disabled] = "frmRangoFechas.invalid" (click)="procesarTabla()"
+                class="btn btn-success" style="margin-top: 30px;"> <i class="fa fa-search"></i> Procesar tabla</button> 
+            </div>
+        </div><br><br>
+    </form>
+      
+    <div id="data" style="display: none; width: 98% !important;">
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="table small mt-3" style="overflow: scroll;overflow: auto;" id="datos_Tbl">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Fecha de irregularidad</th>
+                            <th>Mes de la Irregularidad</th>
+                            <th>Fecha analisis del caso</th>
+                            <th>NIS</th>
+                           <!-- <th>Residencial</th>-->
+                            <th>Explicación Código tipo ENR</th>
+                            <th>Explicacion Metodología cálculo</th>
+                            <th>Fecha 1a notificación</th>
+                            <th>ENR Kwh</th>
+                            <th>Valor US$ Distribucion</th>
+                            <th>Valor US$ Energia</th>
+                            <th>Cobro Equipo Medición</th>
+                            <th>IVA</th>
+                            <th>Monto Total</th>
+                            <!--<th>ESTADO DE COBRO</th>
+                            <th>Forma de Pago</th>
+                            <th>Fecha Emision</th>
+                            <th>N° Factura</th>
+                            <th>Base de Factura</th>-->
+                        </tr>
+                    </thead>
+                    <tbody  style="background-color:#222245; color:white;text-align: center;
+                    font-size: 14px;">
+                        <tr  *ngFor="let dat of datos">
+                                <td>{{dat.fechaIrregular}}</td>
+                                <td>{{dat.mesIrregular}}</td>
+                                <td>{{dat.fechaAnalisis}}</td>
+                                <td>{{dat.nis}}</td>
+                                <!--<td></td>-->
+                                <td>{{dat.expCodENR}}</td>
+                                <td>{{dat.expMetCal}}</td>
+                                <td>{{dat.fechaPrimerNoti}}</td>
+                                <td>{{dat.consumoENR}}</td>
+                                <td>{{dat.montoDistribucion}}</td>
+                                <td>{{dat.montoEnergia}}</td>
+                                <td>{{dat.cobroMedicion}}</td>
+                                <td>{{dat.iva}}</td>
+                                <td>{{dat.total}}</td>
+                                <!--<td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>-->
+                        </tr>
+                    </tbody>
+                </table><br><br><br>
+            </div>
+        </div>
+        
+    </div>
+    
+</div>
