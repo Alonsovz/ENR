@@ -31,6 +31,7 @@ export class RepositorioGlobalComponent implements OnInit {
   }
 
   procesarTabla(){
+    $("#loading").show();
     let datosENRdto : Repositorio = new Repositorio();
   
     datosENRdto = this.frmRangoFechas.value;
@@ -47,7 +48,7 @@ export class RepositorioGlobalComponent implements OnInit {
         
         this.dataTable = table.DataTable({
         'responsive': true,
-          'order' :[[1,'asc']],
+          'order' :[[0,'asc']],
   
         'language' : {
           'sProcessing':     'Procesando...',
@@ -77,6 +78,7 @@ export class RepositorioGlobalComponent implements OnInit {
       },
       err => {},
       () => {
+        $("#loading").hide();
         $("#data").show();
       }
     );

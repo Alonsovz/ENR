@@ -12,7 +12,7 @@
         </div><br>
     </div>
 
-    <h3 style="color:#9AFB4D;margin-left: 20px; margin-right: 20px;font-size:15px;
+    <h3 style="color:#E7D203;margin-left: 20px; margin-right: 20px;font-size:15px;
     font-weight: bold;">Seleccione un rango de fechas de regularización para generar la tabla</h3>
     <form [formGroup]="frmRangoFechas" style="width: 100% !important;margin-left: 20px; margin-right: 20px;">
         <div class="row">
@@ -30,10 +30,40 @@
                 class="btn btn-success" style="margin-top: 30px;"> <i class="fa fa-search"></i> Procesar tabla</button> 
             </div>
         </div><br><br>
+
+        <div id="loading"style="text-align: center !important; align-items: center !important;display: none;">
+            <div class="lds-spinner">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+            <div style="text-align: center;font-size: 23px;color:#02FF20;font-weight: bold;">
+              <img src="./assets/imagenes/global.png"style="margin-bottom:10px !important">
+              Procesando información
+             </div>
+          </div>
     </form>
+
+
+    
       
     <div id="data" style="display: none; width: 98% !important;">
         <div class="row">
+            <div class="col-lg-12">
+                <button class="btn btn-info" style="float: right;margin-right: 20px;"> <i class="fas fa-file-excel"></i> Exportar a excel</button>
+                <br><br>
+            </div>
+        </div>
+        <div class="row" style="margin-left: 10px; margin-right: 10px;">
             <div class="col-lg-12">
                 <table class="table small mt-3" style="overflow: scroll;overflow: auto;" id="datos_Tbl">
                     <thead class="thead-dark">
@@ -42,7 +72,7 @@
                             <th>Mes de la Irregularidad</th>
                             <th>Fecha analisis del caso</th>
                             <th>NIS</th>
-                           <!-- <th>Residencial</th>-->
+                            <th>Residencial</th>
                             <th>Explicación Código tipo ENR</th>
                             <th>Explicacion Metodología cálculo</th>
                             <th>Fecha 1a notificación</th>
@@ -66,7 +96,7 @@
                                 <td>{{dat.mesIrregular}}</td>
                                 <td>{{dat.fechaAnalisis}}</td>
                                 <td>{{dat.nis}}</td>
-                                <!--<td></td>-->
+                                <td>{{dat.residencial}}</td>
                                 <td>{{dat.expCodENR}}</td>
                                 <td>{{dat.expMetCal}}</td>
                                 <td>{{dat.fechaPrimerNoti}}</td>

@@ -1903,67 +1903,81 @@ class ENRController extends Controller
 
 
         $data =  DB::connection('facturacion')->select(
-            "
-            select convert(varchar(10),dg.fechaRegularizacion, 103) as fechaIrregular,
-                case when month(dg.fechaRegularizacion) = 1
-                then
-                'Enero'
-                when month(dg.fechaRegularizacion) = 2
-                then
-                'Febrero'
-                when month(dg.fechaRegularizacion) = 3
-                then
-                'Marzo'
-                when month(dg.fechaRegularizacion) = 4
-                then
-                'Abril'
-                when month(dg.fechaRegularizacion) = 5
-                then
-                'Mayo'
-                when month(dg.fechaRegularizacion) = 6
-                then
-                'Junio'
-                when month(dg.fechaRegularizacion) = 7
-                then
-                'Julio'
-                when month(dg.fechaRegularizacion) = 8
-                then
-                'Agosto'
-                when month(dg.fechaRegularizacion) = 9
-                then
-                'Septiembre'
-                when month(dg.fechaRegularizacion) = 10
-                then
-                'Octubre'
-                when month(dg.fechaRegularizacion) = 11
-                then
-                'Noviembre'
-                when month(dg.fechaRegularizacion) = 12
-                then
-                'Diciembre'
-                end as mesIrregular,convert(varchar(10),dg.fechaCreacion,103) as fechaAnalisis,
-                dg.num_suministro as nis, cod.TipoENR as expCodENR, met.TipoENR as expMetCal,
-                convert(varchar(10), dg.fechaPrimerNoti, 103) as fechaPrimerNoti,
-                (select str(sum(consumo),12,2) from enr_consumoENR where casoENR= dg.id)
-                as consumoENR,
-                (select '$'+str(sum(cobro),12,2) from enr_montoDistribucionENR where casoENR =
-                dg.id) as montoDistribucion,
-                (select '$'+str(sum(cobro),12,2) from enr_montoEnergiaENR where casoENR =
-                dg.id) as montoEnergia,
-                (select  case when cobro_medidor is null 
-                then 
-                '$ 0.00'
-                else
-                '$'+str(cobro_medidor,12,2)
-                end from enr_totalPagos where casoENR = dg.id)
-                as cobroMedicion,
-                '$' + str((select iva from enr_totalPagos where casoENR = dg.id),12,2) as iva,
-                '$' + str((select totalPagar from enr_totalPagos where casoENR = dg.id),12,2) as total
-                from enr_datosGenerales dg 
-                inner join enr_gestionTipoEnr as cod on cod.id = dg.codigoTipoENR
-                inner join enr_metodologiaCalc as met on met.id = dg.codigoTipoMet
-                where dg.estado = 3
-                and fechaRegularizacion between '".$fechaIn." 00:00:00' and '".$fechaFin." 23:59:59' 
+            "select convert(varchar(10),dg.fechaRegularizacion, 103) as fechaIrregular,
+            case when month(dg.fechaRegularizacion) = 1
+            then
+            'Enero'
+            when month(dg.fechaRegularizacion) = 2
+            then
+            'Febrero'
+            when month(dg.fechaRegularizacion) = 3
+            then
+            'Marzo'
+            when month(dg.fechaRegularizacion) = 4
+            then
+            'Abril'
+            when month(dg.fechaRegularizacion) = 5
+            then
+            'Mayo'
+            when month(dg.fechaRegularizacion) = 6
+            then
+            'Junio'
+            when month(dg.fechaRegularizacion) = 7
+            then
+            'Julio'
+            when month(dg.fechaRegularizacion) = 8
+            then
+            'Agosto'
+            when month(dg.fechaRegularizacion) = 9
+            then
+            'Septiembre'
+            when month(dg.fechaRegularizacion) = 10
+            then
+            'Octubre'
+            when month(dg.fechaRegularizacion) = 11
+            then
+            'Noviembre'
+            when month(dg.fechaRegularizacion) = 12
+            then
+            'Diciembre'
+            end as mesIrregular,convert(varchar(10),dg.fechaCreacion,103) as fechaAnalisis,
+            dg.num_suministro as nis,feCol.nombre_colonia as residencial, cod.TipoENR as expCodENR, met.TipoENR as expMetCal,
+            convert(varchar(10), dg.fechaPrimerNoti, 103) as fechaPrimerNoti,
+            (select str(sum(consumo),12,2) from enr_consumoENR where casoENR= dg.id)
+            as consumoENR,
+            (select '$'+str(sum(cobro),12,2) from enr_montoDistribucionENR where casoENR =
+            dg.id) as montoDistribucion,
+            (select '$'+str(sum(cobro),12,2) from enr_montoEnergiaENR where casoENR =
+            dg.id) as montoEnergia,
+            (select  case when cobro_medidor is null 
+            then 
+            '$ 0.00'
+            else
+            '$'+str(cobro_medidor,12,2)
+            end from enr_totalPagos where casoENR = dg.id)
+            as cobroMedicion,
+            '$' + str((select iva from enr_totalPagos where casoENR = dg.id),12,2) as iva,
+            '$' + str((select totalPagar from enr_totalPagos where casoENR = dg.id),12,2) as total
+            from enr_datosGenerales dg 
+            inner join enr_gestionTipoEnr as cod on cod.id = dg.codigoTipoENR
+            inner join enr_metodologiaCalc as met on met.id = dg.codigoTipoMet
+            
+            inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
+            
+            inner join fe_departamentos feD on feD.codigo_departamento = fes.codigo_departamento
+            
+            inner join fe_municipios feM on feM.codigo_municipio = fes.codigo_municipio
+            and feM.codigo_departamento = fes.codigo_departamento
+            
+            inner join fe_poblacion feP on feP.codigo_poblacion = fes.codigo_poblacion
+            and feP.codigo_municipio = fes.codigo_municipio 
+            and feP.codigo_departamento = fes.codigo_departamento
+            
+            inner join fe_colonias feCol on feCol.codigo_colonia = fes.codigo_colonia
+            and feCol.codigo_poblacion = fes.codigo_poblacion
+            and feCol.codigo_municipio = fes.codigo_municipio 
+            and feCol.codigo_departamento = fes.codigo_departamento
+            where dg.estado = 3 and dg.fechaRegularizacion between '".$fechaIn." 00:00:00' and '".$fechaFin." 23:59:59' 
             ");
 
 

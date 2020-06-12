@@ -1,1 +1,70 @@
 /* You can add global styles to this file, and also import other style files */
+div.dataTables_wrapper div.dataTables_info {
+
+    color:#D4BEFB !important;
+  }
+  
+
+  div.dataTables_wrapper div.dataTables_filter input {
+    background-color: #1B1B38 !important;
+    color: #D4BEFB !important;
+    font-size: 15px;
+  }
+
+  div.dataTables_wrapper div.dataTables_length label {
+    color:#D4BEFB !important;
+  }
+  div.dataTables_wrapper div.dataTables_length select {
+    background-color: #1B1B38 !important;
+    color: #D4BEFB !important;
+    font-size: 15px;
+  }
+
+  div.dataTables_wrapper div.dataTables_filter label {
+    color: #D4BEFB !important;
+    font-size: 15px;
+  }
+
+  .pagination > li > a
+  {
+      background-color: #1B1B38;
+      color: #D4BEFB;
+      margin-top: 15px !important;
+  }
+
+ 
+
+  .pagination > li > a:focus,
+  .pagination > li > a:hover,
+  .pagination > li > span:focus,
+  .pagination > li > span:hover
+  {
+      color: #D4BEFB;
+      background-color: #1B1B38;
+  }
+  
+  .pagination > .active > a
+  {
+      color: #D4BEFB !important;
+      background-color: #530992 !important;
+  }
+  
+  .pagination > .active > a:hover
+  {
+      background-color: #530992 !important;
+  }
+
+
+  .pagination > .disabled > a
+  {
+      color: #D4BEFB !important;
+      background-color: #30304D !important;
+  }
+  
+  .pagination > .disabled > a:hover
+  {
+      background-color: #1B1B38 !important;
+      color:#D4BEFB !important;
+  }
+
+
