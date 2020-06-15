@@ -164,7 +164,7 @@ export class DatosENRComponent implements OnInit {
       if(this.datos.length < 1){
         notie.alert({
           type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/nofound.png" width=40 height=40> No se encontró ningún resultado',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/nofound.png" width=40 height=40> No se encontró ningún resultado',
           stay: false, // optional, default = false
           time: 2, // optional, default = 3, minimum = 1,
           position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
@@ -240,7 +240,7 @@ export class DatosENRComponent implements OnInit {
     if(fechaFin > fechaMax){
       notie.alert({
         type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/problem.png" width=40 height=40> No debe ser mayor a la fecha de regularización!',
+        text: '<img class="img-profile alertImg" src="./assets/imagenes/problem.png" width=40 height=40> No debe ser mayor a la fecha de regularización!',
         stay: false, // optional, default = false
         time: 4, // optional, default = 3, minimum = 1,
         position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
@@ -252,7 +252,7 @@ export class DatosENRComponent implements OnInit {
     else if(fechaInicio > fechaFin){
       notie.alert({
         type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/problem.png" width=40 height=40> No debe ser menor a la fecha de inicio!',
+        text: '<img class="img-profile alertImg" src="./assets/imagenes/problem.png" width=40 height=40> No debe ser menor a la fecha de inicio!',
         stay: false, // optional, default = false
         time: 4, // optional, default = 3, minimum = 1,
         position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
@@ -277,7 +277,7 @@ export class DatosENRComponent implements OnInit {
     if(fechaInicio > fechaMax){
       notie.alert({
         type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/problem.png" width=40 height=40> No debe ser mayor a la fecha de regularización!',
+        text: '<img class="img-profile alertImg" src="./assets/imagenes/problem.png" width=40 height=40> No debe ser mayor a la fecha de regularización!',
         stay: false, // optional, default = false
         time: 4, // optional, default = 3, minimum = 1,
         position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
@@ -289,7 +289,7 @@ export class DatosENRComponent implements OnInit {
     else if(fechaFin < fechaInicio){
       notie.alert({
         type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/problem.png" width=40 height=40> No debe ser mayor a la fecha fin!',
+        text: '<img class="img-profile alertImg" src="./assets/imagenes/problem.png" width=40 height=40> No debe ser mayor a la fecha fin!',
         stay: false, // optional, default = false
         time: 4, // optional, default = 3, minimum = 1,
         position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
@@ -343,7 +343,7 @@ export class DatosENRComponent implements OnInit {
       if(total > diasRetroactivos){
         notie.alert({
           type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/problem.png" width=40 height=40> El cálculo de días es mayor al permitido por el código Tipo ENR '+diasRetroactivos+'!',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/problem.png" width=40 height=40> El cálculo de días es mayor al permitido por el código Tipo ENR '+diasRetroactivos+'!',
           stay: false, // optional, default = false
           time: 5, // optional, default = 3, minimum = 1,
           position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
@@ -421,7 +421,7 @@ export class DatosENRComponent implements OnInit {
 
       notie.alert({
         type: 'success', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Caso guardado con éxito!',
+        text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Caso guardado con éxito!',
         stay: false, // optional, default = false
         time: 2, // optional, default = 3, minimum = 1,
         position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
@@ -453,7 +453,7 @@ export class DatosENRComponent implements OnInit {
       
       notie.alert({
         type: 'success', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Adjuntos guardados con éxito!',
+        text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Adjuntos guardados con éxito!',
         stay: false, // optional, default = false
         time: 2, // optional, default = 3, minimum = 1,
         position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
@@ -616,7 +616,7 @@ onSubmit2(numero,user) {
 
         notie.alert({
           type: 'info', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/synchronization.png" width=40 height=40> Archivo cargado con éxito!',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/synchronization.png" width=40 height=40> Archivo cargado con éxito!',
           stay: false, // optional, default = false
           time: 2, // optional, default = 3, minimum = 1,
           position: 'top',
@@ -693,7 +693,7 @@ onSubmit2(numero,user) {
 
         notie.alert({
           type: 'info', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/synchronization.png" width=40 height=40> Archivo cargado con éxito!',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/synchronization.png" width=40 height=40> Archivo cargado con éxito!',
           stay: false, // optional, default = false
           time: 2, // optional, default = 3, minimum = 1,
           position: 'top',
@@ -803,7 +803,7 @@ public eliminarArchivo(orden){
     () => {
       notie.alert({
         type: 'info', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/eliminate.png" width=40 height=40> Archivo eliminado con éxito!',
+        text: '<img class="img-profile alertImg" src="./assets/imagenes/eliminate.png" width=40 height=40> Archivo eliminado con éxito!',
         stay: false, // optional, default = false
         time: 3, // optional, default = 3, minimum = 1,
         position: 'top' // optional, default = 'top', enum: ['top', 'bottom']

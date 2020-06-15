@@ -85,7 +85,7 @@ export class CodigoTipoENRComponent implements OnInit {
       () => {
         notie.alert({
           type: 'success', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Guardado con éxito!',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Guardado con éxito!',
           stay: false, // optional, default = false
           time: 2, // optional, default = 3, minimum = 1,
           position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
@@ -117,7 +117,7 @@ export class CodigoTipoENRComponent implements OnInit {
       () => {
         notie.alert({
           type: 'warning', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/edit.png" width=40 height=40> Editado con éxito!',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/edit.png" width=40 height=40> Editado con éxito!',
           stay: false, // optional, default = false
           time: 2, // optional, default = 3, minimum = 1,
           position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
@@ -148,7 +148,7 @@ export class CodigoTipoENRComponent implements OnInit {
       () => {
         notie.alert({
           type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/eliminate.png" width=40 height=40> Eliminado con éxito!',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/eliminate.png" width=40 height=40> Eliminado con éxito!',
           stay: false, // optional, default = false
           time: 2, // optional, default = 3, minimum = 1,
           position: 'top' // optional, default = 'top', enum: ['top', 'bottom']

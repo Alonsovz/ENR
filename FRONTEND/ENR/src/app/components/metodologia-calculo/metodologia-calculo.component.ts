@@ -69,7 +69,7 @@ export class MetodologiaCalculoComponent implements OnInit {
       () => {
         notie.alert({
           type: 'success', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
           stay: false, // optional, default = false
           time: 2, // optional, default = 3, minimum = 1,
           position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
@@ -98,7 +98,7 @@ export class MetodologiaCalculoComponent implements OnInit {
       () => {
         notie.alert({
           type: 'warning', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/edit.png" width=40 height=40> Modificación realizada con éxito!',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/edit.png" width=40 height=40> Modificación realizada con éxito!',
           stay: false, // optional, default = false
           time: 2, // optional, default = 3, minimum = 1,
           position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
@@ -126,7 +126,7 @@ export class MetodologiaCalculoComponent implements OnInit {
       () => {
         notie.alert({
           type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/eliminate.png" width=40 height=40> Eliminado con éxito!',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/eliminate.png" width=40 height=40> Eliminado con éxito!',
           stay: false, // optional, default = false
           time: 2, // optional, default = 3, minimum = 1,
           position: 'top' // optional, default = 'top', enum: ['top', 'bottom']

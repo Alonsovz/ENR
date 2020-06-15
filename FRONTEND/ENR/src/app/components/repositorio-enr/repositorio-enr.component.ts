@@ -542,7 +542,7 @@ export class RepositorioENRComponent implements OnInit {
   
           notie.alert({
             type: 'info',
-            text: '<img class="img-profile alertImg" src="../../../assets/imagenes/synchronization.png" width=40 height=40> Archivo cargado con éxito!',
+            text: '<img class="img-profile alertImg" src="./assets/imagenes/synchronization.png" width=40 height=40> Archivo cargado con éxito!',
             stay: false, 
             time: 2, 
             position: 'top',
@@ -618,7 +618,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
      notie.alert({
        type: 'info',
-       text: '<img class="img-profile alertImg" src="../../../assets/imagenes/synchronization.png" width=40 height=40> Archivo cargado con éxito!',
+       text: '<img class="img-profile alertImg" src="./assets/imagenes/synchronization.png" width=40 height=40> Archivo cargado con éxito!',
        stay: false, 
        time: 2, 
        position: 'top',
@@ -662,7 +662,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
         
         notie.alert({
           type: 'success',
-          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Adjuntos guardados con éxito!',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Adjuntos guardados con éxito!',
           stay: false, 
           time: 2, 
           position: 'top' 
@@ -783,7 +783,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
         this.getRepositorioNoti();
         notie.alert({
           type: 'info',
-          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/eliminate.png" width=40 height=40> Archivo eliminado con éxito!',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/eliminate.png" width=40 height=40> Archivo eliminado con éxito!',
           stay: false, 
           time: 3, 
           position: 'top' 
@@ -815,7 +815,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
         notie.alert({
           type: 'info',
-          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/eliminate.png" width=40 height=40> Archivo eliminado con éxito!',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/eliminate.png" width=40 height=40> Archivo eliminado con éxito!',
           stay: false, 
           time: 3, 
           position: 'top' 
@@ -1025,7 +1025,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
       if(this.datos.length < 1){
         notie.alert({
           type: 'error',
-          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/nofound.png" width=40 height=40> No se encontró ningún resultado',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/nofound.png" width=40 height=40> No se encontró ningún resultado',
           stay: false, 
           time: 2, 
           position: 'top' 
@@ -1247,7 +1247,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
           () => {
             notie.alert({
               type: 'info',
-              text: '<img class="img-profile alertImg" src="../../../assets/imagenes/synchronization.png" width=40 height=40> Archivo cargado con éxito!',
+              text: '<img class="img-profile alertImg" src="./assets/imagenes/synchronization.png" width=40 height=40> Archivo cargado con éxito!',
               stay: false, 
               time: 2, 
               position: 'top',
@@ -1306,7 +1306,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
   
         notie.alert({
           type: 'success',
-          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Caso editado con éxito!',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Caso editado con éxito!',
           stay: false, 
           time: 2, 
           position: 'top' 
@@ -1334,7 +1334,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
     if(fechaInicio > fechaMax){
       notie.alert({
         type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/problem.png" width=40 height=40> No debe ser mayor a la fecha de regularización!',
+        text: '<img class="img-profile alertImg" src="./assets/imagenes/problem.png" width=40 height=40> No debe ser mayor a la fecha de regularización!',
         stay: false, // optional, default = false
         time: 4, // optional, default = 3, minimum = 1,
         position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
@@ -1346,7 +1346,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
     else if(fechaFin < fechaInicio){
       notie.alert({
         type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/problem.png" width=40 height=40> No debe ser mayor a la fecha fin!',
+        text: '<img class="img-profile alertImg" src="./assets/imagenes/problem.png" width=40 height=40> No debe ser mayor a la fecha fin!',
         stay: false, // optional, default = false
         time: 4, // optional, default = 3, minimum = 1,
         position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
@@ -1380,7 +1380,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
       if(total > diasRetroactivos){
         notie.alert({
           type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/problem.png" width=40 height=40> El cálculo de días es mayor al permitido por el código Tipo ENR '+diasRetroactivos+'!',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/problem.png" width=40 height=40> El cálculo de días es mayor al permitido por el código Tipo ENR '+diasRetroactivos+'!',
           stay: false, // optional, default = false
           time: 5, // optional, default = 3, minimum = 1,
           position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
@@ -1412,7 +1412,7 @@ public validarFechas(){
   if(fechaFin > fechaMax){
     notie.alert({
       type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-      text: '<img class="img-profile alertImg" src="../../../assets/imagenes/problem.png" width=40 height=40> No debe ser mayor a la fecha de regularización!',
+      text: '<img class="img-profile alertImg" src="./assets/imagenes/problem.png" width=40 height=40> No debe ser mayor a la fecha de regularización!',
       stay: false, // optional, default = false
       time: 4, // optional, default = 3, minimum = 1,
       position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
@@ -1424,7 +1424,7 @@ public validarFechas(){
   else if(fechaInicio > fechaFin){
     notie.alert({
       type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-      text: '<img class="img-profile alertImg" src="../../../assets/imagenes/problem.png" width=40 height=40> No debe ser menor a la fecha de inicio!',
+      text: '<img class="img-profile alertImg" src="./assets/imagenes/problem.png" width=40 height=40> No debe ser menor a la fecha de inicio!',
       stay: false, // optional, default = false
       time: 4, // optional, default = 3, minimum = 1,
       position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
@@ -1602,7 +1602,7 @@ public validarFechas(){
      if(amperaje1 == '' && voltaje1 == '' && amperaje2 == '' && voltaje2 == ''){
       notie.alert({
         type: 'error',
-        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/nofound.png" width=40 height=40> Dígite al menos un amperaje y un voltaje para evaluar',
+        text: '<img class="img-profile alertImg" src="./assets/imagenes/nofound.png" width=40 height=40> Dígite al menos un amperaje y un voltaje para evaluar',
         stay: false, 
         time: 4, 
         position: 'top' 
@@ -1611,7 +1611,7 @@ public validarFechas(){
      else if(amperaje1 != '' && voltaje1 == ''){
       notie.alert({
         type: 'error',
-        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/nofound.png" width=40 height=40> Si digitó el amperaje en línea 1, dígite también el voltaje en línea 1',
+        text: '<img class="img-profile alertImg" src="./assets/imagenes/nofound.png" width=40 height=40> Si digitó el amperaje en línea 1, dígite también el voltaje en línea 1',
         stay: false, 
         time: 4, 
         position: 'top' 
@@ -1621,7 +1621,7 @@ public validarFechas(){
      else if(amperaje1 == '' && voltaje1 != ''){
       notie.alert({
         type: 'error',
-        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/nofound.png" width=40 height=40> Si digitó el voltaje en línea 1, dígite también el amperaje en línea 1',
+        text: '<img class="img-profile alertImg" src="./assets/imagenes/nofound.png" width=40 height=40> Si digitó el voltaje en línea 1, dígite también el amperaje en línea 1',
         stay: false, 
         time: 4, 
         position: 'top' 
@@ -1630,7 +1630,7 @@ public validarFechas(){
      else if(amperaje2 != '' && voltaje2 == ''){
       notie.alert({
         type: 'error',
-        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/nofound.png" width=40 height=40> Si digitó el amperaje en línea 2, dígite también el voltaje en línea 2',
+        text: '<img class="img-profile alertImg" src="./assets/imagenes/nofound.png" width=40 height=40> Si digitó el amperaje en línea 2, dígite también el voltaje en línea 2',
         stay: false, 
         time: 4, 
         position: 'top' 
@@ -1640,7 +1640,7 @@ public validarFechas(){
      else if(amperaje2 == '' && voltaje2 != ''){
       notie.alert({
         type: 'error',
-        text: '<img class="img-profile alertImg" src="../../../assets/imagenes/nofound.png" width=40 height=40> Si digitó el voltaje en línea 2, dígite también el amperaje en línea 2',
+        text: '<img class="img-profile alertImg" src="./assets/imagenes/nofound.png" width=40 height=40> Si digitó el voltaje en línea 2, dígite también el amperaje en línea 2',
         stay: false, 
         time: 4, 
         position: 'top' 
@@ -1839,7 +1839,7 @@ public validarFechas(){
       if(consumo == ''){
         notie.alert({
           type: 'error',
-          text: '<img class="img-profile alertImg" src="../../../assets/imagenes/nofound.png" width=40 height=40> Debe calcular el Consumo Diario Estimado',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/nofound.png" width=40 height=40> Debe calcular el Consumo Diario Estimado',
           stay: false, 
           time: 4, 
           position: 'top' 
@@ -2608,7 +2608,7 @@ public eliminarLectura(i, periodo){
               this.cobrarMedidor();
               notie.alert({
                 type: 'success',
-                text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
+                text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
                 stay: false, 
                 time: 2, 
                 position: 'top' 
@@ -2668,7 +2668,7 @@ public eliminarLectura(i, periodo){
               this.cobrarMedidor();
               notie.alert({
                 type: 'success',
-                text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
+                text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
                 stay: false, 
                 time: 2, 
                 position: 'top' 
@@ -2749,7 +2749,7 @@ public eliminarLectura(i, periodo){
               this.cobrarMedidor();
               notie.alert({
                 type: 'success',
-                text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
+                text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
                 stay: false, 
                 time: 2, 
                 position: 'top' 
@@ -2804,7 +2804,7 @@ public eliminarLectura(i, periodo){
               this.cobrarMedidor();
               notie.alert({
                 type: 'success',
-                text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
+                text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
                 stay: false, 
                 time: 2, 
                 position: 'top' 
@@ -2864,7 +2864,7 @@ public eliminarLectura(i, periodo){
               this.cobrarMedidor();
               notie.alert({
                 type: 'success',
-                text: '<img class="img-profile alertImg" src="../../../assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
+                text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
                 stay: false, 
                 time: 2, 
                 position: 'top' 
