@@ -13,9 +13,10 @@ declare const $;
 export class SidebarComponent implements OnInit {
   contenedor = false;
   usuario: Usuario = new Usuario();
+  user: Usuario = new Usuario();
 
   isLoggedIn$ : Observable<boolean>;
-  
+  isusuarioLogueado$ : Observable<Usuario>;
   constructor(private router: Router, private crf: ChangeDetectorRef,
     private usuarioservice : CredencialesService) { }
 
@@ -23,13 +24,14 @@ export class SidebarComponent implements OnInit {
     this.isLoggedIn$ = this.usuarioservice.isLoggedIn;
   }
 
- ngAfterViewInit(){
-   if(localStorage.getItem('usuario') !== null){
-     this.usuarioservice.loggedIn.next(true);
-     this.isLoggedIn$ = this.usuarioservice.isLoggedIn;
-   }else{
-    this.usuarioservice.loggedIn.next(false);
-   }
+  ngAfterViewChecked(){
+ 
+  if(localStorage.getItem('usuario') !== null){
+    this.usuarioservice.loggedIn.next(true);
+    this.isLoggedIn$ = this.usuarioservice.isLoggedIn;
+    //this.crf.detectChanges();
+    
+  }
  }
 
 

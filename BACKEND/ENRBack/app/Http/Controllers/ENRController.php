@@ -682,10 +682,15 @@ class ENRController extends Controller
         $usuario = $request["alias"];
         $password = $request["password"];
 
-        $usuariosesion =  DB::connection('facturacion')->select("
+        $result = [];
+        
+        $usuariosesion =  json_encode( DB::connection('facturacion')->select("
         select * from EDESAL_CALIDAD.dbo.SGT_usuarios where 
         alias = '".$usuario."' and password = '".$password."'
-        ");
+        "));
+
+      
+
 
         $idUser = DB::connection('facturacion')->table('EDESAL_CALIDAD.dbo.SGT_usuarios as u')
         ->select('u.id as idUser')->where('u.alias',$usuario)->where('u.password',$password)->first();
@@ -693,8 +698,12 @@ class ENRController extends Controller
 
         Session::put('idUsuario',$idUser->idUser);
 
-     
-    return response()->json($usuariosesion);
+        $arrayJson = [];
+        foreach (json_decode($usuariosesion, true) as $value){
+            $arrayJson = $value;
+        }
+
+        return $arrayJson;
         
        
     }

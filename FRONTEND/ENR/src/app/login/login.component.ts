@@ -43,7 +43,7 @@ constructor(private usuarioservice: CredencialesService, private router: Router)
 
   // evento submit de boton para formulario
   onClickSubmit(usuario) {
-    localStorage.clear();
+    //localStorage.clear();
     // llamada al service para validar las credenciales
     this.usuarioservice.login(usuario).subscribe(
       response => {
