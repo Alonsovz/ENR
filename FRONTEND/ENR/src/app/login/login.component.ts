@@ -57,7 +57,13 @@ constructor(private usuarioservice: CredencialesService, private router: Router)
       },
       err => {
         
-
+        notie.alert({ 
+          type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+          text: 'Error al validar credenciales!',
+          stay: false, // optional, default = false
+          time: 2, // optional, default = 3, minimum = 1,
+          position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+        });
       },
       () => {
         let obj = this.usuariosesion;
@@ -72,7 +78,6 @@ constructor(private usuarioservice: CredencialesService, private router: Router)
             time: 2, // optional, default = 3, minimum = 1,
             position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
           });
-        
         }else{
           this.usuarioservice.loggedIn.next(true);
           this.usuarioservice.usuariologueado.next(obj);
