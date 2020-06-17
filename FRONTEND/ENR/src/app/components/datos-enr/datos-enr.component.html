@@ -225,8 +225,8 @@
             placeholder="Irregularidades que se adjuntarán a las cartas" class="form-control">
             </textarea>
 
-            <div *ngFor="let us of user">
-              <input type="text" formControlName="idUsuario" class="form-control" [(ngModel)]="us.id">
+            <div>
+              <input type="hidden" formControlName="idUsuario" class="form-control" [(ngModel)]="user.id">
             </div>
             
         </div>
@@ -385,9 +385,9 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
                   <img [src]="previewUrl1" height="150" style="margin-left:25%;"/>                  
               </div>
               </div>
-              <div class="col-md-2" *ngFor="let us of user">
+              <div class="col-md-2">
                 <label style="color: #1B1B38 !important"><i class="fas fa-upload"></i> Seleccione el archivo</label>
-                <button class="btn btn-warning"  (click)="onSubmit2(ordenNumero.orden, us.id)">
+                <button class="btn btn-warning"  (click)="onSubmit2(ordenNumero.orden)">
                   <i class="fas fa-upload"></i> Cargar Archivo
                  </button>
               </div>

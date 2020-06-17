@@ -586,7 +586,7 @@ preview2() {
   }
 }
 //subir el archivo a la carpeta en la orden tecnica
-onSubmit2(numero,user) {
+onSubmit2(numero) {
   
   const formData = new FormData();
   formData.append('file', this.fileData);
@@ -610,7 +610,7 @@ onSubmit2(numero,user) {
         this.fb1.group({ordenN:numero,nombreDocOrden:this.frm_ArchivoOT.controls["tituloDocProbatorioOT"].value,
         tipoAdjuntoOrden:this.frm_ArchivoOT.controls["tipoPruebaProbatorioOT"].value,
         file:str.substring(12),
-        idUsuario: user, }),    
+        idUsuario: this.user.id, }),    
         
         );
 
