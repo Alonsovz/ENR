@@ -1731,72 +1731,114 @@ class ENRController extends Controller
     public function multiplesArchivos(Request $request){
 
 
-        $docs = json_encode($request["pdfs"]);
+                $docs = json_encode($request["pdfs"]);
 
-        $caso = $request["caso"];
-        $codigoENR = $request["codigoTipoENR"];
-        $tipoENR = $request["codigoENR"];
+                $caso = $request["caso"];
+                $codigoENR = $request["codigoTipoENR"];
+                $tipoENR = $request["codigoENR"];
 
-        $docsSeleccionados = json_decode($docs);
+                $docsSeleccionados = json_decode($docs);
 
-     
-        $pdfMerger = PDFMerger::init();
+                $imagenes = '';
 
-        if($codigoENR == 'OT' && $tipoENR == 'Medidor con fallas internas'){
-         //   $pdfMerger->addPDF(public_path('files/rptCobroCero'.$caso.'.pdf'), 'all');
-            $pdfMerger->addPDF(public_path('files/infoGenAutoConsumoCero'.$caso.'.pdf'), 'all');
-        }
+                foreach($docsSeleccionados as $p){
+                    if(substr($p->archivo, -4) == 'JPEG' || substr($p->archivo, -3) == 'jpg' 
+                        || substr($p->archivo, -3) == 'png')
+                        {
+                            $imagenes.=json_encode($p->archivo);
+                        }
+                    }
 
-        if($codigoENR == 'LD' || $codigoENR == 'MM' || $codigoENR == 'PE' || $codigoENR == 'AM'){
-            $pdfMerger->addPDF(public_path('files/rptCondicionIrregular'.$caso.'.pdf'), 'all');
-           $pdfMerger->addPDF(public_path('files/infoGenAutoFraude'.$caso.'.pdf'), 'all');
-        }
+                    if(empty($imagenes)){
+                    
+                    }else{
+                        $pdf = \PDF::loadView('Reportes.imagenesProbatorias', compact('docsSeleccionados'))->save( public_path('files/imagenesCaso'.$caso.'.pdf' )); 
+                    }
+            
+                    //return $imagenes;
+                
+            
+            $pdfMerger = PDFMerger::init();
 
+            if($codigoENR == 'OT' && $tipoENR == 'Medidor con fallas internas'){
+            //   $pdfMerger->addPDF(public_path('files/rptCobroCero'.$caso.'.pdf'), 'all');
+                $pdfMerger->addPDF(public_path('files/infoGenAutoConsumoCero'.$caso.'.pdf'), 'all');
+            }
 
-        if($codigoENR == 'OT' && $tipoENR == 'Varias'){
-            $pdfMerger->addPDF(public_path('files/rptCondicionIrregular'.$caso.'.pdf'), 'all');
+            if($codigoENR == 'LD' || $codigoENR == 'MM' || $codigoENR == 'PE' || $codigoENR == 'AM'){
+                $pdfMerger->addPDF(public_path('files/rptCondicionIrregular'.$caso.'.pdf'), 'all');
             $pdfMerger->addPDF(public_path('files/infoGenAutoFraude'.$caso.'.pdf'), 'all');
-        }
-        $pdfMerger->addPDF(public_path('files/anexoCalculo'.$caso.'.pdf'), 'all');
+            }
 
-        foreach($docsSeleccionados as $p){
-            $pdfMerger->addPDF(public_path('files/'.$p->archivo), 'all');
-        }     
 
-     
+            if($codigoENR == 'OT' && $tipoENR == 'Varias'){
+                $pdfMerger->addPDF(public_path('files/rptCondicionIrregular'.$caso.'.pdf'), 'all');
+                $pdfMerger->addPDF(public_path('files/infoGenAutoFraude'.$caso.'.pdf'), 'all');
+            }
+            $pdfMerger->addPDF(public_path('files/anexoCalculo'.$caso.'.pdf'), 'all');
 
-        $pdfMerger->merge();
+            foreach($docsSeleccionados as $p){
+                if(substr($p->archivo, -4) == 'JPEG' || substr($p->archivo, -3) == 'jpg' 
+                    || substr($p->archivo, -3) == 'png')
+                    {
+
+                    }else{
+                        $pdfMerger->addPDF(public_path('files/'.$p->archivo), 'all');
+                    }
+            
+            }
+            
+            //validar pdf imagenes
+            $imagenes = '';
+            
+            foreach($docsSeleccionados as $p){
+                if(substr($p->archivo, -4) == 'JPEG' || substr($p->archivo, -3) == 'jpg' 
+                    || substr($p->archivo, -3) == 'png')
+                    {
+                        $imagenes.=json_encode($p->archivo);
+                    }
+                }
+                if(empty($imagenes)){ 
+                }else{
+                    $pdfMerger->addPDF(public_path('files/imagenesCaso'.$caso.'.pdf'), 'all');
+                } 
 
         
-     
 
-        $pdfMerger->save(public_path('files/reporteCaso'.$caso.'.pdf'), "file");
+            $pdfMerger->merge();
 
-
-        if($codigoENR == 'OT' && $tipoENR == 'Medidor con fallas internas'){
-         unlink(public_path('files/infoGenAutoConsumoCero'.$caso.'.pdf'));
-            unlink(public_path('files/rptCobroCero'.$caso.'.pdf'));
-        }
-
-        if($codigoENR == 'LD' || $codigoENR == 'MM' || $codigoENR == 'PE' || $codigoENR == 'AM'){
-     
-            unlink(public_path('files/infoGenAutoFraude'.$caso.'.pdf'));
-            unlink(public_path('files/rptCondicionIrregular'.$caso.'.pdf'));
-            unlink(public_path('files/rptInformeTecnico'.$caso.'.pdf'));
-            unlink(public_path('files/rptCobroFraude'.$caso.'.pdf'));
-        }
-
-
-        if($codigoENR == 'OT' && $tipoENR == 'Varias'){
-       
             
-            unlink(public_path('files/infoGenAutoFraude'.$caso.'.pdf'));
-            unlink(public_path('files/rptCondicionIrregular'.$caso.'.pdf'));
-            unlink(public_path('files/rptInformeTecnico'.$caso.'.pdf'));
-            unlink(public_path('files/rptCobroFraude'.$caso.'.pdf'));
-        }
+        
 
-        unlink(public_path('files/anexoCalculo'.$caso.'.pdf'));
+            $pdfMerger->save(public_path('files/reporteCaso'.$caso.'.pdf'), "file");
+
+
+            if($codigoENR == 'OT' && $tipoENR == 'Medidor con fallas internas'){
+            unlink(public_path('files/infoGenAutoConsumoCero'.$caso.'.pdf'));
+                unlink(public_path('files/rptCobroCero'.$caso.'.pdf'));
+            }
+
+            if($codigoENR == 'LD' || $codigoENR == 'MM' || $codigoENR == 'PE' || $codigoENR == 'AM'){
+        
+                unlink(public_path('files/infoGenAutoFraude'.$caso.'.pdf'));
+                unlink(public_path('files/rptCondicionIrregular'.$caso.'.pdf'));
+                unlink(public_path('files/rptInformeTecnico'.$caso.'.pdf'));
+                unlink(public_path('files/rptCobroFraude'.$caso.'.pdf'));
+            }
+
+
+            if($codigoENR == 'OT' && $tipoENR == 'Varias'){
+        
+                
+                unlink(public_path('files/infoGenAutoFraude'.$caso.'.pdf'));
+                unlink(public_path('files/rptCondicionIrregular'.$caso.'.pdf'));
+                unlink(public_path('files/rptInformeTecnico'.$caso.'.pdf'));
+                unlink(public_path('files/rptCobroFraude'.$caso.'.pdf'));
+            }
+
+            unlink(public_path('files/anexoCalculo'.$caso.'.pdf'));
+
+            
 
     }
 
