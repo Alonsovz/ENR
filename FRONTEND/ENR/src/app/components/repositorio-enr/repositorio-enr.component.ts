@@ -450,6 +450,9 @@ export class RepositorioENRComponent implements OnInit {
 
 //inicialización de datos en el formulario de adjuntar archivos a las ordenes técnicas
   public modalAdjuntar(orden, ordenNumeroG){
+
+    this.user = JSON.parse(localStorage.getItem('usuario'));
+    
     this.ordenNumeroAd = orden;
     ////console.log(ordenNumeroG);
     this.ordenNumeroGN = ordenNumeroG;
@@ -1745,7 +1748,7 @@ public validarFechas(){
         this.frm_Caso2.controls["diasCobroCaso2"].value - consRegi).toFixed(3);
   
         this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(consumoENRFacturar);
-        this.frm_LecturasEvaluarTotales.controls["consumoENRRegistrado"].setValue(consRegi);
+        this.frm_LecturasEvaluarTotales.controls["consumoENRRegistrado"].setValue(sumatoriaConsumo.toFixed(3));
   
       }else if(this.casoEvaluado == '3'){
 
@@ -1755,7 +1758,7 @@ public validarFechas(){
         this.frm_Caso3.controls["diasCobroCaso3"].value - consRegi).toFixed(3);
         
         this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(consumoENRFacturar);
-        this.frm_LecturasEvaluarTotales.controls["consumoENRRegistrado"].setValue(consRegi);
+        this.frm_LecturasEvaluarTotales.controls["consumoENRRegistrado"].setValue(sumatoriaConsumo.toFixed(3));
 
       }else if(this.casoEvaluado == '4'){
         var diasHistorico = this.frm_LecturasEvaluarTotales.controls["totalDias"].value;
@@ -1800,7 +1803,7 @@ public validarFechas(){
 
         this.frm_LecturasEvaluarTotales.controls["consumoFuera"].setValue(sumatoriaConsumoFuera.toFixed(3));
         this.frm_LecturasEvaluarTotales.controls["consumoDebioFacturar"].setValue(sumatoriaConsumoCorrecto.toFixed(3));
-        this.frm_LecturasEvaluarTotales.controls["consumoENRRegistrado"].setValue(consRegi);
+        this.frm_LecturasEvaluarTotales.controls["consumoENRRegistrado"].setValue(sumatoriaConsumo.toFixed(3));
        
 
         var totalENR = sumatoriaConsumoCorrecto - sumatoriaConsumo - consRegi;

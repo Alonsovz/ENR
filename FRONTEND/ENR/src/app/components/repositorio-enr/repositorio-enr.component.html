@@ -207,7 +207,7 @@
             <div class="col-md-2">
               <label>Consumo Registrado</label>
               <input type="number" step="0.01" class="form-control" formControlName="consumoENRRegistrado"
-              placeholder="Consumo registrado" (keyup)="totalizarDato()">
+              placeholder="Consumo registrado" (keyup)="totalizarDato()" disabled>
              </div>
 
             <div class="col-md-12">
@@ -508,11 +508,6 @@
                       <input class="form-control" type="text" style="text-align: center !important;" readonly="true"
                       formControlName="promedioDiasCT3">
                     </div>
-                    <div class="col-md-12">
-                      <label style="text-align: center !important;font-weight: bold !important;">Consumo Registrado</label>
-                      <input type="number" step="0.01" class="form-control" formControlName="consumoENRRegistrado"
-                      placeholder="Digite Consumo registrado" (keyup)="totalizarDato()">
-                     </div>
 
                     </div>
                     

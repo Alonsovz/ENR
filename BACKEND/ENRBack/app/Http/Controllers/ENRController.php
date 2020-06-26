@@ -740,7 +740,7 @@ class ENRController extends Controller
 
     public function getConsumoEstimado(Request $request){
     
-        $consumo = $request["consumoENRFacturar"];
+        $consumo = $request["consumoDiarioENR"];
         $caso = $request["numeroCaso"];
 
        $execProcedure =  DB::connection('facturacion')->statement(

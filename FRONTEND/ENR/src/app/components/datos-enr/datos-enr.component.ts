@@ -15,6 +15,7 @@ import { GlobalService } from 'src/app/service/global.service';
 import { Observable } from 'rxjs';
 import { DomSanitizer,SafeResourceUrl } from '@angular/platform-browser';
 import { Usuario } from 'src/app/models/usuario';
+import { isNull } from 'util';
 
 @Component({
   selector: 'app-datos-enr',
@@ -127,7 +128,7 @@ export class DatosENRComponent implements OnInit {
      this.urlArc = this.sanitizer.bypassSecurityTrustResourceUrl(this.url.getUrlBackEnd());
      this.rutaFile = this.url.getUrlBackEnd()+'descargarArchivo?ruta=';
     this.user = JSON.parse(localStorage.getItem('usuario'));
-   // this.frm_DatosNIS.controls["idUsuario"].setValue(this.user.id);
+  
    }
 
    
@@ -591,6 +592,8 @@ onSubmit2(numero) {
   const formData = new FormData();
   formData.append('file', this.fileData);
    
+  this.user = JSON.parse(localStorage.getItem('usuario'));
+
   //this.fileUploadProgress = '0%';
 
  
