@@ -743,14 +743,49 @@ class ENRController extends Controller
         $consumo = $request["consumoDiarioENR"];
         $caso = $request["numeroCaso"];
 
-       $execProcedure =  DB::connection('facturacion')->statement(
-           "exec  [dbo].[enr_consumoEstimadoKwh]  ".$consumo." , ".$caso." ");
+
+        $tipoCaso = DB::connection('facturacion')->table("enr_datosGenerales")
+        ->join('enr_metodologiaCalc','enr_datosGenerales.codigoTipoMet','=','enr_metodologiaCalc.id')
+        ->select("enr_metodologiaCalc.codigo")->where('enr_datosGenerales.id',$caso)->first();
+
+        $total = 0;
+
+        if($tipoCaso->codigo == 'CD'){
+            $total = $consumo;
+        }
+
+        if($tipoCaso->codigo == 'CN'){
+            $total = $consumo;
+        }
+
+        if($tipoCaso->codigo == 'MP'){
+            $consumoFac = $request["totalConsumoNF"];
+            $diasFac = $request["totalDias"];
+    
+            $total = $consumoFac / $diasFac;
+        }
+
+        if($tipoCaso->codigo == 'HI'){
+            $total = $consumo;
+        }
+
+        if($tipoCaso->codigo == 'EM'){
+            $consumoFac = $request["totalConsumoNF"];
+            $diasFac = $request["totalDias"];
+    
+            $total = $consumoFac / $diasFac;
+        }
+
+       
+
+     $execProcedure =  DB::connection('facturacion')->statement(
+         "exec  [dbo].[enr_consumoEstimadoKwh]  ".$total." , ".$caso." ");
 
 
-       $getConsumo = DB::connection('facturacion')->select(
-           "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
-           str(consumo,12,2) as consumo from enr_consumoEstimado
-           where casoENR = ".$caso." order by 1 asc");
+     $getConsumo = DB::connection('facturacion')->select(
+         "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
+         str(consumo,12,2) as consumo from enr_consumoEstimado
+         where casoENR = ".$caso." order by 1 asc");
             
  
              return response()->json($getConsumo);
@@ -761,8 +796,49 @@ class ENRController extends Controller
         $consumo = $request["consumoENRRegistrado"];
         $caso = $request["numeroCaso"];
 
+
+        $tipoCaso = DB::connection('facturacion')->table("enr_datosGenerales")
+        ->join('enr_metodologiaCalc','enr_datosGenerales.codigoTipoMet','=','enr_metodologiaCalc.id')
+        ->select("enr_metodologiaCalc.codigo")->where('enr_datosGenerales.id',$caso)->first();
+
+        $diasTotales = 0;
+
+        if($tipoCaso->codigo == 'CD'){
+
+        $dias = DB::connection('facturacion')->table("enr_datosGenerales")
+        ->select("enr_datosGenerales.diasCobro")->where('enr_datosGenerales.id',$caso)->first();
+
+        $diasTotales = $dias->diasCobro;
+        }
+
+        if($tipoCaso->codigo == 'CN'){
+            $dias = DB::connection('facturacion')->table("enr_datosGenerales")
+        ->select("enr_datosGenerales.diasCobro")->where('enr_datosGenerales.id',$caso)->first();
+
+        $diasTotales = $dias->diasCobro;
+        }
+
+        if($tipoCaso->codigo == 'MP'){
+            $diasTotales = $request["totalDias"];
+        }
+
+        if($tipoCaso->codigo == 'HI'){
+            $dias = DB::connection('facturacion')->table("enr_datosGenerales")
+        ->select("enr_datosGenerales.diasCobro")->where('enr_datosGenerales.id',$caso)->first();
+
+        $diasTotales = $dias->diasCobro;
+        }
+
+        if($tipoCaso->codigo == 'EM'){
+            $diasTotales = $request["totalDias"];
+        }
+
+
+
+
+
        $execProcedure =  DB::connection('facturacion')->statement(
-           "exec  [dbo].[enr_consumoRegistradoKwh]  ".$consumo." , ".$caso." ");
+           "exec  [dbo].[enr_consumoRegistradoKwh]  ".$consumo." , ".$caso." , ".$diasTotales."");
 
 
        $getConsumo = DB::connection('facturacion')->select(
