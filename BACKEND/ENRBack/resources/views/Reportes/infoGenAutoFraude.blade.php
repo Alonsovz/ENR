@@ -6,7 +6,7 @@
             <th style="margin-left:10px;width:440px !important;text-align:left;">
                 <img  src="C:\xampp\htdocs\ENR\backend\ENRBack\public\images\logo2.png"
                 style="width: 250px; height: 90px;">
-            </th>
+                </th>
             <th style="font-size:14px;text-align:right;font-weight:normal;">
                 {{$dat->municipio}},
                 <?php

@@ -5,7 +5,7 @@
                     <th style="margin-left:10px;">
                         <img  src="C:\xampp\htdocs\ENR\backend\ENRBack\public\images\logo1Anexo.png"
                         style="width: 80px; height: 80px">
-                    </th>
+                        </th>
                     <th >
                         <b style="margin-left:400px; font-size:13px;">
                             <?php

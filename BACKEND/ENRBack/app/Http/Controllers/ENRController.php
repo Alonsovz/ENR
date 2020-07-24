@@ -704,7 +704,6 @@ class ENRController extends Controller
         }
 
         return $arrayJson;
-        
        
     }
 
@@ -1804,7 +1803,7 @@ class ENRController extends Controller
 
 
     
-    public function multiplesArchivos(Request $request){
+     public function multiplesArchivos(Request $request){
 
 
                 $docs = json_encode($request["pdfs"]);
@@ -1818,8 +1817,8 @@ class ENRController extends Controller
                 $imagenes = '';
 
                 foreach($docsSeleccionados as $p){
-                    if(substr($p->archivo, -4) == 'JPEG' || substr($p->archivo, -3) == 'jpg' 
-                        || substr($p->archivo, -3) == 'png')
+                    if(substr($p->archivo, -4) == 'JPEG' || substr($p->archivo, -3) == 'jpg' || substr($p->archivo, -3) == 'JPG' 
+                        || substr($p->archivo, -3) == 'png' || substr($p->archivo, -3) == 'PNG' )
                         {
                             $imagenes.=json_encode($p->archivo);
                         }
@@ -1854,8 +1853,8 @@ class ENRController extends Controller
             $pdfMerger->addPDF(public_path('files/anexoCalculo'.$caso.'.pdf'), 'all');
 
             foreach($docsSeleccionados as $p){
-                if(substr($p->archivo, -4) == 'JPEG' || substr($p->archivo, -3) == 'jpg' 
-                    || substr($p->archivo, -3) == 'png')
+                if(substr($p->archivo, -4) == 'JPEG' || substr($p->archivo, -3) == 'jpg' || substr($p->archivo, -3) == 'JPG' 
+                    || substr($p->archivo, -3) == 'png' || substr($p->archivo, -3) == 'PNG' )
                     {
 
                     }else{
@@ -1869,7 +1868,7 @@ class ENRController extends Controller
             
             foreach($docsSeleccionados as $p){
                 if(substr($p->archivo, -4) == 'JPEG' || substr($p->archivo, -3) == 'jpg' 
-                    || substr($p->archivo, -3) == 'png')
+                    || substr($p->archivo, -3) == 'png' || substr($p->archivo, -3) == 'JPG' || substr($p->archivo, -3) == 'PNG' )
                     {
                         $imagenes.=json_encode($p->archivo);
                     }
