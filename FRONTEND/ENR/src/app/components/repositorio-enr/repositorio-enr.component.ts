@@ -232,6 +232,8 @@ export class RepositorioENRComponent implements OnInit {
         'diasRetroactivos' : new FormControl(''),
         'datosAdicionales' : new FormControl(''),
         'datosIrregularidades' : new FormControl(''),
+        'datosCalculo' : new FormControl(''),
+        
       });
 
       this.frm_ArchivoOT = new FormGroup({
@@ -295,6 +297,8 @@ export class RepositorioENRComponent implements OnInit {
       this.cobroMedidor = new FormGroup({
         'idCaso' : new FormControl(''),
         'cantidadCobrar' : new FormControl(''),
+        'datosCalculo' : new FormControl(''),
+
       });
     }
 
@@ -306,7 +310,7 @@ export class RepositorioENRComponent implements OnInit {
     this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
     this.rutaFile = this.url.getUrlBackEnd()+'descargarArchivo?ruta=';
 
-    this.rutaFilePDF = this.url.getUrlBackEnd()+"public_path('files/reporteCaso";
+    this.rutaFilePDF = this.url.getUrlBackEnd()+'public_path("files/reporteCaso';
     
     this.codigoENR.getCodigoENR().subscribe(data => {this.codigosENR = data;});
     this.codigoMetENR.getMetodologiaCalc().subscribe(data => {this.codigosMetENR = data;});
@@ -1457,8 +1461,8 @@ public validarFechas(){
       this.fb2.group({
         idCaso : numero,
         periodo:'',
-        consumoRegistradoCT3:0,
-        diasCT3:0,
+        consumoRegistradoCT3:'',
+        diasCT3:'',
        }),  
     );
 
@@ -3071,6 +3075,10 @@ public eliminarLectura(i, periodo){
 
   }
 
+  public verPDFImpreso(id){
+    var url = this.url.getUrlBackEnd()+'files/reporteCaso'+id+'.pdf';
+    window.open(url, '_blank');
+  }
 
 
 

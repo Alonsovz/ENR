@@ -357,11 +357,13 @@ class ENRController extends Controller
         (select count(id) from enr_documentacion where idCasoENR =
         dg.id and idEliminado = 1) as adjuntos,
         dg.codigoTipoENR as codTipoENR,
-        fes.codigo_tarifa as tarifa, dg.fechaInicio as fechaIn, dg.fechaFin as fechaFin from enr_datosGenerales dg
+        fes.codigo_tarifa as tarifa, dg.fechaInicio as fechaIn, dg.fechaFin as fechaFin,
+        tp.datosCalculo as datosCalculo from enr_datosGenerales dg
         inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
         inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
         inner join EDESAL_CALIDAD.dbo.SGT_Usuarios u on u.id = dg.usuario_creacion
         inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
+        inner join enr_totalPagos tp on tp.casoENR = dg.id
         where dg.idEliminado = 1 and dg.estado = 2
         ");
 
@@ -380,11 +382,13 @@ class ENRController extends Controller
         (select count(id) from enr_documentacion where idCasoENR =
         dg.id and idEliminado = 1) as adjuntos,
         dg.codigoTipoENR as codTipoENR,
-        fes.codigo_tarifa as tarifa, dg.fechaInicio as fechaIn, dg.fechaFin as fechaFin from enr_datosGenerales dg
+        fes.codigo_tarifa as tarifa, dg.fechaInicio as fechaIn, dg.fechaFin as fechaFin,
+        tp.datosCalculo as datosCalculo, convert(varchar,dg.id)+'.pdf' as rutaAr from enr_datosGenerales dg
         inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
         inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
         inner join EDESAL_CALIDAD.dbo.SGT_Usuarios u on u.id = dg.usuario_creacion
         inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
+        inner join enr_totalPagos tp on tp.casoENR = dg.id
         where dg.idEliminado = 1 and dg.estado = 3
         ");
 
@@ -517,9 +521,15 @@ class ENRController extends Controller
         convert(varchar(10),fechaFin,23) as fechaFin,
         convert(varchar(10),fechaInicio,103) as fechaIni,
         convert(varchar(10),fechaFin,103) as fechaFini,
-        convert(varchar,fechaCreacion, 103)+' '+substring(convert(varchar,fechaCreacion, 114),1,5) as fechaCreacionF
+        convert(varchar,fechaCreacion, 103)+' '+substring(convert(varchar,fechaCreacion, 114),1,5) as fechaCreacionF,
+        case when estado > 1
+        then 
+         (select datosCalculo from enr_totalPagos where casoENR = enr_datosGenerales.id)
+        else
+        'No definido'
+        end as datosCalculo
         from enr_datosGenerales
-        where idEliminado = 1 and id =?
+        where idEliminado = 1 and id = ?
         ",[$codigo]);
         return response()->json($getDatos);
     }
@@ -1707,6 +1717,7 @@ class ENRController extends Controller
     public function cobroMedidor(Request $request){
         $idCaso = $request["idCaso"];
         $cantidadCobrar = $request["cantidadCobrar"];
+        $datosCalculo = $request["datosCalculo"];
 
         $eliminar =  DB::connection('facturacion')->table('enr_totalPagos')
         ->where('casoENR', $idCaso)->delete();
@@ -1716,6 +1727,7 @@ class ENRController extends Controller
          ->insert([
         'casoENR' => $idCaso ,
         'cobro_medidor' => $cantidadCobrar,
+        'datosCalculo' => $datosCalculo,
          ]);
         
           return response()->json($insertar); 
@@ -1945,7 +1957,7 @@ class ENRController extends Controller
             /
             (select sum(diasFacturados) from enr_periodosEvaluados where casoENR = dg.id)
             ),12,3) as consumoDiario ,
-            tip.tiempoRetroactivo as diasCobrar,
+            dg.diasCobro as diasCobrar,
             convert(varchar(10), dg.fechaInicio, 103) as fechaInicio,
             convert(varchar(10), dg.fechaFin, 103) as fechaFin,
             (select str(sum(consumo),12,2) from enr_consumoEstimado where casoENR= dg.id)

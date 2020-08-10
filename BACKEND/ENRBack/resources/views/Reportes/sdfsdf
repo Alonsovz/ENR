@@ -1,0 +1,66 @@
+ <table style="margin-left: -10px !important">
+                        <tr>
+                            <td colspan="3" style="font-size:13px;font-weight:bold; margin-top:20px;">Base de cálculo:</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->resultado}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3" style="font-size:13px;font-weight:bold; margin-top:20px;">Fecha de corrección de la Irregularidad:</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->fechaRegularizacion}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3" style="font-size:13px;font-weight:bold; margin-top:20px;">Dias de Histórico:</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->diasHistorico}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3" style="font-size:13px;font-weight:bold; margin-top:20px;">Dias a Cobrar:</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->diasCobrar}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3" style="font-size:13px;font-weight:bold; margin-top:20px;">Fecha Inicio Cobro:</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->fechaInicio}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3" style="font-size:13px;font-weight:bold; margin-top:20px;">Fecha Fin Cobro:</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->fechaFin}}
+                            </td>
+                        </tr>
+
+                        <tr>
+
+                            <td colspan="3" style="font-size:13px;font-weight:bold; margin-top:20px;">Consumo Estimado (Kwh):</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->consumoEstimado}}
+                            </td>
+                        </tr>
+
+                        <tr>
+
+                            <td colspan="3" style="font-size:13px;font-weight:bold; margin-top:20px;">Consumo Registrado (kwh):</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->consumoRegistrado}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3" style="font-size:13px;font-weight:bold; margin-top:20px;">Consumo ENR (Kwh):</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->consumoENR}}
+                            </td>
+                        </tr>
+                </table>

@@ -30,7 +30,7 @@
             </thead>
         
         </table>
-        <h3 style="text-align:center;">CÁLCULO DE ENERGíA NO REGISTRADA (ENR)</h3>
+        <h3 style="text-align:center;">CÁLCULO DE ENERGíA NO REGISTRADA (ENR)</h3><br><br>
         @foreach($data as $dat)
         <table style="font-weight:normal; font-size:13px;">
             <thead>
@@ -59,143 +59,126 @@
             </thead>
         </table>
 
-        <table style="margin-left:10px;margin-right:10px;margin-top:20px; border: 1px solid black; width:100%;
+        <table style="margin-left:10px;margin-right:10px; margin-top:30px; border: 1px solid black; width:100%;
         border-collapse: separate;border-spacing: 12px;">
-            <thead>
+        
+            <tbody>
+            <tr>
+                            <td style="text-align:center !important;font-weight:bold; font-size:15px;"> Datos ENR</td>
+                            <td style="text-align:center !important;font-weight:bold; font-size:15px;"> Datos de Cobro</td>
+            </tr>
                 <tr>
-                    <th style="font-size:13px;margin-left:100px;text-align:right;"> 
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    NIS: </th>
-                    <th style="font-weight:normal; font-size:13px;text-align:left;">
-                    {{$dat->nis}}
-                    </th>
+                 <td>
+                 <table>
+                        <tr>
+                            <td colspan="3" style="font-size:13px;font-weight:bold; text-align:right !important">Corrección de irregularidad:</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->fechaRegularizacion}}
+                            </td>
+                        </tr>
 
-                    <th style=" margin-left: 100px;font-size:13px;text-align:right;">Cliente: </th>
-                    <th style="font-weight:normal; font-size:13px;text-align:left;">
-                    {{$dat->cliente}}
-                    </th>
+                        <tr>
+                            <td colspan="3" style="font-size:13px;font-weight:bold; text-align:right !important">Dias de Histórico:</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->diasHistorico}}
+                            </td>
+                        </tr>
 
+                        <tr>
+                            <td colspan="3" style="font-size:13px;font-weight:bold; text-align:right !important">Dias a Cobrar:</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->diasCobrar}}
+                            </td>
+                        </tr>
 
+                        <tr>
+                            <td colspan="3" style="font-size:13px;font-weight:bold; text-align:right !important">Fecha Inicio Cobro:</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->fechaInicio}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3" style="font-size:13px;font-weight:bold; text-align:right !important">Fecha Fin Cobro:</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->fechaFin}}
+                            </td>
+                        </tr>
+
+                        <tr>
+
+                            <td colspan="3" style="font-size:13px;font-weight:bold; text-align:right !important">Consumo Estimado (Kwh):</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->consumoEstimado}}
+                            </td>
+                        </tr>
+
+                        <tr>
+
+                            <td colspan="3" style="font-size:13px;font-weight:bold; text-align:right !important">Consumo Registrado (kwh):</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->consumoRegistrado}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3" style="font-size:13px;font-weight:bold; text-align:right !important">Consumo ENR (Kwh):</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->consumoENR}}
+                            </td>
+                        </tr>
+                </table>
+ 
+                 </td>
+                   
+
+                 <td style="margin-top:-35px !important;">
+                    <table>
+                        <tr>
+                            <td colspan="3" style="font-size:13px;margin-top:-100px;text-align:right;font-weight:bold">Cargo por Distribución:</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->montoDistribucion}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="font-size:13px;text-align:right;font-weight:bold">Cargo por Energía:</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->montoEnergia}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3" style="font-size:13px;text-align:right;font-weight:bold">Equipo de Medición:</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            {{$dat->cobroEquipo}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3" style="font-size:13px;text-align:right;font-weight:bold">Sub Total:</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            <b>{{$dat->subtotal}}</b>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3" style="font-size:13px;text-align:right;font-weight:bold">IVA	:</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            <b>{{$dat->iva}}</b>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3" style="font-size:13px;text-align:right;font-weight:bold">TOTAL:</td>
+                            <td  style="font-weight:normal; font-size:13px;text-align:left;">
+                            <b>{{$dat->total}}</b>
+                            </td>
+                        </tr>
+                    </table>
+ 
+                 </td>
                 </tr>
-     
-                <tr>
-                    <th colspan="3" style="font-size:13px;text-align:right;margin-top:20px;">Resultado:</th>
-                    <th  style="font-weight:normal; font-size:13px;text-align:left;">
-                    {{$dat->resultado}}
-                    </th>
-                </tr>
-
-                <tr>
-                    <th colspan="3" style="font-size:13px;text-align:right;margin-top:20px;">Fecha de corrección de la Irregularidad:</th>
-                    <th  style="font-weight:normal; font-size:13px;text-align:left;">
-                    {{$dat->fechaRegularizacion}}
-                    </th>
-                </tr>
-
-                <tr>
-                    <th colspan="3" style="font-size:13px;text-align:right;margin-top:20px;">Dias de Histórico:</th>
-                    <th  style="font-weight:normal; font-size:13px;text-align:left;">
-                    {{$dat->diasHistorico}}
-                    </th>
-                </tr>
-
-                <tr>
-                    <th colspan="3" style="font-size:13px;text-align:right;margin-top:20px;">Consumo Diario (Kwh):</th>
-                    <th  style="font-weight:normal; font-size:13px;text-align:left;">
-                    {{$dat->consumoDiario}}
-                    </th>
-                </tr>
-
-                <tr>
-                    <th colspan="3" style="font-size:13px;text-align:right;margin-top:20px;">Dias a Cobrar:</th>
-                    <th  style="font-weight:normal; font-size:13px;text-align:left;">
-                    {{$dat->diasCobrar}}
-                    </th>
-                </tr>
-
-                <tr>
-                    <th colspan="3" style="font-size:13px;text-align:right;margin-top:20px;">Fecha Inicio Cobro:</th>
-                    <th  style="font-weight:normal; font-size:13px;text-align:left;">
-                    {{$dat->fechaInicio}}
-                    </th>
-                </tr>
-
-                <tr>
-                    <th colspan="3" style="font-size:13px;text-align:right;margin-top:20px;">Fecha Fin Cobro:</th>
-                    <th  style="font-weight:normal; font-size:13px;text-align:left;">
-                    {{$dat->fechaFin}}
-                    </th>
-                </tr>
-
-                <tr>
-
-                    <th colspan="3" style="font-size:13px;text-align:right;margin-top:20px;">Consumo Estimado (Kwh):</th>
-                    <th  style="font-weight:normal; font-size:13px;text-align:left;">
-                    {{$dat->consumoEstimado}}
-                    </th>
-                </tr>
-
-                <tr>
-
-                    <th colspan="3" style="font-size:13px;text-align:right;margin-top:20px;">Consumo Registrado (kwh):</th>
-                    <th  style="font-weight:normal; font-size:13px;text-align:left;">
-                    {{$dat->consumoRegistrado}}
-                    </th>
-                </tr>
-
-                <tr>
-                    <th colspan="3" style="font-size:13px;text-align:right;margin-top:20px;">Consumo ENR (Kwh):</th>
-                    <th  style="font-weight:normal; font-size:13px;text-align:left;">
-                    {{$dat->consumoENR}}
-                    </th>
-                </tr>
-
-                <tr>
-
-                    <th colspan="3" style="font-size:13px;text-align:right;margin-top:20px;">Cargo por Distribución:</th>
-                    <th  style="font-weight:normal; font-size:13px;text-align:left;">
-                    {{$dat->montoDistribucion}}
-                    </th>
-                </tr>
-
-                <tr>
-
-                    <th colspan="3" style="font-size:13px;text-align:right;margin-top:20px;">Cargo por Energía:</th>
-                    <th  style="font-weight:normal; font-size:13px;text-align:left;">
-                    {{$dat->montoEnergia}}
-                    </th>
-                </tr>
-
-                <tr>
-                    <th colspan="3" style="font-size:13px;text-align:right;margin-top:20px;">Costo de Equipo de Medición:</th>
-                    <th  style="font-weight:normal; font-size:13px;text-align:left;">
-                    {{$dat->cobroEquipo}}
-                    </th>
-                </tr>
-
-                <tr>
-                    <th colspan="3" style="font-size:13px;text-align:right;margin-top:20px;">Sub Total:</th>
-                    <th  style="font-weight:normal; font-size:13px;text-align:left;">
-                    <b>{{$dat->subtotal}}</b>
-                    </th>
-                </tr>
-
-                <tr>
-                    <th colspan="3" style="font-size:13px;text-align:right;margin-top:20px;">IVA	:</th>
-                    <th  style="font-weight:normal; font-size:13px;text-align:left;">
-                    <b>{{$dat->iva}}</b>
-                    </th>
-                </tr>
-
-                <tr>
-                    <th colspan="3" style="font-size:13px;text-align:right;margin-top:20px;">TOTAL:</th>
-                    <th  style="font-weight:normal; font-size:13px;text-align:left;">
-                    <b>{{$dat->total}}</b>
-                    </th>
-                </tr>
-
-                
-            </thead>
+            </tbody>
         </table>
 
         @endforeach
