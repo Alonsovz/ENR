@@ -169,6 +169,8 @@ Route::get('/', function () {
     Route::post('anexoCalculo', 'ENRController@anexoCalculo');
 
     Route::post('repositorioGlobal', 'ENRController@repositorioGlobal');
+
+    Route::post('eliminarCaso', 'ENRController@eliminarCaso');
     
     
     

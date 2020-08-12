@@ -405,6 +405,12 @@ export class RepositorioEnrService {
     //console.log(nis);
     return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'repositorioGlobal', kwh).pipe(map(data => data as Repositorio[]));
   }
+
+
+  public eliminarCaso(datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'eliminarCaso', datos).pipe(map(data => data as Repositorio));
+  }
   
 }
 

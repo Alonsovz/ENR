@@ -2,6 +2,7 @@
 <!--div para cálculo-->
 <div class="row animated fadeInLeft" style="display:none;margin-left: 30px; margin-right: 30px;" id="titleCalculo">
   <div class="col-lg-12">
+   
       <div class="row">
         <div class="col-lg-10" style="text-align: left;font-size: 20px;color:#49F7DD;font-weight: bold;">
          <img src="./assets/imagenes/moneyCalc.png" height=35>
@@ -1531,17 +1532,24 @@ background-color: #323259;" id="titleGlobal">
                                <td>{{rep.metodologiaENR}}</td>
                                <td>{{rep.diasCobrar}}</td>
                                <td>{{rep.fechaCreacion}}</td>
-                               <td style="width: 10% !important;">
+                               <td style="width: 20% !important;">
                                 <button class="btn btn-default btn-circle btn1"
                                 id="btnD{{rep.caso}}"
                                 data-toggle="modal"  data-target="#datosCaso"
-                                (click)="datosEditar(rep)">
+                                (click)="datosEditar(rep)" title="Editar caso">
                                     <i class="fas fa-edit"></i>
                                  </button>
                                          &nbsp;
                                  <button class="btn btn-default btn-circle btn2"
-                                 (click)="calcularCaso(rep, rep.caso)">
+                                 (click)="calcularCaso(rep, rep.caso)" title="Calcular caso">
                                      <i class="fas fa-calculator"></i>
+                                 </button>
+
+                                 &nbsp;
+                                 <button type="button" class="btn btn-danger btn-circle" 
+                                 data-toggle="modal"  data-target="#mdEliminarCaso" 
+                                 (click)="eliminarCaso(rep.caso)" title="Eliminar caso">
+                                   <i class="fas fa-trash"></i> 
                                  </button>
                                </td>
                             </tr>
@@ -1587,15 +1595,21 @@ background-color: #323259;" id="titleGlobal">
                                <td>{{rep.metodologiaENR}}</td>
                                <td>{{rep.diasCobrar}}</td>
                                <td>{{rep.fechaCreacion}}</td>
-                               <td style="width: 10% !important;">
+                               <td style="width: 20% !important;">
                                 <button class="btn btn-default btn-circle btn1"
-                                data-toggle="modal"  data-target="#datosCasoCalc" (click)="datosEditar(rep)">
+                                data-toggle="modal"  data-target="#datosCasoCalc" (click)="datosEditar(rep)"
+                                title="Ver detalles del caso">
                                     <i class="fas fa-edit"></i>
                                  </button>
                                          &nbsp;
-                                 <button class="btn btn-default btn-circle btn2"
+                                 <button class="btn btn-default btn-circle btn2" title="Generar reporte"
                                   data-toggle="modal"  data-target="#datosImprimir" (click)="datosImprimir(rep)">
                                      <i class="fas fa-bell"></i>
+                                 </button>
+                                 &nbsp;
+                                 <button type="button" class="btn btn-danger btn-circle"  title="Eliminar caso"
+                                 (click)="eliminarCaso(rep.caso)">
+                                   <i class="fas fa-trash"></i> 
                                  </button>
                                 </td>
                             </tr>
@@ -1643,18 +1657,21 @@ background-color: #323259;" id="titleGlobal">
                                <td>{{rep.metodologiaENR}}</td>
                                <td>{{rep.diasCobrar}}</td>
                                <td>{{rep.fechaCreacion}}</td>
-                               <td style="width: 10% !important;">
-                                <button class="btn btn-default btn-circle btn1"
+                               <td style="width: 20% !important;">
+                                <button class="btn btn-default btn-circle btn1" title="Ver detalles del caso"
                                 data-toggle="modal"  data-target="#datosCasoNoti" (click)="datosEditar(rep)">
                                     <i class="fas fa-edit"></i>
                                  </button>
                                  &nbsp;
-                                 
-                                 <button type="button" class="btn btn-info btn-circle"  style="color:black !important;"
-                                 (click)="verPDFImpreso(rep.caso)">
+                                 <button type="button" class="btn btn-info btn-circle" 
+                                 (click)="verPDFImpreso(rep.caso)" title="Ver reporte">
                                    <i class="fas fa-print"></i> 
                                  </button>
-
+                                 &nbsp;
+                                 <button type="button" class="btn btn-danger btn-circle"  title="Eliminar caso"
+                                 (click)="eliminarCaso(rep.caso)">
+                                   <i class="fas fa-trash"></i> 
+                                 </button>
                                  
                             </tr>
                         </tbody>
@@ -3830,6 +3847,53 @@ tabindex="-1" role="dialog" id="nuevoScan">
         data-toggle="modal" data-target="#cancelarGuardadoEditar">
           <i class="fas fa-times-circle"></i>  Cerrar!
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal animated fadeInDown" id="mdEliminarCaso" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="title" style="color:#0CD902 !important;">
+          <img class="img-profile" src="./assets/imagenes/confirm.png" width=35 height=35>
+          Confirmación
+        </h5>
+        
+      </div>
+      <div class="modal-body">
+        <h4 style="text-align: center;color: #67E1E1;">¿Desea eliminar el caso ENR {{casoEliminar}}?</h4>
+        
+          <form [formGroup]="frmDatosEliminar">
+            <div class="row" style="width: 100%; text-align: center !important;">
+              <div class="col-md-12">
+                <label><i class="fas fa-pen"></i> Escriba la razón por la que desea eliminar el caso: </label>
+                <textarea rows="4" placeholder="Razón de eliminado" class="form-control"
+                formControlName="razonEliminado"></textarea>
+
+                <input formControlName="usuario" type="hidden">
+                <input formControlName="idCaso"type="hidden">
+              </div>
+            </div>
+          </form>
+      
+        
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          <i class="fas fa-times-circle"></i>  Cancelar!
+        </button>
+        <button type="button" [disabled] = "frmDatosEliminar.invalid" class="btn btn-success" data-dismiss="modal"
+        (click)="eliminarCasoBD()">
+          <i class="fas fa-thumbs-up"></i> Eliminar!
+        </button>
+        
+        
       </div>
     </div>
   </div>

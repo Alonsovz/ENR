@@ -49,6 +49,7 @@ export class RepositorioENRComponent implements OnInit {
   datosGeneralesLecturas : Repositorio = new Repositorio();
   adjuntoVer : SafeResourceUrl;
   extension : string;
+  casoEliminar: string;
   archivoEliminar : Repositorio = new Repositorio();
   datosPadre : Repositorio = new Repositorio();
   archivoEliminarOT : Repositorio = new Repositorio();
@@ -129,6 +130,7 @@ export class RepositorioENRComponent implements OnInit {
 
   frm_Caso5 : FormGroup;
   cobroMedidor : FormGroup;
+  frmDatosEliminar : FormGroup;
   tarifaE : '';
   datoImprimir : Repositorio = new Repositorio();
   datoImprimirObj : Repositorio[];
@@ -300,9 +302,17 @@ export class RepositorioENRComponent implements OnInit {
         'datosCalculo' : new FormControl(''),
 
       });
+
+      this.frmDatosEliminar = new FormGroup({
+        'idCaso' : new FormControl(''),
+        'razonEliminado' : new FormControl('',[Validators.required]),
+        'usuario' : new FormControl(''),
+
+      });
     }
 
   ngOnInit() {
+  
     this.user = JSON.parse(localStorage.getItem('usuario'));
     this.frm_PdfEvaluar = this.fbpdf.group({pdfs: this.fbpdf.array([]),});
     this.frm_LecturasEvaluar = this.fb2.group({lecturas: this.fb2.array([]),});
@@ -3081,6 +3091,42 @@ public eliminarLectura(i, periodo){
   }
 
 
+  public eliminarCaso(id){
+    this.casoEliminar = id;
+    this.frmDatosEliminar.controls["idCaso"].setValue(id);
+
+    this.frmDatosEliminar.controls["usuario"].setValue(this.user.alias);
+    this.frmDatosEliminar.controls["razonEliminado"].setValue('');
+  }
+
+  public eliminarCasoBD(){
+    let datosEliminar : Repositorio = new Repositorio();
+  
+    datosEliminar = this.frmDatosEliminar.value;
+
+      this.repositorioENR.eliminarCaso(datosEliminar).subscribe(
+        response => {
+          
+        },
+        err => {
+        // //console.log("no");
+        },
+        () => { 
+          notie.alert({
+            type: 'success', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+            text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Eliminado con éxito!',
+            stay: false, // optional, default = false
+            time: 2, // optional, default = 3, minimum = 1,
+            position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+          });
+    
+
+          this.getRepositorioIng();
+          this.getRepositorioCalc();
+          this.getRepositorioNoti();
+    },
+  );
+  }
 
 
 

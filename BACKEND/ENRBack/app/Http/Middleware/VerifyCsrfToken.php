@@ -96,6 +96,7 @@ class VerifyCsrfToken extends BaseVerifier
         'getDatosImprimir',
         'multiplesArchivos',
         'anexoCalculo',
-        'repositorioGlobal'
+        'repositorioGlobal',
+        'eliminarCaso'
     ];
 }

@@ -2121,4 +2121,28 @@ class ENRController extends Controller
 
             return response()->json($data);
     }
+
+
+
+    public function eliminarCaso(Request $request){
+        $idCaso = $request["idCaso"];
+        $razon = $request["razonEliminado"];
+        $usuario = $request["usuario"];
+      
+
+        $editar =  DB::connection('facturacion')->table('enr_datosGenerales')->where('id', $idCaso)
+                         ->update(['idEliminado' => 2]);
+
+         $insertar =  DB::connection('facturacion')->table('enr_bitacoraAcciones')
+         ->insert([
+        'accion' => 'Eliminado de caso ENR '.$idCaso ,
+        'usuario' => $usuario,
+        'razonEliminado' => $razon,
+        'fecha' => date('Ymd H:i:s'),
+        'casoENR' => $idCaso 
+         ]);
+        
+          return response()->json($insertar); 
+        
+    }
 }
