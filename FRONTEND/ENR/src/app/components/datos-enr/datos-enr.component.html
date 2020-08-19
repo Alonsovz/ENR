@@ -171,7 +171,7 @@
                 <input type="date" (change)="asigFechaFin()" class="form-control" formControlName="fechaRegular">
            
             </div>  
-            <div class="col-md-5"><br>
+            <div class="col-md-4"><br>
                 <label><i class="fa fa-archive"></i> Tipo de Caso ENR</label>          
                 <select (change)="asigDias()" class="form-control" formControlName="codTipoENR">
                     <option value="0" set selected> Seleccione una opción</option>
@@ -187,7 +187,13 @@
                     <input type="text" readonly="true" formControlName="diasRetroactivos" class="form-control" [(ngModel)]="dia.diasRetro">
                 </div>              
             </div>
-            <div class="col-md-5"><br>
+            <div class="col-md-2"><br> 
+                <button class="btn btn-warning"  data-toggle="modal"
+                data-target="#mdLecturas"
+                style="margin-left: 18% !important;margin-top: 20% !important;">
+                  <i class="fas fa-list-ul"></i> Lecturas</button>
+            </div>
+            <div class="col-md-4"><br>
                 <label><i class="fa fa-archive"></i> Tipo de Cálculo de metodología ENR</label>          
                 <select class="form-control" formControlName="codTipoMetENR">
                     <option value="0" set selected> Seleccione una opción</option>
@@ -744,6 +750,68 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
         data-toggle="modal" data-target="#adjuntosOrden">
           <i class="fas fa-thumbs-up"></i>  Si, eliminar!
         </button>
+        
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal animated fadeInDown" id="mdLecturas" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog mw-100 w-75">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="title" style="color:#0CD902 !important;">
+          <img class="img-profile" src="./assets/imagenes/list.png" width=35 height=35>
+          Lecturas del suministro: 
+        </h5>
+        
+      </div>
+      <div class="modal-body">
+        <table  id="lecturasTbl" class="table small mt-5" style="width: 99%;
+        margin:auto">
+            <thead class="thead-dark">
+              <tr>
+                <th style="background-color:#323259; color:#51F749;"
+                class="text-center">Período</th>
+                <th style="background-color:#323259; color:#51F749;"
+                class="text-center">N° Medidor</th>
+                <th style="background-color:#323259; color:#51F749;"
+                 class="text-center">F. Lectura</th>
+                 <th style="background-color:#323259; color:#51F749;"
+                 class="text-center">F. Lectura Ant</th>
+                <th style="background-color:#323259; color:#51F749;"
+                 class="text-center">Días</th>
+                 <th style="background-color:#323259; color:#51F749;"
+                 class="text-center">Lectura</th>
+                 <th style="background-color:#323259; color:#51F749;"
+                 class="text-center">Lect.Anterior</th>
+                 
+                 <th style="background-color:#323259; color:#51F749;"
+                 class="text-center">Consumo</th>
+            </tr>
+            </thead>
+            <tbody style="background-color:#323259; color:white;text-align: center;
+            font-size: 13px;">
+              <tr *ngFor="let lec of lecturas">                        
+               <td>{{lec.periodo}}</td>
+               <td>{{lec.numero_medidor}}</td>
+               <td>{{lec.fecha_lectura}}</td>
+               <td>{{lec.fecha_lectura_ant}}</td>
+               <td>{{lec.dias}}</td>
+               <td>{{lec.lectura}}</td>
+               <td>{{lec.lectura_anterior}}</td>
+               <td>{{lec.consumo}}</td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          <i class="fas fa-times-circle"></i>  Cerrar!
+        </button>
+      
         
         
       </div>

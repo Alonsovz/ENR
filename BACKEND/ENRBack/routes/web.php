@@ -173,7 +173,7 @@ Route::get('/', function () {
     Route::post('eliminarCaso', 'ENRController@eliminarCaso');
     
     
-    
+    Route::post('getLecturasbyNISum', 'ENRController@getLecturasbyNISum');
 
     
 

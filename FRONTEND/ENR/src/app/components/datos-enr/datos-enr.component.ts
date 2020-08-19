@@ -38,7 +38,7 @@ export class DatosENRComponent implements OnInit {
   adjuntoOrdenesForm: FormGroup;
   dataTable: any;
   ordenes : DatosENR[];
-
+  lecturas : DatosENR[];
   adjuntosFile : DatosENR[];
   extension : string;
   archivoEliminar : DatosENR = new DatosENR();
@@ -151,6 +151,56 @@ export class DatosENRComponent implements OnInit {
     let datosENRdto : DatosENR = new DatosENR();
 
     datosENRdto = this.frm_NIS.value;
+
+    this.datosENR.getLecturasbyNISum(datosENRdto).subscribe(
+      response => {
+
+        this.lecturas = response;
+        const table: any = $('#lecturasTbl');
+     
+        this.dataTable = table.DataTable();
+        this.dataTable.destroy();
+    
+        this.chRef.detectChanges();
+        
+        this.chRef.detectChanges();
+        
+        this.dataTable = table.DataTable({
+        'iDisplayLength' : 5,
+        'responsive': true,
+          'order' :[[5,'desc']],
+
+        'language' : {
+          'sProcessing':     'Procesando...',
+          'sLengthMenu':     'Mostrar _MENU_ registros',
+          'sZeroRecords':    'No se encontraron resultados',
+          'sEmptyTable':     'Ningún dato disponible en esta tabla',
+          'sInfo':           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
+          'sInfoEmpty':      'Mostrando registros del 0 al 0 de un total de 0 registros',
+          'sInfoFiltered':   '(filtrado de un total de _MAX_ registros)',
+          'sInfoPostFix':    '',
+          'sSearch':         'Buscar:',
+          'sUrl':            '',
+          'sInfoThousands':  ',',
+          'sLoadingRecords': 'Cargando...',
+          'oPaginate': {
+              'sFirst':    'Primero',
+              'sLast':     'Último',
+              'sNext':     'Siguiente',
+              'sPrevious': 'Anterior'
+          },
+          'oAria': {
+              'sSortAscending':  ': Activar para ordenar la columna de manera ascendente',
+              'sSortDescending': ': Activar para ordenar la columna de manera descendente'
+          }
+        }
+        });
+      },
+      err => {},
+      () => {
+        //console.log(this.cod);
+      }
+    );
     
     this.datosENR.getDatosbyNIS(datosENRdto).subscribe(
       response => {
@@ -222,6 +272,7 @@ export class DatosENRComponent implements OnInit {
       }
     );
 
+    
   }
 
 //asignacion de fecha fin mediante la fecha de regularización
@@ -238,7 +289,7 @@ export class DatosENRComponent implements OnInit {
     var fechaFin = this.frm_DatosNIS.controls["fechaFinENR"].value;
     var fechaInicio = this.frm_DatosNIS.controls["fechaInicioENR"].value;
 
-    if(fechaFin > fechaMax){
+   /* if(fechaFin > fechaMax){
       notie.alert({
         type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
         text: '<img class="img-profile alertImg" src="./assets/imagenes/problem.png" width=40 height=40> No debe ser mayor a la fecha de regularización!',
@@ -264,9 +315,9 @@ export class DatosENRComponent implements OnInit {
 
     else{
       this.calcularDias();
-    }
+    }*/
 
-
+    this.calcularDias();
   }
 
   //validación de fecha inicio para que no sea mayor que la final ni la de regularización
@@ -275,7 +326,7 @@ export class DatosENRComponent implements OnInit {
     var fechaMax = this.frm_DatosNIS.controls["fechaRegular"].value;
     var fechaInicio = this.frm_DatosNIS.controls["fechaInicioENR"].value;
     var fechaFin = this.frm_DatosNIS.controls["fechaFinENR"].value;
-    if(fechaInicio > fechaMax){
+   /* if(fechaInicio > fechaMax){
       notie.alert({
         type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
         text: '<img class="img-profile alertImg" src="./assets/imagenes/problem.png" width=40 height=40> No debe ser mayor a la fecha de regularización!',
@@ -302,7 +353,11 @@ export class DatosENRComponent implements OnInit {
     else{
       $("#fechaf").prop("disabled",false);
      this.calcularDias();
-    }
+    }*/
+
+
+    $("#fechaf").prop("disabled",false);
+    this.calcularDias();
   }
 
     //método para obtener dias segun el codigo tipo enr
@@ -340,7 +395,7 @@ export class DatosENRComponent implements OnInit {
     
     var codigo = this.frm_DatosNIS.controls["codTipoENR"].value;
    
-    if(codigo != '6'){
+   /* if(codigo != '6'){
       if(total > diasRetroactivos){
         notie.alert({
           type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
@@ -356,9 +411,9 @@ export class DatosENRComponent implements OnInit {
         
         this.frm_DatosNIS.controls["diasCobro"].setValue(total);
       
-    }
+    }*/
      
-      
+    this.frm_DatosNIS.controls["diasCobro"].setValue(total);
     
   
 
@@ -391,6 +446,20 @@ export class DatosENRComponent implements OnInit {
 
 //inserción de datos a guarddar
  public guardarDatos(){
+  var diasENR = this.frm_DatosNIS.controls["diasRetroactivos"].value;
+  var diasCobro = this.frm_DatosNIS.controls["diasCobro"].value;
+
+
+  if(diasCobro > diasENR){
+    notie.alert({
+      type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+      text: '<img class="img-profile alertImg" src="./assets/imagenes/problem.png" width=40 height=40> El cálculo de días es mayor al permitido por el código Tipo ENR!',
+      stay: false, // optional, default = false
+      time: 5, // optional, default = 3, minimum = 1,
+      position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+    });
+  }else{
+  
   let datosENRdto : DatosENR = new DatosENR();
 
   datosENRdto = this.frm_DatosNIS.value;
@@ -433,7 +502,7 @@ export class DatosENRComponent implements OnInit {
   );
 
 
-  
+  }
 
  }
 
@@ -466,7 +535,7 @@ export class DatosENRComponent implements OnInit {
 
 
   
-
+  
   
  }
 

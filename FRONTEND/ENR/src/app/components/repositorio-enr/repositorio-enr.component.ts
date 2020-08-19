@@ -2467,9 +2467,7 @@ public eliminarLectura(i, periodo){
                                       // // //console.log("no");
                                       },
                                       () => {
-                                        $("#loading").fadeOut();
-                                        $("#divTarifas").show();
-                                        
+                                       this.verTarifasRecalculo(tarifa);
                                         
                                        
                                       },
@@ -2576,6 +2574,497 @@ public eliminarLectura(i, periodo){
 
   }
 
+  public verTarifasRecalculo(tarifa){
+ 
+    
+    //$("#loading").fadeIn();
+    //$("#divTarifas").hide();
+    var caso = this.casoEvaluado;
+    let datosKwh :  DatosENR = new DatosENR();
+
+    datosKwh = this.frm_LecturasEvaluarTotales.value;
+   
+    
+
+    let datosENRdto : DatosENR = new DatosENR();
+
+    datosENRdto = this.frm_tarifas.value;
+    this.repositorioENR.getTarifasFechas(datosENRdto).subscribe(
+      response => {
+        this.tarifasFechas =response;
+      },
+      err => {
+      
+      },
+      () => {
+    
+        this.repositorioENR.getTarifasFechasTotal(datosENRdto).subscribe(
+          response => {
+            this.tarifasFechasTotal =response;
+          },
+          err => {
+          
+          },
+          () => {
+        
+          },
+        );
+
+
+      },
+    );
+
+
+
+    this.repositorioENR.getConsumoEstimado(datosKwh).subscribe(
+      response => {
+        this.consumoEstimado =response;
+      },
+      err => {
+      
+      },
+      () => {
+    
+        this.repositorioENR.getConsumoEstimadoTotal(datosKwh).subscribe(
+          response => {
+            this.consumoEstimadoTotal =response;
+          },
+          err => {
+          
+          },
+          () => {
+        
+          },
+        );
+
+      },
+    );
+
+    this.repositorioENR.getConsumoRegistrado(datosKwh).subscribe(
+      response => {
+        this.consumoRegistrado =response;
+      },
+      err => {
+      
+      },
+      () => {
+    
+        this.repositorioENR.getConsumoRegistradoTotal(datosKwh).subscribe(
+          response => {
+            this.consumoRegistradoTotal =response;
+          },
+          err => {
+          
+          },
+          () => {
+        
+          },
+        );
+
+      },
+    );
+
+    this.repositorioENR.getConsumoENR(datosKwh).subscribe(
+      response => {
+        this.consumoENR =response;
+      },
+      err => {
+      
+      },
+      () => {
+        this.repositorioENR.getConsumoENRTotal(datosKwh).subscribe(
+          response => {
+            this.consumoENRTotal =response;
+          },
+          err => {
+          
+          },
+          () => {
+        
+          },
+        );
+
+          if(tarifa === '1R'){
+
+          
+        this.repositorioENR.getConsumoENR1erBloque(datosKwh).subscribe(
+          response => {
+            this.consumoENR1erBloque =response;
+          },
+          err => {
+          
+          },
+          () => {
+        
+          },
+        );
+
+
+        this.repositorioENR.getConsumoENR2doBloque(datosKwh).subscribe(
+          response => {
+            this.consumoENR2doBloque =response;
+          },
+          err => {
+          
+          },
+          () => {
+        
+          },
+        );
+
+
+        this.repositorioENR.getConsumoENR3erBloque(datosKwh).subscribe(
+          response => {
+            this.consumoENR3erBloque =response;
+          },
+          err => {
+          
+          },
+          () => {
+
+            this.repositorioENR.getConsumoENR1erBloqueTotal(datosKwh).subscribe(
+              response => {
+                this.consumoENR1erBloqueTotal =response;
+              },
+              err => {
+              
+              },
+              () => {
+            
+              },
+            );
+    
+    
+            this.repositorioENR.getConsumoENR2doBloqueTotal(datosKwh).subscribe(
+              response => {
+                this.consumoENR2doBloqueTotal =response;
+              },
+              err => {
+              
+              },
+              () => {
+            
+              },
+            );
+    
+    
+            this.repositorioENR.getConsumoENR3erBloqueTotal(datosKwh).subscribe(
+              response => {
+                this.consumoENR3erBloqueTotal =response;
+              },
+              err => {
+              
+              },
+              () => {
+            
+                this.repositorioENR.getConsumoENRTotalFechas(datosKwh).subscribe(
+                  response => {
+                    this.consumoENRTotalGlobalFechas =response;
+                  },
+                  err => {
+                  
+                  },
+                  () => {
+                
+                  },
+                );
+
+
+                this.repositorioENR.getConsumoENRTotalGlobal(datosKwh).subscribe(
+                  response => {
+                    this.consumoENRTotalGlobal =response;
+                  },
+                  err => {
+                  
+                  },
+                  () => {
+                
+                    this.repositorioENR.getConsumoENR1erBloqueEnergia(datosKwh).subscribe(
+                      response => {
+                        this.consumoENR1erBloqueEnergia =response;
+                      },
+                      err => {
+                      
+                      },
+                      () => {
+                    
+                      },
+                    );
+            
+            
+                    this.repositorioENR.getConsumoENR2doBloqueEnergia(datosKwh).subscribe(
+                      response => {
+                        this.consumoENR2doBloqueEnergia =response;
+                      },
+                      err => {
+                      
+                      },
+                      () => {
+                    
+                      },
+                    );
+            
+            
+                    this.repositorioENR.getConsumoENR3erBloqueEnergia(datosKwh).subscribe(
+                      response => {
+                        this.consumoENR3erBloqueEnergia =response;
+                      },
+                      err => {
+                      
+                      },
+                      () => {
+            
+                        this.repositorioENR.getConsumoENR1erBloqueTotalEnergia(datosKwh).subscribe(
+                          response => {
+                            this.consumoENR1erBloqueTotalEnergia =response;
+                          },
+                          err => {
+                          
+                          },
+                          () => {
+                        
+                          },
+                        );
+                
+                
+                        this.repositorioENR.getConsumoENR2doBloqueTotalEnergia(datosKwh).subscribe(
+                          response => {
+                            this.consumoENR2doBloqueTotalEnergia =response;
+                          },
+                          err => {
+                          
+                          },
+                          () => {
+                        
+                          },
+                        );
+                
+                
+                        this.repositorioENR.getConsumoENR3erBloqueTotalEnergia(datosKwh).subscribe(
+                          response => {
+                            this.consumoENR3erBloqueTotalEnergia =response;
+                          },
+                          err => {
+                          
+                          },
+                          () => {
+                        
+                            this.repositorioENR.getConsumoENRTotalFechasEnergia(datosKwh).subscribe(
+                              response => {
+                                this.consumoENRTotalGlobalFechasEnergia =response;
+                              },
+                              err => {
+                              
+                              },
+                              () => {
+                            
+                              },
+                            );
+            
+            
+                            this.repositorioENR.getConsumoENRTotalGlobalEnergia(datosKwh).subscribe(
+                              response => {
+                                this.consumoENRTotalGlobalEnergia =response;
+                              },
+                              err => {
+                              
+                              },
+                              () => {
+                            
+                              },
+                            );
+
+                            this.repositorioENR.getConsumoENR1erBloqueDistribucion(datosKwh).subscribe(
+                              response => {
+                                this.consumoENR1erBloqueDistribucion =response;
+                              },
+                              err => {
+                              
+                              },
+                              () => {
+                            
+                              },
+                            );
+                    
+                    
+                            this.repositorioENR.getConsumoENR2doBloqueDistribucion(datosKwh).subscribe(
+                              response => {
+                                this.consumoENR2doBloqueDistribucion =response;
+                              },
+                              err => {
+                              
+                              },
+                              () => {
+                            
+                              },
+                            );
+                    
+                    
+                            this.repositorioENR.getConsumoENR3erBloqueDistribucion(datosKwh).subscribe(
+                              response => {
+                                this.consumoENR3erBloqueDistribucion =response;
+                              },
+                              err => {
+                              
+                              },
+                              () => {
+                    
+                                this.repositorioENR.getConsumoENR1erBloqueTotalDistribucion(datosKwh).subscribe(
+                                  response => {
+                                    this.consumoENR1erBloqueTotalDistribucion =response;
+                                  },
+                                  err => {
+                                  
+                                  },
+                                  () => {
+                                
+                                  },
+                                );
+                        
+                        
+                                this.repositorioENR.getConsumoENR2doBloqueTotalDistribucion(datosKwh).subscribe(
+                                  response => {
+                                    this.consumoENR2doBloqueTotalDistribucion =response;
+                                  },
+                                  err => {
+                                  
+                                  },
+                                  () => {
+                                
+                                  },
+                                );
+                        
+                        
+                                this.repositorioENR.getConsumoENR3erBloqueTotalDistribucion(datosKwh).subscribe(
+                                  response => {
+                                    this.consumoENR3erBloqueTotalDistribucion =response;
+                                  },
+                                  err => {
+                                  
+                                  },
+                                  () => {
+                                
+                                    this.repositorioENR.getConsumoENRTotalFechasDistribucion(datosKwh).subscribe(
+                                      response => {
+                                        this.consumoENRTotalGlobalFechasDistribucion =response;
+                                      },
+                                      err => {
+                                      
+                                      },
+                                      () => {
+                                    
+                                      },
+                                    );
+                    
+                    
+                                    this.repositorioENR.getConsumoENRTotalGlobalDistribucion(datosKwh).subscribe(
+                                      response => {
+                                        this.consumoENRTotalGlobalDistribucion =response;
+                                      },
+                                      err => {
+                                      
+                                      },
+                                      () => {
+                                        $("#loading").fadeOut();
+                                        $("#divTarifas").show();
+                                        
+                                        
+                                       
+                                      },
+                                    );
+                    
+                    
+                                    
+                    
+                                  },
+                                );
+                    
+                    
+                              },
+                            );
+            
+            
+                            
+            
+                          },
+                        );
+            
+            
+                      },
+                    );
+
+                  },
+                );
+
+
+                
+
+              },
+            );
+
+
+          },
+        );
+          }
+
+          if(tarifa == '1G'){
+           
+
+            
+            this.repositorioENR.getConsumoENRBloqueDistribucion1G(datosKwh).subscribe(
+              response => {
+                this.consumoENRTotalGlobalFechasDistribucion =response;
+              },
+              err => {
+              
+              },
+              () => {
+            
+              },
+            );
+
+            this.repositorioENR.getConsumoENRBloqueEnergia1G(datosKwh).subscribe(
+              response => {
+                this.consumoENR3erBloqueTotalEnergia =response;
+              },
+              err => {
+              
+              },
+              () => {
+                this.repositorioENR.getConsumoENRBloqueEnergia1GTotal(datosKwh).subscribe(
+                  response => {
+                    this.consumoENR1erBloqueTotalEnergia =response;
+                  },
+                  err => {
+                  
+                  },
+                  () => {
+                    this.repositorioENR.getConsumoENRBloqueDistribucion1GTotal(datosKwh).subscribe(
+                      response => {
+                        this.consumoENR1erBloqueTotalDistribucion =response;
+                      },
+                      err => {
+                      
+                      },
+                      () => {
+                        $("#loading").fadeOut();
+                        $("#divTarifas").show();
+                        
+                        
+                       
+                      },
+                    );
+                    
+                   
+                  },
+                );
+               
+              },
+            );
+          }
+      },
+    );
+  }
 
 
   public calcularDiasTarifas(){

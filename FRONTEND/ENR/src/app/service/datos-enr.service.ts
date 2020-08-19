@@ -23,6 +23,12 @@ export class DatosENRService {
     return this.http.post<DatosENR[]>(this.url.getUrlBackEnd() + 'getOrdenesbyNIS', nis).pipe(map(data => data as DatosENR[]));
   }
 
+  
+  public getLecturasbyNISum(nis): Observable<DatosENR[]> {
+    //console.log(nis);
+    return this.http.post<DatosENR[]>(this.url.getUrlBackEnd() + 'getLecturasbyNISum', nis).pipe(map(data => data as DatosENR[]));
+  }
+
   public getDiasRetroactivos(codigo) : Observable<DatosENR[]>{
     return this.http.post<DatosENR[]>(this.url.getUrlBackEnd() + 'getDiasRetroactivos', codigo).pipe(map(data => data as DatosENR[]));
   }

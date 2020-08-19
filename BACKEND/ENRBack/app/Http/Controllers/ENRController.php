@@ -185,6 +185,30 @@ class ENRController extends Controller
         return response()->json($getDatos);
     }
 
+    public function getLecturasbyNISum(Request $request){
+        $nis = $request["nis"];
+
+        $getDatos =  DB::connection('facturacion')->select("
+        SELECT fe_lecturas.num_suministro,   
+         fe_lecturas.periodo as periodo,   
+         fe_lecturas.numero_medidor as numero_medidor,   
+         fe_lecturas.codigo_consumo as codigo_consumo,   
+         convert(varchar,fe_lecturas.fecha_lectura_ant,103) as fecha_lectura_ant,   
+          convert(varchar,fe_lecturas.fecha_lectura,103) as fecha_lectura,   
+         fe_lecturas.lectura_anterior as lectura_anterior,   
+         fe_lecturas.lectura as lectura,   
+         fe_lecturas.consumo as consumo,
+         DATEDIFF (DAY, fecha_lectura_ant , fecha_lectura ) as dias
+            FROM fe_lecturas 
+            WHERE ( fe_lecturas.num_suministro = ? ) AND  
+         ( fe_lecturas.codigo_consumo <> 'CO030' ) AND  
+         ( fe_lecturas.codigo_consumo <> 'CO031' ) AND
+         (fe_lecturas.fecha_lectura between DATEADD(MM, -12,GETDATE()) AND getdate())",[$nis]);
+
+
+        return response()->json($getDatos);
+    }
+    
 
     public function getDiasRetroactivos(Request $request){
         $codigo = $request["codTipoENR"];
