@@ -129,6 +129,7 @@ export class RepositorioENRComponent implements OnInit {
   frm_Caso4 : FormGroup;
 
   frm_Caso5 : FormGroup;
+  frm_Caso6 : FormGroup;
   cobroMedidor : FormGroup;
   frmDatosEliminar : FormGroup;
   tarifaE : '';
@@ -294,6 +295,21 @@ export class RepositorioENRComponent implements OnInit {
           'consumoENRRegistrado': new FormControl('',[Validators.required]),
           });
     
+
+          this.frm_Caso6 = new FormGroup({
+            'idCaso' : new FormControl('',[Validators.required]),
+            'sumaHistorialLecturas' : new FormControl(''),
+            'fecha1HistoConsumo' : new FormControl(''),
+            'fecha2HistoConsumo' : new FormControl(''),
+            'diasHistorico' : new FormControl(''),
+            'promedioDiarioConsumo' : new FormControl(''),
+            'fecha1PeriodoENR' : new FormControl(''),
+            'fecha2PeriodoENR' : new FormControl(''),
+            'diasRetroactivo' : new FormControl(''),
+            'consumoEstimado' : new FormControl(''),
+            'consumoRegistrado' : new FormControl(0),
+            'montoENR' : new FormControl(''),
+            });
 
           
       this.cobroMedidor = new FormGroup({
@@ -3618,6 +3634,69 @@ public eliminarLectura(i, periodo){
   }
 
 
+  public showMetodo1(){
+    $("#divMetodo1").show();
+
+    $("#divMetodo2").hide();
+    $("#btnSelecLecturasCaso6").hide();
+  }
+
+  public showMetodo2(){
+    $("#divMetodo2").show();
+    $("#btnSelecLecturasCaso6").show();
+    $("#divMetodo1").hide();
+  }
+
+  public calcularDiasHistoricoMet1(){
+    var fecha1 = new Date(this.frm_Caso6.controls["fecha1HistoConsumo"].value).getTime() ;
+    var fecha2 = new Date( this.frm_Caso6.controls["fecha2HistoConsumo"].value).getTime();
+
+    var diferencia = fecha2 - fecha1;
+
+    var total = diferencia / (1000 * 60 * 60 * 24);
+
+    this.frm_Caso6.controls["diasHistorico"].setValue(total);
+
+    var sumaHistorialLecturas = this.frm_Caso6.controls["sumaHistorialLecturas"].value;
+
+    var promedioDiario = sumaHistorialLecturas/total;
+
+    this.frm_Caso6.controls["promedioDiarioConsumo"].setValue(promedioDiario.toFixed(3));
+
+
+    var diasRetroactivo = this.frm_Caso6.controls["diasRetroactivo"].value;
+
+    var consumoEstimado = promedioDiario*diasRetroactivo;
+
+    this.frm_Caso6.controls["consumoEstimado"].setValue(consumoEstimado.toFixed(3));
+    //this.frm_Caso6.controls["consumoRegistrado"].setValue(0);
+    this.frm_Caso6.controls["montoENR"].setValue(consumoEstimado.toFixed(3));
+    $("#btnFacturacion").show();
+
+
+    this.llenarTotales();
+  }
+
+
+  public restarConsumoRegistradoCaso6(){
+    var consumoEstimado = this.frm_Caso6.controls["consumoEstimado"].value;
+    var consumoRegistrado = this.frm_Caso6.controls["consumoRegistrado"].value;
+
+    var total = consumoEstimado - consumoRegistrado;
+    this.frm_Caso6.controls["montoENR"].setValue(total.toFixed(3));
+
+   this.llenarTotales();
+  }
+
+  public llenarTotales(){
+    var diasRetroactivo = this.frm_Caso6.controls["diasRetroactivo"].value;
+    var consumoEstimado =  this.frm_Caso6.controls["consumoEstimado"].value;
+    var consumoRegistrado = this.frm_Caso6.controls["consumoRegistrado"].value;
+
+    this.frm_LecturasEvaluarTotales.controls["totalDias"].setValue(diasRetroactivo);
+    this.frm_LecturasEvaluarTotales.controls["consumoDiarioENR"].setValue(consumoEstimado);
+    this.frm_LecturasEvaluarTotales.controls["consumoENRRegistrado"].setValue(consumoRegistrado);
+  }
 
   
 }

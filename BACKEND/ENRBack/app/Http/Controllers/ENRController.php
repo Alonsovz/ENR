@@ -545,6 +545,7 @@ class ENRController extends Controller
         convert(varchar(10),fechaFin,23) as fechaFin,
         convert(varchar(10),fechaInicio,103) as fechaIni,
         convert(varchar(10),fechaFin,103) as fechaFini,
+        convert(varchar(10),fechaRegularizacion,103) as fechaRe,
         convert(varchar,fechaCreacion, 103)+' '+substring(convert(varchar,fechaCreacion, 114),1,5) as fechaCreacionF,
         case when estado > 1
         then 
@@ -781,6 +782,12 @@ class ENRController extends Controller
         ->join('enr_metodologiaCalc','enr_datosGenerales.codigoTipoMet','=','enr_metodologiaCalc.id')
         ->select("enr_metodologiaCalc.codigo")->where('enr_datosGenerales.id',$caso)->first();
 
+
+        
+        $nombreMet = DB::connection('facturacion')->table("enr_datosGenerales")
+        ->join('enr_metodologiaCalc','enr_datosGenerales.codigoTipoMet','=','enr_metodologiaCalc.id')
+        ->select("enr_metodologiaCalc.tipoENR")->where('enr_datosGenerales.id',$caso)->first();
+
         $total = 0;
 
         if($tipoCaso->codigo == 'CD'){
@@ -793,6 +800,14 @@ class ENRController extends Controller
 
         if($tipoCaso->codigo == 'MP'){
             $consumoFac = $request["totalConsumoNF"];
+            $diasFac = $request["totalDias"];
+    
+            $total = $consumoFac / $diasFac;
+        }
+
+
+        if($tipoCaso->codigo == 'MP' && $nombreMet->tipoENR=='Medición posterior fallas internas'){
+            $consumoFac = $request["consumoDiarioENR"];
             $diasFac = $request["totalDias"];
     
             $total = $consumoFac / $diasFac;
