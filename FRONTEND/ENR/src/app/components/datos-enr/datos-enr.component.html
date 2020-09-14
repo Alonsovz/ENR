@@ -843,6 +843,8 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
             <thead class="thead-dark">
               <tr>
                 <th style="background-color:#323259; color:#51F749;"
+                class="text-center">N° Suministro</th>
+                <th style="background-color:#323259; color:#51F749;"
                 class="text-center">N° Orden</th>
                 <th style="background-color:#323259; color:#51F749;"
                 class="text-center">Código Tipo Orden</th>
@@ -852,16 +854,20 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
                  class="text-center">Fecha realización</th>
                  <th style="background-color:#323259; color:#51F749;"
                  class="text-center">Usuario realización</th>
+                 <th style="background-color:#323259; color:#51F749;"
+                 class="text-center">Causa</th>
             </tr>
             </thead>
             <tbody style="background-color:#323259; color:white;text-align: center;
             font-size: 13px;">
-              <tr *ngFor="let lec of ordenesRegulares">                        
+              <tr *ngFor="let lec of ordenesRegulares">   
+                <td>{{lec.nis}}</td>                     
                <td>{{lec.nOrden}}</td>
                <td>{{lec.cod}}</td>
                <td>{{lec.fecha}}</td>
                <td>{{lec.fechaRealiza}}</td>
                <td>{{lec.usuario}}</td>
+               <td>{{lec.causa}}</td>
               </tr>
             </tbody>
           </table>

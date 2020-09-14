@@ -169,10 +169,13 @@ class ENRController extends Controller
         $nis = $request["nis"];
 
         $getDatos =  DB::connection('facturacion')->select("
-        select ord.numero_orden as nOrden, ord.codigo_tipo_ordentrabajo as cod,
+        select ord.num_suministro as nis, ord.numero_orden as nOrden, ord.codigo_tipo_ordentrabajo as cod,
         ord.fecha_realiza as fecha,
         convert(varchar, ord.fecha_realiza, 103) as fechaRealiza,
-        us.nombre as usuario
+        us.nombre as usuario,
+        (select ca.nombre_causa from EDESAL_CALIDAD.dbo.fe_calidad_tipo_ordentrabajo_causa ca
+        where ca.codigo_causa = ord.codigo_causa)
+        as causa
         from EDESAL_CALIDAD.dbo.fe_calidad_reclamos_ordenes  as ord
         inner join EDESAL_CALIDAD.dbo.fe_calidad_ocupacion us on us.codigo = 
         ord .usuario_realiza

@@ -221,11 +221,11 @@ export class DatosENRComponent implements OnInit {
         this.dataTable = table.DataTable({
         'iDisplayLength' : 5,
         'responsive': true,
-          'order' :[[2,'desc']],
+          'order' :[[3,'desc']],
 
           'columnDefs': [
             {
-                "targets": [ 2 ],
+                "targets": [ 3 ],
                 "visible": false,
                 "searchable": false
             }
