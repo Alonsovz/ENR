@@ -174,7 +174,7 @@ Route::get('/', function () {
     
     
     Route::post('getLecturasbyNISum', 'ENRController@getLecturasbyNISum');
-
+    Route::post('getOtbyNis', 'ENRController@getOtbyNis');
     
 
     

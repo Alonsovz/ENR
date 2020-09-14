@@ -1841,6 +1841,34 @@ public validarFechas(){
         this.frm_LecturasEvaluarTotales.controls["consumoENRFacturar"].setValue(totalENR.toFixed(3));
       }
      
+
+      else if(this.casoEvaluado == '6'){
+
+        
+
+
+        this.frm_Caso6.controls["sumaHistorialLecturas"].setValue(sumatoriaConsumo);
+        this.frm_Caso6.controls["diasHistorico"].setValue(sumatoriaDias);
+
+        var promedioDiarioConsumo = sumatoriaConsumo / sumatoriaDias;
+
+        this.frm_Caso6.controls["promedioDiarioConsumo"].setValue(promedioDiarioConsumo.toFixed(3));
+
+
+        var diasRetroactivo = this.frm_Caso6.controls["diasRetroactivo"].value;
+
+        var consumoEstimado = promedioDiarioConsumo*diasRetroactivo;
+    
+        this.frm_Caso6.controls["consumoEstimado"].setValue(consumoEstimado.toFixed(3));
+        //this.frm_Caso6.controls["consumoRegistrado"].setValue(0);
+        this.frm_Caso6.controls["montoENR"].setValue(consumoEstimado.toFixed(3));
+
+
+        $("#frmTotalENR6").show();
+        $("#frmLecTotales").hide();
+        this.llenarTotales();
+      }
+
       this.totalSeleccion = dias.length;
 
       
@@ -1883,11 +1911,12 @@ public validarFechas(){
   }
 
   public hideModalLecturas(){
-    this.totalizarDatos();
+   
     $("#mostrarLecturas").hide();
       $("#frmLec").show();
       $("#frmLecTotales").show();
       $("#btnFacturacion").show();
+      this.totalizarDatos();
   }
  
 
@@ -1954,7 +1983,9 @@ public validarFechas(){
             this.frm_Caso5.controls["porcentajeExactitudOT"].value))).toFixed(3),
            }),  
       );
-      }else{
+      }
+      
+      else{
         this.lecturas.push(
           this.fb2.group({
             idCaso: this.frm_Caso5.controls["idCaso"].value,
@@ -1972,6 +2003,19 @@ public validarFechas(){
       );
       }
      
+    }
+    else if(this.casoEvaluado == '6'){
+      this.lecturas.push(
+        this.fb2.group({
+          idCaso: this.frm_Caso6.controls["idCaso"].value,
+          periodo:periodo,
+          fechaLecturaAnt:fechaLecturaAnt,
+          fechaLectura:fechaLectura,
+          diasFacturados:diasFacturados,
+          consumo:consumoN,
+         }),  
+    );
+
     }
     
 
@@ -3645,6 +3689,9 @@ public eliminarLectura(i, periodo){
     $("#divMetodo2").show();
     $("#btnSelecLecturasCaso6").show();
     $("#divMetodo1").hide();
+    //this.frm_Caso6.reset();
+    this.frm_LecturasEvaluarTotales.reset();
+    $("#divTarifas").hide();
   }
 
   public calcularDiasHistoricoMet1(){
@@ -3692,10 +3739,13 @@ public eliminarLectura(i, periodo){
     var diasRetroactivo = this.frm_Caso6.controls["diasRetroactivo"].value;
     var consumoEstimado =  this.frm_Caso6.controls["consumoEstimado"].value;
     var consumoRegistrado = this.frm_Caso6.controls["consumoRegistrado"].value;
+    var id = this.frm_Caso6.controls["idCaso"].value;
 
     this.frm_LecturasEvaluarTotales.controls["totalDias"].setValue(diasRetroactivo);
     this.frm_LecturasEvaluarTotales.controls["consumoDiarioENR"].setValue(consumoEstimado);
     this.frm_LecturasEvaluarTotales.controls["consumoENRRegistrado"].setValue(consumoRegistrado);
+
+    this.frm_LecturasEvaluarTotales.controls["numeroCaso"].setValue(id);
   }
 
   

@@ -98,6 +98,7 @@ class VerifyCsrfToken extends BaseVerifier
         'anexoCalculo',
         'repositorioGlobal',
         'eliminarCaso',
-        'getLecturasbyNISum'
+        'getLecturasbyNISum',
+        'getOtbyNis'
     ];
 }

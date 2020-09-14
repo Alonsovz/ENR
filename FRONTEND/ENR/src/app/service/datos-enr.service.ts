@@ -22,6 +22,13 @@ export class DatosENRService {
     //console.log(nis);
     return this.http.post<DatosENR[]>(this.url.getUrlBackEnd() + 'getOrdenesbyNIS', nis).pipe(map(data => data as DatosENR[]));
   }
+  
+
+  
+  public getOtbyNis(nis): Observable<DatosENR[]> {
+    //console.log(nis);
+    return this.http.post<DatosENR[]>(this.url.getUrlBackEnd() + 'getOtbyNis', nis).pipe(map(data => data as DatosENR[]));
+  }
 
   
   public getLecturasbyNISum(nis): Observable<DatosENR[]> {

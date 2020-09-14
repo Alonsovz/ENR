@@ -161,12 +161,18 @@
                 <input (change)="fileProgress1($event)" type="file" class="form-control" style="height: 45px;" formControlName="adScanNoti">
            
             </div>
-            <div class="col-md-6"><br>
+            <div class="col-md-5"><br>
                 <label><i class="fa fa-calendar"></i> Fecha de primera notificación </label>          
                 <input type="date" class="form-control"  formControlName="fechaPrimeraNoti">
            
             </div>
-            <div class="col-md-6"><br>
+            <div class="col-md-2"><br> 
+              <button class="btn btn-info"  data-toggle="modal"
+              data-target="#mdFechaRegularizacion"
+              style="margin-left: 18% !important;margin-top: 20% !important;">
+                <i class="fas fa-list-ul"></i> Órdenes tec. </button>
+          </div>
+            <div class="col-md-5"><br>
                 <label><i class="fa fa-calendar"></i> Fecha de Regularización</label>          
                 <input type="date" (change)="asigFechaFin()" class="form-control" formControlName="fechaRegular">
            
@@ -803,6 +809,59 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
                <td>{{lec.lectura}}</td>
                <td>{{lec.lectura_anterior}}</td>
                <td>{{lec.consumo}}</td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          <i class="fas fa-times-circle"></i>  Cerrar!
+        </button>
+      
+        
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal animated fadeInDown" id="mdFechaRegularizacion" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog mw-100 w-75">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="title" style="color:#0CD902 !important;">
+          <img class="img-profile" src="./assets/imagenes/list.png" width=35 height=35>
+          Órdenes del suministro: 
+        </h5>
+        
+      </div>
+      <div class="modal-body">
+        <table  id="ordenesRegularesTbl" class="table small mt-5" style="width: 99%;
+        margin:auto">
+            <thead class="thead-dark">
+              <tr>
+                <th style="background-color:#323259; color:#51F749;"
+                class="text-center">N° Orden</th>
+                <th style="background-color:#323259; color:#51F749;"
+                class="text-center">Código Tipo Orden</th>
+                <th style="background-color:#323259; color:#51F749;"
+                 class="text-center">Fecha realización</th>
+                 <th style="background-color:#323259; color:#51F749;"
+                 class="text-center">Fecha realización</th>
+                 <th style="background-color:#323259; color:#51F749;"
+                 class="text-center">Usuario realización</th>
+            </tr>
+            </thead>
+            <tbody style="background-color:#323259; color:white;text-align: center;
+            font-size: 13px;">
+              <tr *ngFor="let lec of ordenesRegulares">                        
+               <td>{{lec.nOrden}}</td>
+               <td>{{lec.cod}}</td>
+               <td>{{lec.fecha}}</td>
+               <td>{{lec.fechaRealiza}}</td>
+               <td>{{lec.usuario}}</td>
               </tr>
             </tbody>
           </table>

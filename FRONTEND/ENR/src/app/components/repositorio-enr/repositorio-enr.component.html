@@ -1101,7 +1101,7 @@
           <div class="row">
             <div class="col-md-6">
               <button class="btn btn-lg btn-block btn-default" style="background-color: #7406CF !important; color:white;"
-              (click)="showMetodo1()">Método 1: Cuando no hay periodo de facturación total afectado</button>
+              (click)="showMetodo1()">Método 1: Ingreso manual de lecturas y consumo</button>
             </div>
 
             <div class="col-md-6">
@@ -1229,7 +1229,7 @@
                   </div>
                 </div>
 
-                <form [formGroup]="frm_LecturasEvaluarTotales" style="display: none;width: 100% !important;" id="frmLecTotales">
+                <form [formGroup]="frm_LecturasEvaluarTotales" style="display: none !important;width: 100% !important;" id="frmLecTotales">
                   <div class="row"> 
                     
                 <input class="form-control" type="text" style="text-align: center !important;" readonly="true"
@@ -1265,6 +1265,202 @@
                   </button>
                 </div>
               
+
+                <form [formGroup]="frm_LecturasEvaluar" class="animated fadeInDown" 
+              style="display: none;width: 100% !important;" id="frmLec">       
+              
+                <hr style="background-color: #4C9AFD !important; height: 2px;">
+                
+                <h4 style="color: #4C9AFD;margin-top: 5px;"> 
+                  <img src="./assets/imagenes/light-bulb.png" height=35>
+                  Períodos seleccionados  = <a style="color:yellow !important;">{{totalSeleccion}}</a></h4>
+                <table class="table small mt-3">
+                    <thead class="thead-dark">
+                        <tr >
+                            <th style="background-color: #1B1B38;color:#1FE303;font-size: 13px;
+                            border-bottom: 2px solid #1FE303;font-weight: bold;" class="text-center">
+                                Período
+                            </th>
+                            <th style="background-color: #1B1B38;color:yellow;font-size: 13px;
+                            border-bottom: 2px solid yellow;font-weight: bold;" class="text-center">
+                            Fecha Lectura Ant.
+                            </th>
+                            <th style="background-color: #1B1B38;color:#1FE303;font-size: 13px;
+                            border-bottom: 2px solid #1FE303;font-weight: bold;" class="text-center">
+                                Fecha Lectura
+                            </th>
+                            <th style="background-color: #1B1B38;color:yellow;font-size: 13px;
+                            border-bottom: 2px solid yellow;font-weight: bold;" class="text-center">
+                                Días Facturados
+                            </th>
+                            <th style="background-color: #1B1B38;color:#1FE303;font-size: 13px;
+                            border-bottom: 2px solid #1FE303;font-weight: bold;" class="text-center">
+                                Consumo
+                            </th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody  formArrayName="lecturas"
+                    style="background-color:#222245; color:white;text-align: center;
+                    font-size: 14px;">
+                        <tr *ngFor="let item of lecturas.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                            <td style="border-bottom: 1px solid #A4FA98;">
+                              
+                      <input type="hidden" formControlName="idCaso">
+                              <input class="form-control" type="text" formControlName="periodo"
+                              style="text-align: center !important;color: #A4FA98 !important;" readonly="true">
+                            </td>
+                            <td style="border-bottom: 1px solid #FAFD4F;">
+                              <input class="form-control" type="text" formControlName="fechaLecturaAnt"
+                                style="text-align: center !important;color: #FAFD4F !important;" readonly="true">
+                            </td>
+                            <td style="border-bottom: 1px solid #A4FA98;">
+                                <input class="form-control" type="text" formControlName="fechaLectura"
+                                style="text-align: center !important;color: #A4FA98 !important;" readonly="true">
+                            </td>
+                            <td style="border-bottom: 1px solid #FAFD4F;">
+                              <input class="form-control" type="text" formControlName="diasFacturados" name="diasFacturados"
+                              style="text-align: center !important;color: #FAFD4F !important;" readonly="true">
+                            </td>
+                            <td style="border-bottom: 1px solid #A4FA98;">
+                              <input class="form-control" type="text" formControlName="consumo" name="consumo"
+                              style="text-align: center !important;color: #A4FA98 !important;" readonly="true">
+                            
+                              <button class="btn btn-danger btn-sm btn-circle" id="btnEl{{item.value.periodo}}"
+                              style="display: none;"
+                              (click)="eliminarLectura(pointIndex,item.value.periodo)"><i class="fas fa-trash"></i></button>
+                          
+                            </td>
+                            
+                          
+                        </tr>
+                        
+                    </tbody>
+                    
+                </table>
+              </form>
+
+              <div class="col-md-12" id="frmTotalENR6" style="display: none !important;">
+                <hr style="background-color: #DFA714 !important; height: 2px;">
+                <div class="row" style="width: 95% !important;margin-top: 10px !important;margin-left: 3px;">
+                
+                  <div class="col-md-3"   style="text-align: right !important;">
+                    <label>Sumatoria Historial Nuevas Lecturas (kwh):</label>
+
+                  </div>
+
+                  <div class="col-md-4">
+                    <input type="number" step="0.01" class="form-control" formControlName="sumaHistorialLecturas"
+                    placeholder="Sumatoria Historial Nuevas Lecturas (kwh)">
+                  </div>
+
+                </div>
+                
+                <div class="row" style="width: 95% !important;margin-top: 10px !important;margin-left: 3px;">
+                  <div class="col-md-3" style="text-align: right !important;">
+                    <label>N° de días histórico:</label>
+                  </div>
+
+                  <div class="col-md-4">
+                    <input type="number" readonly class="form-control" formControlName="diasHistorico"
+                    placeholder="N° de días histórico">
+                  </div>
+                </div>
+               
+                <div class="row" style="width: 95% !important;margin-top: 10px !important;margin-left: 3px;">
+                  <div class="col-md-3" style="text-align: right !important;">
+                    <label>Promedio diario de consumo:</label>
+                  </div>
+
+                  <div class="col-md-4">
+                    <input type="number" readonly class="form-control" formControlName="promedioDiarioConsumo"
+                    placeholder="Promedio diario de consumo">
+                  </div>
+                </div>
+
+                <div class="row" style="width: 95% !important;margin-top: 10px !important;margin-left: 3px;">
+                  <div class="col-md-3" style="text-align: right !important;">
+                    <label>Período retroactivo de cobro ENR:</label>
+                  </div>
+                  <div class="col-md-4">
+                    <input type="date" formControlName="fecha1PeriodoENR" class="form-control"  [(ngModel)]="dg.fechaIn">
+                  </div>
+                  <div class="col-md-1">
+                    <label>al</label>
+                  </div>
+                  <div class="col-md-4">
+                    <input type="date" formControlName="fecha2PeriodoENR" class="form-control"  [(ngModel)]="dg.fechaFin">
+                  </div>
+                </div>
+
+
+                <div class="row" style="width: 95% !important;margin-top: 10px !important;margin-left: 3px;">
+                  <div class="col-md-3" style="text-align: right !important;">
+                    <label>Días retroactivo:</label>
+                  </div>
+
+                  <div class="col-md-4">
+                    <input type="number" readonly class="form-control" formControlName="diasRetroactivo"  [(ngModel)]="dg.diasCobro"
+                    placeholder="Días retroactivo">
+                  </div>
+                </div>
+
+                <div class="row" style="width: 95% !important;margin-top: 10px !important;margin-left: 3px;">
+                  <div class="col-md-3" style="text-align: right !important;">
+                    <label>Consumo Estimado:</label>
+                  </div>
+
+                  <div class="col-md-4">
+                    <input type="number" readonly class="form-control" formControlName="consumoEstimado"
+                    placeholder="Consumo Estimado">
+                  </div>
+                </div>
+
+                <div class="row" style="width: 95% !important;margin-top: 10px !important;margin-left: 3px;">
+                  <div class="col-md-3" style="text-align: right !important;">
+                    <label>Consumo Registrado:</label>
+                  </div>
+
+                  <div class="col-md-4">
+                    <input type="number" step="0.01" class="form-control" formControlName="consumoRegistrado"
+                    placeholder="Consumo Registrado" (keyup)="restarConsumoRegistradoCaso6()">
+                  </div>
+                </div>
+
+                <div class="row" style="width: 95% !important;margin-top: 10px !important;margin-left: 3px;">
+                  <div class="col-md-3" style="text-align: right !important;">
+                    <label>Monto kwh ENR:</label>
+                  </div>
+
+                  <div class="col-md-4">
+                    <input type="number" readonly class="form-control" formControlName="montoENR"
+                    placeholder="Monto kwh ENR">
+                  </div>
+                </div>
+
+                <form [formGroup]="frm_LecturasEvaluarTotales" style="display:none !important;width: 100% !important;" id="frmLecTotales">
+                  <div class="row"> 
+                    
+                <input class="form-control" type="text" style="text-align: center !important;" readonly="true"
+                  formControlName="totalDias">
+              
+                  <input class="form-control" type="text" style="text-align: center !important;" readonly="true"
+                  formControlName="consumoDiarioENR">
+                
+                <input class="form-control" type="text" style="text-align: center !important;" readonly="true"
+                formControlName="consumoENRRegistrado">
+                
+               
+        
+
+                  <input type="text" formControlName="numeroCaso" class="form-control">
+                        
+                  </div>
+                </form>
+
+              </div>    
+            
+
             </div>
             
           </div>

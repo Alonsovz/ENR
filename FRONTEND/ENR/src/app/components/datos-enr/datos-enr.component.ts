@@ -39,6 +39,7 @@ export class DatosENRComponent implements OnInit {
   dataTable: any;
   ordenes : DatosENR[];
   lecturas : DatosENR[];
+  ordenesRegulares : DatosENR[];
   adjuntosFile : DatosENR[];
   extension : string;
   archivoEliminar : DatosENR = new DatosENR();
@@ -169,6 +170,66 @@ export class DatosENRComponent implements OnInit {
         'iDisplayLength' : 5,
         'responsive': true,
           'order' :[[5,'desc']],
+
+        'language' : {
+          'sProcessing':     'Procesando...',
+          'sLengthMenu':     'Mostrar _MENU_ registros',
+          'sZeroRecords':    'No se encontraron resultados',
+          'sEmptyTable':     'Ningún dato disponible en esta tabla',
+          'sInfo':           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
+          'sInfoEmpty':      'Mostrando registros del 0 al 0 de un total de 0 registros',
+          'sInfoFiltered':   '(filtrado de un total de _MAX_ registros)',
+          'sInfoPostFix':    '',
+          'sSearch':         'Buscar:',
+          'sUrl':            '',
+          'sInfoThousands':  ',',
+          'sLoadingRecords': 'Cargando...',
+          'oPaginate': {
+              'sFirst':    'Primero',
+              'sLast':     'Último',
+              'sNext':     'Siguiente',
+              'sPrevious': 'Anterior'
+          },
+          'oAria': {
+              'sSortAscending':  ': Activar para ordenar la columna de manera ascendente',
+              'sSortDescending': ': Activar para ordenar la columna de manera descendente'
+          }
+        }
+        });
+      },
+      err => {},
+      () => {
+        //console.log(this.cod);
+      }
+    );
+
+
+
+    this.datosENR.getOtbyNis(datosENRdto).subscribe(
+      response => {
+
+        this.ordenesRegulares = response;
+        const table: any = $('#ordenesRegularesTbl');
+     
+        this.dataTable = table.DataTable();
+        this.dataTable.destroy();
+    
+        this.chRef.detectChanges();
+        
+        this.chRef.detectChanges();
+        
+        this.dataTable = table.DataTable({
+        'iDisplayLength' : 5,
+        'responsive': true,
+          'order' :[[2,'desc']],
+
+          'columnDefs': [
+            {
+                "targets": [ 2 ],
+                "visible": false,
+                "searchable": false
+            }
+        ],
 
         'language' : {
           'sProcessing':     'Procesando...',

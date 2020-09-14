@@ -163,6 +163,29 @@ class ENRController extends Controller
     }
 
 
+
+    public function getOtbyNis(Request $request)
+    {
+        $nis = $request["nis"];
+
+        $getDatos =  DB::connection('facturacion')->select("
+        select ord.numero_orden as nOrden, ord.codigo_tipo_ordentrabajo as cod,
+        ord.fecha_realiza as fecha,
+        convert(varchar, ord.fecha_realiza, 103) as fechaRealiza,
+        us.nombre as usuario
+        from EDESAL_CALIDAD.dbo.fe_calidad_reclamos_ordenes  as ord
+        inner join EDESAL_CALIDAD.dbo.fe_calidad_ocupacion us on us.codigo = 
+        ord .usuario_realiza
+        where ord.codigo_tipo_ordentrabajo in ('MV','TT','MS','CM','MD')
+         and ord.estado = 'F'
+        and (ord.num_suministro = '".$nis."') order by 3 desc");
+
+
+        return response()->json($getDatos);
+
+    }
+
+
     public function getOrdenesbyNIS(Request $request){
         $nis = $request["nis"];
 
