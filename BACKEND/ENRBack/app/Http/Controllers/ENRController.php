@@ -1913,9 +1913,15 @@ class ENRController extends Controller
             $pdfMerger = PDFMerger::init();
 
          
-            $pdfMerger->addPDF(public_path('files/informe'.$caso.'.pdf'), 'all');
-            $pdfMerger->addPDF(public_path('files/cobro'.$caso.'.pdf'), 'all');
-
+            if($codigoENR == 'AM' || $codigoENR == 'PE' ||
+                $codigoENR == 'LD' || $codigoENR == 'MM'){
+                $pdfMerger->addPDF(public_path('files/informe'.$caso.'.pdf'), 'all');
+                $pdfMerger->addPDF(public_path('files/cobro'.$caso.'.pdf'), 'all');
+            }else if($codigoENR == 'OT'){
+                $pdfMerger->addPDF(public_path('files/cobroFallasInternas'.$caso.'.pdf'), 'all');
+            }
+           
+            
            
             $pdfMerger->addPDF(public_path('files/anexoCalculo'.$caso.'.pdf'), 'all');
 
@@ -1954,11 +1960,16 @@ class ENRController extends Controller
 
             $pdfMerger->save(public_path('files/reporteCaso'.$caso.'.pdf'), "file");
 
+            if($codigoENR == 'AM' || $codigoENR == 'PE' ||
+            $codigoENR == 'LD' || $codigoENR == 'MM'){
+                unlink(public_path('files/informe'.$caso.'.pdf'));
+                unlink(public_path('files/cobro'.$caso.'.pdf'));
+            }else if($codigoENR == 'OT'){
+                unlink(public_path('files/cobroFallasInternas'.$caso.'.pdf'));
+            }
 
-            unlink(public_path('files/cobro'.$caso.'.pdf'));
-            unlink(public_path('files/informe'.$caso.'.pdf'));
             
-
+       
             unlink(public_path('files/anexoCalculo'.$caso.'.pdf'));
 
             
@@ -2031,16 +2042,19 @@ class ENRController extends Controller
 			inner join fe_aparatos feApa on feApa.num_suministro = fes.num_suministro
             where (feApa.bandera_activo = 1) and dg.id = ".$caso."");
 
+            
+
 
     
     $pdf = \PDF::loadView('Reportes.anexoCalculo', compact('data'))->save( public_path('files/anexoCalculo'.$caso.'.pdf' )); 
  
-    
-        $pdf = \PDF::loadView('Reportes.informe', compact('data'))->save( public_path('files/informe'.$caso.'.pdf' )); 
-        $pdf = \PDF::loadView('Reportes.cobro', compact('data'))->save( public_path('files/cobro'.$caso.'.pdf' )); 
-
-    
-
+        if($codigoENR == 'AM' || $codigoENR == 'PE' ||$codigoENR ==  'LD' || $codigoENR == 'MM'){
+                $pdf = \PDF::loadView('Reportes.informe', compact('data'))->save( public_path('files/informe'.$caso.'.pdf' )); 
+                $pdf = \PDF::loadView('Reportes.cobro', compact('data'))->save( public_path('files/cobro'.$caso.'.pdf' )); 
+        
+        }else if($codigoENR == 'OT'){
+                $pdf = \PDF::loadView('Reportes.cobroFallasInternas', compact('data'))->save( public_path('files/cobroFallasInternas'.$caso.'.pdf' )); 
+        }
 
     return response()->json($data);
     }

@@ -54,7 +54,7 @@
 
 <p align="justify" style="font-size:14px;margin-left:400px;margin-right:10px;">
 <b>Asunto:</b>
-Informe Técnico de Condición irregular encontrada.
+Notificación de Cobro ENR.
 <br>
 <b>Ref:</b>
     ENR-<?php 

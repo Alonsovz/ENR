@@ -31,7 +31,6 @@
 
 </table>
 
-
 <br>
 <table style="margin-left:10px;margin-right:10px;">
     <thead>
@@ -50,9 +49,12 @@
     </thead>
 </table>
 
+
+
+
 <p align="justify" style="font-size:14px;margin-left:400px;margin-right:10px;">
 <b>Asunto:</b>
-Informe Técnico de Condición Irregular encontrada en su Suministro.
+Notificación de Cobro - Fallas del Medidor.
 <br>
 <b>Ref:</b>
     ENR-<?php 
@@ -60,19 +62,13 @@ Informe Técnico de Condición Irregular encontrada en su Suministro.
     echo $fecha->format('d').$fecha->format('m');
     ?>-{{$dat->nCaso}}
 </p>
-
+<br>
 <p align="justify" style="font-size:14px;margin-left:10px;margin-right:10px;">Estimado(a) usuario(a):</p>
 
 <p align="justify" style="font-size:14px;margin-left:10px;margin-right:10px;">
-Reciba un saludo de parte de la Empresa Distribuidora Eléctrica Salvadoreña, S.A. de CV.,
-deseándole al mismo tiempo éxitos en las actividades que desempeña.</p>
-
-<p align="justify" style="font-size:14px;margin-left:10px;margin-right:10px;">
-Le informamos que en fecha <b>{{$dat->fechaRegularizacion}}</b> se realizó inspección técnica y prueba de validación a su medidor 
-levantando acta en donde se detalla que el equipo de medición no se encuentra registrando
-la energía consumida de forma correcta.
-</p>
-
+Le informamos que en fecha <b>{{$dat->fechaRegularizacion}}</b> se realizó visita inspección técnica a su medidor
+levantando acta en donde se detalla que el equipo de medición no se encontraba registrando
+la energía consumida de forma correcta. </p>
 
 <p align="justify" style="font-size:14px;margin-left:10px;margin-right:10px;">
 <b>Se detectó la siguiente irregularidad:</b> Se detecto que en el medidor número <b>{{$dat->medidor}}</b> existía una 
@@ -84,24 +80,20 @@ condición irregular a consecuencia de encontrar:<br>
 
 
 <p align="justify" style="font-size:14px;margin-left:10px;margin-right:10px;">
-Establecido lo anterior, debe mencionarse que la estimación de la energía consumida y no registrada,
-se realizará en base a Términos y Condiciones del pliego tarifario y del Procedimiento para investigar
-la existencia de condiciones irregulares en el suministro de energía eléctrica del usuario final”, 
-estableciendo dicha normativa que una vez acreditado que el usuario ha cometido una irregularidad-alteración
-en la acometida para evitar el registro correcto del consumo de energía eléctrica, el marco regulatorio
-habilita al distribuidor a recuperar el valor de la energía consumida y no registrada. 						
+Por dicha razón, hemos procedido a calcularle la energía no registrada, la cual asciende a:
+    <br> <b>Consumo ENR: </b>  {{$dat->consumoENR}} kwh
+    <br> <b>Total cargo ENR: </b> $ {{$dat->total}} 
+    <br> <b>Fecha incio del cobro: </b> $ {{$dat->fechaInicio}} 
+    <br> <b>Fecha fin del cobro: </b> $ {{$dat->fechaFin}}
+    <br><br>
+Dicho periodo y cálculo se estima de acuerdo con lo que establece el “Procedimiento para investigar
+la existencia de condiciones irregulares en el suministro de energía eléctrica del usuario final”
 </p>
 
 <p align="justify" style="font-size:14px;margin-left:10px;margin-right:10px;">
-<b>Base de Determinación de Energía consumida no registrada:</b>
-Se evaluará el consumo no registrando en función del caso que resulte más conveniente para el usuario:
-Se procederá con la estimación del consumo real del usuario durante el periodo que subsistió la irregularidad, se estimara el consumo correcto mediante la metodología de cálculo: 						
-<b>{{$dat->resultado}}</b>
-</p>
-
-<p align="justify" style="font-size:14px;margin-left:10px;margin-right:10px;">
-<b>Datos Adicionales del Cálculo:</b>
-{{$dat->adicionales}}
+Por las razones antes expuestas le solicitamos contactarse con EDESAL, a fin de realizar el pago de 
+dicho monto, como también informarle sobre las diferentes opciones de pago que pueden aplicarse;
+ caso contrario se le cargara en su totalidad en su próxima facturación de energía mensual.						
 </p>
 
 
@@ -119,10 +111,12 @@ Sin otro particular aprovecho la oportunidad para saludarle y suscribirme.
 Atentamente.												
 </p>
 
-<br><br><br>
+<br><br><br><br><br>
 <p align="justify" style="font-size:14px;margin-left:10px;margin-right:10px;">
-Área de Control de Incidencias ENR
-<br>
+Área de Control de Incidencias ENR<br>
 EDESAL, S.A. DE C.V.												
 </p>
+
+
+
 @endforeach
