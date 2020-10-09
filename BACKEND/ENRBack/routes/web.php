@@ -66,7 +66,6 @@ Route::get('/', function () {
     Route::post('getLecturasbyNIS', 'ENRController@getLecturasbyNIS');
 
 
-    Route::post('usuario', 'ENRController@validarUsuario');
     
     Route::post('getFechaInicioTarifa', 'ENRController@getFechaInicioTarifa');
     
@@ -177,8 +176,9 @@ Route::get('/', function () {
     Route::post('getOtbyNis', 'ENRController@getOtbyNis');
     
 
+    Route::any('getPagosENR', 'DashboardController@getPagosENR');
     
-    
+    Route::any('getCasosRed', 'DashboardController@getCasosRed');
     
     
     

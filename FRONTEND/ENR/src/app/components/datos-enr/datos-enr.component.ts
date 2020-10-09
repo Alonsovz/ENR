@@ -153,6 +153,8 @@ export class DatosENRComponent implements OnInit {
 
     datosENRdto = this.frm_NIS.value;
 
+    $("#numSuministro").text(this.frm_NIS.controls["nis"].value);
+
     this.datosENR.getLecturasbyNISum(datosENRdto).subscribe(
       response => {
 

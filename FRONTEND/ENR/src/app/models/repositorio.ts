@@ -10,5 +10,6 @@ caso: string;
 orden: string;
 tipo: string;
 num_suministro: string;
-
+periodo: string;
+pagos: string;
 }
