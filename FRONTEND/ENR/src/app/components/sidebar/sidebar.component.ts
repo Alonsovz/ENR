@@ -22,6 +22,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit() {
     this.isLoggedIn$ = this.usuarioservice.isLoggedIn;
+    this.user = JSON.parse(localStorage.getItem('usuario'));
   }
 
   ngAfterViewChecked(){
@@ -29,7 +30,7 @@ export class SidebarComponent implements OnInit {
   if(localStorage.getItem('usuario') !== null){
     this.usuarioservice.loggedIn.next(true);
     this.isLoggedIn$ = this.usuarioservice.isLoggedIn;
-    //this.crf.detectChanges();
+    this.user = JSON.parse(localStorage.getItem('usuario'));
     
   }
  }

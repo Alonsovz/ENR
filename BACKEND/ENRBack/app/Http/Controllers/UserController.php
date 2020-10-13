@@ -21,8 +21,11 @@ class UserController extends Controller
         $result = [];
         
         $usuariosesion =  json_encode( DB::connection('facturacion')->select("
-        select * from EDESAL_CALIDAD.dbo.SGT_usuarios where 
-        alias = '".$usuario."' and password = '".$password."'
+        select u.*, r.aliasRol as rol from EDESAL_CALIDAD.dbo.SGT_usuarios u 
+        inner join enr_usuario_rol ur on ur.idUsuario = u.id
+        inner join enr_roles r on r.id = ur.idRol
+        where
+        u.alias = '".$usuario."' and u.password = '".$password."'
         "));
 
       

@@ -29,44 +29,26 @@ z-index: 1000;">
  
      <!-- Divider -->
      <hr class="sidebar-divider">
- 
-     <!-- Heading -->
-     <div class="sidebar-heading">
-       Administración
+     <div *ngIf="user.rol == 'AEA' ">
+        <div class="sidebar-heading">
+          Administración
+        </div>
+    
+        
+        <li class="nav-item">
+          <a [routerLink]="['/gestiones']" class="nav-link">
+              
+            <img class="img-profile" src="./assets/imagenes/know-how.png" width=35 height=35>
+            <span style="font-size: 11px;;">Gestiones </span>
+          </a>
+    
+    
+    
+        </li>
      </div>
+  
  
- 
-     <li class="nav-item">
-       <a [routerLink]="['/gestiones']" class="nav-link">
-           
-         <img class="img-profile" src="./assets/imagenes/know-how.png" width=35 height=35>
-         <span style="font-size: 11px;;">Gestiones</span>
-       </a>
- 
- 
- 
-     </li>
- 
- <!---<li class="nav-item">
-       <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-         
-         <img class="img-profile" src="./assets/imagenes/know-how.png" width=35 height=35>
-         <span style="font-size: 11px;;">Gestiones</span>
-       </a>
-       <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" 
-       data-parent="#accordionSidebar"  style="border: 1px solid #A16EFF;">
-         <div class=" collapse-inner rounded">
- 
-           <a class="collapse-item" [routerLink]="['/codigoTipoENR']">
-             <img class="img-profile" src="./assets/imagenes/work.png" width=25 height=25>
-             Códigos tipo de ENR</a>
-           <a class="collapse-item" [routerLink]="['/metodologiaCalc']">
-             <img class="img-profile" src="./assets/imagenes/statistics.png" width=25 height=25>
-             Metodología de Cálculo</a>
-         </div>
-       </div>
-     </li>--->
- 
+
  
  
      <!-- Divider -->
@@ -79,14 +61,16 @@ z-index: 1000;">
  
  
  
+     <div *ngIf="user.rol == 'AEA' ||  user.rol == 'AE'">
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/datosENR']">
+          <img class="img-profile" src="./assets/imagenes/money.png" width=35 height=35>
+            <span style="font-size: 11px;">Ingreso de Datos</span>
+        </a>
+      </li>
+     </div>
  
- 
-     <li class="nav-item">
-       <a class="nav-link" [routerLink]="['/datosENR']">
-         <img class="img-profile" src="./assets/imagenes/money.png" width=35 height=35>
-           <span style="font-size: 11px;">Ingreso de Datos</span>
-       </a>
-     </li>
+   
  
      <li class="nav-item">
        <a class="nav-link" [routerLink]="['/repositorioENR']">
@@ -94,13 +78,14 @@ z-index: 1000;">
            <span style="font-size: 11px;">Repositorio de Casos</span>
        </a>
      </li>
-
+     <div *ngIf="user.rol == 'AEA' ">
      <li class="nav-item">
       <a class="nav-link" [routerLink]="['/repositorioGlobal']">
         <img  src="./assets/imagenes/global.png" width=45 height=45>
           <span style="font-size: 11px;">Repositorio global</span>
       </a>
     </li>
+    </div>
     
      
      <!-- Nav Item - Tables -->

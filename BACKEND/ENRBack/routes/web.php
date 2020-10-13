@@ -155,6 +155,9 @@ Route::get('/', function () {
     Route::post('savePeriodosSeleccionadosCaso5', 'ENRController@savePeriodosSeleccionadosCaso5');
 
     Route::post('updateDatosCalCaso5', 'ENRController@updateDatosCalCaso5');
+
+    Route::post('savePeriodosSeleccionadosCaso6', 'ENRController@savePeriodosSeleccionadosCaso6');
+
     Route::post('cobroMedidor', 'ENRController@cobroMedidor');
     Route::post('getConsumoENRBloqueEnergia1G', 'ENRController@getConsumoENRBloqueEnergia1G');
     Route::post('getConsumoENRBloqueDistribucion1G', 'ENRController@getConsumoENRBloqueDistribucion1G');
@@ -180,5 +183,5 @@ Route::get('/', function () {
     
     Route::any('getCasosRed', 'DashboardController@getCasosRed');
     
-    
+    Route::post('usuario', 'UserController@validarUsuario');
     

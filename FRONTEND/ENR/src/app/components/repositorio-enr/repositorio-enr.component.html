@@ -1928,12 +1928,14 @@ background-color: #323259;" id="titleGlobal">
                                  </button>
                                          &nbsp;
                                  <button class="btn btn-default btn-circle btn2"
+                                 *ngIf="user.rol == 'AEA' || user.rol == 'AE'"
                                  (click)="calcularCaso(rep, rep.caso)" title="Calcular caso">
                                      <i class="fas fa-calculator"></i>
                                  </button>
 
                                  &nbsp;
                                  <button type="button" class="btn btn-danger btn-circle" 
+                                 *ngIf="user.rol == 'AEA' || user.rol == 'AE'"
                                  data-toggle="modal"  data-target="#mdEliminarCaso" 
                                  (click)="eliminarCaso(rep.caso)" title="Eliminar caso">
                                    <i class="fas fa-trash"></i> 
@@ -1990,12 +1992,15 @@ background-color: #323259;" id="titleGlobal">
                                  </button>
                                          &nbsp;
                                  <button class="btn btn-default btn-circle btn2" title="Generar reporte"
+                                 *ngIf="user.rol == 'AEA' || user.rol == 'AE'"
                                   data-toggle="modal"  data-target="#datosImprimir" (click)="datosImprimir(rep)">
                                      <i class="fas fa-bell"></i>
                                  </button>
                                  &nbsp;
-                                 <button type="button" class="btn btn-danger btn-circle"  title="Eliminar caso"
-                                 (click)="eliminarCaso(rep.caso)">
+                                 <button type="button" class="btn btn-danger btn-circle" 
+                                 *ngIf="user.rol == 'AEA' || user.rol == 'AE'"
+                                 data-toggle="modal"  data-target="#mdEliminarCaso" 
+                                 (click)="eliminarCaso(rep.caso)" title="Eliminar caso">
                                    <i class="fas fa-trash"></i> 
                                  </button>
                                 </td>
@@ -2055,8 +2060,10 @@ background-color: #323259;" id="titleGlobal">
                                    <i class="fas fa-print"></i> 
                                  </button>
                                  &nbsp;
-                                 <button type="button" class="btn btn-danger btn-circle"  title="Eliminar caso"
-                                 (click)="eliminarCaso(rep.caso)">
+                                 <button type="button" class="btn btn-danger btn-circle" 
+                                 data-toggle="modal"  data-target="#mdEliminarCaso" 
+                                 *ngIf="user.rol == 'AEA'"
+                                 (click)="eliminarCaso(rep.caso)" title="Eliminar caso">
                                    <i class="fas fa-trash"></i> 
                                  </button>
                                  
@@ -2298,7 +2305,7 @@ background-color: #323259;" id="titleGlobal">
                              <th style="background-color:#323259; color:#51F749;"
                              class="text-center">Fecha de resolución</th>
                              <th style="background-color:#323259; color:#51F749;"
-                             class="text-center">Acciones</th>
+                             class="text-center" *ngIf="user.rol == 'AEA' || user.rol == 'AE'">Acciones</th>
                         </tr>
                         </thead>
                         <tbody style="background-color:#323259; color:white;text-align: center;
@@ -2316,7 +2323,7 @@ background-color: #323259;" id="titleGlobal">
                             </td>
                             <td>{{orden.resolucion}}</td>
                            <td>{{orden.fechaRes}}</td>
-                           <td>
+                           <td *ngIf="user.rol == 'AEA' || user.rol == 'AE'">
                            
                             <button class="btn btn-success btn-sm btn-circle" style="background-color: #51F749;
                            color:black" data-dismiss="modal" data-toggle="modal" data-target="#adjuntarArchivosOrden"
@@ -2371,13 +2378,13 @@ background-color: #323259;" id="titleGlobal">
                                 <i class="fa fa-eye"></i>
                       </button> 
                         &nbsp; 
-                        <a class="btn btn-info btn-sm btn-circle"  
+                        <a class="btn btn-info btn-sm btn-circle" 
                         [href]="rutaFile+data.ruta">
                                 <i class="fa fa-download"></i>
                         </a>
                         &nbsp; 
                         <button class="btn btn-warning btn-sm btn-circle"
-                        data-dismiss="modal"
+                        data-dismiss="modal" *ngIf="user.rol == 'AEA' || user.rol == 'AE'"
                         (click)="nuevoScan(ordenNumeroG)" 
                         data-toggle="modal" data-target="#nuevoScan">
                                 <i class="fa fa-sync"></i>
@@ -2461,7 +2468,7 @@ background-color: #323259;" id="titleGlobal">
                   <br>
                 </form>
                 
-                <div class="row">
+                <div class="row" *ngIf="user.rol == 'AEA' || user.rol == 'AE'">
                   <div class="col-lg-12"><br>
                     <hr style="background-color: #D1D104 !important; height: 2px;">
                     <h4 style="color: #D1D104;">
@@ -3352,7 +3359,8 @@ tabindex="-1" role="dialog" id="nuevoScan">
           <i class="fas fa-times-circle"></i>  Cancelar!
         </button>
         <button type="button" class="btn btn-info"  style="color:black !important;"
-        (click)="fusionarPDF(datoImprimir, datoImprimir.caso)" data-dismiss="modal">
+        (click)="fusionarPDF(datoImprimir, datoImprimir.caso)" data-dismiss="modal"
+        data-toggle="modal" data-target="#mdGenerarReporte">
           <i class="fas fa-print"></i>  Generar reporte! 
         </button>
 
@@ -3507,7 +3515,7 @@ tabindex="-1" role="dialog" id="nuevoScan">
                              <th style="background-color:#323259; color:#51F749;"
                              class="text-center">Fecha de resolución</th>
                              <th style="background-color:#323259; color:#51F749;"
-                             class="text-center">Acciones</th>
+                             class="text-center" *ngIf="user.rol == 'AEA' || user.rol == 'AE'">Acciones</th>
                         </tr>
                         </thead>
                         <tbody style="background-color:#323259; color:white;text-align: center;
@@ -3525,7 +3533,7 @@ tabindex="-1" role="dialog" id="nuevoScan">
                             </td>
                             <td>{{orden.resolucion}}</td>
                            <td>{{orden.fechaRes}}</td>
-                           <td>
+                           <td *ngIf="user.rol == 'AEA' || user.rol == 'AE'">
                            
                             <button class="btn btn-success btn-sm btn-circle" style="background-color: #51F749;
                            color:black" data-dismiss="modal" data-toggle="modal" data-target="#adjuntarArchivosOrden"
@@ -3586,7 +3594,7 @@ tabindex="-1" role="dialog" id="nuevoScan">
                         </a>
                         &nbsp; 
                         <button class="btn btn-warning btn-sm btn-circle"
-                        data-dismiss="modal"
+                        data-dismiss="modal" *ngIf="user.rol == 'AEA' || user.rol == 'AE'"
                         (click)="nuevoScan(ordenNumeroG)" 
                         data-toggle="modal" data-target="#nuevoScan">
                                 <i class="fa fa-sync"></i>
@@ -3670,7 +3678,7 @@ tabindex="-1" role="dialog" id="nuevoScan">
                   <br>
                 </form>
                 
-                <div class="row">
+                <div class="row" *ngIf="user.rol == 'AEA' || user.rol == 'AE'">
                   <div class="col-lg-12"><br>
                     <hr style="background-color: #D1D104 !important; height: 2px;">
                     <h4 style="color: #D1D104;">
@@ -3978,7 +3986,7 @@ tabindex="-1" role="dialog" id="nuevoScan">
                   <h4 style="color: #51F749;">
                       <img class="img-profile" src="./assets/imagenes/order.png"
                       style="margin-bottom: 5px;">
-                      Órdenes téNicas asociadas al suministro
+                      Órdenes técnicas asociadas al suministro
                   </h4>
                 </div>
                 <div class="col-md-12" style="max-height: 400px; overflow-y: auto;
@@ -4002,7 +4010,7 @@ tabindex="-1" role="dialog" id="nuevoScan">
                              <th style="background-color:#323259; color:#51F749;"
                              class="text-center">Fecha de resolución</th>
                              <th style="background-color:#323259; color:#51F749;"
-                             class="text-center">Acciones</th>
+                             class="text-center" *ngIf="user.rol == 'AEA' || user.rol == 'AE'">Acciones</th>
                         </tr>
                         </thead>
                         <tbody style="background-color:#323259; color:white;text-align: center;
@@ -4020,7 +4028,7 @@ tabindex="-1" role="dialog" id="nuevoScan">
                             </td>
                             <td>{{orden.resolucion}}</td>
                            <td>{{orden.fechaRes}}</td>
-                           <td>
+                           <td *ngIf="user.rol == 'AEA' || user.rol == 'AE'">
                            
                             <button class="btn btn-success btn-sm btn-circle" style="background-color: #51F749;
                            color:black" data-dismiss="modal" data-toggle="modal" data-target="#adjuntarArchivosOrden"
@@ -4075,7 +4083,7 @@ tabindex="-1" role="dialog" id="nuevoScan">
                                 <i class="fa fa-eye"></i>
                       </button> 
                         &nbsp; 
-                        <a class="btn btn-info btn-sm btn-circle"  
+                        <a class="btn btn-info btn-sm btn-circle"   
                         [href]="rutaFile+data.ruta">
                                 <i class="fa fa-download"></i>
                         </a>
@@ -4282,6 +4290,43 @@ tabindex="-1" role="dialog" id="nuevoScan">
         
         
       </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal animated fadeInDown" id="mdGenerarReporte" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+  
+      <div class="modal-body" style="text-align: center !important;align-items: center !important;">
+    
+      
+        <div class="lds-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div style="text-align: center;font-size: 23px;color:#02FF20;font-weight: bold;">
+          <img src="./assets/imagenes/reportProceso.png" height=35
+          style="margin-bottom:10px !important">
+         Procesando reporte
+         </div>
+         <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCerrarProcesoReporte"
+         style="display: none;">
+           <i class="fas fa-times-circle"></i>  Cerrar!
+         </button>
+      </div>
+      
     </div>
   </div>
 </div>

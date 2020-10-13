@@ -801,6 +801,7 @@ class ENRController extends Controller
     public function getConsumoEstimado(Request $request){
     
         $consumo = $request["consumoDiarioENR"];
+        $consumoENR = $request["consumoENRFacturar"];
         $caso = $request["numeroCaso"];
 
 
@@ -813,6 +814,9 @@ class ENRController extends Controller
         $nombreMet = DB::connection('facturacion')->table("enr_datosGenerales")
         ->join('enr_metodologiaCalc','enr_datosGenerales.codigoTipoMet','=','enr_metodologiaCalc.id')
         ->select("enr_metodologiaCalc.tipoENR")->where('enr_datosGenerales.id',$caso)->first();
+
+        $diasCobro = DB::connection('facturacion')->table("enr_datosGenerales")
+        ->select("enr_datosGenerales.diasCobro")->where('enr_datosGenerales.id',$caso)->first();
 
         $total = 0;
 
@@ -840,7 +844,7 @@ class ENRController extends Controller
         }
 
         if($tipoCaso->codigo == 'HI'){
-            $total = $consumo;
+           $total = $consumoENR / $diasCobro->diasCobro;
         }
 
         if($tipoCaso->codigo == 'EM'){
@@ -858,7 +862,7 @@ class ENRController extends Controller
 
      $getConsumo = DB::connection('facturacion')->select(
          "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
-         str(consumo,12,2) as consumo from enr_consumoEstimado
+         str(round(consumo,-0),12,2) as consumo from enr_consumoEstimado
          where casoENR = ".$caso." order by 1 asc");
             
  
@@ -917,7 +921,7 @@ class ENRController extends Controller
 
        $getConsumo = DB::connection('facturacion')->select(
            "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
-           str(consumo,12,2) as consumo from enr_consumoRegistrado
+           str(round(consumo,-0),12,2) as consumo from enr_consumoRegistrado
            where casoENR = ".$caso." order by 1 asc");
             
  
@@ -936,7 +940,7 @@ class ENRController extends Controller
 
        $getConsumo = DB::connection('facturacion')->select(
            "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
-           str(consumo,12,2) as consumo from enr_consumoENR
+           str(round(consumo,-0),12,2) as consumo from enr_consumoENR
            where casoENR = ".$caso." order by 1 asc");
             
  
@@ -963,7 +967,7 @@ class ENRController extends Controller
  
  
         $getConsumo = DB::connection('facturacion')->select(
-            "select str(sum(consumo),12,2) as consumo from enr_consumoEstimado
+            "select str(sum(round(consumo,-0)),12,2) as consumo from enr_consumoEstimado
             where casoENR = ".$caso."");
              
   
@@ -975,7 +979,7 @@ class ENRController extends Controller
  
  
         $getConsumo = DB::connection('facturacion')->select(
-            "select str(sum(consumo),12,2) as consumo from enr_consumoRegistrado
+            "select str(sum(round(consumo,-0)),12,2) as consumo from enr_consumoRegistrado
             where casoENR = ".$caso."");
              
   
@@ -987,7 +991,7 @@ class ENRController extends Controller
  
  
         $getConsumo = DB::connection('facturacion')->select(
-            "select str(sum(consumo),12,2) as consumo from enr_consumoENR
+            "select str(sum(round(consumo,-0)),12,2) as consumo from enr_consumoENR
             where casoENR = ".$caso."");
              
   
@@ -1006,7 +1010,7 @@ class ENRController extends Controller
  
  
         $getConsumo = DB::connection('facturacion')->select(
-            "select fechas, str(consumo,12,2) as consumo from 
+            "select fechas, str(round(consumo,-0),12,2) as consumo from 
             enr_bloquesConsumoENR where casoENR = ".$caso."
             and bloque = '1er bloque' order by 1 asc");
              
@@ -1020,7 +1024,7 @@ class ENRController extends Controller
  
  
         $getConsumo = DB::connection('facturacion')->select(
-            "select fechas, str(consumo,12,2) as consumo from 
+            "select fechas, str(round(consumo,-0),12,2) as consumo from 
             enr_bloquesConsumoENR where casoENR = ".$caso."
             and bloque = '2do bloque' order by 1 asc");
              
@@ -1035,7 +1039,7 @@ class ENRController extends Controller
  
  
         $getConsumo = DB::connection('facturacion')->select(
-            "select fechas, str(consumo,12,2) as consumo from 
+            "select fechas, str(round(consumo,-0),12,2) as consumo from 
             enr_bloquesConsumoENR where casoENR = ".$caso."
             and bloque = '3er bloque' order by 1 asc");
              
@@ -1053,7 +1057,7 @@ class ENRController extends Controller
        
  
         $getConsumo = DB::connection('facturacion')->select(
-            "select str(sum(consumo),12,2) as consumo from 
+            "select str(sum(round(consumo,-0)),12,2) as consumo from 
             enr_bloquesConsumoENR where casoENR = ".$caso."
             and bloque = '1er bloque' order by 1 asc");
              
@@ -1067,7 +1071,7 @@ class ENRController extends Controller
  
  
         $getConsumo = DB::connection('facturacion')->select(
-            "select str(sum(consumo),12,2) as consumo from 
+            "select str(sum(round(consumo,-0)),12,2) as consumo from 
             enr_bloquesConsumoENR where casoENR = ".$caso."
             and bloque = '2do bloque' order by 1 asc");
              
@@ -1082,7 +1086,7 @@ class ENRController extends Controller
  
  
         $getConsumo = DB::connection('facturacion')->select(
-            "select str(sum(consumo),12,2) as consumo from 
+            "select str(sum(round(consumo,-0)),12,2) as consumo from 
             enr_bloquesConsumoENR where casoENR = ".$caso."
             and bloque = '3er bloque' order by 1 asc");
              
@@ -1096,7 +1100,7 @@ class ENRController extends Controller
  
  
         $getConsumo = DB::connection('facturacion')->select(
-            "select str(sum(consumo),12,2) as consumo from enr_bloquesConsumoENR
+            "select str(sum(round(consumo,-0)),12,2) as consumo from enr_bloquesConsumoENR
              where casoENR = ".$caso."");
              
   
@@ -1109,7 +1113,7 @@ class ENRController extends Controller
  
  
         $getConsumo = DB::connection('facturacion')->select(
-            "select fechas, str(sum(consumo),12,2) as consumo from enr_bloquesConsumoENR
+            "select fechas, str(sum(round(consumo,-0)),12,2) as consumo from enr_bloquesConsumoENR
              where casoENR = ".$caso."
             group by fechas order by 1 asc");
              
@@ -1759,6 +1763,39 @@ class ENRController extends Controller
 
 
 
+    public function savePeriodosSeleccionadosCaso6(Request $request){
+        $periodos = json_encode($request["lecturas"]);
+        $periodosDes = json_decode($periodos);
+       
+        $contador = 0;
+        
+          foreach($periodosDes as $p){
+            $eliminar =  DB::connection('facturacion')->table('enr_periodosEvaluados')
+            ->where('casoENR', $p->idCaso)->delete();
+        }  
+
+        foreach($periodosDes as $p){
+            $insertar =  DB::connection('facturacion')->table('enr_periodosEvaluados')
+                         ->insert([
+                        'casoENR' => $p->idCaso ,
+                         'periodo' => $p->periodo,
+                         'diasFacturados' => $p->diasFacturados,
+                         'consFacturado' => $p->consumo,
+                         ]);
+
+            $contador++;
+        }     
+            
+        
+       if($contador == count($periodosDes)){
+        return response()->json("ok");
+       }
+       
+        
+    }
+
+
+
     public function updateDatosCalCaso5(Request $request){
         $idCaso = $request["idCaso"];
         $consFacturado  = $request["totalConsumo"];
@@ -1870,10 +1907,10 @@ class ENRController extends Controller
 
         $getDatos =  DB::connection('facturacion')->select("
         select 0 as id, 'Notificación inicial' as titulo, scanPrimerNoti as ruta 
-        from enr_datosGenerales where id = ".$id."
+        from enr_datosGenerales where id = ".$id." and scanPrimerNoti != '0'
         union 
         select id as id, titulo as titulo, ruta as ruta from enr_documentacion 
-        where idCasoENR =  ".$id." and idEliminado = 1");
+        where idCasoENR =  ".$id." and idEliminado = 1 and ruta != '0'");
 
         return response()->json($getDatos);
     }

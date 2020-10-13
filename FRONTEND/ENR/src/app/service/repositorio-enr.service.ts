@@ -411,6 +411,13 @@ export class RepositorioEnrService {
     //console.log(datos);
     return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'eliminarCaso', datos).pipe(map(data => data as Repositorio));
   }
+
+
+  public savePeriodosSeleccionadosCaso6 (datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'savePeriodosSeleccionadosCaso6', datos).pipe(map(data => data as Repositorio));
+  }
+
   
 }
 

@@ -101,6 +101,7 @@ class VerifyCsrfToken extends BaseVerifier
         'getLecturasbyNISum',
         'getOtbyNis',
         'getPagosENR',
-        'getCasosRed'
+        'getCasosRed',
+        'savePeriodosSeleccionadosCaso6',
     ];
 }

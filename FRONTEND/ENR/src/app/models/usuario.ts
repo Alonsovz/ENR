@@ -7,7 +7,7 @@ export class Usuario {
     public  estado: string;
     public  nombre: string;
     public  apellido: string;
-    public  rol_id: number;
+    public  rol: string;
 
     public getNombre() {
       return this.nombre;

@@ -3451,7 +3451,66 @@ public eliminarLectura(i, periodo){
     }
     
  
+    if(caso == '6'){
+      let datosCalculados5 : Repositorio = new Repositorio();
+  
+          datosCalculados5 = this.frm_Caso6.value;
 
+          this.repositorioENR.saveDatosCalCaso5(datosCalculados5).subscribe(
+            response => {
+              
+            },
+            err => {
+             // //console.log("no");
+            },
+            () => { 
+              let periodosSeleccionados : Repositorio = new Repositorio();
+  
+              periodosSeleccionados = this.frm_LecturasEvaluar.value;
+
+          this.repositorioENR.savePeriodosSeleccionadosCaso6(periodosSeleccionados).subscribe(
+            response => {
+              
+            },
+            err => {
+             // //console.log("no");
+            },
+            () => { 
+
+              let datosCalculados5 : Repositorio = new Repositorio();
+  
+              datosCalculados5 = this.frm_LecturasEvaluarTotales.value;
+
+          this.repositorioENR.updateDatosCalCaso5(datosCalculados5).subscribe(
+            response => {
+              
+            },
+            err => {
+             // //console.log("no");
+            },
+            () => { 
+              this.cobrarMedidor();
+              notie.alert({
+                type: 'success',
+                text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
+                stay: false, 
+                time: 2, 
+                position: 'top' 
+              });
+              this.cerrarCalculo();
+                 
+              this.getRepositorioIng();
+              this.getRepositorioCalc();
+              this.getRepositorioNoti();
+              },
+            );
+
+              },
+            );
+             
+            },
+          );
+    }
 
   }
 
@@ -3624,6 +3683,7 @@ public eliminarLectura(i, periodo){
         () => { 
           this.getRepositorioCalc();
           window.open(url, '_blank');
+          $("#btnCerrarProcesoReporte").click();
         },
         );
 
