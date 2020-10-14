@@ -23,4 +23,30 @@ export class GlobalService {
   public getCasosRed(){
     return this.http.get(this.getUrlBackEnd() +'getCasosRed').pipe(map(data => data as Repositorio[]));
   }
+
+  public getCuadroAcumulado(){
+    return this.http.get(this.getUrlBackEnd() +'getCuadroAcumulado').pipe(map(data => data as Repositorio[]));
+  }
+
+  public getTotalCuadroAcumulado(){
+    return this.http.get(this.getUrlBackEnd() +'getTotalCuadroAcumulado').pipe(map(data => data as Repositorio[]));
+  }
+  
+  public getCasosIng(){
+    return this.http.get(this.getUrlBackEnd() +'getCasosIng').pipe(map(data => data as Repositorio[]));
+  }
+
+  public getCasosCalc(){
+    return this.http.get(this.getUrlBackEnd() +'getCasosCalc').pipe(map(data => data as Repositorio[]));
+  }
+
+  public getCasosNoti(){
+    return this.http.get(this.getUrlBackEnd() +'getCasosNoti').pipe(map(data => data as Repositorio[]));
+  }
+
+  public getCasosEl(){
+    return this.http.get(this.getUrlBackEnd() +'getCasosEl').pipe(map(data => data as Repositorio[]));
+  }
+
+ 
 }

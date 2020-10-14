@@ -1,9 +1,95 @@
 
+<div class="row" style="margin-top: -10px !important;">
+    <div class="col-md-1"></div>
+        <div class="col-md-5">
+            <h5 style="text-align: center !important; color: #FCAD05 !important;font-size: 16px !important;">
+            <img class="img-profile" src="./assets/imagenes/tablero.png" width=50 height=50>
+            Cuadro de ENR acumulado (Kwh - $)
+            </h5>
+            <table class="table table-sm" style="width: 99%; margin:auto;">
+                <thead class="thead-dark">
+                <tr>
+                    <th style="background-color:#232345; color:#51F749; font-size: 13px; text-align:center; font-weight: normal;">Período</th>
+                    <th style="background-color:#232345; color:#51F749; font-size: 13px; text-align:center; font-weight: normal;">ENR Kwh</th>
+                    <th style="background-color:#232345; color:#51F749; font-size: 13px; text-align:center; font-weight: normal;">ENR $$</th>
+                    <th style="background-color:#232345; color:#51F749; font-size: 13px; text-align:center; font-weight: normal;">Acumulado $$</th>
+                </tr>
+                </thead>
+                <tbody style="background-color:#323259; color:white;text-align: center;
+                font-size: 13px;">
+                <tr *ngFor="let cb of cobro" style="height: 1px !important">   
+                    <td>{{cb.periodo}}</td>                     
+                <td>{{cb.enrKwhPeriodo}}</td>
+                <td>$ {{cb.cobroPeriodo}}</td>
+                <td>$ {{cb.cobroAcumulado}}</td>
+                </tr>
+                </tbody>
+                
+                <tfoot style="background-color:#232345; color:white;text-align: center;
+                font-size: 13px;">
+                    <tr *ngFor="let cb of cobroTotal">   
+                    <td style="color: #FCAD05 !important; ">Totales</td>                     
+                <td style="color: #02E5C3 !important; ">{{cb.enrKwhPeriodo}}</td>
+                <td style="color: #02E5C3 !important; ">$ {{cb.cobroPeriodo}}</td>
+                <td style="color: #02E5C3 !important; ">$ {{cb.cobroAcumulado}}</td>
+                </tr>
+
+                </tfoot>
+            </table>
+
+        </div>
+        <div class="col-md-5" style="text-align: center !important; align-items: center !important;">
+            <canvas id="cobroAcumuladoENR" width="450px" height="250px"></canvas>
+        </div>
+    <div class="col-md-1"></div>
+</div>
+
 <div class="row">
-    <div class="col-md-6">
-        <canvas id="pagosENR" style="width: 100% !important;"></canvas>
+    <div class="col-md-4">
+        <br>
+        <h5 style="text-align: center !important; color: white !important;font-size: 16px !important;
+        margin-top: 10px;">
+        Repositorios</h5>
+        <br>
+        <h5 style="text-align: center !important; color: #FC60B3 !important;font-size: 16px !important;">
+            <img class="img-profile" src="./assets/imagenes/insertar.png" >
+            Casos Ingresados : 
+            <a style="text-align: center !important; color: white !important;font-size: 16px !important;"
+            *ngFor="let i of ing">{{i.ing}}</a>
+          </h5>
+
+          <h5 style="text-align: center !important; color: #05E9FC !important;font-size: 16px !important;">
+            <img class="img-profile" src="./assets/imagenes/calcular.png">
+            Casos Calculados : 
+            <a style="text-align: center !important; color: white !important;font-size: 16px !important;"
+            *ngFor="let c of calc">{{c.calc}}</a>
+          </h5>
+
+          <h5 style="text-align: center !important; color: #FCAD05 !important;font-size: 16px !important;">
+            <img class="img-profile" src="./assets/imagenes/notificacion.png">
+            Casos Notificados : 
+            <a style="text-align: center !important; color: white !important;font-size: 16px !important;"
+            *ngFor="let n of noti">{{n.noti}}</a>
+          </h5>
+
+          <h5 style="text-align: center !important; color: red !important;font-size: 16px !important;">
+            <img class="img-profile" src="./assets/imagenes/dt.png">
+            Casos Eliminados : 
+            <a style="text-align: center !important; color: white !important;font-size: 16px !important;"
+            *ngFor="let e of el">{{e.el}}</a>
+          </h5>
     </div>
-    <div class="col-md-6">
-        <canvas id="casosRed" style="width: 100% !important;"></canvas>
+    <div class="col-md-4">
+        <br>
+        <canvas id="pagosENR" width="350px" height="250px"></canvas>
+    </div>
+    <div class="col-md-4">
+        <br>
+        <canvas id="casosRed" width="350px" height="250px"></canvas>
     </div>
 </div>
+
+
+    
+    
+

@@ -103,5 +103,11 @@ class VerifyCsrfToken extends BaseVerifier
         'getPagosENR',
         'getCasosRed',
         'savePeriodosSeleccionadosCaso6',
+        'getCuadroAcumulado',
+        'getTotalCuadroAcumulado',
+        'getCasosIng',
+        'getCasosCalc',
+        'getCasosNoti',
+        'getCasosEl'
     ];
 }

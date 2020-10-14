@@ -15,6 +15,12 @@ export class DashboardComponent implements OnInit {
   ctx: any;
   pagosENRLista : any;
   casosRedENRLista : any;
+  cobro: any;
+  cobroTotal: any;
+  ing: any;
+  calc: any;
+  noti: any;
+  el: any;
   constructor(
     private pagosENR: GlobalService
   ) { }
@@ -40,35 +46,42 @@ export class DashboardComponent implements OnInit {
         this.canvas = document.getElementById('pagosENR');
         this.ctx = this.canvas.getContext('2d');
         let myChart = new Chart(this.ctx, {
-          type: 'bar',
+          type: 'line',
           data: {
               labels: periodos,
+              fontColor: 'white',
               datasets: [{
-                  label: 'Pago $',
+                  label: 'Cobro $',
                   data: pagos,
-                  backgroundColor: [ "#7406CF","#9366B8","#D6A7FC","#806695",
-                  "#573375","#18FE11","#0A9F05","#91BF90","#045D02",
-                  "#E80D1A","#AB010C","#620E13","#764447","#D68287",
-                  "#BD5B0F","#8B4208","#CF9A70","#684931","#E5A26F",
-                  "#f39c12","#d35400","#c0392b","#bdc3c7","#7f8c8d",
-                  "#55efc4","#81ecec","#74b9ff","#a29bfe","#dfe6e9",
-                  "#00b894","#00cec9","#0984e3","#6c5ce7","#ffeaa7",
-                  "#fab1a0","#ff7675","#fd79a8","#fdcb6e","#e17055",
-                  "#d63031","#feca57","#5f27cd","#54a0ff","#01a3a4"],
+                  backgroundColor: [ 
+                    "rgba(189,236,182,0.2)"],
+                    borderColor: "#DD04FB",
+
               }]
           },
           options: {
-            textColor: "#FFFFFF",
+           
             responsive: false,
             title: {
               display: true,
-              text: 'Pagos ENR por periodo'
+              text: 'Cobros ENR por periodo',
+              fontColor: "#FBF404",
+              fontSize: 16,
+              fontStyle: "normal", 
             },
-            legend: { display: false },
+            legend: { display: false, },
             scales: {
               xAxes: [{
-                  barPercentage: 0.5
-              }]
+                  barPercentage: 0.3,
+                  ticks: {
+                    fontColor: "white",
+                  }
+              }],
+              yAxes: [{
+                ticks: {
+                  fontColor: "white",
+                }
+            }]
           }
           }
         });
@@ -103,23 +116,26 @@ export class DashboardComponent implements OnInit {
               datasets: [{
                   label: 'Casos',
                   data: casos,
-                  backgroundColor: [ "#7406CF","#9366B8","#D6A7FC","#806695",
-                  "#573375","#18FE11","#0A9F05","#91BF90","#045D02",
-                  "#E80D1A","#AB010C","#620E13","#764447","#D68287",
-                  "#BD5B0F","#8B4208","#CF9A70","#684931","#E5A26F",
-                  "#f39c12","#d35400","#c0392b","#bdc3c7","#7f8c8d",
-                  "#55efc4","#81ecec","#74b9ff","#a29bfe","#dfe6e9",
-                  "#00b894","#00cec9","#0984e3","#6c5ce7","#ffeaa7",
-                  "#fab1a0","#ff7675","#fd79a8","#fdcb6e","#e17055",
-                  "#d63031","#feca57","#5f27cd","#54a0ff","#01a3a4"],
+                  backgroundColor: [
+                  "#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
+                  "#F54A88","#80F29F","#FD9F46","#9946FD","#FA0707",
+                  "#02E5C3","#98F54A","#F5714A","#F5F24A","#80BEF2",
+                  "#05FC05","#FCD705","#FC5F05","#05FC7D", "#0566FC",
+                  "#02E5C3","#98F54A","#F5714A","#F5F24A","#80BEF2",
+                  "#F54A88","#80F29F","#FD9F46","#9946FD","#FA0707",
+                  "#CAFADB","#F8BAA1","#A1F8DB","#D2A1F8","#F8A1B5",
+                  "#05FC05","#FCD705","#FC5F05","#05FC7D", "#0566FC"],
               }]
           },
           options: {
-            textColor: "#FFFFFF",
+           
             responsive: false,
             title: {
               display: true,
-              text: 'Casos ENR por red eléctrica'
+              text: 'Casos ENR por red eléctrica',
+              fontColor: "#32FC05",
+              fontSize: 16,
+              fontStyle: "normal",
             },
             legend: { display: false }
           }
@@ -128,17 +144,118 @@ export class DashboardComponent implements OnInit {
       }
     );
     
+
+
+    this.pagosENR.getCuadroAcumulado().subscribe(
+      response => {
+        this.cobro = response;
+
+
+        let periodos = [];
+        let cobro = [];
+        let acumulado = [];
+
+       
+
+        this.cobro.forEach(element => {
+          periodos.push(element["periodo"]);
+          cobro.push(element["cobroPeriodo"]);
+         acumulado.push(element["cobroAcumulado"]);
+        });
+
+        //console.log(pagos);
+        this.canvas = document.getElementById('cobroAcumuladoENR');
+        this.ctx = this.canvas.getContext('2d');
+        let myChart = new Chart(this.ctx, {
+          type: 'bar',
+          data: {
+              labels: periodos,
+              datasets: [{
+                  label: 'Cobro $',
+                  data: cobro,
+                  backgroundColor: [
+                    "#CAFADB","#F8BAA1","#A1F8DB","#D2A1F8","#F8A1B5",
+                    "#02E5C3","#98F54A","#F5714A","#F5F24A","#80BEF2",
+                    "#05FC05","#FCD705","#FC5F05","#05FC7D", "#0566FC",
+                    "#F54A88","#80F29F","#FD9F46","#9946FD","#FA0707",
+                 
+                  "#02E5C3","#98F54A","#F5714A","#F5F24A","#80BEF2",
+                  "#F54A88","#80F29F","#FD9F46","#9946FD","#FA0707",
+                  "#CAFADB","#F8BAA1","#A1F8DB","#D2A1F8","#F8A1B5",
+                  "#05FC05","#FCD705","#FC5F05","#05FC7D", "#0566FC"],
+              },
+              {
+                label: "Acumulado $",
+                type: "line",
+                borderColor: "#3e95cd",
+                data: acumulado,
+                backgroundColor : "rgba(202,196,176,0.2)",
+              }
+            ]
+          },
+          options: {
+            
+            responsive: false,
+            title: {
+              display: true,
+              text: 'Cuadro ENR acumulado',
+              fontColor: "#05E9FC",
+              fontSize: 16,
+              fontStyle: "normal",
+            },
+            legend: { display: false },
+            scales: {
+              xAxes: [{
+                  barPercentage: 0.3,
+                  ticks: {
+                    fontColor: "white",
+                  }
+              }],
+              yAxes: [{
+                ticks: {
+                  fontColor: "white",
+                }
+            }]
+          }
+          }
+        });
+
+      }
+    );
+
+    this.pagosENR.getTotalCuadroAcumulado().subscribe(
+      response => {
+        this.cobroTotal = response;
+      }
+    );
+
+    this.pagosENR.getCasosIng().subscribe(
+      response => {
+        this.ing = response;
+      }
+    );
+
+    this.pagosENR.getCasosCalc().subscribe(
+      response => {
+        this.calc = response;
+      }
+    );
+
+    this.pagosENR.getCasosNoti().subscribe(
+      response => {
+        this.noti = response;
+      }
+    );
+
+    this.pagosENR.getCasosEl().subscribe(
+      response => {
+        this.el = response;
+      }
+    );
+
   }
 
 
-   getRandomColor() {
-    var letters = '0123456789ABCDEF'.split('');
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
 
 }
 

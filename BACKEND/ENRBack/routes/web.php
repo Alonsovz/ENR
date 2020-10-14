@@ -185,3 +185,12 @@ Route::get('/', function () {
     
     Route::post('usuario', 'UserController@validarUsuario');
     
+    
+    Route::any('getCuadroAcumulado', 'DashboardController@getCuadroAcumulado');
+    
+    Route::any('getTotalCuadroAcumulado', 'DashboardController@getTotalCuadroAcumulado');
+
+    Route::any('getCasosIng', 'DashboardController@getCasosIng');
+    Route::any('getCasosCalc', 'DashboardController@getCasosCalc');
+    Route::any('getCasosNoti', 'DashboardController@getCasosNoti');
+    Route::any('getCasosEl', 'DashboardController@getCasosEl');
