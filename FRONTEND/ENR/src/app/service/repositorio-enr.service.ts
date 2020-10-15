@@ -24,6 +24,10 @@ export class RepositorioEnrService {
     return this.http.get(this.url.getUrlBackEnd() +'getRepositorioNotificados').pipe(map(data => data as Repositorio[]));
   }
 
+  public getRepositorioEliminados(): Observable<Repositorio[]> {
+    return this.http.get(this.url.getUrlBackEnd() +'getRepositorioEliminados').pipe(map(data => data as Repositorio[]));
+  }
+
   public getAdjuntosOrdenesENR(orden): Observable<Repositorio[]> {
     //console.log(orden);
     return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getAdjuntosOrdenesENR', orden).pipe(map(data => data as Repositorio[]));

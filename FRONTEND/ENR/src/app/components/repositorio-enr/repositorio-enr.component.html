@@ -389,7 +389,7 @@
               
               <div class="col-md-4">
                 <label style="font-size: 15px !important;color:#FC4343 !important;font-weight: bold;">Consumo ENR_Diario (kwh Diario)</label>
-                <input class="form-control" type="text" formControlName="consumoDiarioENR" name="consumoDiarioENR"
+                <input class="form-control" type="text" formControlName="consumoDia<rioENR" name="consumoDiarioENR"
                 style="text-align: center !important;" readonly="true">
               </div>
               <div class="col-md-4">
@@ -1511,7 +1511,7 @@
               <input type="hidden" [(ngModel)]="dg.fechaIn" formControlName="fechaInicio">
             
               <input type="hidden" [(ngModel)]="dg.fechaFin" formControlName="fechaFin">
-              <input type="hidden" [(ngModel)]="dg.id" formControlName="numeroCaso">
+              <input type="text" [(ngModel)]="dg.idC" formControlName="numeroCaso">
            
            <div class="col-lg-12">
             <hr style="background-color: yellow !important; height: 2px;">
@@ -1879,6 +1879,13 @@ background-color: #323259;" id="titleGlobal">
             Notificado
         </a>
       </li>
+      <li class="nav-item" style="border-bottom:1px solid white;">
+        <a class="nav-link"  data-toggle="tab" href="#eliminados" role="tab" (click)="getRepositorioEli()"
+        aria-controls="profile" aria-selected="false" style="color:white;background-color: #1B1B38;">
+         <i class="fas fa-trash"></i>
+            Eliminados
+        </a>
+      </li>
     </ul>
 
     <div class="tab-content" id="myTabContent" style="background-color: #323259;margin-right: 30px;
@@ -1888,7 +1895,7 @@ background-color: #323259;" id="titleGlobal">
                 <div class="col-lg-2"></div>
                     <div class="col-lg-8" style="background-color: #1B1B38;color: white;
                     text-align: center;font-size: 25px;color:#4DFBE6;font-weight: bold;">
-                      <img class="img-profile" src="./assets/imagenes/homework.png"  height=35
+                      <img class="img-profile" src="./assets/imagenes/homework.png"  height=42
                       style="margin-bottom: 5px;">
                       Casos Ingresados (Pendientes de Cálculo)
                     </div>                   
@@ -1953,7 +1960,7 @@ background-color: #323259;" id="titleGlobal">
                 <div class="col-lg-2"></div>
                     <div class="col-lg-8" style="background-color: #1B1B38;color: white;
                     text-align: center;font-size: 25px;color:#4DFBE6;font-weight: bold;">
-                      <img class="img-profile" src="./assets/imagenes/moneyIn.png"  height=35
+                      <img class="img-profile" src="./assets/imagenes/moneyIn.png"  height=42
                       style="margin-bottom: 5px;">
                       Casos Calculados (Pendientes de Notificación)
                     </div>                   
@@ -2018,7 +2025,7 @@ background-color: #323259;" id="titleGlobal">
                 <div class="col-lg-2"></div>
                     <div class="col-lg-8" style="background-color: #1B1B38;color: white;
                     text-align: center;font-size: 25px;color:#4DFBE6;font-weight: bold;">
-                      <img class="img-profile" src="./assets/imagenes/bell.png"  height=35
+                      <img class="img-profile" src="./assets/imagenes/bell.png"  height=42
                       style="margin-bottom: 5px;">
                       Casos Notificados
                     </div>                   
@@ -2075,6 +2082,58 @@ background-color: #323259;" id="titleGlobal">
             </div> 
 
         </div>
+
+
+
+        <div class="tab-pane" id="eliminados" role="tabpanel" aria-labelledby="">
+          <div class="row animated flipInX">
+              <div class="col-lg-2"></div>
+                  <div class="col-lg-8" style="background-color: #1B1B38;color: white;
+                  text-align: center;font-size: 25px;color:#4DFBE6;font-weight: bold;">
+                    <img class="img-profile" src="./assets/imagenes/delete.png"  height=42
+                    style="margin-bottom: 5px;">
+                    Casos Eliminados
+                  </div>                   
+              <div class="col-lg-2"></div>
+          </div>
+
+          <div class="row mt-5 animated fadeInLeft">
+              <div class="col-lg-1"></div>
+              <div class="col-lg-10">
+                  <table  id="tbl_Eliminados" class="table small mt-5" style="width: 100%;">
+                      <thead class="thead-dark">
+                        <tr>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">N° Caso</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">N° Suministro</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Tipo ENR</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Metodología ENR</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Dias de Cobro</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Fecha de Creación</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody style="background-color:#323259; color:white;text-align: center;font-size: 11px;">
+                          <tr *ngFor="let rep  of repositorioEl"
+                          [ngClass]="{adjuntos: rep.adjuntos > 0}">
+                             <td>{{rep.caso}}</td>
+                             <td>{{rep.nis}}</td>
+                             <td>{{rep.codigoENR}}</td>
+                             <td>{{rep.metodologiaENR}}</td>
+                             <td>{{rep.diasCobrar}}</td>
+                             <td>{{rep.fechaCreacion}}</td>
+                             <td>
+                              <button class="btn btn-default btn-circle btn1" title="Ver detalles del caso"
+                              data-toggle="modal"  data-target="#datosCasoNoti" (click)="datosEditar(rep)">
+                                  <i class="fas fa-edit"></i>
+                               </button> 
+                          </tr>
+                      </tbody>
+                  </table><br><br>
+              </div>
+              <div class="col-lg-1"></div>
+          </div> 
+
+      </div>
     </div>
 
 
@@ -2371,24 +2430,38 @@ background-color: #323259;" id="titleGlobal">
                     <div class="col-md-6"><br>
                         <label><i class="fa fa-file"></i> Adjunto: Scan de notificacion inicial</label>          
                         <br>
-                        <h6 style="color: yellow;font-size: 13px;">{{data.ruta}}</h6>
-                        <button class="btn btn-success btn-sm btn-circle"  data-dismiss="modal"
-                        (click)="adjuntosOrdenesVer(data.ruta, data.ext)"
-                        data-toggle="modal" data-target="#verAdjuntosOrden">
+                        <div *ngIf = "data.ruta != '0'">
+                          <h6 style="color: yellow;font-size: 13px;">{{data.ruta}}</h6>
+                          <button class="btn btn-success btn-sm btn-circle"  data-dismiss="modal"
+                          (click)="adjuntosOrdenesVer(data.ruta, data.ext)"
+                          data-toggle="modal" data-target="#verAdjuntosOrden">
                                 <i class="fa fa-eye"></i>
-                      </button> 
-                        &nbsp; 
-                        <a class="btn btn-info btn-sm btn-circle" 
-                        [href]="rutaFile+data.ruta">
-                                <i class="fa fa-download"></i>
-                        </a>
-                        &nbsp; 
-                        <button class="btn btn-warning btn-sm btn-circle"
-                        data-dismiss="modal" *ngIf="user.rol == 'AEA' || user.rol == 'AE'"
-                        (click)="nuevoScan(ordenNumeroG)" 
-                        data-toggle="modal" data-target="#nuevoScan">
-                                <i class="fa fa-sync"></i>
-                      </button> 
+                          </button> 
+                            &nbsp; 
+                            <a class="btn btn-info btn-sm btn-circle" 
+                            [href]="rutaFile+data.ruta">
+                                    <i class="fa fa-download"></i>
+                            </a>
+                            &nbsp; 
+                            <button class="btn btn-warning btn-sm btn-circle"
+                            data-dismiss="modal" *ngIf="user.rol == 'AEA' || user.rol == 'AE'"
+                            (click)="nuevoScan(ordenNumeroG)" 
+                            data-toggle="modal" data-target="#nuevoScan">
+                                    <i class="fa fa-sync"></i>
+                          </button> 
+                        </div>
+                        <div *ngIf="data.ruta == '0'">
+                          <h6 style="color: yellow;font-size: 13px;">No se adjuntó</h6>
+                            <button class="btn btn-warning btn-sm btn-circle"
+                              data-dismiss="modal" *ngIf="user.rol == 'AEA' || user.rol == 'AE'"
+                              (click)="nuevoScan(ordenNumeroG)" 
+                              data-toggle="modal" data-target="#nuevoScan">
+                                      <i class="fa fa-sync"></i>
+                            </button> 
+                        </div>
+                          
+                       
+                        
                   
                     </div>
                     <div class="col-md-6"><br>
@@ -3581,24 +3654,35 @@ tabindex="-1" role="dialog" id="nuevoScan">
                     <div class="col-md-6"><br>
                         <label><i class="fa fa-file"></i> Adjunto: Scan de notificacion inicial</label>          
                         <br>
-                        <h6 style="color: yellow;font-size: 13px;">{{data.ruta}}</h6>
-                        <button class="btn btn-success btn-sm btn-circle"  data-dismiss="modal"
-                        (click)="adjuntosOrdenesVer(data.ruta, data.ext)"
-                        data-toggle="modal" data-target="#verAdjuntosOrden">
-                                <i class="fa fa-eye"></i>
-                      </button> 
-                        &nbsp; 
-                        <a class="btn btn-info btn-sm btn-circle"  
-                        [href]="rutaFile+data.ruta">
-                                <i class="fa fa-download"></i>
-                        </a>
-                        &nbsp; 
-                        <button class="btn btn-warning btn-sm btn-circle"
-                        data-dismiss="modal" *ngIf="user.rol == 'AEA' || user.rol == 'AE'"
-                        (click)="nuevoScan(ordenNumeroG)" 
-                        data-toggle="modal" data-target="#nuevoScan">
-                                <i class="fa fa-sync"></i>
-                      </button> 
+                        <div *ngIf = "data.ruta != '0'">
+                          <h6 style="color: yellow;font-size: 13px;">{{data.ruta}}</h6>
+                          <button class="btn btn-success btn-sm btn-circle"  data-dismiss="modal"
+                          (click)="adjuntosOrdenesVer(data.ruta, data.ext)"
+                          data-toggle="modal" data-target="#verAdjuntosOrden">
+                                  <i class="fa fa-eye"></i>
+                        </button> 
+                          &nbsp; 
+                          <a class="btn btn-info btn-sm btn-circle"  
+                          [href]="rutaFile+data.ruta">
+                                  <i class="fa fa-download"></i>
+                          </a>
+                          &nbsp; 
+                          <button class="btn btn-warning btn-sm btn-circle"
+                          data-dismiss="modal" *ngIf="user.rol == 'AEA' || user.rol == 'AE'"
+                          (click)="nuevoScan(ordenNumeroG)" 
+                          data-toggle="modal" data-target="#nuevoScan">
+                                  <i class="fa fa-sync"></i>
+                          </button> 
+                        </div>
+                        <div *ngIf = "data.ruta == '0'">
+                          <h6 style="color: yellow;font-size: 13px;">No se adjuntó</h6>
+                          <button class="btn btn-warning btn-sm btn-circle"
+                          data-dismiss="modal" *ngIf="user.rol == 'AEA' || user.rol == 'AE'"
+                          (click)="nuevoScan(ordenNumeroG)" 
+                          data-toggle="modal" data-target="#nuevoScan">
+                                  <i class="fa fa-sync"></i>
+                          </button> 
+                        </div>
                   
                     </div>
                     <div class="col-md-6"><br>
@@ -4065,7 +4149,27 @@ tabindex="-1" role="dialog" id="nuevoScan">
                   </h4>
                 </div>
                 <form [formGroup]='frmDatosENR'>
+                  
                   <div class="row" *ngFor="let data  of datosENRLista">
+                    <div class="col-md-5">
+                      <label><i class="fa fa-trash"></i> Razón de Eliminado</label>
+                      <textarea rows="3" placeholder="Razon Eliminado" [(ngModel)]="data.razonEliminado"
+                      class="form-control" formControlName="razonEliminado" disabled></textarea>
+                    </div>
+                    <div class="col-md-3">
+                      <label><i class="fa fa-user"></i> Usuario que lo eliminó: </label>          
+                      <input type="text" class="form-control"  formControlName="usuarioEliminado"
+                      [(ngModel)]="data.usuarioEliminado" readonly="true">
+                    </div>
+                    <div class="col-md-3">
+                      <label><i class="fa fa-cogs"></i> Estado del caso: </label>          
+                      <input type="text" class="form-control"  formControlName="estado"
+                      [(ngModel)]="data.nomEstado" readonly="true">
+                    </div>
+                    <div class="col-md-12">
+                      <hr style="background-color: red !important;height: 2px;">
+                    </div>
+                   
                     <div class="col-md-6"><br>
                       <label><i class="fa fa-barcode"></i> Número de Notificación ENR</label>          
                       <input type="text" class="form-control"  placeholder="Número de Notificación ENR"
@@ -4076,18 +4180,24 @@ tabindex="-1" role="dialog" id="nuevoScan">
                     <div class="col-md-6"><br>
                         <label><i class="fa fa-file"></i> Adjunto: Scan de notificacion inicial</label>          
                         <br>
-                        <h6 style="color: yellow;font-size: 13px;">{{data.ruta}}</h6>
-                        <button class="btn btn-success btn-sm btn-circle"  data-dismiss="modal"
-                        (click)="adjuntosOrdenesVer(data.ruta, data.ext)"
-                        data-toggle="modal" data-target="#verAdjuntosOrden">
-                                <i class="fa fa-eye"></i>
-                      </button> 
-                        &nbsp; 
-                        <a class="btn btn-info btn-sm btn-circle"   
-                        [href]="rutaFile+data.ruta">
-                                <i class="fa fa-download"></i>
-                        </a>
-                        &nbsp; 
+                        <div *ngIf="data.ruta != '0'">
+                          <h6 style="color: yellow;font-size: 13px;">{{data.ruta}}</h6>
+                          <button class="btn btn-success btn-sm btn-circle"  data-dismiss="modal"
+                          (click)="adjuntosOrdenesVer(data.ruta, data.ext)"
+                          data-toggle="modal" data-target="#verAdjuntosOrden">
+                                  <i class="fa fa-eye"></i>
+                        </button> 
+                          &nbsp; 
+                          <a class="btn btn-info btn-sm btn-circle"   
+                          [href]="rutaFile+data.ruta">
+                                  <i class="fa fa-download"></i>
+                          </a>
+                          &nbsp; 
+                        </div>
+                        <div *ngIf="data.ruta == '0'">
+                          <h6 style="color: yellow;font-size: 13px;">No se adjuntó</h6>
+                        </div>
+                        
                         
                   
                     </div>
@@ -4149,19 +4259,19 @@ tabindex="-1" role="dialog" id="nuevoScan">
                     <div class="col-md-4"><br>
                       <label><i class="fa fa-comments"></i> Datos adicionales para control interno</label>
                       <textarea rows="4" placeholder="Comentarios o datos adicionales" [(ngModel)]="data.datosAdicionales"
-                      class="form-control" formControlName="datosAdicionales"></textarea>
+                      class="form-control" formControlName="datosAdicionales" disabled></textarea>
                   </div>
 
                   <div class="col-md-4"><br>
                     <label><i class="fa fa-bolt"></i> Datos de irregularidades para cartas</label>
                     <textarea rows="4" placeholder="Comentarios o datos adicionales" [(ngModel)]="data.datosIrregulares"
-                    class="form-control" formControlName="datosIrregularidades"></textarea>
+                    class="form-control" formControlName="datosIrregularidades" disabled></textarea>
                 </div>
 
                 <div class="col-md-4" *ngIf="data.estado > 1"><br>
                     <label><i class="fa fa-calculator"></i> Datos adicionales de cálculo</label>
                     <textarea rows="4" placeholder="Datos adicionales de cálculo" [(ngModel)]="data.datosCalculo"
-                    class="form-control" formControlName="datosCalculo"></textarea>
+                    class="form-control" formControlName="datosCalculo" disabled></textarea>
                 </div>
 
                   </div>

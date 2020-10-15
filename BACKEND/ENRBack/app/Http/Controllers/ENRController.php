@@ -215,21 +215,16 @@ class ENRController extends Controller
         $nis = $request["nis"];
 
         $getDatos =  DB::connection('facturacion')->select("
-        SELECT fe_lecturas.num_suministro,   
-         fe_lecturas.periodo as periodo,   
-         fe_lecturas.numero_medidor as numero_medidor,   
-         fe_lecturas.codigo_consumo as codigo_consumo,   
-         convert(varchar,fe_lecturas.fecha_lectura_ant,103) as fecha_lectura_ant,   
-          convert(varchar,fe_lecturas.fecha_lectura,103) as fecha_lectura,   
-         fe_lecturas.lectura_anterior as lectura_anterior,   
-         fe_lecturas.lectura as lectura,   
-         fe_lecturas.consumo as consumo,
-         DATEDIFF (DAY, fecha_lectura_ant , fecha_lectura ) as dias
-            FROM fe_lecturas 
-            WHERE ( fe_lecturas.num_suministro = ? ) AND  
-         ( fe_lecturas.codigo_consumo <> 'CO030' ) AND  
-         ( fe_lecturas.codigo_consumo <> 'CO031' ) AND
-         (fe_lecturas.fecha_lectura between DATEADD(MM, -12,GETDATE()) AND getdate())",[$nis]);
+        select SUBSTRING ( periodo ,3 , 4 ) as anio,periodo as periodo,
+        convert(varchar, fecha_lectura_ant, 103)as fechaLecturaAnterior,
+        convert(varchar, fecha_lectura, 103)as fechaLectura,
+        DATEDIFF(day, fecha_lectura_ant, fecha_lectura) as diasFacturado,
+        CONVERT(decimal(18,2),sum (consumo * multiplicador)) as consumo,
+        numero_medidor as medidor  from fe_lecturas 
+        where (codigo_consumo = 'CO011' or codigo_consumo = 'CO012'
+        or codigo_consumo = 'CO013' or codigo_consumo = 'CO014' ) and num_suministro = ?	
+        group by periodo,fecha_lectura_ant,fecha_lectura,numero_medidor
+        ORDER BY fecha_lectura DESC",[$nis]);
 
 
         return response()->json($getDatos);
@@ -391,6 +386,30 @@ class ENRController extends Controller
         inner join EDESAL_CALIDAD.dbo.SGT_Usuarios u on u.id = dg.usuario_creacion
         inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
         where dg.idEliminado = 1 and dg.estado = 1
+        ");
+
+
+        return response()->json($getDatos);
+    }
+
+    public function getRepositorioEliminados(){
+        $getDatos =  DB::connection('facturacion')->select("
+        select dg.id as caso, dg.num_suministro as nis, dg.scanPrimerNoti as ruta,
+        dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
+        convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
+        t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado, es.estado as nomEstado,
+        m.codigo as codBase,
+        (select count(id) from enr_documentacion where idCasoENR =
+        dg.id and idEliminado = 1) as adjuntos,
+        
+        dg.codigoTipoENR as codTipoENR,
+        fes.codigo_tarifa as tarifa, dg.fechaInicio as fechaIn, dg.fechaFin as fechaFin from enr_datosGenerales dg
+        inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
+        inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
+        inner join EDESAL_CALIDAD.dbo.SGT_Usuarios u on u.id = dg.usuario_creacion
+        inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
+        inner join enr_estadosCasos es on es.id = dg.estado
+        where dg.idEliminado = 2
         ");
 
 
@@ -560,7 +579,7 @@ class ENRController extends Controller
         $codigo = $request["caso"];
 
         $getDatos =  DB::connection('facturacion')->select("
-        select *, 
+        select *, enr_datosGenerales.id as idC, 
         (select voltaje_energia from fe_suministros where num_suministro =
         enr_datosGenerales.num_suministro) as voltajeSuministro,
         scanPrimerNoti as ruta,
@@ -572,15 +591,20 @@ class ENRController extends Controller
         convert(varchar(10),fechaInicio,103) as fechaIni,
         convert(varchar(10),fechaFin,103) as fechaFini,
         convert(varchar(10),fechaRegularizacion,103) as fechaRe,
+        (select e.estado from enr_estadosCasos e 
+        inner join enr_datosGenerales dg on dg.estado = e.id
+        where dg.id = enr_datosGenerales.id) as nomEstado,
+        (select razonEliminado from enr_bitacoraAcciones where casoENR = enr_datosGenerales.id) as razonEliminado,
+        (select usuario from enr_bitacoraAcciones where casoENR = enr_datosGenerales.id) as usuarioEliminado,
         convert(varchar,fechaCreacion, 103)+' '+substring(convert(varchar,fechaCreacion, 114),1,5) as fechaCreacionF,
-        case when estado > 1
+        case when enr_datosGenerales.estado > 1
         then 
          (select datosCalculo from enr_totalPagos where casoENR = enr_datosGenerales.id)
         else
         'No definido'
         end as datosCalculo
         from enr_datosGenerales
-        where idEliminado = 1 and id = ?
+        where enr_datosGenerales.id= ?
         ",[$codigo]);
         return response()->json($getDatos);
     }

@@ -35,6 +35,7 @@ export class RepositorioENRComponent implements OnInit {
   docForm: FormGroup;
   repositorioCalc : Repositorio[];
   repositorioNoti : Repositorio[];
+  repositorioEl : Repositorio[];
   dataTable: any;
   adjuntosFile : Repositorio[];
   adjuntosFileOrdenes: DatosENR[];
@@ -236,6 +237,9 @@ export class RepositorioENRComponent implements OnInit {
         'datosAdicionales' : new FormControl(''),
         'datosIrregularidades' : new FormControl(''),
         'datosCalculo' : new FormControl(''),
+        'razonEliminado' : new FormControl(''),
+        'estado' : new FormControl(''),
+        'usuarioEliminado'  : new FormControl(''),
         
       });
 
@@ -386,6 +390,10 @@ export class RepositorioENRComponent implements OnInit {
     );
 
 
+
+
+
+
     this.repositorioENR.getRepositorioCalculados().subscribe(
       response => {
 
@@ -440,6 +448,52 @@ export class RepositorioENRComponent implements OnInit {
         this.chRef.detectChanges();
 
         const table: any = $('#tbl_Notificados');
+
+        this.dataTable = table.DataTable({
+          'iDisplayLength' : 5,
+        'responsive': true,
+          'order' :[[0,'desc']],
+
+        'language' : {
+          'sProcessing':     'Procesando...',
+          'sLengthMenu':     'Mostrar _MENU_ registros',
+          'sZeroRecords':    'No se encontraron resultados',
+          'sEmptyTable':     'Ningún dato disponible en esta tabla',
+          'sInfo':           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
+          'sInfoEmpty':      'Mostrando registros del 0 al 0 de un total de 0 registros',
+          'sInfoFiltered':   '(filtrado de un total de _MAX_ registros)',
+          'sInfoPostFix':    '',
+          'sSearch':         'Buscar:',
+          'sUrl':            '',
+          'sInfoThousands':  ',',
+          'sLoadingRecords': 'Cargando...',
+          'oPaginate': {
+              'sFirst':    'Primero',
+              'sLast':     'Último',
+              'sNext':     'Siguiente',
+              'sPrevious': 'Anterior'
+          },
+          'oAria': {
+              'sSortAscending':  ': Activar para ordenar la columna de manera ascendente',
+              'sSortDescending': ': Activar para ordenar la columna de manera descendente'
+          }
+        }
+        });
+      },
+      err => {},
+      () => {}
+    );
+
+
+
+    this.repositorioENR.getRepositorioEliminados().subscribe(
+      response => {
+
+        this.repositorioEl = response;
+
+        this.chRef.detectChanges();
+
+        const table: any = $('#tbl_Eliminados');
 
         this.dataTable = table.DataTable({
           'iDisplayLength' : 5,
@@ -1011,6 +1065,55 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
     );
   }
 
+  public getRepositorioEli(){
+    this.repositorioENR.getRepositorioEliminados().subscribe(
+      response => {
+
+        this.repositorioEl = response;
+
+      
+
+        const table: any = $('#tbl_Eliminados');
+        this.dataTable = table.DataTable();
+        this.dataTable.destroy();
+    
+        this.chRef.detectChanges();
+        this.dataTable = table.DataTable({
+          'iDisplayLength' : 5,
+        'responsive': true,
+          'order' :[[0,'desc']],
+
+        'language' : {
+          'sProcessing':     'Procesando...',
+          'sLengthMenu':     'Mostrar _MENU_ registros',
+          'sZeroRecords':    'No se encontraron resultados',
+          'sEmptyTable':     'Ningún dato disponible en esta tabla',
+          'sInfo':           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
+          'sInfoEmpty':      'Mostrando registros del 0 al 0 de un total de 0 registros',
+          'sInfoFiltered':   '(filtrado de un total de _MAX_ registros)',
+          'sInfoPostFix':    '',
+          'sSearch':         'Buscar:',
+          'sUrl':            '',
+          'sInfoThousands':  ',',
+          'sLoadingRecords': 'Cargando...',
+          'oPaginate': {
+              'sFirst':    'Primero',
+              'sLast':     'Último',
+              'sNext':     'Siguiente',
+              'sPrevious': 'Anterior'
+          },
+          'oAria': {
+              'sSortAscending':  ': Activar para ordenar la columna de manera ascendente',
+              'sSortDescending': ': Activar para ordenar la columna de manera descendente'
+          }
+        }
+        });
+      },
+      err => {},
+      () => {}
+    );
+  }
+
   //método para obtener dias segun el codigo tipo enr
   public asigDias(){
     let datosENRdto : DatosENR = new DatosENR();
@@ -1058,7 +1161,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
       if(this.datos.length < 1){
         notie.alert({
           type: 'error',
-          text: '<img class="img-profile alertImg" src="./assets/imagenes/nofound.png" width=40 height=40> No se encontró ningún resultado',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/nofound.png" width=40 height=40> Problema procesando datos del NIS',
           stay: false, 
           time: 2, 
           position: 'top' 

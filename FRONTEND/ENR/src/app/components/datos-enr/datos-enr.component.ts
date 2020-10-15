@@ -166,12 +166,10 @@ export class DatosENRComponent implements OnInit {
     
         this.chRef.detectChanges();
         
-        this.chRef.detectChanges();
-        
         this.dataTable = table.DataTable({
         'iDisplayLength' : 5,
         'responsive': true,
-          'order' :[[5,'desc']],
+          'order' :[[2,'desc']],
 
         'language' : {
           'sProcessing':     'Procesando...',
