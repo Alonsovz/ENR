@@ -2261,6 +2261,7 @@ background-color: #323259;" id="titleGlobal">
         </ul>
         </div>
         <h6 class="title" style="color:#B18AFF !important;margin-right: 40px;">
+          NIS: <a style="color: #0CD902;">{{ordenNumeroG.nis}}</a><br>
           Caso N°: <a style="color: #0CD902;">{{ordenNumeroG.caso}}</a><br>
           Usuario creacion: <a style="color: #0CD902;">{{ordenNumeroG.usuarioCreacion}}</a> 
         </h6>
@@ -3485,8 +3486,10 @@ tabindex="-1" role="dialog" id="nuevoScan">
         </ul>
         </div>
         <h6 class="title" style="color:#B18AFF !important;margin-right: 40px;">
+          NIS: <a style="color: #0CD902;">{{ordenNumeroG.nis}}</a><br> 
           Caso N°: <a style="color: #0CD902;">{{ordenNumeroG.caso}}</a><br>
-          Usuario creacion: <a style="color: #0CD902;">{{ordenNumeroG.usuarioCreacion}}</a> 
+          Usuario creacion: <a style="color: #0CD902;">{{ordenNumeroG.usuarioCreacion}}</a>
+          
         </h6>
       </div>
       <div class="modal-body" style="max-height: calc(100vh - 200px);
@@ -3991,6 +3994,7 @@ tabindex="-1" role="dialog" id="nuevoScan">
         </ul>
         </div>
         <h6 class="title" style="color:#B18AFF !important;margin-right: 40px;">
+          NIS: <a style="color: #0CD902;">{{ordenNumeroG.nis}}</a><br>
           Caso N°: <a style="color: #0CD902;">{{ordenNumeroG.caso}}</a><br>
           Usuario creacion: <a style="color: #0CD902;">{{ordenNumeroG.usuarioCreacion}}</a> 
         </h6>
@@ -4151,18 +4155,23 @@ tabindex="-1" role="dialog" id="nuevoScan">
                 <form [formGroup]='frmDatosENR'>
                   
                   <div class="row" *ngFor="let data  of datosENRLista">
-                    <div class="col-md-5">
+                    <div class="col-md-3">
                       <label><i class="fa fa-trash"></i> Razón de Eliminado</label>
                       <textarea rows="3" placeholder="Razon Eliminado" [(ngModel)]="data.razonEliminado"
                       class="form-control" formControlName="razonEliminado" disabled></textarea>
                     </div>
                     <div class="col-md-3">
-                      <label><i class="fa fa-user"></i> Usuario que lo eliminó: </label>          
+                      <label><i class="fa fa-user"></i> Usuario que lo eliminó</label>          
                       <input type="text" class="form-control"  formControlName="usuarioEliminado"
                       [(ngModel)]="data.usuarioEliminado" readonly="true">
                     </div>
                     <div class="col-md-3">
-                      <label><i class="fa fa-cogs"></i> Estado del caso: </label>          
+                      <label><i class="fa fa-calendar"></i> Fecha de eliminado</label>          
+                      <input type="text" class="form-control"  formControlName="fechaEliminado"
+                      [(ngModel)]="data.fechaEliminado" readonly="true">
+                    </div>
+                    <div class="col-md-3">
+                      <label><i class="fa fa-cogs"></i> Estado del caso</label>          
                       <input type="text" class="form-control"  formControlName="estado"
                       [(ngModel)]="data.nomEstado" readonly="true">
                     </div>

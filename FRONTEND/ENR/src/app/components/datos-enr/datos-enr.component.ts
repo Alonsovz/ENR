@@ -169,7 +169,7 @@ export class DatosENRComponent implements OnInit {
         this.dataTable = table.DataTable({
         'iDisplayLength' : 5,
         'responsive': true,
-          'order' :[[2,'desc']],
+         'order' :[[0,'desc']],
 
         'language' : {
           'sProcessing':     'Procesando...',

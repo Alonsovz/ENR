@@ -779,6 +779,8 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
         margin:auto">
             <thead class="thead-dark">
               <tr>
+                <th style="background-color:#323259; color:#51F749; display: none;"
+                class="text-center"></th>
                 <th style="background-color:#323259; color:#51F749;"
                 class="text-center">Período</th>
                 <th style="background-color:#323259; color:#51F749;"
@@ -800,7 +802,8 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
             </thead>
             <tbody style="background-color:#323259; color:white;text-align: center;
             font-size: 13px;">
-              <tr *ngFor="let lec of lecturas">                        
+              <tr *ngFor="let lec of lecturas">
+                <td style="display: none;">{{lec.f1}}</td>                        
                <td>{{lec.periodo}}</td>
                <td>{{lec.numero_medidor}}</td>
                <td>{{lec.fecha_lectura}}</td>

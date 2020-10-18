@@ -12,7 +12,7 @@ export class GlobalService {
   constructor(private http: HttpClient, private url: GlobalService) { }
 
   public getUrlBackEnd() {
-    return 'http://192.168.50.47:80/';
+    return 'http://localhost:8000/';
   }
 
 

@@ -215,16 +215,22 @@ class ENRController extends Controller
         $nis = $request["nis"];
 
         $getDatos =  DB::connection('facturacion')->select("
-        select SUBSTRING ( periodo ,3 , 4 ) as anio,periodo as periodo,
-        convert(varchar, fecha_lectura_ant, 103)as fechaLecturaAnterior,
-        convert(varchar, fecha_lectura, 103)as fechaLectura,
-        DATEDIFF(day, fecha_lectura_ant, fecha_lectura) as diasFacturado,
-        CONVERT(decimal(18,2),sum (consumo * multiplicador)) as consumo,
-        numero_medidor as medidor  from fe_lecturas 
-        where (codigo_consumo = 'CO011' or codigo_consumo = 'CO012'
-        or codigo_consumo = 'CO013' or codigo_consumo = 'CO014' ) and num_suministro = ?	
-        group by periodo,fecha_lectura_ant,fecha_lectura,numero_medidor
-        ORDER BY fecha_lectura DESC",[$nis]);
+        SELECT fe_lecturas.fecha_lectura as f1,fe_lecturas.num_suministro,   
+         fe_lecturas.periodo as periodo,   
+         fe_lecturas.numero_medidor as numero_medidor,   
+         fe_lecturas.codigo_consumo as codigo_consumo,   
+         convert(varchar,fe_lecturas.fecha_lectura_ant,103) as fecha_lectura_ant,   
+          convert(varchar,fe_lecturas.fecha_lectura,103) as fecha_lectura,   
+         fe_lecturas.lectura_anterior as lectura_anterior,   
+         fe_lecturas.lectura as lectura,   
+         fe_lecturas.consumo as consumo,
+         DATEDIFF (DAY, fecha_lectura_ant , fecha_lectura ) as dias
+            FROM fe_lecturas 
+            WHERE ( fe_lecturas.num_suministro = ? ) AND  
+         ( fe_lecturas.codigo_consumo <> 'CO030' ) AND  
+         ( fe_lecturas.codigo_consumo <> 'CO031' ) AND
+         (fe_lecturas.fecha_lectura between DATEADD(MM, -12,GETDATE()) AND getdate()) 
+         ORDER BY 1 DESC",[$nis]);
 
 
         return response()->json($getDatos);
@@ -596,6 +602,8 @@ class ENRController extends Controller
         where dg.id = enr_datosGenerales.id) as nomEstado,
         (select razonEliminado from enr_bitacoraAcciones where casoENR = enr_datosGenerales.id) as razonEliminado,
         (select usuario from enr_bitacoraAcciones where casoENR = enr_datosGenerales.id) as usuarioEliminado,
+        (select convert(varchar,fecha, 103)+' '+substring(convert(varchar,fecha, 114),1,5)
+         from enr_bitacoraAcciones where casoENR = enr_datosGenerales.id) as fechaEliminado,
         convert(varchar,fechaCreacion, 103)+' '+substring(convert(varchar,fechaCreacion, 114),1,5) as fechaCreacionF,
         case when enr_datosGenerales.estado > 1
         then 

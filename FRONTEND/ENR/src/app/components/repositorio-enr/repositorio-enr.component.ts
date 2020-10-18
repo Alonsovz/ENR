@@ -240,7 +240,7 @@ export class RepositorioENRComponent implements OnInit {
         'razonEliminado' : new FormControl(''),
         'estado' : new FormControl(''),
         'usuarioEliminado'  : new FormControl(''),
-        
+        'fechaEliminado'  : new FormControl(''),
       });
 
       this.frm_ArchivoOT = new FormGroup({
