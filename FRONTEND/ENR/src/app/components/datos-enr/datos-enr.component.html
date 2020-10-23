@@ -2,7 +2,7 @@
 <div class="row" style="margin-left: 30px;margin-right: 30px;">
     <div class="col-md-6 animated fadeInRight">  
      
-        <form [formGroup]='frm_NIS'>
+        <form [formGroup]='frm_NIS' (ngSubmit)="obtenerDatos()">
             <label>
                 <img class="img-profile" src="./assets/imagenes/html.png">
                 Ingrese el N° de Suministro
@@ -187,10 +187,13 @@
                 </select>         
             </div>
             
-            <div class="col-md-2" id="diasData"><br> 
-                <div  *ngFor="let dia  of dias">
+            <div class="col-md-2"><br> 
+                <div id="diasData" style="display: none !important;">
+                  <div   *ngFor="let dia  of dias">
                     <label><i class="fa fa-calendar"></i> Tiempo Retroactivo</label>
-                    <input type="text" readonly="true" formControlName="diasRetroactivos" class="form-control" [(ngModel)]="dia.diasRetro">
+                    <input type="text" readonly="true"  formControlName="diasRetroactivos" class="form-control" [(ngModel)]="dia.diasRetro">
+                  </div>
+                    
                 </div>              
             </div>
             <div class="col-md-2"><br> 
@@ -224,14 +227,25 @@
                 <input type="text" placeholder="Días de Cobro ENR"
                 class="form-control" formControlName="diasCobro" readonly="true">
             </div>
-            <div class="col-md-6"><br>
+            <div class="col-md-4"><br>
               <label><i class="fa fa-comments"></i> Datos adicionales para control interno</label>
               <textarea rows="3" formControlName="datosAdicionales" 
               placeholder="Comentarios o datos adicionales" class="form-control">
               </textarea>
           </div>
 
-          <div class="col-md-6"><br>
+          <div class="col-md-4"><br>
+            <label><i class="fa fa-project-diagram"></i> N° de Medidor para carta</label>
+           
+            <select class="form-control" formControlName="nMedidorCarta">
+              <option value="0" set selected> Seleccione una opción</option>
+              <option *ngFor="let med of medidores"  value="{{med.numero_medidor}}">
+                {{med.numero_medidor}}
+              </option>
+          </select>
+        </div>
+
+          <div class="col-md-4"><br>
             <label><i class="fas fa-bolt"></i> Irregularidades presentadas para agregar a carta:</label>
             <textarea rows="3" formControlName="datosIrregularidades" 
             placeholder="Irregularidades que se adjuntarán a las cartas" class="form-control">
@@ -836,7 +850,7 @@ tabindex="-1" role="dialog" id="adjuntarArchivosOrden">
       <div class="modal-header">
         <h5 class="title" style="color:#0CD902 !important;">
           <img class="img-profile" src="./assets/imagenes/list.png" width=35 height=35>
-          Órdenes del suministro: 
+          Órdenes de cambio de medidor del suministro
         </h5>
         
       </div>

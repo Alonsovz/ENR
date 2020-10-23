@@ -109,6 +109,8 @@ class VerifyCsrfToken extends BaseVerifier
         'getCasosCalc',
         'getCasosNoti',
         'getCasosEl',
-        'getRepositorioEliminados'
+        'getRepositorioEliminados',
+        'getNumeroMedidor',
+        'getNumeroMedidorE'
     ];
 }

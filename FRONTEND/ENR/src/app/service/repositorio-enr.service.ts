@@ -12,6 +12,7 @@ export class RepositorioEnrService {
 
   constructor(private http: HttpClient, private url: GlobalService) { }
 
+ 
   public getRepositorioIngresados(): Observable<Repositorio[]> {
     return this.http.get(this.url.getUrlBackEnd() +'getRepositorioIngresados').pipe(map(data => data as Repositorio[]));
   }

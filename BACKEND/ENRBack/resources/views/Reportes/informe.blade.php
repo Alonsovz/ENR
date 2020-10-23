@@ -75,7 +75,7 @@ la energía consumida de forma correcta.
 
 
 <p align="justify" style="font-size:14px;margin-left:10px;margin-right:10px;">
-<b>Se detectó la siguiente irregularidad:</b> Se detecto que en el medidor número <b>{{$dat->medidor}}</b> existía una 
+<b>Se detectó la siguiente irregularidad:</b> Se detecto que en el medidor número <b>{{$dat->medidorCarta}}</b> existía una 
 condición irregular a consecuencia de encontrar:<br>
 <b>Tipo de caso ENR:</b> {{$dat->codigoENR}}<br>
 <b>Base de Cálculo:</b> {{$dat->resultado}}<br>

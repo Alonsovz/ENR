@@ -33,6 +33,7 @@ export class DatosENRComponent implements OnInit {
   frm_ArchivoOT: FormGroup;
   frm_Archivo: FormGroup;
   codigosENR : codigos[];
+  medidores : DatosENR[];
   codigosMetENR : metodologia[];
   docForm: FormGroup;
   adjuntoOrdenesForm: FormGroup;
@@ -110,6 +111,7 @@ export class DatosENRComponent implements OnInit {
       'diasRetroactivos' : new FormControl(''),
       'datosAdicionales' : new FormControl(''),
       'datosIrregularidades': new FormControl(''),
+      'nMedidorCarta': new FormControl(0),
       'idUsuario' : new FormControl(''),
     });
 
@@ -145,6 +147,12 @@ export class DatosENRComponent implements OnInit {
 
 //extraccion de datos por NIS
   public obtenerDatos(){
+    $("#diasData").hide();
+    this.frm_DatosNIS.reset();
+    this.frm_DatosNIS.controls["codTipoENR"].setValue(0);
+    this.frm_DatosNIS.controls["codTipoMetENR"].setValue(0);
+    this.frm_DatosNIS.controls["nMedidorCarta"].setValue(0);
+    
     this.docForm = this.fb.group({documentacion: this.fb.array([]),});
 
     this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
@@ -333,14 +341,28 @@ export class DatosENRComponent implements OnInit {
       }
     );
 
+
+    this.datosENR.getNumeroMedidor(datosENRdto).subscribe(data => {this.medidores = data;});
+
     
   }
 
 //asignacion de fecha fin mediante la fecha de regularización
   public asigFechaFin(){
     var fecha = this.frm_DatosNIS.controls["fechaRegular"].value;
+    var dias = this.frm_DatosNIS.controls["diasRetroactivos"].value;
 
     this.frm_DatosNIS.controls["fechaFinENR"].setValue(fecha);
+
+    if(dias == ''){
+
+    }else
+    {
+      this.dias.forEach(element => {
+        this.asigFechaInicio(element["diasRetro"]);
+         
+       });
+    }
   }
 
 //validación de fecha inicio y fin 
@@ -423,23 +445,81 @@ export class DatosENRComponent implements OnInit {
 
     //método para obtener dias segun el codigo tipo enr
   public asigDias(){
-    let datosENRdto : DatosENR = new DatosENR();
 
-    datosENRdto = this.frm_DatosNIS.value;
+    var fechaRe = this.frm_DatosNIS.controls["fechaRegular"].value;
 
+    if(fechaRe == ''){
+      
+      notie.alert({
+        type: 'error', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+        text: '<img class="img-profile alertImg" src="./assets/imagenes/problem.png" width=40 height=40> Seleccione fecha de regularización!',
+        stay: false, // optional, default = false
+        time: 5, // optional, default = 3, minimum = 1,
+        position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+      });
 
-  this.datosENR.getDiasRetroactivos(datosENRdto).subscribe(
-      response => {
-        this.dias =response;
-      },
-      err => {
-        console.log("no");
-      },
-      () => {
+      this.frm_DatosNIS.controls["codTipoENR"].setValue(0);
+    }else{
+
+      let datosENRdto : DatosENR = new DatosENR();
+
+      datosENRdto = this.frm_DatosNIS.value;
+  
+  
+    this.datosENR.getDiasRetroactivos(datosENRdto).subscribe(
+        response => {
+          this.dias =response;
+        },
+        err => {
+          console.log("no");
+        },
+        () => {
+          this.dias.forEach(element => {
+           this.asigFechaInicio(element["diasRetro"]);
+            
+          });
+          $("#diasData").show();
+      
+        },
+      );
+    }
+  
+
     
-      },
-    );
+   
   }
+
+
+public asigFechaInicio(dias){
+  var fechaRe = this.frm_DatosNIS.controls["fechaRegular"].value;
+//  var dias = this.frm_DatosNIS.controls["diasRetroactivos"].value;
+
+  var newdate = new Date(fechaRe);
+
+  var fechaIni = newdate.setDate(newdate.getDate()+1 - dias);
+
+
+  this.frm_DatosNIS.controls["fechaInicioENR"].setValue(this.formatDate(fechaIni));
+
+ this.validarFechaInicio();
+ this.validarFechas();
+}
+
+
+  formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
 
   //método para obtener dias de cobro segun el codigo tipo enr y mensaje de alerta
   //si sobrepasa el límite

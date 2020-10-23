@@ -33,6 +33,7 @@ export class RepositorioENRComponent implements OnInit {
   frm_Archivo: FormGroup;
   frmDatosENR : FormGroup;
   docForm: FormGroup;
+   medidores : DatosENR[];
   repositorioCalc : Repositorio[];
   repositorioNoti : Repositorio[];
   repositorioEl : Repositorio[];
@@ -241,6 +242,7 @@ export class RepositorioENRComponent implements OnInit {
         'estado' : new FormControl(''),
         'usuarioEliminado'  : new FormControl(''),
         'fechaEliminado'  : new FormControl(''),
+        'nMedidorCarta': new FormControl(0),
       });
 
       this.frm_ArchivoOT = new FormGroup({
@@ -1148,6 +1150,8 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
     datosENRdto = caso;
     
+    
+
     this.datosENR.getDatosbyNIS(datosENRdto).subscribe(
       response => {
       
@@ -1193,7 +1197,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
         //console.log("no");
       },
       () => {
-     
+        this.datosENR.getNumeroMedidor(datosENRdto).subscribe(data => {this.medidores = data;});
       },
     );
 
@@ -1290,6 +1294,8 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
         ////console.log(this.cod);
       }
     );
+
+   
 
   }
 
@@ -1617,6 +1623,7 @@ public validarFechas(){
 
     //console.log(caso);
 
+   
     this.repositorioENR.getDatosENR(datosENRdto).subscribe(
       response => {
       

@@ -195,4 +195,7 @@ Route::get('/', function () {
     Route::any('getCasosNoti', 'DashboardController@getCasosNoti');
     Route::any('getCasosEl', 'DashboardController@getCasosEl');
     Route::any('getRepositorioEliminados', 'ENRController@getRepositorioEliminados');
+
+    Route::post('getNumeroMedidor', 'ENRController@getNumeroMedidor');
+    Route::post('getNumeroMedidorE', 'ENRController@getNumeroMedidorE');
     

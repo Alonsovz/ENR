@@ -64,7 +64,8 @@ class DashboardController extends Controller
         inner join fe_aparatos feApa on feApa.num_suministro = fes.num_suministro
         inner join EDESAL_CALIDAD.dbo.ens_transformadores as feTran on feTran.codigo_trafo = feApa.codigo_elemento
          inner join EDESAL_CALIDAD.dbo.fe_red_maestro_redes as fr on fr.codigo_red_electrica = feTran.codigo_red
-        where feApa.num_suministro =dg.num_suministro
+        where feApa.num_suministro =dg.num_suministro and feApa.bandera_activo = 1
+        and dg.idEliminado = 1
         group by fr.descripcion_red_electrica
         ");
 

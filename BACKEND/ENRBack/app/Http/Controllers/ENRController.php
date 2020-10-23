@@ -262,6 +262,7 @@ class ENRController extends Controller
         $usuario_creacion = $request["idUsuario"];
         $datosAdicionales = $request["datosAdicionales"];
         $datosIrregulares = $request["datosIrregularidades"];
+        $medidorCarta = $request["nMedidorCarta"];
 
          //convertir fecha primer notificacion enr
         $fecha1 = date_create_from_format('Y-m-d',$fechaPrimeraNoti);
@@ -301,6 +302,7 @@ class ENRController extends Controller
                          'fechaCreacion'=>date('Ymd H:i:s'),
                          'datosAdicionales'=>$datosAdicionales,
                          'datosIrregulares'=>$datosIrregulares,
+                         'medidorCarta'=>$medidorCarta,
                          ]);
 
 
@@ -669,7 +671,7 @@ class ENRController extends Controller
         $diasCobro = $request["diasCobro"];
         $datosAdicionales = $request["datosAdicionales"];
         $datosIrregulares = $request["datosIrregularidades"];
-
+        $medidorCarta = $request["nMedidorCarta"];
          //convertir fecha primer notificacion enr
         $fecha1 = date_create_from_format('Y-m-d',$fechaPrimeraNoti);
 
@@ -705,6 +707,7 @@ class ENRController extends Controller
                          'idEliminado'=>1,
                          'datosAdicionales'=>$datosAdicionales,
                          'datosIrregulares'=>$datosIrregulares,
+                         'medidorCarta'=>$medidorCarta,
                          ]);
 
 
@@ -2068,6 +2071,7 @@ class ENRController extends Controller
             tip.TipoENR as codigoENR,
             dg.datosIrregulares as irregularidades,
             dg.datosAdicionales as adicionales,
+            dg.medidorCarta as medidorCarta,
             convert(varchar(10), dg.fechaRegularizacion, 103) as fechaRegularizacion,
             (select sum(diasFacturados) from enr_periodosEvaluados where casoENR = dg.id) as diasHistorico,
             str(((select sum(consFacturado) from enr_periodosEvaluados where casoENR = dg.id)
@@ -2219,7 +2223,8 @@ class ENRController extends Controller
             and feCol.codigo_poblacion = fes.codigo_poblacion
             and feCol.codigo_municipio = fes.codigo_municipio 
             and feCol.codigo_departamento = fes.codigo_departamento
-            where dg.estado = 3 and dg.fechaRegularizacion between '".$fechaIn." 00:00:00' and '".$fechaFin." 23:59:59' 
+            where dg.estado = 3 and dg.idEliminado = 1
+            and dg.fechaRegularizacion between '".$fechaIn." 00:00:00' and '".$fechaFin." 23:59:59' 
             ");
 
 
@@ -2248,5 +2253,18 @@ class ENRController extends Controller
         
           return response()->json($insertar); 
         
+    }
+
+
+    public function getNumeroMedidor(Request $request)
+    {
+        $nis = $request["nis"];
+
+        $getDatos =  DB::connection('facturacion')->select("
+        select LTRIM(RTRIM(numero_medidor)) as numero_medidor from FE_APARATOS where num_suministro = '".$nis."'");
+
+
+        return response()->json($getDatos);
+
     }
 }
