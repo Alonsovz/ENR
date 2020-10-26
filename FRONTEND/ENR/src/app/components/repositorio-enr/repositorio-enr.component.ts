@@ -78,6 +78,7 @@ export class RepositorioENRComponent implements OnInit {
   frm_Caso2 : FormGroup;
   lecturasArray : Repositorio[];
   tarifasFechas : Repositorio[];
+  totalesCobro : Repositorio[];
   consumoEstimado : Repositorio[];
   consumoRegistrado : Repositorio[];
   consumoENR : Repositorio[];
@@ -1197,7 +1198,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
         //console.log("no");
       },
       () => {
-        this.datosENR.getNumeroMedidor(datosENRdto).subscribe(data => {this.medidores = data;});
+      this.datosENR.getNumeroMedidor(datosENRdto).subscribe(data => {this.medidores = data;});
       },
     );
 
@@ -3918,6 +3919,642 @@ public eliminarLectura(i, periodo){
     this.frm_LecturasEvaluarTotales.controls["numeroCaso"].setValue(id);
   }
 
+  public datosEditarCalc(caso,tarifa){
+    ////console.log(caso);
+    this.datosGenerales = caso;
+    this.docForm = this.fb.group({documentacion: this.fb.array([]),});
+
+    this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
+    this.ordenNumeroG = caso;
+
+    
+    let datosENRdto : DatosENR = new DatosENR();
+
+    datosENRdto = caso;
+    
+    
+    this.verDatosCalculo(datosENRdto, tarifa);
+
+    this.datosENR.getDatosbyNIS(datosENRdto).subscribe(
+      response => {
+      
+        this.datos = response;
+       // $("#dataNis").show();
+      },
+      err => {
+        ////console.log("no");
+      },
+      () => {
+      if(this.datos.length < 1){
+        notie.alert({
+          type: 'error',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/nofound.png" width=40 height=40> Problema procesando datos del NIS',
+          stay: false, 
+          time: 2, 
+          position: 'top' 
+        });
+      }
+      },
+    );
+
+    this.datosENR.getDiasRetroactivos(datosENRdto).subscribe(
+      response => {
+        this.dias =response;
+      },
+      err => {
+      // // //console.log("no");
+      },
+      () => {
+    
+      },
+    );
+
+
+    this.repositorioENR.getDatosENR(datosENRdto).subscribe(
+      response => {
+      
+        this.datosENRLista = response;
+       // $("#dataNis").show();
+      },
+      err => {
+        //console.log("no");
+      },
+      () => {
+      this.datosENR.getNumeroMedidor(datosENRdto).subscribe(data => {this.medidores = data;});
+      },
+    );
+
+    this.repositorioENR.getAdjuntosOrdenesENR(datosENRdto).subscribe(
+      response => {
+  
+        this.adjuntosFile = response;
+        const table: any = $('#adjuntos_Tbl');
+        this.dataTable = table.DataTable();
+        this.dataTable.destroy();
+    
+        this.chRef.detectChanges();
+        
+        this.dataTable = table.DataTable({
+          'iDisplayLength' : 3,
+        'responsive': true,
+          'order' :[[0,'desc']],
+  
+        'language' : {
+          'sProcessing':     'Procesando...',
+          'sLengthMenu':     'Mostrar _MENU_ registros',
+          'sZeroRecords':    'No se encontraron resultados',
+          'sEmptyTable':     'Ningún dato disponible en esta tabla',
+          'sInfo':           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
+          'sInfoEmpty':      'Mostrando registros del 0 al 0 de un total de 0 registros',
+          'sInfoFiltered':   '(filtrado de un total de _MAX_ registros)',
+          'sInfoPostFix':    '',
+          'sSearch':         'Buscar:',
+          'sUrl':            '',
+          'sInfoThousands':  ',',
+          'sLoadingRecords': 'Cargando...',
+          'oPaginate': {
+              'sFirst':    'Primero',
+              'sLast':     'Último',
+              'sNext':     'Siguiente',
+              'sPrevious': 'Anterior'
+          },
+          'oAria': {
+              'sSortAscending':  ': Activar para ordenar la columna de manera ascendente',
+              'sSortDescending': ': Activar para ordenar la columna de manera descendente'
+          }
+        }
+        });
+      },
+      err => {},
+      () => {
+        ////console.log(this.cod);
+      }
+    );
+
+    this.datosENR.getOrdenesbyNIS(datosENRdto).subscribe(
+      response => {
+
+        this.ordenes = response;
+        const table: any = $('#ordenesTbl');
+        this.dataTable = table.DataTable();
+        this.dataTable.destroy();
+    
+        this.chRef.detectChanges();
+        
+        this.dataTable = table.DataTable({
+        'iDisplayLength' : 3,
+        'responsive': true,
+          'order' :[[0,'desc']],
+
+        'language' : {
+          'sProcessing':     'Procesando...',
+          'sLengthMenu':     'Mostrar _MENU_ registros',
+          'sZeroRecords':    'No se encontraron resultados',
+          'sEmptyTable':     'Ningún dato disponible en esta tabla',
+          'sInfo':           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
+          'sInfoEmpty':      'Mostrando registros del 0 al 0 de un total de 0 registros',
+          'sInfoFiltered':   '(filtrado de un total de _MAX_ registros)',
+          'sInfoPostFix':    '',
+          'sSearch':         'Buscar:',
+          'sUrl':            '',
+          'sInfoThousands':  ',',
+          'sLoadingRecords': 'Cargando...',
+          'oPaginate': {
+              'sFirst':    'Primero',
+              'sLast':     'Último',
+              'sNext':     'Siguiente',
+              'sPrevious': 'Anterior'
+          },
+          'oAria': {
+              'sSortAscending':  ': Activar para ordenar la columna de manera ascendente',
+              'sSortDescending': ': Activar para ordenar la columna de manera descendente'
+          }
+        }
+        });
+      },
+      err => {},
+      () => {
+        ////console.log(this.cod);
+      }
+    );
+
+     
+  }
+
+  public verDatosCalculo(caso, tarifa){
+    $("#divCobroENR").hide();
+    $("#divCalculoENR").hide();
+
+    
+
+    this.repositorioENR.getTotalesCobro(caso).subscribe(
+      response => {
+        this.totalesCobro =response;
+      },
+      err => {
+      },
+      () => {
+      },
+    );
+    this.repositorioENR.getTarifasFechasCalculo(caso).subscribe(
+      response => {
+        this.tarifasFechas =response;
+      },
+      err => {
+      },
+      () => {
+      },
+    );
+
+
+    
+    this.repositorioENR.getTarifasFechasTotalCalculo(caso).subscribe(
+      response => {
+        this.tarifasFechasTotal =response;
+      },
+      err => {
+      },
+      () => {
+      },
+    );
+
+
+    this.repositorioENR.getConsumoEstimadoCalculo(caso).subscribe(
+      response => {
+        this.consumoEstimado =response;
+      },
+      err => {
+      
+      },
+      () => {
+    
+
+      },
+    );
+
+    
+    this.repositorioENR.getConsumoEstimadoTotalCalculo(caso).subscribe(
+      response => {
+        this.consumoEstimadoTotal =response;
+      },
+      err => {
+      
+      },
+      () => {
+    
+      },
+    );
+
+
+    
+    this.repositorioENR.getConsumoRegistradoCalculo(caso).subscribe(
+      response => {
+        this.consumoRegistrado =response;
+      },
+      err => {
+      
+      },
+      () => {
+  
+
+      },
+    );
+
+      
+    this.repositorioENR.getConsumoRegistradoTotalCalculo(caso).subscribe(
+      response => {
+        this.consumoRegistradoTotal =response;
+      },
+      err => {
+      
+      },
+      () => {
+    
+      },
+    );
+
+    this.repositorioENR.getConsumoENRCalculo(caso).subscribe(
+      response => {
+        this.consumoENR =response;
+      },
+      err => {
+      
+      },
+      () => {
+      },
+      );
+
+    this.repositorioENR.getConsumoENRTotalCalculo(caso).subscribe(
+      response => {
+        this.consumoENRTotal =response;
+      },
+      err => {
+      
+      },
+      () => {
+    
+      },
+    );
+
+    if(tarifa === '1R'){
+      this.repositorioENR.getConsumoENR1erBloqueCalculo(caso).subscribe(
+        response => {
+          this.consumoENR1erBloque =response;
+        },
+        err => {
+        
+        },
+        () => {
+      
+        },
+      );
+
+      
+      this.repositorioENR.getConsumoENR2doBloqueCalculo(caso).subscribe(
+        response => {
+          this.consumoENR2doBloque =response;
+        },
+        err => {
+        
+        },
+        () => {
+      
+        },
+      );
+
+      this.repositorioENR.getConsumoENR3erBloqueCalculo(caso).subscribe(
+        response => {
+          this.consumoENR3erBloque =response;
+        },
+        err => {
+        
+        },
+        () => {  },
+        );
+
+
+        this.repositorioENR.getConsumoENR1erBloqueTotalCalculo(caso).subscribe(
+          response => {
+            this.consumoENR1erBloqueTotal =response;
+          },
+          err => {
+          
+          },
+          () => {
+        
+          },
+        );
+
+
+        this.repositorioENR.getConsumoENR2doBloqueTotalCalculo(caso).subscribe(
+          response => {
+            this.consumoENR2doBloqueTotal =response;
+          },
+          err => {
+          
+          },
+          () => {
+        
+          },
+        );
+
+
+        this.repositorioENR.getConsumoENR3erBloqueTotalCalculo(caso).subscribe(
+          response => {
+            this.consumoENR3erBloqueTotal =response;
+          },
+          err => {
+          
+          },
+          () => {
+
+          },
+          );
+
+
+          this.repositorioENR.getConsumoENRTotalFechasCalculo(caso).subscribe(
+            response => {
+              this.consumoENRTotalGlobalFechas =response;
+            },
+            err => {
+            
+            },
+            () => {
+          
+            },
+          );
+
+          this.repositorioENR.getConsumoENRTotalGlobalCalculo(caso).subscribe(
+            response => {
+              this.consumoENRTotalGlobal =response;
+            },
+            err => {
+            
+            },
+            () => {
+            },
+            );
+
+            this.repositorioENR.getConsumoENR1erBloqueEnergiaCalculo(caso).subscribe(
+              response => {
+                this.consumoENR1erBloqueEnergia =response;
+              },
+              err => {
+              
+              },
+              () => {
+            
+              },
+            );
+    
+    
+            this.repositorioENR.getConsumoENR2doBloqueEnergiaCalculo(caso).subscribe(
+              response => {
+                this.consumoENR2doBloqueEnergia =response;
+              },
+              err => {
+              
+              },
+              () => {
+            
+              },
+            );
+    
+    
+            this.repositorioENR.getConsumoENR3erBloqueEnergiaCalculo(caso).subscribe(
+              response => {
+                this.consumoENR3erBloqueEnergia =response;
+              },
+              err => {
+              
+              },
+              () => {
+              },
+              );
+
+
+              this.repositorioENR.getConsumoENR1erBloqueTotalEnergiaCalculo(caso).subscribe(
+                response => {
+                  this.consumoENR1erBloqueTotalEnergia =response;
+                },
+                err => {
+                
+                },
+                () => {
+              
+                },
+              );
+      
+      
+              this.repositorioENR.getConsumoENR2doBloqueTotalEnergiaCalculo(caso).subscribe(
+                response => {
+                  this.consumoENR2doBloqueTotalEnergia =response;
+                },
+                err => {
+                
+                },
+                () => {
+              
+                },
+              );
+      
+      
+              this.repositorioENR.getConsumoENR3erBloqueTotalEnergiaCalculo(caso).subscribe(
+                response => {
+                  this.consumoENR3erBloqueTotalEnergia =response;
+                },
+                err => {
+                
+                },
+                () => {  },
+                );
+
+                this.repositorioENR.getConsumoENRTotalFechasEnergiaCalculo(caso).subscribe(
+                  response => {
+                    this.consumoENRTotalGlobalFechasEnergia =response;
+                  },
+                  err => {
+                  
+                  },
+                  () => {
+                
+                  },
+                );
+
+
+                this.repositorioENR.getConsumoENRTotalGlobalEnergiaCalculo(caso).subscribe(
+                  response => {
+                    this.consumoENRTotalGlobalEnergia =response;
+                  },
+                  err => {
+                  
+                  },
+                  () => {
+                
+                  },
+                );
+
+
+                this.repositorioENR.getConsumoENR1erBloqueDistribucionCalculo(caso).subscribe(
+                  response => {
+                    this.consumoENR1erBloqueDistribucion =response;
+                  },
+                  err => {
+                  
+                  },
+                  () => {
+                
+                  },
+                );
+        
+        
+                this.repositorioENR.getConsumoENR2doBloqueDistribucionCalculo(caso).subscribe(
+                  response => {
+                    this.consumoENR2doBloqueDistribucion =response;
+                  },
+                  err => {
+                  
+                  },
+                  () => {
+                
+                  },
+                );
+        
+        
+                this.repositorioENR.getConsumoENR3erBloqueDistribucionCalculo(caso).subscribe(
+                  response => {
+                    this.consumoENR3erBloqueDistribucion =response;
+                  },
+                  err => {
+                  
+                  },
+                  () => { },
+                  );
+
+                  this.repositorioENR.getConsumoENR1erBloqueTotalDistribucionCalculo(caso).subscribe(
+                    response => {
+                      this.consumoENR1erBloqueTotalDistribucion =response;
+                    },
+                    err => {
+                    
+                    },
+                    () => {
+                  
+                    },
+                  );
+          
+          
+                  this.repositorioENR.getConsumoENR2doBloqueTotalDistribucionCalculo(caso).subscribe(
+                    response => {
+                      this.consumoENR2doBloqueTotalDistribucion =response;
+                    },
+                    err => {
+                    
+                    },
+                    () => {
+                  
+                    },
+                  );
+          
+          
+                  this.repositorioENR.getConsumoENR3erBloqueTotalDistribucionCalculo(caso).subscribe(
+                    response => {
+                      this.consumoENR3erBloqueTotalDistribucion =response;
+                    },
+                    err => {
+                    
+                    },
+                    () => { },
+                    );
+
+
+                    this.repositorioENR.getConsumoENRTotalFechasDistribucionCalculo(caso).subscribe(
+                      response => {
+                        this.consumoENRTotalGlobalFechasDistribucion =response;
+                      },
+                      err => {
+                      
+                      },
+                      () => {
+                    
+                      },
+                    );
+    
+    
+                    this.repositorioENR.getConsumoENRTotalGlobalDistribucionCalculo(caso).subscribe(
+                      response => {
+                        this.consumoENRTotalGlobalDistribucion =response;
+                      },
+                      err => {
+                      
+                      },
+                      () => {},
+                      );
+    }
+
+
+    if(tarifa == '1G'){
+           
+
+            
+      this.repositorioENR.getConsumoENRBloqueDistribucion1GCalculo(caso).subscribe(
+        response => {
+          this.consumoENRTotalGlobalFechasDistribucion =response;
+        },
+        err => {
+        
+        },
+        () => {
+        },
+      );
+
+      this.repositorioENR.getConsumoENRBloqueEnergia1GCalculo(caso).subscribe(
+        response => {
+          this.consumoENR3erBloqueTotalEnergia =response;
+        },
+        err => {
+        
+        },
+        () => {
+          this.repositorioENR.getConsumoENRBloqueEnergia1GTotalCalculo(caso).subscribe(
+            response => {
+              this.consumoENR1erBloqueTotalEnergia =response;
+            },
+            err => {
+            },
+            () => {
+              this.repositorioENR.getConsumoENRBloqueDistribucion1GTotalCalculo(caso).subscribe(
+                response => {
+                  this.consumoENR1erBloqueTotalDistribucion =response;
+                },
+                err => {
+                
+                },
+                () => {
+                },
+              );
+              
+             
+            },
+          );
+         
+        },
+      );
+    }
+
+  }
+
+
+
+ public mostrardtCalculo(){
+  $("#divCalculoENR").show();
+  $("#divCobroENR").hide();
+ }
+
+ public mostrardtCobro(){
+  $("#divCobroENR").show();
+  $("#divCalculoENR").hide();
+}
   
 }
 

@@ -423,6 +423,190 @@ export class RepositorioEnrService {
     return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'savePeriodosSeleccionadosCaso6', datos).pipe(map(data => data as Repositorio));
   }
 
+  public getTarifasFechasCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getTarifasFechasCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getTarifasFechasTotalCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getTarifasFechasTotalCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+
   
+  public getConsumoEstimadoCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoEstimadoCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getConsumoEstimadoTotalCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoEstimadoTotalCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+
+  public getConsumoRegistradoCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoRegistradoCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getConsumoRegistradoTotalCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoRegistradoTotalCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+
+  public getConsumoENRCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getConsumoENRTotalCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRTotalCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getConsumoENR1erBloqueCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR1erBloqueCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getConsumoENR2doBloqueCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR2doBloqueCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getConsumoENR3erBloqueCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR3erBloqueCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+
+  public getConsumoENR1erBloqueTotalCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR1erBloqueTotalCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getConsumoENR2doBloqueTotalCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR2doBloqueTotalCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getConsumoENR3erBloqueTotalCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR3erBloqueTotalCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getConsumoENRTotalFechasCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRTotalFechasCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getConsumoENRTotalGlobalCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRTotalGlobalCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getConsumoENR1erBloqueEnergiaCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR1erBloqueEnergiaCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+  public getConsumoENR2doBloqueEnergiaCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR2doBloqueEnergiaCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+  public getConsumoENR3erBloqueEnergiaCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR3erBloqueEnergiaCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+
+  public getConsumoENR1erBloqueTotalEnergiaCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR1erBloqueTotalEnergiaCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+  public getConsumoENR2doBloqueTotalEnergiaCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR2doBloqueTotalEnergiaCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+  public getConsumoENR3erBloqueTotalEnergiaCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR3erBloqueTotalEnergiaCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+  
+
+  public getConsumoENRTotalFechasEnergiaCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRTotalFechasEnergiaCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+  public getConsumoENRTotalGlobalEnergiaCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRTotalGlobalEnergiaCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+
+  public getConsumoENR1erBloqueDistribucionCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR1erBloqueDistribucionCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+  public getConsumoENR2doBloqueDistribucionCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR2doBloqueDistribucionCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+  public getConsumoENR3erBloqueDistribucionCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR3erBloqueDistribucionCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+
+  public getConsumoENR1erBloqueTotalDistribucionCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR1erBloqueTotalDistribucionCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+  public getConsumoENR2doBloqueTotalDistribucionCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR2doBloqueTotalDistribucionCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+  public getConsumoENR3erBloqueTotalDistribucionCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENR3erBloqueTotalDistribucionCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+
+  public getConsumoENRTotalFechasDistribucionCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRTotalFechasDistribucionCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+  public getConsumoENRTotalGlobalDistribucionCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRTotalGlobalDistribucionCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getConsumoENRBloqueDistribucion1GCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRBloqueDistribucion1GCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+  public getConsumoENRBloqueEnergia1GCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRBloqueEnergia1GCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+
+  public getConsumoENRBloqueEnergia1GTotalCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRBloqueEnergia1GTotalCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+  public getConsumoENRBloqueDistribucion1GTotalCalculo(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getConsumoENRBloqueDistribucion1GTotalCalculo', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+  public getTotalesCobro(kwh): Observable<Repositorio[]> {
+    //console.log(nis);
+    return this.http.post<Repositorio[]>(this.url.getUrlBackEnd() + 'getTotalesCobro', kwh).pipe(map(data => data as Repositorio[]));
+  }
+
+
 }
 

@@ -199,3 +199,57 @@ Route::get('/', function () {
     Route::post('getNumeroMedidor', 'ENRController@getNumeroMedidor');
     Route::post('getNumeroMedidorE', 'ENRController@getNumeroMedidorE');
     
+    Route::post('getTarifasFechasCalculo', 'ENRController@getTarifasFechasCalculo');
+    Route::post('getTarifasFechasTotalCalculo', 'ENRController@getTarifasFechasTotalCalculo');
+
+    Route::post('getConsumoEstimadoCalculo', 'ENRController@getConsumoEstimadoCalculo');
+    Route::post('getConsumoEstimadoTotalCalculo', 'ENRController@getConsumoEstimadoTotalCalculo');
+
+    Route::post('getConsumoRegistradoCalculo', 'ENRController@getConsumoRegistradoCalculo');
+    Route::post('getConsumoRegistradoTotalCalculo', 'ENRController@getConsumoRegistradoTotalCalculo');
+
+    Route::post('getConsumoENRCalculo', 'ENRController@getConsumoENRCalculo');
+    Route::post('getConsumoENRTotalCalculo', 'ENRController@getConsumoENRTotalCalculo');
+
+    Route::post('getConsumoENR1erBloqueCalculo', 'ENRController@getConsumoENR1erBloqueCalculo');
+    Route::post('getConsumoENR2doBloqueCalculo', 'ENRController@getConsumoENR2doBloqueCalculo');
+    Route::post('getConsumoENR3erBloqueCalculo', 'ENRController@getConsumoENR3erBloqueCalculo');
+
+    Route::post('getConsumoENR1erBloqueTotalCalculo', 'ENRController@getConsumoENR1erBloqueTotalCalculo');
+    Route::post('getConsumoENR2doBloqueTotalCalculo', 'ENRController@getConsumoENR2doBloqueTotalCalculo');
+    Route::post('getConsumoENR3erBloqueTotalCalculo', 'ENRController@getConsumoENR3erBloqueTotalCalculo');
+
+    Route::post('getConsumoENRTotalFechasCalculo', 'ENRController@getConsumoENRTotalFechasCalculo');
+    Route::post('getConsumoENRTotalGlobalCalculo', 'ENRController@getConsumoENRTotalGlobalCalculo');
+    
+    Route::post('getConsumoENR1erBloqueEnergiaCalculo', 'ENRController@getConsumoENR1erBloqueEnergiaCalculo');
+    Route::post('getConsumoENR2doBloqueEnergiaCalculo', 'ENRController@getConsumoENR2doBloqueEnergiaCalculo');
+    Route::post('getConsumoENR3erBloqueEnergiaCalculo', 'ENRController@getConsumoENR3erBloqueEnergiaCalculo');
+
+    Route::post('getConsumoENR1erBloqueTotalEnergiaCalculo', 'ENRController@getConsumoENR1erBloqueTotalEnergiaCalculo');
+    Route::post('getConsumoENR2doBloqueTotalEnergiaCalculo', 'ENRController@getConsumoENR2doBloqueTotalEnergiaCalculo');
+    Route::post('getConsumoENR3erBloqueTotalEnergiaCalculo', 'ENRController@getConsumoENR3erBloqueTotalEnergiaCalculo');
+
+    Route::post('getConsumoENRTotalGlobalEnergiaCalculo', 'ENRController@getConsumoENRTotalGlobalEnergiaCalculo');
+    Route::post('getConsumoENRTotalFechasEnergiaCalculo', 'ENRController@getConsumoENRTotalFechasEnergiaCalculo');
+
+
+    Route::post('getConsumoENR1erBloqueDistribucionCalculo', 'ENRController@getConsumoENR1erBloqueDistribucionCalculo');
+    Route::post('getConsumoENR2doBloqueDistribucionCalculo', 'ENRController@getConsumoENR2doBloqueDistribucionCalculo');
+    Route::post('getConsumoENR3erBloqueDistribucionCalculo', 'ENRController@getConsumoENR3erBloqueDistribucionCalculo');
+
+    Route::post('getConsumoENR1erBloqueTotalDistribucionCalculo', 'ENRController@getConsumoENR1erBloqueTotalDistribucionCalculo');
+    Route::post('getConsumoENR2doBloqueTotalDistribucionCalculo', 'ENRController@getConsumoENR2doBloqueTotalDistribucionCalculo');
+    Route::post('getConsumoENR3erBloqueTotalDistribucionCalculo', 'ENRController@getConsumoENR3erBloqueTotalDistribucionCalculo');
+
+    Route::post('getConsumoENRTotalFechasDistribucionCalculo', 'ENRController@getConsumoENRTotalFechasDistribucionCalculo');
+    Route::post('getConsumoENRTotalGlobalDistribucionCalculo', 'ENRController@getConsumoENRTotalGlobalDistribucionCalculo');
+
+
+    Route::post('getConsumoENRBloqueDistribucion1GCalculo', 'ENRController@getConsumoENRBloqueDistribucion1GCalculo');
+    Route::post('getConsumoENRBloqueEnergia1GCalculo', 'ENRController@getConsumoENRBloqueEnergia1GCalculo');
+    Route::post('getConsumoENRBloqueEnergia1GTotalCalculo', 'ENRController@getConsumoENRBloqueEnergia1GTotalCalculo');
+    Route::post('getConsumoENRBloqueDistribucion1GTotalCalculo', 'ENRController@getConsumoENRBloqueDistribucion1GTotalCalculo');
+
+    
+    Route::post('getTotalesCobro', 'ENRController@getTotalesCobro');
