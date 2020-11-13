@@ -328,7 +328,7 @@ class ENRController extends Controller
                         'idCasoENR' => $ultimoCaso->id ,
                          'titulo' => $docSave->nombreDoc,
                          'tipo' => $docSave->tipoPrueba,
-                         'ruta' => $docSave->archivo,
+                         'ruta' => strtolower($docSave->archivo),
                          'fechaCreacion'=>date('Ymd H:i:s'),
                          'idEliminado'=>1,
                          'usuarioCreacion'=>$user->usuario_creacion,
@@ -360,7 +360,7 @@ class ENRController extends Controller
                        ->insert([
                       'correlativoOrden' => $docSave->ordenN ,
                        'tipo' => $docSave->tipoAdjuntoOrden,
-                       'ruta' => $docSave->file,
+                       'ruta' => strtolower($docSave->file),
                        'fechaCreacion'=>date('Ymd H:i:s'),
                        'titulo'=>$docSave->nombreDocOrden,
                        'idEliminado'=>1,
@@ -479,7 +479,7 @@ class ENRController extends Controller
       
         $file = $request->file('file');
 
-        $nombreoriginal = $file->getClientOriginalName();
+        $nombreoriginal = strtolower($file->getClientOriginalName());
         $file->move('files/',(string)$nombreoriginal);
 
         return response()->json($nombreoriginal);
@@ -511,7 +511,7 @@ class ENRController extends Controller
 
     public function descargarArchivo(Request $request){
 
-        $file = $request["ruta"];
+        $file = strtolower($request["ruta"]);
 
         if(file_exists(public_path('files/'.$file))){
             return response()->download(public_path('files/'.$file));
@@ -525,7 +525,7 @@ class ENRController extends Controller
 
     public function eliminarArchivo(Request $request){
 
-        $file = $request["rutaEliminar"];
+        $file = strtolower($request["rutaEliminar"]);
         $id = $request["idEliminar"];
        
         
@@ -541,9 +541,9 @@ class ENRController extends Controller
     
     public function eliminarArchivoENR(Request $request){
 
-        $file = $request["rutaEliminar"];
+        $file = strtolower($request["rutaEliminar"]);
         $id = $request["idEliminar"];
-        $user = 151;
+      
         
         $delete =  DB::connection('facturacion')->table('enr_documentacion')->where('id', $id)
                          ->update([
@@ -622,9 +622,9 @@ class ENRController extends Controller
 
     public function cambiarScanENR(Request $request){
 
-        $file = $request["nuevoScanENR"];
+        $file = strtolower($request["nuevoScanENR"]);
         $id = $request["idCambio"];
-        $fileViejo = $request["rutaVieja"];
+        $fileViejo = strtolower($request["rutaVieja"]);
         
         $delete =  DB::connection('facturacion')->table('enr_datosGenerales')->where('id', $id)
                          ->update([
@@ -738,7 +738,7 @@ class ENRController extends Controller
                         'idCasoENR' => $docSave->caso ,
                          'titulo' => $docSave->nombreDoc,
                          'tipo' => $docSave->tipoPrueba,
-                         'ruta' => $docSave->archivo,
+                         'ruta' => strtolower($docSave->archivo),
                          'fechaCreacion'=>date('Ymd H:i:s'),
                          'idEliminado'=>1,
                          'usuarioCreacion'=>$user->usuario_creacion,

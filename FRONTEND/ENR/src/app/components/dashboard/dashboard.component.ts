@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
     private pagosENR: GlobalService
   ) { }
 
-  ngOnInit() {
+  ngOnInit() { 
 
     this.pagosENR.getPagosENR().subscribe(
       response => {

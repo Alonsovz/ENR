@@ -16,4 +16,5 @@ export class DatosENR {
    lectura_anterior: string;
    consumo : string;
    diasRetro: number;
+   estado : number;
 }

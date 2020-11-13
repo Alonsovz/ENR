@@ -16,7 +16,7 @@ import { RepositorioENRComponent } from './components/repositorio-enr/repositori
 import { LoginComponent } from './login/login.component';
 import { CredencialesGuard } from './login/credenciales.guard';
 import { RepositorioGlobalComponent } from './components/repositorio-global/repositorio-global.component';
-
+import  {  PdfViewerModule  }  from  'ng2-pdf-viewer';
 
 @NgModule({
   declarations: [
@@ -39,6 +39,7 @@ import { RepositorioGlobalComponent } from './components/repositorio-global/repo
     NgxMaskModule.forRoot(),
     ReactiveFormsModule,
     FormsModule,
+    PdfViewerModule,
   ],
   providers: [
     CredencialesGuard

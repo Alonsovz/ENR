@@ -825,12 +825,14 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
 //método que obtiene la URL del archivo a ver y valida el tipo de extension
   public adjuntosOrdenesVer(adjunto, ext){
-    ////console.log(adjunto);
-    var url = this.url.getUrlBackEnd()+'files/'+adjunto;
+
+    var url = this.url.getUrlBackEnd()+'files/'+adjunto+'';
   
     this.adjuntoVer =  this.sanitizer.bypassSecurityTrustResourceUrl(url);
-  
+
     this.extension = ext;
+
+    console.log( this.adjuntoVer);
   }
 
 //método que obtiene los parametros del archivo a eliminar del caso ENR
@@ -1141,6 +1143,17 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
   public datosEditar(caso){
     ////console.log(caso);
 
+    $("#tabDatosNis").addClass("active");
+    $("#tabDatosOt").removeClass("active");
+    $("#tabDatosENR").removeClass("active");
+    $("#tabDatosAd").removeClass("active");
+
+
+    $("#datosNIS").addClass("show active");
+    $("#ordenesNIS").removeClass("show active");
+    $("#datosENR").removeClass("show active");
+    $("#docAdjuntos").removeClass("show active");
+
     this.docForm = this.fb.group({documentacion: this.fb.array([]),});
 
     this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
@@ -1292,7 +1305,8 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
       },
       err => {},
       () => {
-        ////console.log(this.cod);
+        $("#btnCerrarProcesoDatosIng").click();
+       $("#openModalDatosIng").click();
       }
     );
 
@@ -3919,8 +3933,36 @@ public eliminarLectura(i, periodo){
     this.frm_LecturasEvaluarTotales.controls["numeroCaso"].setValue(id);
   }
 
-  public datosEditarCalc(caso,tarifa){
-    ////console.log(caso);
+  public datosEditarCalc(caso,tarifa, repo){
+
+    $("#tabDatosNisC").addClass("active");
+    $("#tabDatosOtC").removeClass("active");
+    $("#tabDatosENRC").removeClass("active");
+    $("#tabDatosCalC").removeClass("active");
+    $("#tabDatosAdC").removeClass("active");
+
+
+    $("#datosNISCN").addClass("show active");
+    $("#ordenesNISCN").removeClass("show active");
+    $("#datosENRCN").removeClass("show active");
+    $("#datosCalculoENRCN").removeClass("show active");
+    $("#docAdjuntosCN").removeClass("show active");
+
+
+    $("#tabDatosNisN").addClass("active");
+    $("#tabDatosOtN").removeClass("active");
+    $("#tabDatosENRN").removeClass("active");
+    $("#tabDatosCalN").removeClass("active");
+    $("#tabDatosAdN").removeClass("active");
+
+
+    $("#datosNISN").addClass("show active");
+    $("#ordenesNISN").removeClass("show active");
+    $("#datosENRN").removeClass("show active");
+    $("#datosCalculoENR").removeClass("show active");
+    $("#docAdjuntosN").removeClass("show active");
+
+    var repositorio = repo;
     this.datosGenerales = caso;
     this.docForm = this.fb.group({documentacion: this.fb.array([]),});
 
@@ -4074,18 +4116,34 @@ public eliminarLectura(i, periodo){
       },
       err => {},
       () => {
-        ////console.log(this.cod);
+        if(repositorio == '2'){
+          $("#btnCerrarProcesoDatosCalc").click();
+          $("#openModalDatosCalculo").click();
+        }
+
+        if(repositorio == '3'){
+          $("#btnCerrarProcesoDatosNoti").click();
+          $("#openModalDatosNoti").click();
+        }
+
+        if(repositorio == '4'){
+          $("#btnCerrarProcesoDatosEli").click();
+          $("#openModalDatosEli").click();
+        }
+       
       }
     );
 
-     
+    
+    
   }
 
   public verDatosCalculo(caso, tarifa){
     $("#divCobroENR").hide();
     $("#divCalculoENR").hide();
 
-    
+    $("#divCobroENRC").hide();
+    $("#divCalculoENRC").hide();
 
     this.repositorioENR.getTotalesCobro(caso).subscribe(
       response => {
@@ -4556,6 +4614,16 @@ public eliminarLectura(i, periodo){
   $("#divCalculoENR").hide();
 }
   
+
+public mostrardtCalculoC(){
+  $("#divCalculoENRC").show();
+  $("#divCobroENRC").hide();
+ }
+
+ public mostrardtCobroC(){
+  $("#divCobroENRC").show();
+  $("#divCalculoENRC").hide();
+}
 }
 
 
