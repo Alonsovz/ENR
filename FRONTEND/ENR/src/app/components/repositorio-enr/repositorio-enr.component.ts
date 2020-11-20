@@ -732,6 +732,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
   public datosOrdenAdjuntos(datos){
    ////console.log(datos);
     this.ordenNumeroGN = datos;
+    
   }
 
 //método para guardar los adjuntos de la orden tecnica
@@ -766,6 +767,108 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
     
    }
  
+
+
+   public guardarAdjuntosOTC(ordenes){
+    let datosENRdtoDoc : DatosENR = new DatosENR();
+  
+    datosENRdtoDoc = this.adjuntoOrdenesForm.value;
+    ////console.log(ordenes);
+    
+    this.datosENR.saveDocOT(datosENRdtoDoc).subscribe(
+      response => {
+        
+      },
+      err => {
+       // //console.log("no");
+      },
+      () => { 
+        
+        notie.alert({
+          type: 'success',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Adjuntos guardados con éxito!',
+          stay: false, 
+          time: 2, 
+          position: 'top' 
+        });
+  
+        this.datosEditCalcOT(ordenes);
+      },
+    );
+    
+  
+    
+   }
+
+
+   public datosEditCalcOT(caso){
+  
+
+    this.docForm = this.fb.group({documentacion: this.fb.array([]),});
+
+    this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
+    this.ordenNumeroG = caso;
+  
+
+    let datosENRdto : DatosENR = new DatosENR();
+
+    datosENRdto = caso;
+    
+    
+
+
+    this.datosENR.getOrdenesbyNIS(datosENRdto).subscribe(
+      response => {
+
+        this.ordenes = response;
+        const table: any = $('#ordenesTbl');
+        this.dataTable = table.DataTable();
+        this.dataTable.destroy();
+    
+        this.chRef.detectChanges();
+        
+        this.dataTable = table.DataTable({
+        'iDisplayLength' : 3,
+        'responsive': true,
+          'order' :[[0,'desc']],
+
+        'language' : {
+          'sProcessing':     'Procesando...',
+          'sLengthMenu':     'Mostrar _MENU_ registros',
+          'sZeroRecords':    'No se encontraron resultados',
+          'sEmptyTable':     'Ningún dato disponible en esta tabla',
+          'sInfo':           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
+          'sInfoEmpty':      'Mostrando registros del 0 al 0 de un total de 0 registros',
+          'sInfoFiltered':   '(filtrado de un total de _MAX_ registros)',
+          'sInfoPostFix':    '',
+          'sSearch':         'Buscar:',
+          'sUrl':            '',
+          'sInfoThousands':  ',',
+          'sLoadingRecords': 'Cargando...',
+          'oPaginate': {
+              'sFirst':    'Primero',
+              'sLast':     'Último',
+              'sNext':     'Siguiente',
+              'sPrevious': 'Anterior'
+          },
+          'oAria': {
+              'sSortAscending':  ': Activar para ordenar la columna de manera ascendente',
+              'sSortDescending': ': Activar para ordenar la columna de manera descendente'
+          }
+        }
+        });
+      },
+      err => {},
+      () => {
+     //   $("#btnCerrarProcesoDatosIng").click();
+       $("#openModalDatosCalculo").click();
+      }
+    );
+
+   
+
+  }
+
 
 //método para obtener los adjuntos de las ordenes
   public adjuntosOrdenes(orden, ordenNumeroG1){
@@ -1141,18 +1244,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
   //Método para carga de datos en tablas y formularios en la vista para editar
   public datosEditar(caso){
-    ////console.log(caso);
-
-    $("#tabDatosNis").addClass("active");
-    $("#tabDatosOt").removeClass("active");
-    $("#tabDatosENR").removeClass("active");
-    $("#tabDatosAd").removeClass("active");
-
-
-    $("#datosNIS").addClass("show active");
-    $("#ordenesNIS").removeClass("show active");
-    $("#datosENR").removeClass("show active");
-    $("#docAdjuntos").removeClass("show active");
+  
 
     this.docForm = this.fb.group({documentacion: this.fb.array([]),});
 
@@ -1483,6 +1575,154 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
   
    }
 
+
+   public guardarDatosCalc(datos){
+
+  //  var tar = tarifa;
+
+    let datosENRdto : DatosENR = new DatosENR();
+  
+    datosENRdto = this.frmDatosENR.value;
+  
+  
+    this.datosENR.updateDatosNISGenerales(datosENRdto).subscribe(
+      response => {
+        
+      },
+      err => {
+        //console.log("no");
+      },
+      () => {
+        let datosENRdtoDoc : DatosENR = new DatosENR();
+  
+        datosENRdtoDoc = this.docForm.value;
+        this.datosENR.updateDocProbatoria(datosENRdtoDoc).subscribe(
+          response => {
+            
+          },
+          err => {
+            //console.log("no");
+          },
+          () => { 
+            
+  
+          },
+        );
+  
+        notie.alert({
+          type: 'success',
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Caso editado con éxito!',
+          stay: false, 
+          time: 2, 
+          position: 'top' 
+        });
+  
+        this.docForm.reset();
+        this.datosEditarCalcENR(datos);
+        this.getRepositorioCalc();
+        this.getRepositorioIng();
+        this.getRepositorioNoti();
+        this.ordenNumeroG = datos;
+      },
+    );
+  
+  
+    
+  
+   }
+
+
+
+   public datosEditarCalcENR(caso){
+    
+   // var repositorio = repo;
+    this.datosGenerales = caso;
+    this.docForm = this.fb.group({documentacion: this.fb.array([]),});
+
+    this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
+    this.ordenNumeroG = caso;
+
+    
+    let datosENRdto : DatosENR = new DatosENR();
+
+    datosENRdto = caso;
+
+    this.datosENR.getDiasRetroactivos(datosENRdto).subscribe(
+      response => {
+        this.dias =response;
+      },
+      err => {
+      // // //console.log("no");
+      },
+      () => {
+    
+      },
+    );
+
+
+    this.repositorioENR.getDatosENR(datosENRdto).subscribe(
+      response => {
+      
+        this.datosENRLista = response;
+       // $("#dataNis").show();
+      },
+      err => {
+        //console.log("no");
+      },
+      () => {
+      this.datosENR.getNumeroMedidor(datosENRdto).subscribe(data => {this.medidores = data;});
+      },
+    );
+
+    this.repositorioENR.getAdjuntosOrdenesENR(datosENRdto).subscribe(
+      response => {
+  
+        this.adjuntosFile = response;
+        const table: any = $('#adjuntos_Tbl');
+        this.dataTable = table.DataTable();
+        this.dataTable.destroy();
+    
+        this.chRef.detectChanges();
+        
+        this.dataTable = table.DataTable({
+          'iDisplayLength' : 3,
+        'responsive': true,
+          'order' :[[0,'desc']],
+  
+        'language' : {
+          'sProcessing':     'Procesando...',
+          'sLengthMenu':     'Mostrar _MENU_ registros',
+          'sZeroRecords':    'No se encontraron resultados',
+          'sEmptyTable':     'Ningún dato disponible en esta tabla',
+          'sInfo':           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
+          'sInfoEmpty':      'Mostrando registros del 0 al 0 de un total de 0 registros',
+          'sInfoFiltered':   '(filtrado de un total de _MAX_ registros)',
+          'sInfoPostFix':    '',
+          'sSearch':         'Buscar:',
+          'sUrl':            '',
+          'sInfoThousands':  ',',
+          'sLoadingRecords': 'Cargando...',
+          'oPaginate': {
+              'sFirst':    'Primero',
+              'sLast':     'Último',
+              'sNext':     'Siguiente',
+              'sPrevious': 'Anterior'
+          },
+          'oAria': {
+              'sSortAscending':  ': Activar para ordenar la columna de manera ascendente',
+              'sSortDescending': ': Activar para ordenar la columna de manera descendente'
+          }
+        }
+        });
+      },
+      err => {},
+      () => {
+       
+      }
+    );
+   
+    $("#openModalDatosCalculo").click();
+  }
 
    public validarFechaInicio(){
     var fechaMax = this.frmDatosENR.controls["fechaRegular"].value;
@@ -3864,19 +4104,23 @@ public eliminarLectura(i, periodo){
 
 
   public showMetodo1(){
+    $("#btnFacturacion").hide();
     $("#divMetodo1").show();
 
     $("#divMetodo2").hide();
     $("#btnSelecLecturasCaso6").hide();
+    $("#btnFacturacion").show();
   }
 
   public showMetodo2(){
+    $("#btnFacturacion").hide();
     $("#divMetodo2").show();
     $("#btnSelecLecturasCaso6").show();
     $("#divMetodo1").hide();
     //this.frm_Caso6.reset();
     this.frm_LecturasEvaluarTotales.reset();
     $("#divTarifas").hide();
+   
   }
 
   public calcularDiasHistoricoMet1(){
@@ -3903,7 +4147,7 @@ public eliminarLectura(i, periodo){
     this.frm_Caso6.controls["consumoEstimado"].setValue(consumoEstimado.toFixed(3));
     //this.frm_Caso6.controls["consumoRegistrado"].setValue(0);
     this.frm_Caso6.controls["montoENR"].setValue(consumoEstimado.toFixed(3));
-    $("#btnFacturacion").show();
+    
 
 
     this.llenarTotales();
@@ -3935,33 +4179,6 @@ public eliminarLectura(i, periodo){
 
   public datosEditarCalc(caso,tarifa, repo){
 
-    $("#tabDatosNisC").addClass("active");
-    $("#tabDatosOtC").removeClass("active");
-    $("#tabDatosENRC").removeClass("active");
-    $("#tabDatosCalC").removeClass("active");
-    $("#tabDatosAdC").removeClass("active");
-
-
-    $("#datosNISCN").addClass("show active");
-    $("#ordenesNISCN").removeClass("show active");
-    $("#datosENRCN").removeClass("show active");
-    $("#datosCalculoENRCN").removeClass("show active");
-    $("#docAdjuntosCN").removeClass("show active");
-
-
-    $("#tabDatosNisN").addClass("active");
-    $("#tabDatosOtN").removeClass("active");
-    $("#tabDatosENRN").removeClass("active");
-    $("#tabDatosCalN").removeClass("active");
-    $("#tabDatosAdN").removeClass("active");
-
-
-    $("#datosNISN").addClass("show active");
-    $("#ordenesNISN").removeClass("show active");
-    $("#datosENRN").removeClass("show active");
-    $("#datosCalculoENR").removeClass("show active");
-    $("#docAdjuntosN").removeClass("show active");
-
     var repositorio = repo;
     this.datosGenerales = caso;
     this.docForm = this.fb.group({documentacion: this.fb.array([]),});
@@ -3975,7 +4192,7 @@ public eliminarLectura(i, periodo){
     datosENRdto = caso;
     
     
-    this.verDatosCalculo(datosENRdto, tarifa);
+   
 
     this.datosENR.getDatosbyNIS(datosENRdto).subscribe(
       response => {
@@ -4131,6 +4348,8 @@ public eliminarLectura(i, periodo){
           $("#openModalDatosEli").click();
         }
        
+
+        this.verDatosCalculo(datosENRdto, tarifa);
       }
     );
 
@@ -4138,6 +4357,8 @@ public eliminarLectura(i, periodo){
     
   }
 
+
+ 
   public verDatosCalculo(caso, tarifa){
     $("#divCobroENR").hide();
     $("#divCalculoENR").hide();

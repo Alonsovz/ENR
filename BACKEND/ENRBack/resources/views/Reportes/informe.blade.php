@@ -101,7 +101,7 @@ Se procederá con la estimación del consumo real del usuario durante el periodo
 
 <p align="justify" style="font-size:14px;margin-left:10px;margin-right:10px;">
 <b>Datos Adicionales del Cálculo:</b>
-{{$dat->adicionales}}
+{{$dat->datosCalculo}}
 </p>
 
 

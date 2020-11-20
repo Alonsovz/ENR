@@ -2103,7 +2103,8 @@ class ENRController extends Controller
              '$' + str((select iva from enr_totalPagos where casoENR = dg.id),12,2) as iva,
 
 
-            '$' + str((select totalPagar from enr_totalPagos where casoENR = dg.id),12,2) as total
+            '$' + str((select totalPagar from enr_totalPagos where casoENR = dg.id),12,2) as total,
+            (select datosCalculo from enr_totalPagos where casoENR = dg.id) as datosCalculo
             from enr_datosGenerales dg 
             inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
             inner join fe_cliente as cli on cli.CODIGO_CLIENTE = fes.CODIGO_CLIENTE
