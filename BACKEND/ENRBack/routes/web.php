@@ -253,3 +253,8 @@ Route::get('/', function () {
 
     
     Route::post('getTotalesCobro', 'ENRController@getTotalesCobro');
+
+        
+    Route::post('guardarDatosRecibidoCliente', 'ENRController@guardarDatosRecibidoCliente');
+    Route::any('getRepositorioRecibidosCliente', 'ENRController@getRepositorioRecibidosCliente');
+    

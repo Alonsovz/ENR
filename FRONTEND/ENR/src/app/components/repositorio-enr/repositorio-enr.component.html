@@ -1875,10 +1875,19 @@ background-color: #323259;" id="titleGlobal">
       <li class="nav-item" style="border-bottom:1px solid white;">
         <a class="nav-link"  data-toggle="tab" href="#notificados" role="tab" (click)="getRepositorioNoti()"
         aria-controls="profile" aria-selected="false" style="color:white;background-color: #1B1B38;">
-         <i class="fas fa-bell"></i>
-            Notificado
+         <i class="fas fa-print"></i>
+            Generados
         </a>
       </li>
+      <li class="nav-item" style="border-bottom:1px solid white;">
+        <a class="nav-link"  data-toggle="tab" href="#recibidos" role="tab" 
+        (click)="getRepositorioRecibidosCliente()"
+        aria-controls="profile" aria-selected="false" style="color:white;background-color: #1B1B38;">
+         <i class="fas fa-bell"></i>
+            Notificados
+        </a>
+      </li>
+
       <li class="nav-item" style="border-bottom:1px solid white;">
         <a class="nav-link"  data-toggle="tab" href="#eliminados" role="tab" (click)="getRepositorioEli()"
         aria-controls="profile" aria-selected="false" style="color:white;background-color: #1B1B38;">
@@ -1895,7 +1904,7 @@ background-color: #323259;" id="titleGlobal">
                 <div class="col-lg-2"></div>
                     <div class="col-lg-8" style="background-color: #1B1B38;color: white;
                     text-align: center;font-size: 25px;color:#4DFBE6;font-weight: bold;">
-                      <img class="img-profile" src="./assets/imagenes/homework.png"  height=42
+                      <img class="img-profile" src="./assets/imagenes/pending.png" 
                       style="margin-bottom: 5px;">
                       Casos Ingresados (Pendientes de Cálculo)
                     </div>                   
@@ -1906,25 +1915,25 @@ background-color: #323259;" id="titleGlobal">
                 <div class="col-lg-1"></div>
                 <div class="col-lg-10">
                     <table  id="tbl_Ingresados" class="table small mt-5" style="width: 100%;">
-                        <thead class="thead-dark">
-                          <tr>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">N° Caso</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">N° Suministro</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Tipo ENR</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Metodología ENR</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Dias de Cobro</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Fecha de Creación</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Acciones</th>
+                      <thead class="thead-dark">
+                        <tr>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">N°</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">NIS</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Tipo ENR</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Metodología ENR</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Dias de Cobro</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Fecha de Creación</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Acciones</th>
                         </tr>
-                        </thead>
-                        <tbody style="background-color:#323259; color:white;text-align: center;font-size: 11px;">
-                            <tr *ngFor="let rep  of repositorioIng"
-                            [ngClass]="{adjuntos: rep.adjuntos > 0}">
-                               <td>{{rep.caso}}</td>
-                               <td>{{rep.nis}}</td>
-                               <td>{{rep.codigoENR}}</td>
-                               <td>{{rep.metodologiaENR}}</td>
-                               <td>{{rep.diasCobrar}}</td>
+                      </thead>
+                      <tbody style="background-color:#323259; color:white;text-align: center;font-size: 11px;">
+                          <tr *ngFor="let rep  of repositorioIng"
+                          [ngClass]="{adjuntos: rep.adjuntos > 0}">
+                             <td  style="width: 5% !important;">{{rep.caso}}</td>
+                             <td  style="width: 8% !important;">{{rep.nis}}</td>
+                             <td>{{rep.codigoENR}}</td>
+                             <td>{{rep.metodologiaENR}}</td>
+                             <td  style="width: 12% !important;">{{rep.diasCobrar}}</td>
                                <td>{{rep.fechaCreacion}}<br>{{rep.usuarioCreacion}}</td>
                                <td style="width: 20% !important;">
                                 <button class="btn btn-default btn-circle btn1"
@@ -1960,9 +1969,9 @@ background-color: #323259;" id="titleGlobal">
                 <div class="col-lg-2"></div>
                     <div class="col-lg-8" style="background-color: #1B1B38;color: white;
                     text-align: center;font-size: 25px;color:#4DFBE6;font-weight: bold;">
-                      <img class="img-profile" src="./assets/imagenes/moneyIn.png"  height=42
+                      <img class="img-profile" src="./assets/imagenes/budget.png" 
                       style="margin-bottom: 5px;">
-                      Casos Calculados (Pendientes de Notificación)
+                      Casos Calculados (Pendientes de emitir reporte)
                     </div>                   
                 <div class="col-lg-2"></div>
             </div>
@@ -1971,25 +1980,25 @@ background-color: #323259;" id="titleGlobal">
                 <div class="col-lg-1"></div>
                 <div class="col-lg-10">
                     <table  id="tbl_Calculados" class="table small mt-5" style="width: 100%;">
-                        <thead class="thead-dark">
-                          <tr>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">N° Caso</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">N° Suministro</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Tipo ENR</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Metodología ENR</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Dias de Cobro</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Fecha de Creación</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Acciones</th>
+                      <thead class="thead-dark">
+                        <tr>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">N°</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">NIS</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Tipo ENR</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Metodología ENR</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Dias de Cobro</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Fecha de Creación</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Acciones</th>
                         </tr>
-                        </thead>
-                        <tbody style="background-color:#323259; color:white;text-align: center;font-size: 11px;">
-                            <tr *ngFor="let rep  of repositorioCalc"
-                            [ngClass]="{adjuntos: rep.adjuntos > 0}">
-                               <td>{{rep.caso}}</td>
-                               <td>{{rep.nis}}</td>
-                               <td>{{rep.codigoENR}}</td>
-                               <td>{{rep.metodologiaENR}}</td>
-                               <td>{{rep.diasCobrar}}</td>
+                      </thead>
+                      <tbody style="background-color:#323259; color:white;text-align: center;font-size: 11px;">
+                          <tr *ngFor="let rep  of repositorioCalc"
+                          [ngClass]="{adjuntos: rep.adjuntos > 0}">
+                             <td  style="width: 5% !important;">{{rep.caso}}</td>
+                             <td  style="width: 8% !important;">{{rep.nis}}</td>
+                             <td>{{rep.codigoENR}}</td>
+                             <td>{{rep.metodologiaENR}}</td>
+                             <td  style="width: 12% !important;">{{rep.diasCobrar}}</td>
                                <td>{{rep.fechaCreacion}}<br>{{rep.usuarioCreacion}}</td>
                                <td style="width: 20% !important;">
                                 <button class="btn btn-default btn-circle btn1"
@@ -2025,9 +2034,9 @@ background-color: #323259;" id="titleGlobal">
                 <div class="col-lg-2"></div>
                     <div class="col-lg-8" style="background-color: #1B1B38;color: white;
                     text-align: center;font-size: 25px;color:#4DFBE6;font-weight: bold;">
-                      <img class="img-profile" src="./assets/imagenes/bell.png"  height=42
+                      <img class="img-profile" src="./assets/imagenes/printer.png" 
                       style="margin-bottom: 5px;">
-                      Casos Notificados
+                      Casos Generados (Pendientes de recibir por cliente)
                     </div>                   
                 <div class="col-lg-2"></div>
             </div>
@@ -2036,25 +2045,25 @@ background-color: #323259;" id="titleGlobal">
                 <div class="col-lg-1"></div>
                 <div class="col-lg-10">
                     <table  id="tbl_Notificados" class="table small mt-5" style="width: 100%;">
-                        <thead class="thead-dark">
-                          <tr>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">N° Caso</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">N° Suministro</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Tipo ENR</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Metodología ENR</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Dias de Cobro</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Fecha de Creación</th>
-                            <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Acciones</th>
-                          </tr>
-                        </thead>
-                        <tbody style="background-color:#323259; color:white;text-align: center;font-size: 11px;">
-                            <tr *ngFor="let rep  of repositorioNoti"
-                            [ngClass]="{adjuntos: rep.adjuntos > 0}">
-                               <td>{{rep.caso}}</td>
-                               <td>{{rep.nis}}</td>
-                               <td>{{rep.codigoENR}}</td>
-                               <td>{{rep.metodologiaENR}}</td>
-                               <td>{{rep.diasCobrar}}</td>
+                      <thead class="thead-dark">
+                        <tr>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">N°</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">NIS</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Tipo ENR</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Metodología ENR</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Dias de Cobro</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Fecha de Creación</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody style="background-color:#323259; color:white;text-align: center;font-size: 11px;">
+                          <tr *ngFor="let rep  of repositorioNoti"
+                          [ngClass]="{adjuntos: rep.adjuntos > 0}">
+                             <td  style="width: 5% !important;">{{rep.caso}}</td>
+                             <td  style="width: 8% !important;">{{rep.nis}}</td>
+                             <td>{{rep.codigoENR}}</td>
+                             <td>{{rep.metodologiaENR}}</td>
+                             <td  style="width: 12% !important;">{{rep.diasCobrar}}</td>
                                <td>{{rep.fechaCreacion}}<br>{{rep.usuarioCreacion}}</td>
                                <td style="width: 20% !important;">
                                 <button class="btn btn-default btn-circle btn1" title="Ver detalles del caso"
@@ -2065,6 +2074,13 @@ background-color: #323259;" id="titleGlobal">
                                  <button type="button" class="btn btn-info btn-circle" 
                                  (click)="verPDFImpreso(rep.caso)" title="Ver reporte">
                                    <i class="fas fa-print"></i> 
+                                 </button>
+                                 &nbsp;
+                                 <button type="button" class="btn btn-warning btn-circle" 
+                                 data-toggle="modal"  data-target="#mdRecibirCliente" 
+                                 *ngIf="user.rol == 'AEA' || user.rol == 'AE'"
+                                 (click)="recibirCaso(rep.caso, rep.nis)" title="Recibir datos">
+                                   <i class="fas fa-user-check"></i> 
                                  </button>
                                  &nbsp;
                                  <button type="button" class="btn btn-danger btn-circle" 
@@ -2083,14 +2099,70 @@ background-color: #323259;" id="titleGlobal">
 
         </div>
 
+        <div class="tab-pane" id="recibidos" role="tabpanel" aria-labelledby="">
+          <div class="row animated flipInX">
+              <div class="col-lg-1"></div>
+                  <div class="col-lg-10" style="background-color: #1B1B38;color: white;
+                  text-align: center;font-size: 25px;color:#4DFBE6;font-weight: bold;">
+                    <img class="img-profile" src="./assets/imagenes/file.png"
+                    style="margin-bottom: 5px;">
+                    Casos Notificados (Pendientes de facturar)
+                  </div>                   
+              <div class="col-lg-2"></div>
+          </div>
 
+          <div class="row mt-5 animated fadeInLeft">
+              <div class="col-lg-1"></div>
+              <div class="col-lg-10">
+                  <table  id="tbl_Recibidos" class="table small mt-5" style="width: 100%;">
+                      <thead class="thead-dark">
+                        <tr>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">N°</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">NIS</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Tipo ENR</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Metodología ENR</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Dias de Cobro</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Fecha de Creación</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody style="background-color:#323259; color:white;text-align: center;font-size: 11px;">
+                          <tr *ngFor="let rep  of repositorioRecibidos"
+                          [ngClass]="{adjuntos: rep.adjuntos > 0}">
+                             <td  style="width: 5% !important;">{{rep.caso}}</td>
+                             <td  style="width: 8% !important;">{{rep.nis}}</td>
+                             <td>{{rep.codigoENR}}</td>
+                             <td>{{rep.metodologiaENR}}</td>
+                             <td  style="width: 12% !important;">{{rep.diasCobrar}}</td>
+                             <td>{{rep.fechaCreacion}}<br>{{rep.usuarioCreacion}}</td>
+                             <td>
+                              <button class="btn btn-default btn-circle btn1" title="Ver detalles del caso"
+                              data-toggle="modal"  data-target="#mdGenerarDatosNoti" (click)="datosEditarCalc(rep, rep.tarifa,3)">
+                                  <i class="fas fa-edit"></i>
+                               </button>
+                               &nbsp;
+                               <button type="button" class="btn btn-info btn-circle" 
+                               (click)="verPDFImpreso(rep.caso)" title="Ver reporte">
+                                 <i class="fas fa-print"></i> 
+                               </button>
+                               
+                               
+                               
+                          </tr>
+                      </tbody>
+                  </table><br><br>
+              </div>
+              <div class="col-lg-1"></div>
+          </div> 
+
+      </div>
 
         <div class="tab-pane" id="eliminados" role="tabpanel" aria-labelledby="">
           <div class="row animated flipInX">
               <div class="col-lg-2"></div>
                   <div class="col-lg-8" style="background-color: #1B1B38;color: white;
                   text-align: center;font-size: 25px;color:#4DFBE6;font-weight: bold;">
-                    <img class="img-profile" src="./assets/imagenes/delete.png"  height=42
+                    <img class="img-profile" src="./assets/imagenes/rejected.png" 
                     style="margin-bottom: 5px;">
                     Casos Eliminados
                   </div>                   
@@ -2151,7 +2223,7 @@ background-color: #323259;" id="titleGlobal">
             <div *ngIf="extension === 'pdf' || extension === 'PDF'">
               <iframe [src]="adjuntoVer" width="100%" height="450px"></iframe>
             </div>
-            <div *ngIf="extension === 'jpg' || extension === 'JPG' || extension === 'JPEG'">
+            <div *ngIf="extension === 'jpg' || extension === 'JPG' || extension === 'PEG' || extension === 'peg'">
               <img [src]="adjuntoVer" width="650px" height="450px"
               style="margin-left: 20%;"/>
             </div>
@@ -2189,7 +2261,7 @@ background-color: #323259;" id="titleGlobal">
             <div *ngIf="extension === 'pdf' || extension === 'PDF'">
               <iframe [src]="adjuntoVer" width="100%" height="450px"></iframe>
             </div>
-            <div *ngIf="extension === 'jpg' || extension === 'JPG' || extension === 'JPEG'">
+            <div *ngIf="extension === 'jpg' || extension === 'JPG' || extension === 'PEG' || extension === 'peg'">
               <img [src]="adjuntoVer" width="650px" height="450px"
               style="margin-left: 20%;"/>
             </div>
@@ -2227,7 +2299,7 @@ background-color: #323259;" id="titleGlobal">
             <div *ngIf="extension === 'pdf' || extension === 'PDF'">
               <iframe [src]="adjuntoVer" width="100%" height="450px"></iframe>
             </div>
-            <div *ngIf="extension === 'jpg' || extension === 'JPG' || extension === 'JPEG'">
+            <div *ngIf="extension === 'jpg' || extension === 'JPG' || extension === 'PEG' || extension === 'peg'">
               <img [src]="adjuntoVer" width="650px" height="450px"
               style="margin-left: 20%;"/>
             </div>
@@ -2356,7 +2428,7 @@ background-color: #323259;" id="titleGlobal">
                       <hr style="background-color: #FB51EE !important;height: 2px;">
               
                       <h4 style="color: #FB51EE;">
-                          <img class="img-profile" src="./assets/imagenes/result.png"
+                          <img class="img-profile" src="./assets/imagenes/result.png" height="50"
                           style="margin-bottom: 5px;">
                           Datos obtenidos
                       </h4>
@@ -2413,7 +2485,7 @@ background-color: #323259;" id="titleGlobal">
                 <div class="col-lg-12">
                   <hr style="background-color: #51F749 !important; height: 2px;">
                   <h4 style="color: #51F749;">
-                      <img class="img-profile" src="./assets/imagenes/order.png"
+                      <img class="img-profile" src="./assets/imagenes/order.png" height="50"
                       style="margin-bottom: 5px;">
                       Órdenes técnicas asociadas al suministro
                   </h4>
@@ -2482,7 +2554,7 @@ background-color: #323259;" id="titleGlobal">
                 <div class="col-lg-12">
                   <hr style="background-color: #49F7DD !important; height: 2px;">
                   <h4 style="color: #49F7DD;">
-                      <img class="img-profile" src="./assets/imagenes/cost.png"
+                      <img class="img-profile" src="./assets/imagenes/cost.png" height="50"
                       style="margin-bottom: 5px;">
                       Generales Cálculo ENR
                   </h4>
@@ -2652,7 +2724,7 @@ background-color: #323259;" id="titleGlobal">
                           formControlName="fileProbatorio" style="height:45px"/>
                           <br>
                           <div *ngIf="fileUploadProgress" style="color:white">
-                            Upload progress: {{ fileUploadProgress }}
+                            Subiendo Archivo: {{ fileUploadProgress }}
                         </div>
                         <div class="image-preview mb-3" *ngIf="previewUrl">
                             <img [src]="previewUrl" height="150" style="margin-left:25%;"/>    
@@ -2741,7 +2813,7 @@ background-color: #323259;" id="titleGlobal">
               <div class="col-lg-12">
                 <hr style="background-color: #D1D104 !important; height: 2px;">
               <h4 style="color: #D1D104;">
-                  <img class="img-profile" src="./assets/imagenes/document.png">
+                  <img class="img-profile" src="./assets/imagenes/document.png" height="50">
                   Adjuntos del caso
               </h4>
               </div>
@@ -2971,7 +3043,7 @@ background-color: #323259;" id="titleGlobal">
             <div *ngIf="extension == 'pdf'">
               <iframe [src]="adjuntoVer" width="100%" height="450px"></iframe>
             </div>
-            <div *ngIf="extension == 'jpg' ">
+            <div *ngIf="extension === 'jpg' || extension === 'JPG' || extension === 'PEG' || extension === 'peg'">
               <img [src]="adjuntoVer" width="650px" height="450px"
               style="margin-left: 20%;"/>
             </div>
@@ -3009,7 +3081,7 @@ background-color: #323259;" id="titleGlobal">
             <div *ngIf="extension == 'pdf'">
               <iframe [src]="adjuntoVer" width="100%" height="450px"></iframe>
             </div>
-            <div *ngIf="extension == 'jpg' ">
+            <div *ngIf="extension === 'jpg' || extension === 'JPG' || extension === 'JPEG' || extension === 'jpeg'">
               <img [src]="adjuntoVer" width="650px" height="450px"
               style="margin-left: 20%;"/>
             </div>
@@ -4023,7 +4095,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
                       <hr style="background-color: #FB51EE !important;height: 2px;">
               
                       <h4 style="color: #FB51EE;">
-                          <img class="img-profile" src="./assets/imagenes/result.png"
+                          <img class="img-profile" src="./assets/imagenes/result.png" height="50"
                           style="margin-bottom: 5px;">
                           Datos obtenidos
                       </h4>
@@ -4080,7 +4152,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
                 <div class="col-lg-12">
                   <hr style="background-color: #51F749 !important; height: 2px;">
                   <h4 style="color: #51F749;">
-                      <img class="img-profile" src="./assets/imagenes/order.png"
+                      <img class="img-profile" src="./assets/imagenes/order.png" height="50"
                       style="margin-bottom: 5px;">
                       Órdenes técnicas asociadas al suministro
                   </h4>
@@ -4149,7 +4221,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
                 <div class="col-lg-12">
                   <hr style="background-color: #49F7DD !important; height: 2px;">
                   <h4 style="color: #49F7DD;">
-                      <img class="img-profile" src="./assets/imagenes/cost.png"
+                      <img class="img-profile" src="./assets/imagenes/cost.png" height="50"
                       style="margin-bottom: 5px;">
                       Generales Cálculo ENR
                   </h4>
@@ -4317,7 +4389,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
                           formControlName="fileProbatorio" style="height:45px"/>
                           <br>
                           <div *ngIf="fileUploadProgress" style="color:white">
-                            Upload progress: {{ fileUploadProgress }}
+                            Subiendo Archivo: {{ fileUploadProgress }}
                         </div>
                         <div class="image-preview mb-3" *ngIf="previewUrl">
                             <img [src]="previewUrl" height="150" style="margin-left:25%;"/>    
@@ -4420,7 +4492,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
                 <div class="col-lg-12">
                   <hr style="background-color: #FF6928 !important; height: 2px;">
                   <h4 style="color: #FF6928;">
-                      <img class="img-profile" src="./assets/imagenes/calcular.png"
+                      <img class="img-profile" src="./assets/imagenes/calcular.png" height="50"
                       style="margin-bottom: 5px;">
                       Datos de Cálculo ENR
                   </h4>
@@ -4712,7 +4784,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
               <div class="col-lg-12">
                 <hr style="background-color: #1FF3F5 !important; height: 2px;">
                 <h4 style="color: #1FF3F5;">
-                    <img class="img-profile" src="./assets/imagenes/calc.png" height="35"
+                    <img class="img-profile" src="./assets/imagenes/calc.png" height="50"
                     style="margin-bottom: 5px;">
                     Datos de Cobro ENR
                 </h4>
@@ -4757,7 +4829,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
               <div class="col-lg-12">
                 <hr style="background-color: #D1D104 !important; height: 2px;">
               <h4 style="color: #D1D104;">
-                  <img class="img-profile" src="./assets/imagenes/document.png">
+                  <img class="img-profile" src="./assets/imagenes/document.png" height="50">
                   Adjuntos del caso
               </h4>
               </div>
@@ -4832,7 +4904,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
     <div class="modal-content">
       <div class="modal-header" >
         
-        <div class="row" style="margin-left: 30px;">
+        <div class="row" style="margin-left: 5px;">
           <ul class="nav nav-tabs" id="myTab" role="tablist" >
           <li class="nav-item">
             <a class="nav-link active" data-toggle="tab" href="#datosNISN" role="tab" id="tabDatosNisN"
@@ -4845,7 +4917,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
             <a class="nav-link"  data-toggle="tab" href="#ordenesNISN" role="tab" id="tabDatosOtN"
             aria-controls="profile" aria-selected="false" style="color:#51F749;background-color: #1B1B38;">
             <i class="fas fa-paperclip"></i>
-                Órdenes tec. del NIS
+                Órdenes
             </a>
           </li>
           <li class="nav-item" style="border-bottom:1px solid white;">
@@ -4855,7 +4927,8 @@ tabindex="-1" role="dialog" id="nuevoScanC">
                 Datos de ENR
             </a>
           </li>
-          <li class="nav-item" style="border-bottom:1px solid white;" *ngIf="ordenNumeroG.estado == 2 || ordenNumeroG.estado == 3 ">
+          <li class="nav-item" style="border-bottom:1px solid white;" 
+          *ngIf="ordenNumeroG.estado == 2 || ordenNumeroG.estado == 3 || ordenNumeroG.estado == 6 ">
             <a class="nav-link"  data-toggle="tab" href="#datosCalculoENR" role="tab" id="tabDatosCalN"
             aria-controls="profile" aria-selected="false" style="color:#FFA500;background-color: #1B1B38;">
             <i class="fas fa-calculator"></i>
@@ -4867,6 +4940,13 @@ tabindex="-1" role="dialog" id="nuevoScanC">
             aria-controls="profile" aria-selected="false" style="color:#D1D104;background-color: #1B1B38;">
             <i class="fas fa-file"></i>
                 Adjuntos
+            </a>
+          </li>
+          <li class="nav-item" style="border-bottom:1px solid white;">
+            <a class="nav-link"  data-toggle="tab" href="#tabRecibidos" role="tab"
+            aria-controls="profile" aria-selected="false" style="color:#757BFF;background-color: #1B1B38;">
+            <i class="fas fa-user-check"></i>
+                Recepción
             </a>
           </li>
         </ul>
@@ -4950,7 +5030,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
                 <div class="col-lg-12">
                   <hr style="background-color: #51F749 !important; height: 2px;">
                   <h4 style="color: #51F749;">
-                      <img class="img-profile" src="./assets/imagenes/order.png"
+                      <img class="img-profile" src="./assets/imagenes/order.png" height="50"
                       style="margin-bottom: 5px;">
                       Órdenes técnicas asociadas al suministro
                   </h4>
@@ -5019,7 +5099,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
                 <div class="col-lg-12">
                   <hr style="background-color: #49F7DD !important; height: 2px;">
                   <h4 style="color: #49F7DD;">
-                      <img class="img-profile" src="./assets/imagenes/cost.png"
+                      <img class="img-profile" src="./assets/imagenes/cost.png" height="50"
                       style="margin-bottom: 5px;">
                       Generales Cálculo ENR
                   </h4>
@@ -5196,7 +5276,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
                 <div class="col-lg-12">
                   <hr style="background-color: #FF6928 !important; height: 2px;">
                   <h4 style="color: #FF6928;">
-                      <img class="img-profile" src="./assets/imagenes/calcular.png"
+                      <img class="img-profile" src="./assets/imagenes/calcular.png" height="50"
                       style="margin-bottom: 5px;">
                       Datos de Cálculo ENR
                   </h4>
@@ -5488,7 +5568,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
               <div class="col-lg-12">
                 <hr style="background-color: #1FF3F5 !important; height: 2px;">
                 <h4 style="color: #1FF3F5;">
-                    <img class="img-profile" src="./assets/imagenes/calc.png" height="35"
+                    <img class="img-profile" src="./assets/imagenes/calc.png"  height="50"
                     style="margin-bottom: 5px;">
                     Datos de Cobro ENR
                 </h4>
@@ -5534,7 +5614,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
               <div class="col-lg-12">
                 <hr style="background-color: #D1D104 !important; height: 2px;">
               <h4 style="color: #D1D104;">
-                  <img class="img-profile" src="./assets/imagenes/document.png">
+                  <img class="img-profile" src="./assets/imagenes/document.png" height="50">
                   Adjuntos del caso
               </h4>
               </div>
@@ -5567,7 +5647,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
                     <td>
                         <button class="btn btn-success btn-sm btn-circle"  data-dismiss="modal"
                         (click)="adjuntosOrdenesVer(ad.ruta, ad.ext)"
-                        data-toggle="modal" data-target="#verAdjuntosOrden">
+                        data-toggle="modal" data-target="#verAdjuntosOrdenN">
                                 <i class="fa fa-eye"></i>
                     </button> 
                         &nbsp; 
@@ -5591,6 +5671,75 @@ tabindex="-1" role="dialog" id="nuevoScanC">
               
               </div>
             </div>
+
+            <div class="tab-pane" id="tabRecibidos" role="tabpanel" aria-labelledby="">
+              <div class="row animated fadeInLeft" 
+              style="margin-left: 30px;margin-right: 30px;margin-top: 30px;margin-bottom: 30px;" >
+              
+              <div class="col-lg-12">
+                <hr style="background-color: #757BFF !important; height: 2px;">
+              <h4 style="color: #757BFF;">
+                  <img class="img-profile" src="./assets/imagenes/agreement.png" height="50">
+                  Datos de recepción de parte del cliente
+              </h4>
+
+              <br>
+              <form [formGroup]="frmRecibidoClienteE" *ngFor="let data  of datosENRLista">
+                <div class="row" style="width: 100%;">
+             
+                  <div class="col-md-4">
+                    <label><i class="fas fa-calendar"></i> Fecha de recibido </label>
+                    <input type="date"  class="form-control" formControlName="fechaRecibido" [(ngModel)]="data.fechaRecibidoCli"
+                    disabled>
+                    
+                  </div>
+                  <div class="col-md-4">
+                    <label><i class="fas fa-user"></i> Usuario que entregó el reporte </label>
+                    <input type="text"  class="form-control" formControlName="usuarioEntrega" [(ngModel)]="data.usuarioEntrega"
+                    placeholder=" Usuario" disabled>
+                  </div>
+
+                  <div class="col-md-4"><br>
+                    <label><i class="fa fa-file"></i> Adjunto: Scan de notificacion inicial</label>          
+                    <br>
+                    <div *ngIf = "data.adjuntoEntrega != ''">
+                      <h6 style="color: yellow;font-size: 13px;">{{data.adjuntoEntrega}}</h6>
+                      <button class="btn btn-success btn-sm btn-circle"  data-dismiss="modal"
+                      (click)="adjuntosOrdenesVer(data.adjuntoEntrega, data.extCli)"
+                      data-toggle="modal" data-target="#verAdjuntoEntrega">
+                            <i class="fa fa-eye"></i>
+                      </button> 
+                        &nbsp; 
+                        <a class="btn btn-info btn-sm btn-circle" 
+                        [href]="rutaFile+data.adjuntoEntrega">
+                                <i class="fa fa-download"></i>
+                        </a>
+                        
+                    </div>
+                    <div *ngIf="data.ruta == '0'">
+                      <h6 style="color: yellow;font-size: 13px;">No se adjuntó</h6>
+                        <button class="btn btn-warning btn-sm btn-circle"
+                          data-dismiss="modal" *ngIf="user.rol == 'AEA' || user.rol == 'AE'"
+                          (click)="nuevoScan(ordenNumeroG)" 
+                          data-toggle="modal" data-target="#nuevoScan">
+                                  <i class="fa fa-sync"></i>
+                        </button> 
+                    </div>
+                      
+                   
+                    
+              
+                </div>
+                
+                
+                </div>
+              </form>
+              </div>
+              
+              </div>
+            </div>
+
+
         </div>
       </div>
       <div class="modal-footer">
@@ -5838,3 +5987,99 @@ tabindex="-1" role="dialog" id="nuevoScanC">
 
 <button id="openModalDatosNoti" data-target="#datosCasoNoti"   data-toggle="modal" style="display: none;"></button>
 
+<div class="modal animated fadeInDown" id="mdRecibirCliente" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="title" style="color:#0CD902 !important;">
+          <img class="img-profile" src="./assets/imagenes/contract.png" width=35 height=35>
+          Recibir datos de Caso N°  <a style="color: yellow !important;">{{casoRecibir}}</a>
+          ---
+           NIS:  <a style="color: yellow !important;">{{nisRecibir}}</a>
+        </h5>
+        
+      </div>
+      <div class="modal-body">
+      
+        <form [formGroup]="frmRecibidoCliente">
+          <div class="row" style="width: 100%;">
+       
+            <div class="col-md-6">
+              <label><i class="fas fa-calendar"></i> Fecha de recibido </label>
+              <input type="date"  class="form-control" formControlName="fechaRecibido">
+              <input formControlName="idCasoEntregado"type="hidden">
+            </div>
+            <div class="col-md-6">
+              <label><i class="fas fa-user"></i> Usuario que entregó el reporte </label>
+              <input type="text"  class="form-control" formControlName="usuarioEntrega"
+              placeholder=" Usuario">
+            </div>
+           
+            <div class="col-md-10">
+              <br>
+              <label><i class="fas fa-file"></i> Adjunto firmado</label>
+              <input type="file" (change)="subirRecibido($event)"  class="form-control" formControlName="adjuntoRecibido" style="height:45px">
+            </div>
+            <div class="col-md-2">
+              <div *ngIf="barraCarga" style="color:white; font-size: 12px;">
+                Subiendo archivo: {{ barraCarga }}
+            </div>
+            </div>
+          
+          </div>
+        </form>
+        
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          <i class="fas fa-times-circle"></i>  Cancelar!
+        </button>
+        <button type="button" [disabled] = "frmRecibidoCliente.invalid" class="btn btn-success" data-dismiss="modal"
+        (click)="guardarDatosRecibidoCliente()">
+          <i class="fas fa-thumbs-up"></i> Guardar datos!
+        </button>
+        
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal animated fadeInDown" id="verAdjuntoEntrega" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog  mw-100 w-75">
+    <div class="modal-content">
+      <div class="modal-header">
+      </div>
+      <div class="modal-body">
+        
+       
+            <div *ngIf="extension === 'pdf' || extension === 'PDF'">
+              <iframe [src]="adjuntoVer" width="100%" height="450px"></iframe>
+            </div>
+            <div *ngIf="extension === 'jpg' || extension === 'JPG' || extension === 'PEG' || extension === 'peg'">
+              <img [src]="adjuntoVer" width="650px" height="450px"
+              style="margin-left: 20%;"/>
+            </div>
+  
+            <div *ngIf="extension === 'png' || extension === 'PNG' ">
+              <img [src]="adjuntoVer" width="650px" height="450px"
+              style="margin-left: 20%;"/>
+            </div>
+            <div *ngIf="extension === 'txt' ">
+              <h2 style="color:yellow;text-align: center;">El formato .txt solo puede ser descargado</h2>
+            </div>
+         
+        
+      
+     </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal"
+          data-toggle="modal" data-target="#datosCasoNoti">
+          <i class="fas fa-times-circle"></i>  Cerrar
+        </button>          
+      </div>
+    </div>
+  </div>
+</div>

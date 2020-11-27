@@ -37,6 +37,7 @@ export class RepositorioENRComponent implements OnInit {
   repositorioCalc : Repositorio[];
   repositorioNoti : Repositorio[];
   repositorioEl : Repositorio[];
+  repositorioRecibidos : Repositorio[];
   dataTable: any;
   adjuntosFile : Repositorio[];
   adjuntosFileOrdenes: DatosENR[];
@@ -52,6 +53,8 @@ export class RepositorioENRComponent implements OnInit {
   adjuntoVer : SafeResourceUrl;
   extension : string;
   casoEliminar: string;
+  casoRecibir: string;
+  nisRecibir: string;
   archivoEliminar : Repositorio = new Repositorio();
   datosPadre : Repositorio = new Repositorio();
   archivoEliminarOT : Repositorio = new Repositorio();
@@ -73,6 +76,7 @@ export class RepositorioENRComponent implements OnInit {
   adjuntoOrdenesForm: FormGroup;
   fileData: File = null;
   fileUploadProgress: string = null;
+  barraCarga: string = null;
   uploadedFilePath: string = null;
   frm_Caso1 : FormGroup;
   frm_Caso2 : FormGroup;
@@ -135,6 +139,8 @@ export class RepositorioENRComponent implements OnInit {
   frm_Caso6 : FormGroup;
   cobroMedidor : FormGroup;
   frmDatosEliminar : FormGroup;
+  frmRecibidoCliente : FormGroup;
+  frmRecibidoClienteE : FormGroup;
   tarifaE : '';
   datoImprimir : Repositorio = new Repositorio();
   datoImprimirObj : Repositorio[];
@@ -330,6 +336,21 @@ export class RepositorioENRComponent implements OnInit {
         'idCaso' : new FormControl(''),
         'razonEliminado' : new FormControl('',[Validators.required]),
         'usuario' : new FormControl(''),
+
+      });
+
+      this.frmRecibidoCliente = new FormGroup({
+        'idCasoEntregado' : new FormControl(''),
+        'fechaRecibido' : new FormControl('',[Validators.required]),
+        'usuarioEntrega' : new FormControl('',[Validators.required]),
+        'adjuntoRecibido' : new FormControl('',[Validators.required]),
+
+      });
+
+      this.frmRecibidoClienteE = new FormGroup({
+       
+        'fechaRecibido' : new FormControl(''),
+        'usuarioEntrega' : new FormControl(''),
 
       });
     }
@@ -935,7 +956,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
     this.extension = ext;
 
-    console.log( this.adjuntoVer);
+    //console.log( this.adjuntoVer);
   }
 
 //método que obtiene los parametros del archivo a eliminar del caso ENR
@@ -1173,6 +1194,55 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
     );
   }
 
+  public getRepositorioRecibidosCliente(){
+    this.repositorioENR.getRepositorioRecibidosCliente().subscribe(
+      response => {
+
+        this.repositorioRecibidos = response;
+
+        
+
+        const table: any = $('#tbl_Recibidos');
+        this.dataTable = table.DataTable();
+        this.dataTable.destroy();
+    
+        this.chRef.detectChanges();
+
+        this.dataTable = table.DataTable({
+          'iDisplayLength' : 5,
+        'responsive': true,
+          'order' :[[0,'desc']],
+
+        'language' : {
+          'sProcessing':     'Procesando...',
+          'sLengthMenu':     'Mostrar _MENU_ registros',
+          'sZeroRecords':    'No se encontraron resultados',
+          'sEmptyTable':     'Ningún dato disponible en esta tabla',
+          'sInfo':           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
+          'sInfoEmpty':      'Mostrando registros del 0 al 0 de un total de 0 registros',
+          'sInfoFiltered':   '(filtrado de un total de _MAX_ registros)',
+          'sInfoPostFix':    '',
+          'sSearch':         'Buscar:',
+          'sUrl':            '',
+          'sInfoThousands':  ',',
+          'sLoadingRecords': 'Cargando...',
+          'oPaginate': {
+              'sFirst':    'Primero',
+              'sLast':     'Último',
+              'sNext':     'Siguiente',
+              'sPrevious': 'Anterior'
+          },
+          'oAria': {
+              'sSortAscending':  ': Activar para ordenar la columna de manera ascendente',
+              'sSortDescending': ': Activar para ordenar la columna de manera descendente'
+          }
+        }
+        });
+      },
+      err => {},
+      () => {}
+    );
+  }
   public getRepositorioEli(){
     this.repositorioENR.getRepositorioEliminados().subscribe(
       response => {
@@ -4073,6 +4143,17 @@ public eliminarLectura(i, periodo){
     this.frmDatosEliminar.controls["razonEliminado"].setValue('');
   }
 
+
+  public recibirCaso(id, nis){
+    this.casoRecibir = id;
+    this.nisRecibir = nis;
+    this.frmRecibidoCliente.controls["idCasoEntregado"].setValue(id);
+
+    this.frmRecibidoCliente.controls["fechaRecibido"].setValue('');
+    this.frmRecibidoCliente.controls["usuarioEntrega"].setValue('');
+    this.frmRecibidoCliente.controls["adjuntoRecibido"].setValue('');
+  }
+
   public eliminarCasoBD(){
     let datosEliminar : Repositorio = new Repositorio();
   
@@ -4845,6 +4926,73 @@ public mostrardtCalculoC(){
   $("#divCobroENRC").show();
   $("#divCalculoENRC").hide();
 }
+
+
+//validacion del archivo seleccionado
+subirRecibido(fileInput: any) {
+  this.fileData = <File>fileInput.target.files[0];
+  this.moverAdjuntoCliente();
+}
+
+
+moverAdjuntoCliente() {
+  const formData = new FormData();
+  formData.append('file', this.fileData);
+   
+  this.barraCarga = '0%';
+
+ 
+  this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
+    reportProgress: true,
+    observe: 'events'   
+  })
+  .subscribe(events => {
+    if(events.type === HttpEventType.UploadProgress) {
+      this.barraCarga = Math.round(events.loaded / events.total * 100) + '%';
+      //console.log(this.barraCarga);
+    } else if(events.type === HttpEventType.Response) {
+      this.barraCarga = '';
+    }
+
+    
+       
+  });
+  
+  
+}
+
+
+
+public guardarDatosRecibidoCliente(){
+  let datosRecibidos : Repositorio = new Repositorio();
+
+  datosRecibidos = this.frmRecibidoCliente.value;
+
+    this.repositorioENR.guardarDatosRecibidoCliente(datosRecibidos).subscribe(
+      response => {
+        
+      },
+      err => {
+      // //console.log("no");
+      },
+      () => { 
+        notie.alert({
+          type: 'success', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+          text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Guardado con éxito!',
+          stay: false, // optional, default = false
+          time: 2, // optional, default = 3, minimum = 1,
+          position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+        });
+  
+
+        this.getRepositorioIng();
+        this.getRepositorioCalc();
+        this.getRepositorioNoti();
+  },
+);
+}
+
+
 }
 
 

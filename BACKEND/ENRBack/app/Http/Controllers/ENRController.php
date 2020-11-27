@@ -474,6 +474,31 @@ class ENRController extends Controller
     }
 
 
+    public function getRepositorioRecibidosCliente(){
+        $getDatos =  DB::connection('facturacion')->select("
+        select dg.id as caso, dg.num_suministro as nis, dg.scanPrimerNoti as ruta,
+        dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
+        convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
+        t.tipoENR as codigoENR,t.codigoTipo as codigoTipoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
+        m.codigo as codBase,
+        (select count(id) from enr_documentacion where idCasoENR =
+        dg.id and idEliminado = 1) as adjuntos,
+        dg.codigoTipoENR as codTipoENR,
+        fes.codigo_tarifa as tarifa, dg.fechaInicio as fechaIn, dg.fechaFin as fechaFin,
+        tp.datosCalculo as datosCalculo from enr_datosGenerales dg
+        inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
+        inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
+        inner join EDESAL_CALIDAD.dbo.SGT_Usuarios u on u.id = dg.usuario_creacion
+        inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
+        inner join enr_totalPagos tp on tp.casoENR = dg.id
+        where dg.idEliminado = 1 and dg.estado = 6
+        ");
+
+
+        return response()->json($getDatos);
+    }
+
+
     public function moveDoc(Request $request){
     
       
@@ -592,6 +617,7 @@ class ENRController extends Controller
         enr_datosGenerales.num_suministro) as voltajeSuministro,
         scanPrimerNoti as ruta,
         RIGHT(scanPrimerNoti,3) as ext,
+        RIGHT(adjuntoEntrega,3) as extCli,
         convert(varchar(10),fechaPrimerNoti,23) as fechaPri,
         convert(varchar(10),fechaRegularizacion,23) as fechaR,
         convert(varchar(10),fechaInicio,23) as fechaIn,
@@ -599,6 +625,7 @@ class ENRController extends Controller
         convert(varchar(10),fechaInicio,103) as fechaIni,
         convert(varchar(10),fechaFin,103) as fechaFini,
         convert(varchar(10),fechaRegularizacion,103) as fechaRe,
+        convert(varchar(10),fechaRecibidoCliente,23) as fechaRecibidoCli,
         (select e.estado from enr_estadosCasos e 
         inner join enr_datosGenerales dg on dg.estado = e.id
         where dg.id = enr_datosGenerales.id) as nomEstado,
@@ -1966,7 +1993,7 @@ class ENRController extends Controller
                 $imagenes = '';
 
                 foreach($docsSeleccionados as $p){
-                    if(substr($p->archivo, -4) == 'JPEG' || substr($p->archivo, -3) == 'jpg' || substr($p->archivo, -3) == 'JPG' 
+                    if(substr($p->archivo, -4) == 'JPEG' || substr($p->archivo, -4) == 'jpeg' || substr($p->archivo, -3) == 'jpg' || substr($p->archivo, -3) == 'JPG' 
                         || substr($p->archivo, -3) == 'png' || substr($p->archivo, -3) == 'PNG' )
                         {
                             $imagenes.=json_encode($p->archivo);
@@ -1999,7 +2026,7 @@ class ENRController extends Controller
 
             foreach($docsSeleccionados as $p){
                 if(substr($p->archivo, -4) == 'JPEG' || substr($p->archivo, -3) == 'jpg' || substr($p->archivo, -3) == 'JPG' 
-                    || substr($p->archivo, -3) == 'png' || substr($p->archivo, -3) == 'PNG' )
+                    || substr($p->archivo, -3) == 'png' || substr($p->archivo, -3) == 'PNG' || substr($p->archivo, -4) == 'jpeg')
                     {
 
                     }else{
@@ -2012,7 +2039,7 @@ class ENRController extends Controller
             $imagenes = '';
             
             foreach($docsSeleccionados as $p){
-                if(substr($p->archivo, -4) == 'JPEG' || substr($p->archivo, -3) == 'jpg' 
+                if(substr($p->archivo, -4) == 'JPEG' || substr($p->archivo, -3) == 'jpg' || substr($p->archivo, -4) == 'jpeg'
                     || substr($p->archivo, -3) == 'png' || substr($p->archivo, -3) == 'JPG' || substr($p->archivo, -3) == 'PNG' )
                     {
                         $imagenes.=json_encode($p->archivo);
@@ -2740,4 +2767,29 @@ class ENRController extends Controller
 
             return response()->json($getConsumo);
     }
+
+    public function guardarDatosRecibidoCliente(Request $request){
+        $idCaso = $request["idCasoEntregado"];
+        $usuario = $request["usuarioEntrega"];
+        $fechaRecibido = $request["fechaRecibido"];
+        $ruta = $request["adjuntoRecibido"];
+      
+        $fecha = date_create_from_format('Y-m-d',$fechaRecibido);
+
+        $fechaEntrega = date_format($fecha,'Ymd');
+
+        $editar =  DB::connection('facturacion')->table('enr_datosGenerales')->where('id', $idCaso)
+                         ->update([
+                             'estado' => 6,
+                             'fechaRecibidoCliente' => $fechaEntrega,
+                             'usuarioEntrega' => $usuario,
+                             'adjuntoEntrega' => substr($ruta,12),
+                             ]);
+
+                   
+        
+          return response()->json($editar); 
+        
+    }
+
 }
