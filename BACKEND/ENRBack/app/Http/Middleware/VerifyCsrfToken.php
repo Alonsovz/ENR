@@ -108,6 +108,7 @@ class VerifyCsrfToken extends BaseVerifier
         'getCasosIng',
         'getCasosCalc',
         'getCasosNoti',
+        'getCasosRec',
         'getCasosEl',
         'getRepositorioEliminados',
         'getNumeroMedidor',
@@ -150,6 +151,9 @@ class VerifyCsrfToken extends BaseVerifier
         'getConsumoENRBloqueDistribucion1GTotalCalculo',
         'getTotalesCobro',
         'guardarDatosRecibidoCliente',
-        'getRepositorioRecibidosCliente'
+        'getRepositorioRecibidosCliente',
+        'guardarSeleccionEE',
+        'getCodigosCargos',
+        'saveDatosCalCaso6'
     ];
 }

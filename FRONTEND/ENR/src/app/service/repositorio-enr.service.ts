@@ -315,6 +315,10 @@ export class RepositorioEnrService {
     return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'saveDatosCalCaso1', datos).pipe(map(data => data as Repositorio));
   }
 
+  public saveDatosCalCaso6(datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'saveDatosCalCaso6', datos).pipe(map(data => data as Repositorio));
+  }
   public updateDatosCalCaso1(datos: Repositorio): Observable<Repositorio> {
     //console.log(datos);
     return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'updateDatosCalCaso1', datos).pipe(map(data => data as Repositorio));
@@ -617,6 +621,11 @@ export class RepositorioEnrService {
     return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'guardarDatosRecibidoCliente', datos).pipe(map(data => data as Repositorio));
   }
 
+
+  public guardarSeleccionEE(datos: Repositorio): Observable<Repositorio> {
+    //console.log(datos);
+    return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'guardarSeleccionEE', datos).pipe(map(data => data as Repositorio));
+  }
 
 }
 

@@ -16,8 +16,10 @@ export class CodigoENRService {
   public getCodigoENR(): Observable<codigos[]> {
     return this.http.get(this.url.getUrlBackEnd() + 'getCodigoENR').pipe(map(data => data as codigos[]));
   }
-
-
+  public getCodigosCargos(): Observable<codigos[]> {
+    return this.http.get(this.url.getUrlBackEnd() + 'getCodigosCargos').pipe(map(data => data as codigos[]));
+  }
+  
   public saveCodigos(codigo: codigos): Observable<codigos> {
     return this.http.post<codigos>(this.url.getUrlBackEnd() + 'saveCodigoENR', codigo).pipe(map(data => data as codigos));
   }

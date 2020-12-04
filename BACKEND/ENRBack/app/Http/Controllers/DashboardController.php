@@ -48,7 +48,7 @@ class DashboardController extends Controller
             +''+convert(varchar,year(dg.fechaCreacion)) as periodo, sum(tp.totalPagar) as pagos
             from enr_datosgenerales dg
             inner join enr_totalpagos tp on tp.casoENR = dg.id
-            where dg.estado = 3 and dg.idEliminado = 1 and tp.totalPagar > 0
+            where dg.estado in (3,6) and dg.idEliminado = 1 and tp.totalPagar > 0
             group by CONVERT(char(2), cast(dg.fechaCreacion as datetime), 101) 
             +''+convert(varchar,year(dg.fechaCreacion))
         ");
@@ -74,8 +74,7 @@ class DashboardController extends Controller
 
     public function getCasosIng(){
 
-        $execProcedure =  DB::connection('facturacion')->statement(
-            "exec  [dbo].[enr_calculoCuadroAcumulado]");
+
  
  
         $getDatos = DB::connection('facturacion')->select(
@@ -88,8 +87,7 @@ class DashboardController extends Controller
 
     public function getCasosCalc(){
 
-        $execProcedure =  DB::connection('facturacion')->statement(
-            "exec  [dbo].[enr_calculoCuadroAcumulado]");
+       
  
  
         $getDatos = DB::connection('facturacion')->select(
@@ -102,8 +100,7 @@ class DashboardController extends Controller
 
     public function getCasosNoti(){
 
-        $execProcedure =  DB::connection('facturacion')->statement(
-            "exec  [dbo].[enr_calculoCuadroAcumulado]");
+ 
  
  
         $getDatos = DB::connection('facturacion')->select(
@@ -114,10 +111,21 @@ class DashboardController extends Controller
     }
 
 
+    public function getCasosRec(){
+
+ 
+ 
+ 
+        $getDatos = DB::connection('facturacion')->select(
+            "select count(id) as rec from enr_datosGenerales where idEliminado = 1 and estado = 6");
+             
+  
+        return response()->json($getDatos);
+    }
+
     public function getCasosEl(){
 
-        $execProcedure =  DB::connection('facturacion')->statement(
-            "exec  [dbo].[enr_calculoCuadroAcumulado]");
+ 
  
  
         $getDatos = DB::connection('facturacion')->select(

@@ -194,6 +194,7 @@ Route::get('/', function () {
     Route::any('getCasosCalc', 'DashboardController@getCasosCalc');
     Route::any('getCasosNoti', 'DashboardController@getCasosNoti');
     Route::any('getCasosEl', 'DashboardController@getCasosEl');
+    Route::any('getCasosRec', 'DashboardController@getCasosRec');
     Route::any('getRepositorioEliminados', 'ENRController@getRepositorioEliminados');
 
     Route::post('getNumeroMedidor', 'ENRController@getNumeroMedidor');
@@ -257,4 +258,8 @@ Route::get('/', function () {
         
     Route::post('guardarDatosRecibidoCliente', 'ENRController@guardarDatosRecibidoCliente');
     Route::any('getRepositorioRecibidosCliente', 'ENRController@getRepositorioRecibidosCliente');
+    Route::any('guardarSeleccionEE', 'ENRController@guardarSeleccionEE');
+
+    Route::any('getCodigosCargos', 'ENRController@getCodigosCargos');
+    Route::any('saveDatosCalCaso6','ENRController@saveDatosCalCaso6');
     

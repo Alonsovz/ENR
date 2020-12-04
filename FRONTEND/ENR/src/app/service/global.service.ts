@@ -48,5 +48,10 @@ export class GlobalService {
     return this.http.get(this.getUrlBackEnd() +'getCasosEl').pipe(map(data => data as Repositorio[]));
   }
 
+  public getCasosRec(){
+    return this.http.get(this.getUrlBackEnd() +'getCasosRec').pipe(map(data => data as Repositorio[]));
+  }
+
+  
  
 }

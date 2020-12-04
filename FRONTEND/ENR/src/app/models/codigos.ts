@@ -3,4 +3,5 @@ export class codigos {
     codigoTipo: string;
     TipoENR: string;
     tiempoRetroactivo : number;
+    codigoCargo: string;
 }

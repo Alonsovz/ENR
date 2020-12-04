@@ -16,6 +16,7 @@ import notie from 'notie';
 export class CodigoTipoENRComponent implements OnInit {
 
   cod: codigos[];
+  cargos: codigos[];
   dataTable: any;
   codEdition : codigos = new codigos();
   eliCodigo : codigos = new codigos();
@@ -32,6 +33,7 @@ export class CodigoTipoENRComponent implements OnInit {
     'codigoTipo' : new FormControl('',[Validators.required]),
     'tipoENR': new FormControl('',[Validators.required]),
     'tiempoRetroactivo': new FormControl('',[Validators.required]),
+    'cargo': new FormControl(0,[Validators.required]),
     });
 
 
@@ -40,6 +42,7 @@ export class CodigoTipoENRComponent implements OnInit {
       'codigoTipo' : new FormControl(''),
       'TipoENR': new FormControl(''),
       'tiempoRetroactivo': new FormControl(''),
+      'codigoCargo': new FormControl(0),
       });
 
       this.frmEliminarCodigoENR = new FormGroup({
@@ -50,8 +53,9 @@ export class CodigoTipoENRComponent implements OnInit {
 
 
   public editarCodigo(codigo) {
+    console.log(codigo);
     this.codEdition = codigo;
-   this.frmEditarCodigoENR.setValue(codigo);
+  this.frmEditarCodigoENR.setValue(codigo);
   }
 
 
@@ -213,7 +217,17 @@ export class CodigoTipoENRComponent implements OnInit {
         
       }
     );
-    
+
+    this.codigoENR.getCodigosCargos().subscribe(
+      response => {
+       
+        this.cargos = response;
+      },
+      err => {},
+      () => {
+        
+      }
+    );
   }
 
 

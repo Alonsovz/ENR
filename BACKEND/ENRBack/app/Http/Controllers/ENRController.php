@@ -16,7 +16,7 @@ class ENRController extends Controller
 {
     public function getCodigoENR(){
         $codigos = DB::connection('facturacion')->select("
-        select id, codigoTipo,TipoENR,tiempoRetroactivo from enr_gestionTipoEnr
+        select id, codigoTipo,TipoENR,tiempoRetroactivo, codigoCargo from enr_gestionTipoEnr
          where idEliminado = 1 order by id desc
         ");
 
@@ -33,15 +33,26 @@ class ENRController extends Controller
         return response()->json($codigos);
     }
 
+    public function getCodigosCargos(){
+        $codigos = DB::connection('facturacion')->select("
+        select distinct codigo_cargo as cargo from fe_cargos_varios
+        ");
+
+
+        return response()->json($codigos);
+    }
+
     public function saveCodigos(Request $request){
         $codigo = $request["codigoTipo"];
         $tipoENR = $request["tipoENR"];
         $tiempo = $request["tiempoRetroactivo"];
+        $cargo = $request["cargo"];
 
 
         $insertar =  DB::connection('facturacion')->table('enr_gestionTipoEnr')
                          ->insert(['codigoTipo' => "$codigo" , 'TipoENR' => $tipoENR,
-                         'tiempoRetroactivo' => $tiempo,'idEliminado' => 1
+                         'tiempoRetroactivo' => $tiempo,'idEliminado' => 1,
+                         'codigoCargo' => $cargo
                          ]);
 
 
@@ -57,11 +68,11 @@ class ENRController extends Controller
         $codigo = $request["codigoTipo"];
         $tipoENR = $request["TipoENR"];
         $tiempo = $request["tiempoRetroactivo"];
-
+        $cargo = $request["codigoCargo"];
 
         $editar =  DB::connection('facturacion')->table('enr_gestionTipoEnr')->where('id', $id)
                          ->update(['codigoTipo' => "$codigo" , 'TipoENR' => $tipoENR,
-                         'tiempoRetroactivo' => $tiempo
+                         'tiempoRetroactivo' => $tiempo, 'codigoCargo' => $cargo
                          ]);
 
 
@@ -485,7 +496,8 @@ class ENRController extends Controller
         dg.id and idEliminado = 1) as adjuntos,
         dg.codigoTipoENR as codTipoENR,
         fes.codigo_tarifa as tarifa, dg.fechaInicio as fechaIn, dg.fechaFin as fechaFin,
-        tp.datosCalculo as datosCalculo from enr_datosGenerales dg
+        tp.datosCalculo as datosCalculo,
+        LTRIM(str(tp.subTotal,12,2)) as pagoSinIva from enr_datosGenerales dg
         inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
         inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
         inner join EDESAL_CALIDAD.dbo.SGT_Usuarios u on u.id = dg.usuario_creacion
@@ -882,9 +894,15 @@ class ENRController extends Controller
 
         $total = 0;
 
-        if($tipoCaso->codigo == 'CD'){
+        if($tipoCaso->codigo == 'CD' ){
             $total = $consumo;
         }
+        
+        if($tipoCaso->codigo == 'CD' && $nombreMet->tipoENR=='Medición de corriente en derivación'){
+            $total = $consumoENR/$diasCobro->diasCobro;
+        }
+
+       
 
         if($tipoCaso->codigo == 'CN'){
             $total = $consumo;
@@ -924,7 +942,7 @@ class ENRController extends Controller
 
      $getConsumo = DB::connection('facturacion')->select(
          "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
-         str(round(consumo,-0),12,2) as consumo from enr_consumoEstimado
+         str(consumo,12,2) as consumo from enr_consumoEstimado
          where casoENR = ".$caso." order by 1 asc");
             
  
@@ -1467,11 +1485,6 @@ class ENRController extends Controller
         $consumo2 = $request["consumo2"];
         $consumoENRFacturar = $request["consumoENRFacturar"];
 
-      
-       
-
-      
-      
 
           $insertar =  DB::connection('facturacion')->table('enr_datosCalculados')
           ->where('casoENR', $idCaso)
@@ -1790,6 +1803,17 @@ class ENRController extends Controller
     }
 
 
+    public function saveDatosCalCaso6(Request $request){
+        $idCaso = $request["idCaso"];
+      
+      
+      $notificar =  DB::connection('facturacion')->table('enr_datosGenerales')
+        ->where('id', $idCaso)
+        ->update(['estado' => 2]);
+        return response()->json($notificar); 
+    }
+
+
     public function savePeriodosSeleccionadosCaso5(Request $request){
         $periodos = json_encode($request["lecturas"]);
         $periodosDes = json_decode($periodos);
@@ -1968,10 +1992,10 @@ class ENRController extends Controller
         $id = $request["caso"];
 
         $getDatos =  DB::connection('facturacion')->select("
-        select 0 as id, 'Notificación inicial' as titulo, scanPrimerNoti as ruta 
+        select 0 as id, 'Notificación inicial' as titulo, LTRIM(RTRIM(scanPrimerNoti)) as ruta 
         from enr_datosGenerales where id = ".$id." and scanPrimerNoti != '0'
         union 
-        select id as id, titulo as titulo, ruta as ruta from enr_documentacion 
+        select id as id, titulo as titulo, LTRIM(RTRIM(ruta)) as ruta from enr_documentacion 
         where idCasoENR =  ".$id." and idEliminado = 1 and ruta != '0'");
 
         return response()->json($getDatos);
@@ -1979,8 +2003,8 @@ class ENRController extends Controller
 
 
     
-     public function multiplesArchivos(Request $request){
-
+     
+    public function multiplesArchivos(Request $request){
 
                 $docs = json_encode($request["pdfs"]);
 
@@ -2790,6 +2814,17 @@ class ENRController extends Controller
         
           return response()->json($editar); 
         
+    }
+
+
+
+    public function guardarSeleccionEE(Request $request){
+        $casos = json_encode($request["casosEE"]);
+
+        $caso = $request["periodoFacEE"];
+
+
+        return response()->json($caso); 
     }
 
 }

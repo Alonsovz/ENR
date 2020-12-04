@@ -1453,7 +1453,7 @@
                
         
 
-                  <input type="text" formControlName="numeroCaso" class="form-control">
+                  <input type="hidden" formControlName="numeroCaso" class="form-control">
                         
                   </div>
                 </form>
@@ -1511,7 +1511,7 @@
               <input type="hidden" [(ngModel)]="dg.fechaIn" formControlName="fechaInicio">
             
               <input type="hidden" [(ngModel)]="dg.fechaFin" formControlName="fechaFin">
-              <input type="text" [(ngModel)]="dg.idC" formControlName="numeroCaso">
+              <input type="hidden" [(ngModel)]="dg.idC" formControlName="numeroCaso">
            
            <div class="col-lg-12">
             <hr style="background-color: yellow !important; height: 2px;">
@@ -1846,7 +1846,7 @@
 <div class="row animated fadeInLeft" style="margin-left: 30px;margin-right: 30px;
 background-color: #323259;" id="titleGlobal">
   <div class="center" style="margin: auto;">
-    <h3 style="color: #9AFB4D;">
+    <h3 style="color: #A523FF;">
         <img class="img-profile" src="./assets/imagenes/folder.png"
         style="margin-bottom: 5px;margin-top: 5px;" height=45>
         Repositorio de Casos de ENR
@@ -1860,37 +1860,37 @@ background-color: #323259;" id="titleGlobal">
     margin-left: 30px;">
       <li class="nav-item">
         <a class="nav-link active"  data-toggle="tab" href="#ingresados" role="tab" (click)="getRepositorioIng()"
-        aria-controls="home" aria-selected="true" style="color:white;background-color: #1B1B38;">
+        aria-controls="home" aria-selected="true" style="color:yellow;background-color: #1B1B38;">
         <i class="fas fa-save"></i>
-        Ingresado
+        Ingresados
          </a>
       </li>
-      <li class="nav-item" style="border-bottom:1px solid white;">
+      <li class="nav-item" style="border-bottom:1px solid aqua;">
         <a class="nav-link"  data-toggle="tab" href="#calculados" role="tab" (click)="getRepositorioCalc()"
-        aria-controls="profile" aria-selected="false" style="color:white;background-color: #1B1B38;">
+        aria-controls="profile" aria-selected="false" style="color:aqua;background-color: #1B1B38;">
          <i class="fas fa-calculator"></i>
-            Calculado
+            Calculados
         </a>
       </li>
-      <li class="nav-item" style="border-bottom:1px solid white;">
+      <li class="nav-item" style="border-bottom:1px solid orange;">
         <a class="nav-link"  data-toggle="tab" href="#notificados" role="tab" (click)="getRepositorioNoti()"
-        aria-controls="profile" aria-selected="false" style="color:white;background-color: #1B1B38;">
+        aria-controls="profile" aria-selected="false" style="color:orange;background-color: #1B1B38;">
          <i class="fas fa-print"></i>
             Generados
         </a>
       </li>
-      <li class="nav-item" style="border-bottom:1px solid white;">
+      <li class="nav-item" style="border-bottom:1px solid #35FD04;">
         <a class="nav-link"  data-toggle="tab" href="#recibidos" role="tab" 
         (click)="getRepositorioRecibidosCliente()"
-        aria-controls="profile" aria-selected="false" style="color:white;background-color: #1B1B38;">
+        aria-controls="profile" aria-selected="false" style="color:#35FD04;background-color: #1B1B38;">
          <i class="fas fa-bell"></i>
             Notificados
         </a>
       </li>
 
-      <li class="nav-item" style="border-bottom:1px solid white;">
+      <li class="nav-item" style="border-bottom:1px solid #FD0404;">
         <a class="nav-link"  data-toggle="tab" href="#eliminados" role="tab" (click)="getRepositorioEli()"
-        aria-controls="profile" aria-selected="false" style="color:white;background-color: #1B1B38;">
+        aria-controls="profile" aria-selected="false" style="color:#FD0404; background-color: #1B1B38;">
          <i class="fas fa-trash"></i>
             Eliminados
         </a>
@@ -1898,12 +1898,12 @@ background-color: #323259;" id="titleGlobal">
     </ul>
 
     <div class="tab-content" id="myTabContent" style="background-color: #323259;margin-right: 30px;
-    margin-left: 30px;border: 1px solid white;">
+    margin-left: 30px;border-right: 1px solid white;border-left: 1px solid white;border-bottom: 1px solid white;">
         <div class="tab-pane fade show active" id="ingresados" role="tabpanel" aria-labelledby="">
             <div class="row animated flipInX">
                 <div class="col-lg-2"></div>
                     <div class="col-lg-8" style="background-color: #1B1B38;color: white;
-                    text-align: center;font-size: 25px;color:#4DFBE6;font-weight: bold;">
+                    text-align: center;font-size: 25px;color:yellow;font-weight: bold;">
                       <img class="img-profile" src="./assets/imagenes/pending.png" 
                       style="margin-bottom: 5px;">
                       Casos Ingresados (Pendientes de Cálculo)
@@ -1968,7 +1968,7 @@ background-color: #323259;" id="titleGlobal">
             <div class="row animated flipInX">
                 <div class="col-lg-2"></div>
                     <div class="col-lg-8" style="background-color: #1B1B38;color: white;
-                    text-align: center;font-size: 25px;color:#4DFBE6;font-weight: bold;">
+                    text-align: center;font-size: 25px;color:aqua;font-weight: bold;">
                       <img class="img-profile" src="./assets/imagenes/budget.png" 
                       style="margin-bottom: 5px;">
                       Casos Calculados (Pendientes de emitir reporte)
@@ -2033,7 +2033,7 @@ background-color: #323259;" id="titleGlobal">
             <div class="row animated flipInX">
                 <div class="col-lg-2"></div>
                     <div class="col-lg-8" style="background-color: #1B1B38;color: white;
-                    text-align: center;font-size: 25px;color:#4DFBE6;font-weight: bold;">
+                    text-align: center;font-size: 25px;color:orange;font-weight: bold;">
                       <img class="img-profile" src="./assets/imagenes/printer.png" 
                       style="margin-bottom: 5px;">
                       Casos Generados (Pendientes de recibir por cliente)
@@ -2093,9 +2093,14 @@ background-color: #323259;" id="titleGlobal">
                             </tr>
                         </tbody>
                     </table><br><br>
+
+                 
                 </div>
                 <div class="col-lg-1"></div>
             </div> 
+
+
+          
 
         </div>
 
@@ -2103,17 +2108,24 @@ background-color: #323259;" id="titleGlobal">
           <div class="row animated flipInX">
               <div class="col-lg-1"></div>
                   <div class="col-lg-10" style="background-color: #1B1B38;color: white;
-                  text-align: center;font-size: 25px;color:#4DFBE6;font-weight: bold;">
+                  text-align: center;font-size: 25px;color:#35FD04;font-weight: bold;">
                     <img class="img-profile" src="./assets/imagenes/file.png"
                     style="margin-bottom: 5px;">
                     Casos Notificados (Pendientes de facturar)
                   </div>                   
               <div class="col-lg-2"></div>
+             
           </div>
 
-          <div class="row mt-5 animated fadeInLeft">
+          <div class="row animated fadeInLeft">
               <div class="col-lg-1"></div>
               <div class="col-lg-10">
+                  <br>
+                  <button id="btnFinalizarEE" style="display:none;float: right; margin-right: 0; color:black !important;"
+                  type="button" class="btn btn-warning" data-toggle="modal"  data-target="#modalCasosEE">
+                    <i class="fas fa-check"></i>  Finalizar selección!
+                  </button>
+                  <br><br>
                   <table  id="tbl_Recibidos" class="table small mt-5" style="width: 100%;">
                       <thead class="thead-dark">
                         <tr>
@@ -2124,6 +2136,7 @@ background-color: #323259;" id="titleGlobal">
                           <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Dias de Cobro</th>
                           <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Fecha de Creación</th>
                           <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Acciones</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Enviar a Fact.</th>
                         </tr>
                       </thead>
                       <tbody style="background-color:#323259; color:white;text-align: center;font-size: 11px;">
@@ -2145,12 +2158,18 @@ background-color: #323259;" id="titleGlobal">
                                (click)="verPDFImpreso(rep.caso)" title="Ver reporte">
                                  <i class="fas fa-print"></i> 
                                </button>
-                               
-                               
-                               
+                               </td>
+                               <td>
+                               <input type="checkbox" class="form-control" value="rep.caso" title="Enviar a tabla EE"
+                               (change)="casosTablaEE($event.target.checked, rep.caso, rep.nis, rep.codigoENR,
+                               rep.pagoSinIva)"
+                               style="height: 20px !important; width: 20px !important; margin: auto;">
+                               </td>
                           </tr>
                       </tbody>
                   </table><br><br>
+
+                
               </div>
               <div class="col-lg-1"></div>
           </div> 
@@ -2161,7 +2180,7 @@ background-color: #323259;" id="titleGlobal">
           <div class="row animated flipInX">
               <div class="col-lg-2"></div>
                   <div class="col-lg-8" style="background-color: #1B1B38;color: white;
-                  text-align: center;font-size: 25px;color:#4DFBE6;font-weight: bold;">
+                  text-align: center;font-size: 25px;color:#FD0404;font-weight: bold;">
                     <img class="img-profile" src="./assets/imagenes/rejected.png" 
                     style="margin-bottom: 5px;">
                     Casos Eliminados
@@ -4943,7 +4962,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
             </a>
           </li>
           <li class="nav-item" style="border-bottom:1px solid white;">
-            <a class="nav-link"  data-toggle="tab" href="#tabRecibidos" role="tab"
+            <a class="nav-link"  data-toggle="tab" href="#tabRecibidos" role="tab"  *ngIf="ordenNumeroG.estado == 6 "
             aria-controls="profile" aria-selected="false" style="color:#757BFF;background-color: #1B1B38;">
             <i class="fas fa-user-check"></i>
                 Recepción
@@ -5702,7 +5721,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
                   <div class="col-md-4"><br>
                     <label><i class="fa fa-file"></i> Adjunto: Scan de notificacion inicial</label>          
                     <br>
-                    <div *ngIf = "data.adjuntoEntrega != ''">
+                    <div *ngIf = "data.adjuntoEntrega != null">
                       <h6 style="color: yellow;font-size: 13px;">{{data.adjuntoEntrega}}</h6>
                       <button class="btn btn-success btn-sm btn-circle"  data-dismiss="modal"
                       (click)="adjuntosOrdenesVer(data.adjuntoEntrega, data.extCli)"
@@ -5716,14 +5735,9 @@ tabindex="-1" role="dialog" id="nuevoScanC">
                         </a>
                         
                     </div>
-                    <div *ngIf="data.ruta == '0'">
+                    <div *ngIf="data.adjuntoEntrega == null">
                       <h6 style="color: yellow;font-size: 13px;">No se adjuntó</h6>
-                        <button class="btn btn-warning btn-sm btn-circle"
-                          data-dismiss="modal" *ngIf="user.rol == 'AEA' || user.rol == 'AE'"
-                          (click)="nuevoScan(ordenNumeroG)" 
-                          data-toggle="modal" data-target="#nuevoScan">
-                                  <i class="fa fa-sync"></i>
-                        </button> 
+                     
                     </div>
                       
                    
@@ -6079,6 +6093,97 @@ tabindex="-1" role="dialog" id="nuevoScanC">
           data-toggle="modal" data-target="#datosCasoNoti">
           <i class="fas fa-times-circle"></i>  Cerrar
         </button>          
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal animated fadeInDown" id="modalCasosEE" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog  mw-100 w-75">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="title" style="color:#0CD902 !important;">
+          <img class="img-profile" src="./assets/imagenes/facEE.png" height="50">
+          Casos seleccionados para envío a facturación EE
+        </h5>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="frmPeriodoEE">
+          <div class="col-md-4">
+            <label> Período de facturación </label>
+            <input type="text" formControlName="periodoFacEE" placeholder="Período de facturación" class="form-control"
+            mask="000000">
+          </div>
+        </form>
+
+        <form [formGroup]="frm_casosTablaEE" style="margin-left: 30px;margin-right: 30px;">       
+
+          <table class="table small mt-3">
+              <thead class="thead-dark">
+                  <tr >
+                      <th style="background-color: #1B1B38;color:#1FE303;font-size: 13px;
+                      border-bottom: 2px solid #1FE303;font-weight: bold;" class="text-center">
+                          Caso
+                      </th>
+                      <th style="background-color: #1B1B38;color:#1FE303;font-size: 13px;
+                      border-bottom: 2px solid #1FE303;font-weight: bold;" class="text-center">
+                          NIS
+                      </th>
+                      <th style="background-color: #1B1B38;color:#1FE303;font-size: 13px;
+                      border-bottom: 2px solid #1FE303;font-weight: bold;" class="text-center">
+                          Código Tipo ENR
+                      </th>
+                   
+                      <th style="background-color: #1B1B38;color:#1FE303;font-size: 13px;
+                      border-bottom: 2px solid #1FE303;font-weight: bold;" class="text-center">
+                         Cobro ENR Sin Iva
+                      </th>
+                   
+                  </tr>
+              </thead>
+              <tbody  formArrayName="casosEE"
+              style="background-color:#222245; color:white;text-align: center;
+              font-size: 14px;">
+                  <tr *ngFor="let item of casosEE.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                      <td style="border-bottom: 1px solid #A4FA98;">
+                        <input class="form-control" type="text" formControlName="casoEE"
+                        style="text-align: center !important;color: #A4FA98 !important;" readonly="true">
+                      </td>
+                      <td style="border-bottom: 1px solid #A4FA98;">
+                        <input class="form-control" type="text" formControlName="nis"
+                        style="text-align: center !important;color: #A4FA98 !important;" readonly="true">
+                      </td>
+                      <td style="border-bottom: 1px solid #A4FA98;width: 30% !important;">
+                        <textarea class="form-control" formControlName="codigoTipoENR"
+                        style="text-align: center !important;color: #A4FA98 !important;" readonly="true">
+                        </textarea> 
+                      </td>
+     
+                      <td style="border-bottom: 1px solid #A4FA98;">
+                        <input class="form-control" type="text" formControlName="pagoSinIva"
+                        style="text-align: center !important;color: #A4FA98 !important;" readonly="true">
+                      </td>
+
+                     
+                      <button class="btn btn-danger btn-sm btn-circle" id="btnCasos{{item.value.casoEE}}"
+                      style="display: none;"
+                      (click)="eliminarCasoEE(pointIndex,item.value.casoEE)"><i class="fas fa-trash"></i></button>
+
+                  </tr>
+              </tbody>
+          </table>
+        </form>
+      
+     </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal">
+          <i class="fas fa-times-circle"></i>  Cerrar
+        </button>
+        <button type="button" [disabled] = "frmPeriodoEE.invalid" class="btn btn-success"
+        (click)="guardarSeleccionEE()">
+          <i class="fas fa-thumbs-up"></i> Guardar datos!
+        </button>        
       </div>
     </div>
   </div>

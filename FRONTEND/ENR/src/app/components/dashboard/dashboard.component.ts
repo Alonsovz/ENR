@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
   ing: any;
   calc: any;
   noti: any;
+  rec: any;
   el: any;
   constructor(
     private pagosENR: GlobalService
@@ -244,6 +245,12 @@ export class DashboardComponent implements OnInit {
     this.pagosENR.getCasosNoti().subscribe(
       response => {
         this.noti = response;
+      }
+    );
+
+    this.pagosENR.getCasosRec().subscribe(
+      response => {
+        this.rec = response;
       }
     );
 

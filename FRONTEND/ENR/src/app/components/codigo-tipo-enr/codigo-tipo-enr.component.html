@@ -46,17 +46,26 @@ margin-left: 20px;border: 1px solid white;">
               
                 <form [formGroup]='frm_codigoENR'>
                   <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                       <label> <i class="fas fa-cubes"></i> Código Tipo</label>
                       <input class="form-control" placeholder="Ingreso Código Tipo"
                       formControlName ="codigoTipo">
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label> <i class="fas fa-codeopen"></i> Tipo ENR</label>
                         <textarea rows="3" class="form-control" placeholder="Ingreso Tipo ENR"
                         formControlName="tipoENR"></textarea>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
+                      <label> <i class="fas fa-codeopen"></i> Cargo asociado: </label>
+                      <select class="form-control" formControlName="cargo">
+                        <option value="0" set selected> Seleccione una opción</option>
+                        <option *ngFor="let car of cargos"  value="{{car.cargo}}">
+                          {{car.cargo}}
+                        </option>
+                    </select>
+                  </div>
+                    <div class="col-md-3">
                         <label> <i class="fas fa-codeopen"></i> Tiempo Retroactivo</label>
                         <input class="form-control" placeholder="Ingreso Tiempo Retroactivo"
                         formControlName="tiempoRetroactivo">
@@ -100,6 +109,7 @@ margin-left: 20px;border: 1px solid white;">
                 <th style="background-color:#323259; color:#A16EFF;" class="text-center">ID</th>
                 <th style="background-color:#323259; color:#A16EFF;" class="text-center">Código Tipo</th>
                 <th style="background-color:#323259; color:#A16EFF;" class="text-center">Tipo ENR</th>
+                <th style="background-color:#323259; color:#A16EFF;" class="text-center">Cargo Asociado</th>
                 <th style="background-color:#323259; color:#A16EFF;" class="text-center">Tiempo Retroactivo</th>
                 <th style="background-color:#323259; color:#A16EFF;" class="text-center">Acciones</th>
             </tr>
@@ -109,6 +119,7 @@ margin-left: 20px;border: 1px solid white;">
                 <td>{{codigo.id}}</td>
                <td>{{codigo.codigoTipo}}</td>
                <td>{{codigo.TipoENR}}</td>
+               <td>{{codigo.codigoCargo}}</td>
                <td>{{codigo.tiempoRetroactivo}}</td>
                <td>
                 <button (click)="editarCodigo(codigo)" class="btn btn-warning btn-sm btn-circle"
@@ -155,7 +166,7 @@ margin-left: 20px;border: 1px solid white;">
       <div class="modal-body"><br><br>
         <form [formGroup] = "frmEditarCodigoENR">
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label> Código Tipo</label>
                 <input class="form-control" 
                 formControlName = "codigoTipo" name="codigoTipo">
@@ -163,12 +174,21 @@ margin-left: 20px;border: 1px solid white;">
                 <input type="hidden" class="form-control" 
                 formControlName = "id" name="id"><br><br>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label>Tipo ENR</label>
                 <textarea rows="3" class="form-control" 
                 formControlName="TipoENR" name="TipoENR"></textarea>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
+              <label> <i class="fas fa-codeopen"></i> Cargo asociado: </label>
+              <select class="form-control" formControlName="codigoCargo" name="codigoCargo">
+                <option value="0" set selected> Seleccione una opción</option>
+                <option *ngFor="let car of cargos"  value="{{car.cargo}}">
+                  {{car.cargo}}
+                </option>
+            </select>
+          </div>
+            <div class="col-md-3">
                 <label>Tiempo Retroactivo</label>
                 <input class="form-control" 
                 formControlName="tiempoRetroactivo" name="tiempoRetroactivo">

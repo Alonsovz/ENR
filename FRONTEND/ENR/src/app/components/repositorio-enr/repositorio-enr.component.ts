@@ -146,7 +146,10 @@ export class RepositorioENRComponent implements OnInit {
   datoImprimirObj : Repositorio[];
   frm_PdfEvaluar: FormGroup;
   verPDF : SafeResourceUrl;
-  
+  public casosTabla: string[] = [];
+
+  frm_casosTablaEE: FormGroup;
+  frmPeriodoEE : FormGroup;
 
   constructor(private repositorioENR : RepositorioEnrService,private chRef: ChangeDetectorRef,
     private http: HttpClient, private url: GlobalService,
@@ -154,6 +157,7 @@ export class RepositorioENRComponent implements OnInit {
     public sanitizer: DomSanitizer,
     private codigoENR: CodigoENRService, private codigoMetENR: MetodologiaCalcService,
     private fb1: FormBuilder, private fb: FormBuilder,private fb2: FormBuilder,
+    private fbCasos: FormBuilder,
     private fbpdf: FormBuilder,) { 
 
       this.frm_LecturasEvaluarTotales = new FormGroup({
@@ -353,6 +357,12 @@ export class RepositorioENRComponent implements OnInit {
         'usuarioEntrega' : new FormControl(''),
 
       });
+
+      this.frmPeriodoEE = new FormGroup({
+       
+        'periodoFacEE' : new FormControl('',[Validators.required]),
+
+      });
     }
 
   ngOnInit() {
@@ -360,6 +370,7 @@ export class RepositorioENRComponent implements OnInit {
     this.user = JSON.parse(localStorage.getItem('usuario'));
     this.frm_PdfEvaluar = this.fbpdf.group({pdfs: this.fbpdf.array([]),});
     this.frm_LecturasEvaluar = this.fb2.group({lecturas: this.fb2.array([]),});
+    this.frm_casosTablaEE = this.fbCasos.group({casosEE: this.fbCasos.array([]),});
     this.docForm = this.fb.group({documentacion: this.fb.array([]),});
     this.adjuntoOrdenesForm = this.fb1.group({documentacionOrden: this.fb1.array([]),});
     this.rutaFile = this.url.getUrlBackEnd()+'descargarArchivo?ruta=';
@@ -591,6 +602,10 @@ export class RepositorioENRComponent implements OnInit {
     return this.frm_PdfEvaluar.get('pdfs') as FormArray;
   }
 
+
+  get casosEE(){
+    return this.frm_casosTablaEE.get('casosEE') as FormArray;
+  }
 
   get consumosReales3(){
     return this.frm_ConsumosReales3.get('consumosReales3') as FormArray;
@@ -1195,6 +1210,9 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
   }
 
   public getRepositorioRecibidosCliente(){
+    $("#btnFinalizarEE").hide();
+    this.frm_casosTablaEE = this.fbCasos.group({casosEE: this.fbCasos.array([]),});
+
     this.repositorioENR.getRepositorioRecibidosCliente().subscribe(
       response => {
 
@@ -3578,7 +3596,57 @@ public eliminarLectura(i, periodo){
 
 
   public guardarDatosFinales(){
+ 
     var caso = this.casoEvaluado;
+
+    if(caso === ''){
+      let datosCalculados5 : Repositorio = new Repositorio();
+  
+          datosCalculados5 = this.frm_Caso6.value;
+
+          this.repositorioENR.saveDatosCalCaso6(datosCalculados5).subscribe(
+            response => {
+              
+            },
+            err => {
+             // //console.log("no");
+            },
+            () => { 
+   
+
+
+              let datosCalculados5 : Repositorio = new Repositorio();
+  
+              datosCalculados5 = this.frm_LecturasEvaluarTotales.value;
+
+          this.repositorioENR.updateDatosCalCaso5(datosCalculados5).subscribe(
+            response => {
+              
+            },
+            err => {
+             // //console.log("no");
+            },
+            () => { 
+              this.cobrarMedidor();
+              notie.alert({
+                type: 'success',
+                text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Datos guardados con éxito!',
+                stay: false, 
+                time: 2, 
+                position: 'top' 
+              });
+              this.cerrarCalculo();
+                 
+              this.getRepositorioIng();
+              this.getRepositorioCalc();
+              this.getRepositorioNoti();
+              },
+            );
+
+             
+            },
+          );
+    }
 
     if(caso == '1'){  
       
@@ -4990,6 +5058,67 @@ public guardarDatosRecibidoCliente(){
         this.getRepositorioNoti();
   },
 );
+}
+
+
+casosTablaEE(event, caso, nis, codigoTipoENR, cobro) {
+
+  if(event === true){
+    this.casosEE.push(
+      this.fbCasos.group({
+        casoEE:caso,
+        nis: nis,
+        codigoTipoENR: codigoTipoENR,
+        pagoSinIva : '$ ' + cobro,
+        periodoEE : '',
+       }),  
+  );
+  }else{
+    $("#btnCasos"+caso).click();
+  }
+    
+  if(this.casosEE.length > 0){
+    $("#btnFinalizarEE").show();
+  }else{
+    $("#btnFinalizarEE").hide();
+  }
+}
+
+
+public eliminarCasoEE(i, id){
+  this.casosEE.removeAt(i);
+}
+
+
+
+public guardarSeleccionEE(){
+
+  var lista = this.frm_casosTablaEE.value;
+  var periodo = this.frmPeriodoEE.value;
+
+  let casosSeleccionados : Repositorio = new Repositorio();
+  
+  casosSeleccionados = Object.assign(lista, periodo);
+
+  this.repositorioENR.guardarSeleccionEE(casosSeleccionados).subscribe(
+    response => {
+      
+    },
+    err => {
+    // //console.log("no");
+    },
+    () => { 
+      notie.alert({
+        type: 'success', // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+        text: '<img class="img-profile alertImg" src="./assets/imagenes/save.png" width=40 height=40> Guardado con éxito!',
+        stay: false, // optional, default = false
+        time: 2, // optional, default = 3, minimum = 1,
+        position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
+      });
+
+},
+);
+
 }
 
 
