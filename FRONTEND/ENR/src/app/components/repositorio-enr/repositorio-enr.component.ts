@@ -38,6 +38,7 @@ export class RepositorioENRComponent implements OnInit {
   repositorioNoti : Repositorio[];
   repositorioEl : Repositorio[];
   repositorioRecibidos : Repositorio[];
+  repositorioFac : Repositorio[];
   dataTable: any;
   adjuntosFile : Repositorio[];
   adjuntosFileOrdenes: DatosENR[];
@@ -1270,6 +1271,56 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
       
 
         const table: any = $('#tbl_Eliminados');
+        this.dataTable = table.DataTable();
+        this.dataTable.destroy();
+    
+        this.chRef.detectChanges();
+        this.dataTable = table.DataTable({
+          'iDisplayLength' : 5,
+        'responsive': true,
+          'order' :[[0,'desc']],
+
+        'language' : {
+          'sProcessing':     'Procesando...',
+          'sLengthMenu':     'Mostrar _MENU_ registros',
+          'sZeroRecords':    'No se encontraron resultados',
+          'sEmptyTable':     'Ningún dato disponible en esta tabla',
+          'sInfo':           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
+          'sInfoEmpty':      'Mostrando registros del 0 al 0 de un total de 0 registros',
+          'sInfoFiltered':   '(filtrado de un total de _MAX_ registros)',
+          'sInfoPostFix':    '',
+          'sSearch':         'Buscar:',
+          'sUrl':            '',
+          'sInfoThousands':  ',',
+          'sLoadingRecords': 'Cargando...',
+          'oPaginate': {
+              'sFirst':    'Primero',
+              'sLast':     'Último',
+              'sNext':     'Siguiente',
+              'sPrevious': 'Anterior'
+          },
+          'oAria': {
+              'sSortAscending':  ': Activar para ordenar la columna de manera ascendente',
+              'sSortDescending': ': Activar para ordenar la columna de manera descendente'
+          }
+        }
+        });
+      },
+      err => {},
+      () => {}
+    );
+  }
+
+
+  public getRepositorioFacturados(){
+    this.repositorioENR.getRepositorioFacturados().subscribe(
+      response => {
+
+        this.repositorioFac = response;
+
+        
+
+        const table: any = $('#tbl_Facturados');
         this.dataTable = table.DataTable();
         this.dataTable.destroy();
     
@@ -5061,7 +5112,7 @@ public guardarDatosRecibidoCliente(){
 }
 
 
-casosTablaEE(event, caso, nis, codigoTipoENR, cobro) {
+casosTablaEE(event, caso, nis, codigoTipoENR, cobro,cargo) {
 
   if(event === true){
     this.casosEE.push(
@@ -5070,7 +5121,7 @@ casosTablaEE(event, caso, nis, codigoTipoENR, cobro) {
         nis: nis,
         codigoTipoENR: codigoTipoENR,
         pagoSinIva : '$ ' + cobro,
-        periodoEE : '',
+        cargo : cargo,
        }),  
   );
   }else{
@@ -5115,6 +5166,8 @@ public guardarSeleccionEE(){
         time: 2, // optional, default = 3, minimum = 1,
         position: 'top' // optional, default = 'top', enum: ['top', 'bottom']
       });
+
+      this.getRepositorioRecibidosCliente();
 
 },
 );

@@ -144,6 +144,11 @@ tbody tr:hover{
 }
 
 
+html,body{
+  background-color: #1B1B38;
+  height: 100% !important;
+}
+
 
 
 /*ANIMACION DE OPCIONES DE PERFIL*/

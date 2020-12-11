@@ -48,7 +48,7 @@ class DashboardController extends Controller
             +''+convert(varchar,year(dg.fechaCreacion)) as periodo, sum(tp.totalPagar) as pagos
             from enr_datosgenerales dg
             inner join enr_totalpagos tp on tp.casoENR = dg.id
-            where dg.estado in (3,6) and dg.idEliminado = 1 and tp.totalPagar > 0
+            where dg.estado in (3,4) and dg.idEliminado = 1 and tp.totalPagar > 0
             group by CONVERT(char(2), cast(dg.fechaCreacion as datetime), 101) 
             +''+convert(varchar,year(dg.fechaCreacion))
         ");
@@ -117,7 +117,7 @@ class DashboardController extends Controller
  
  
         $getDatos = DB::connection('facturacion')->select(
-            "select count(id) as rec from enr_datosGenerales where idEliminado = 1 and estado = 6");
+            "select count(id) as rec from enr_datosGenerales where idEliminado = 1 and estado = 4");
              
   
         return response()->json($getDatos);

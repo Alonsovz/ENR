@@ -82,9 +82,9 @@ condición irregular a consecuencia de encontrar:<br>
 <p align="justify" style="font-size:14px;margin-left:10px;margin-right:10px;">
 Por dicha razón, hemos procedido a calcularle la energía no registrada, la cual asciende a:
     <br> <b>Consumo ENR: </b>  {{$dat->consumoENR}} kwh
-    <br> <b>Total cargo ENR: </b> $ {{$dat->total}} 
-    <br> <b>Fecha incio del cobro: </b> $ {{$dat->fechaInicio}} 
-    <br> <b>Fecha fin del cobro: </b> $ {{$dat->fechaFin}}
+    <br> <b>Total cargo ENR: </b> {{$dat->total}} 
+    <br> <b>Fecha incio del cobro: </b> {{$dat->fechaInicio}} 
+    <br> <b>Fecha fin del cobro: </b> {{$dat->fechaFin}}
     <br><br>
 Dicho periodo y cálculo se estima de acuerdo con lo que establece el “Procedimiento para investigar
 la existencia de condiciones irregulares en el suministro de energía eléctrica del usuario final”

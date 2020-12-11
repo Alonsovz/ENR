@@ -497,19 +497,45 @@ class ENRController extends Controller
         dg.codigoTipoENR as codTipoENR,
         fes.codigo_tarifa as tarifa, dg.fechaInicio as fechaIn, dg.fechaFin as fechaFin,
         tp.datosCalculo as datosCalculo,
-        LTRIM(str(tp.subTotal,12,2)) as pagoSinIva from enr_datosGenerales dg
+        LTRIM(str(tp.subTotal,12,2)) as pagoSinIva, t.codigoCargo as cargo from enr_datosGenerales dg
         inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
         inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
         inner join EDESAL_CALIDAD.dbo.SGT_Usuarios u on u.id = dg.usuario_creacion
         inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
         inner join enr_totalPagos tp on tp.casoENR = dg.id
-        where dg.idEliminado = 1 and dg.estado = 6
+        where dg.idEliminado = 1 and dg.estado = 4
         ");
 
 
         return response()->json($getDatos);
     }
 
+
+
+    public function getRepositorioFacturados(){
+        $getDatos =  DB::connection('facturacion')->select("
+        select dg.id as caso, dg.num_suministro as nis, dg.scanPrimerNoti as ruta,
+        dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
+        convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
+        t.tipoENR as codigoENR,t.codigoTipo as codigoTipoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
+        m.codigo as codBase,
+        (select count(id) from enr_documentacion where idCasoENR =
+        dg.id and idEliminado = 1) as adjuntos,
+        dg.codigoTipoENR as codTipoENR,
+        fes.codigo_tarifa as tarifa, dg.fechaInicio as fechaIn, dg.fechaFin as fechaFin,
+        tp.datosCalculo as datosCalculo,
+        LTRIM(str(tp.subTotal,12,2)) as pagoSinIva, t.codigoCargo as cargo from enr_datosGenerales dg
+        inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
+        inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
+        inner join EDESAL_CALIDAD.dbo.SGT_Usuarios u on u.id = dg.usuario_creacion
+        inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
+        inner join enr_totalPagos tp on tp.casoENR = dg.id
+        where dg.idEliminado = 1 and dg.estado in (5,6)
+        ");
+
+
+        return response()->json($getDatos);
+    }
 
     public function moveDoc(Request $request){
     
@@ -2160,7 +2186,6 @@ class ENRController extends Controller
             inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
             inner join fe_cliente as cli on cli.CODIGO_CLIENTE = fes.CODIGO_CLIENTE
             inner join enr_metodologiaCalc met on met.id = dg.codigoTipoMet
-            inner join enr_datosCalculados cal on cal.casoENR = dg.id
             inner join enr_gestionTipoENR tip on tip.id = dg.codigoTipoENR
 			inner join fe_municipios feMun on feMun.codigo_municipio = fes.codigo_municipio
 			and feMun.codigo_departamento = fes.codigo_departamento
@@ -2785,7 +2810,6 @@ class ENRController extends Controller
 
             '$' + LTRIM(str((select totalPagar from enr_totalPagos where casoENR = dg.id),12,2)) as total
             from enr_datosGenerales dg 
-            inner join enr_datosCalculados cal on cal.casoENR = dg.id
             where dg.id =".$caso."");
             
 
@@ -2804,7 +2828,7 @@ class ENRController extends Controller
 
         $editar =  DB::connection('facturacion')->table('enr_datosGenerales')->where('id', $idCaso)
                          ->update([
-                             'estado' => 6,
+                             'estado' => 4,
                              'fechaRecibidoCliente' => $fechaEntrega,
                              'usuarioEntrega' => $usuario,
                              'adjuntoEntrega' => substr($ruta,12),
@@ -2821,10 +2845,99 @@ class ENRController extends Controller
     public function guardarSeleccionEE(Request $request){
         $casos = json_encode($request["casosEE"]);
 
-        $caso = $request["periodoFacEE"];
+        $casosEE = json_decode($casos);
+
+        $periodo = $request["periodoFacEE"];
 
 
-        return response()->json($caso); 
+        $contador = 0;
+  
+
+        foreach($casosEE as $c){
+            $insertar =  DB::connection('facturacion')->table('enr_facturacion_ee')
+                         ->insert([
+                         'casoENR' => $c->casoEE,
+                         'num_suministro ' => $c->nis,
+                         'periodo' => $periodo,
+                         'codigoTipoENR' => $c->codigoTipoENR,
+                         'codigo_cargo'=>$c->cargo,
+                         'monto_SinIva'=>substr($c->pagoSinIva,2),
+                         'estado'=>'P',
+                         'fechageneracion'=>date('Ymd H:i:s'),
+                         ]);
+
+                            
+        $editar =  DB::connection('facturacion')->table('enr_datosGenerales')->where('id', $c->casoEE)
+        ->update(['estado' => 6]);
+            $contador++;
+        }     
+            
+        
+       if($contador == count($casosEE)){
+        return response()->json("ok");
+       }
+       
+
+       
+    }
+
+
+    public function getConsumoENRBloqueEnergia1GCalculo(Request $request){
+
+        $caso = $request["caso"];
+
+
+    
+ 
+ 
+        $getConsumo = DB::connection('facturacion')->select(
+            "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
+            '$' + str(cobro,12,2) as consumo from enr_montoEnergiaENR
+            where casoENR = ".$caso." order by 1 asc");
+
+            return response()->json($getConsumo);
+    }
+
+
+    
+    public function getConsumoENRBloqueDistribucion1GCalculo(Request $request){
+
+        $caso = $request["caso"];
+
+
+   
+ 
+        $getConsumo = DB::connection('facturacion')->select(
+            "select fechas, convert(varchar, fechas, 103) as fechasTarifa,
+            '$' + str(cobro,12,2) as consumo from enr_montoDistribucionENR 
+            where casoENR = ".$caso." order by 1 asc");
+
+            return response()->json($getConsumo);
+    }
+
+
+    public function getConsumoENRBloqueEnergia1GTotalCalculo(Request $request){
+
+        $caso = $request["caso"];
+ 
+        $getConsumo = DB::connection('facturacion')->select(
+            "select '$' + str(sum(cobro),12,2) as consumo from enr_montoEnergiaENR
+            where casoENR = ".$caso." order by 1 asc");
+
+            return response()->json($getConsumo);
+    }
+
+
+    
+    public function getConsumoENRBloqueDistribucion1GTotalCalculo(Request $request){
+
+        $caso = $request["caso"];
+
+        $getConsumo = DB::connection('facturacion')->select(
+            "select '$' + str(sum(cobro),12,2) as consumo from enr_montoDistribucionENR 
+            where casoENR = ".$caso." order by 1 asc");
+
+            return response()->json($getConsumo);
     }
 
 }

@@ -25,6 +25,10 @@ export class RepositorioEnrService {
     return this.http.get(this.url.getUrlBackEnd() +'getRepositorioNotificados').pipe(map(data => data as Repositorio[]));
   }
 
+  public getRepositorioFacturados(): Observable<Repositorio[]> {
+    return this.http.get(this.url.getUrlBackEnd() +'getRepositorioFacturados').pipe(map(data => data as Repositorio[]));
+  }
+
   public getRepositorioRecibidosCliente(): Observable<Repositorio[]> {
     return this.http.get(this.url.getUrlBackEnd() +'getRepositorioRecibidosCliente').pipe(map(data => data as Repositorio[]));
   }

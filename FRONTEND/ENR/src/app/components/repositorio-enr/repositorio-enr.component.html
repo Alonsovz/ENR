@@ -1888,6 +1888,14 @@ background-color: #323259;" id="titleGlobal">
         </a>
       </li>
 
+      <li class="nav-item" style="border-bottom:1px solid #F53DBF;">
+        <a class="nav-link"  data-toggle="tab" href="#facturados" role="tab" (click)="getRepositorioFacturados()"
+        aria-controls="profile" aria-selected="false" style="color:#F53DBF; background-color: #1B1B38;">
+         <i class="fas fa-trash"></i>
+            Facturados
+        </a>
+      </li>
+
       <li class="nav-item" style="border-bottom:1px solid #FD0404;">
         <a class="nav-link"  data-toggle="tab" href="#eliminados" role="tab" (click)="getRepositorioEli()"
         aria-controls="profile" aria-selected="false" style="color:#FD0404; background-color: #1B1B38;">
@@ -2162,7 +2170,7 @@ background-color: #323259;" id="titleGlobal">
                                <td>
                                <input type="checkbox" class="form-control" value="rep.caso" title="Enviar a tabla EE"
                                (change)="casosTablaEE($event.target.checked, rep.caso, rep.nis, rep.codigoENR,
-                               rep.pagoSinIva)"
+                               rep.pagoSinIva, rep.cargo)"
                                style="height: 20px !important; width: 20px !important; margin: auto;">
                                </td>
                           </tr>
@@ -2175,6 +2183,61 @@ background-color: #323259;" id="titleGlobal">
           </div> 
 
       </div>
+
+      <div class="tab-pane" id="facturados" role="tabpanel" aria-labelledby="">
+        <div class="row animated flipInX">
+            <div class="col-lg-2"></div>
+                <div class="col-lg-8" style="background-color: #1B1B38;color: white;
+                text-align: center;font-size: 25px;color:#F53DBF;font-weight: bold;">
+                  <img class="img-profile" src="./assets/imagenes/factu.png" 
+                  style="margin-bottom: 5px;">
+                  Casos Facturados
+                </div>                   
+            <div class="col-lg-2"></div>
+        </div>
+
+        <div class="row mt-5 animated fadeInLeft">
+            <div class="col-lg-1"></div>
+            <div class="col-lg-10">
+                <table  id="tbl_Facturados" class="table small mt-5" style="width: 100%;">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">N° Caso</th>
+                        <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">N° Suministro</th>
+                        <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Tipo ENR</th>
+                        <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Cod. Metodología ENR</th>
+                        <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Dias de Cobro</th>
+                        <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Fecha de Creación</th>
+                        <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody style="background-color:#323259; color:white;text-align: center;font-size: 11px;">
+                        <tr *ngFor="let rep  of repositorioFac"
+                        [ngClass]="{adjuntos: rep.adjuntos > 0}">
+                           <td>{{rep.caso}}</td>
+                           <td>{{rep.nis}}</td>
+                           <td>{{rep.codigoENR}}</td>
+                           <td>{{rep.metodologiaENR}}</td>
+                           <td>{{rep.diasCobrar}}</td>
+                           <td>{{rep.fechaCreacion}}<br>{{rep.usuarioCreacion}}</td>
+                           <td>
+                            <button class="btn btn-default btn-circle btn1" title="Ver detalles del caso"
+                            data-toggle="modal"  data-target="#mdGenerarDatosNoti" (click)="datosEditarCalc(rep, rep.tarifa,3)">
+                                <i class="fas fa-edit"></i>
+                             </button> 
+                             &nbsp; 
+                               <button type="button" class="btn btn-info btn-circle" 
+                               (click)="verPDFImpreso(rep.caso)" title="Ver reporte">
+                                 <i class="fas fa-print"></i> 
+                               </button>
+                        </tr>
+                    </tbody>
+                </table><br><br>
+            </div>
+            <div class="col-lg-1"></div>
+        </div> 
+
+    </div>
 
         <div class="tab-pane" id="eliminados" role="tabpanel" aria-labelledby="">
           <div class="row animated flipInX">
@@ -4947,7 +5010,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
             </a>
           </li>
           <li class="nav-item" style="border-bottom:1px solid white;" 
-          *ngIf="ordenNumeroG.estado == 2 || ordenNumeroG.estado == 3 || ordenNumeroG.estado == 6 ">
+          *ngIf="ordenNumeroG.estado == 2 || ordenNumeroG.estado == 3 || ordenNumeroG.estado == 4 ">
             <a class="nav-link"  data-toggle="tab" href="#datosCalculoENR" role="tab" id="tabDatosCalN"
             aria-controls="profile" aria-selected="false" style="color:#FFA500;background-color: #1B1B38;">
             <i class="fas fa-calculator"></i>
@@ -4962,7 +5025,7 @@ tabindex="-1" role="dialog" id="nuevoScanC">
             </a>
           </li>
           <li class="nav-item" style="border-bottom:1px solid white;">
-            <a class="nav-link"  data-toggle="tab" href="#tabRecibidos" role="tab"  *ngIf="ordenNumeroG.estado == 6 "
+            <a class="nav-link"  data-toggle="tab" href="#tabRecibidos" role="tab"  *ngIf="ordenNumeroG.estado == 4 "
             aria-controls="profile" aria-selected="false" style="color:#757BFF;background-color: #1B1B38;">
             <i class="fas fa-user-check"></i>
                 Recepción
@@ -6134,7 +6197,10 @@ tabindex="-1" role="dialog" id="nuevoScanC">
                       border-bottom: 2px solid #1FE303;font-weight: bold;" class="text-center">
                           Código Tipo ENR
                       </th>
-                   
+                      <th style="background-color: #1B1B38;color:#1FE303;font-size: 13px;
+                      border-bottom: 2px solid #1FE303;font-weight: bold;" class="text-center">
+                          Cargo
+                      </th>
                       <th style="background-color: #1B1B38;color:#1FE303;font-size: 13px;
                       border-bottom: 2px solid #1FE303;font-weight: bold;" class="text-center">
                          Cobro ENR Sin Iva
@@ -6159,7 +6225,10 @@ tabindex="-1" role="dialog" id="nuevoScanC">
                         style="text-align: center !important;color: #A4FA98 !important;" readonly="true">
                         </textarea> 
                       </td>
-     
+                      <td style="border-bottom: 1px solid #A4FA98;">
+                        <input class="form-control" type="text" formControlName="cargo"
+                        style="text-align: center !important;color: #A4FA98 !important;" readonly="true">
+                      </td>
                       <td style="border-bottom: 1px solid #A4FA98;">
                         <input class="form-control" type="text" formControlName="pagoSinIva"
                         style="text-align: center !important;color: #A4FA98 !important;" readonly="true">
@@ -6177,10 +6246,10 @@ tabindex="-1" role="dialog" id="nuevoScanC">
       
      </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
           <i class="fas fa-times-circle"></i>  Cerrar
         </button>
-        <button type="button" [disabled] = "frmPeriodoEE.invalid" class="btn btn-success"
+        <button type="button"  data-dismiss="modal" [disabled] = "frmPeriodoEE.invalid" class="btn btn-success"
         (click)="guardarSeleccionEE()">
           <i class="fas fa-thumbs-up"></i> Guardar datos!
         </button>        

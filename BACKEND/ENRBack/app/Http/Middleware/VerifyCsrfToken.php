@@ -154,6 +154,7 @@ class VerifyCsrfToken extends BaseVerifier
         'getRepositorioRecibidosCliente',
         'guardarSeleccionEE',
         'getCodigosCargos',
-        'saveDatosCalCaso6'
+        'saveDatosCalCaso6',
+        'getRepositorioFacturados'
     ];
 }
