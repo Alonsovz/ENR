@@ -950,7 +950,8 @@ class ENRController extends Controller
         }
 
         if($tipoCaso->codigo == 'HI'){
-           $total = $consumoENR / $diasCobro->diasCobro;
+            $consumoENREst = $request["consumoENREstimado"];
+            $total = $consumoENREst / $diasCobro->diasCobro;
         }
 
         if($tipoCaso->codigo == 'EM'){

@@ -73,17 +73,11 @@ class DashboardController extends Controller
     }
 
     public function getCasosIng(){
-
-
- 
- 
         $getDatos = DB::connection('facturacion')->select(
             "select count(id) as ing from enr_datosGenerales where idEliminado = 1 and estado = 1");
-             
   
         return response()->json($getDatos);
     }
-
 
     public function getCasosCalc(){
 

@@ -1313,6 +1313,8 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
 
 
   public getRepositorioFacturados(){
+    $("#tblM").hide();
+    $("#tblFEE").hide();
     this.repositorioENR.getRepositorioFacturados().subscribe(
       response => {
 
@@ -5046,7 +5048,15 @@ public mostrardtCalculoC(){
   $("#divCalculoENRC").hide();
 }
 
+public mostrarTblM(){
+  $("#tblM").show();
+  $("#tblFEE").hide();
+}
 
+public mostrarTblFE(){
+  $("#tblM").hide();
+  $("#tblFEE").show();
+}
 //validacion del archivo seleccionado
 subirRecibido(fileInput: any) {
   this.fileData = <File>fileInput.target.files[0];
