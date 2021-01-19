@@ -39,6 +39,8 @@ export class RepositorioENRComponent implements OnInit {
   repositorioEl : Repositorio[];
   repositorioRecibidos : Repositorio[];
   repositorioFac : Repositorio[];
+  repositorioFacManual: Repositorio[];
+  repositorioFacEE: Repositorio[];
   dataTable: any;
   adjuntosFile : Repositorio[];
   adjuntosFileOrdenes: DatosENR[];
@@ -1315,14 +1317,16 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
   public getRepositorioFacturados(){
     $("#tblM").hide();
     $("#tblFEE").hide();
-    this.repositorioENR.getRepositorioFacturados().subscribe(
+
+
+    this.repositorioENR.getRepositorioFacturadosManual().subscribe(
       response => {
-
-        this.repositorioFac = response;
-
+  
+        this.repositorioFacManual = response;
+  
         
-
-        const table: any = $('#tbl_Facturados');
+  
+        const table: any = $('#tbl_FacturadosManual');
         this.dataTable = table.DataTable();
         this.dataTable.destroy();
     
@@ -1331,7 +1335,7 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
           'iDisplayLength' : 5,
         'responsive': true,
           'order' :[[0,'desc']],
-
+  
         'language' : {
           'sProcessing':     'Procesando...',
           'sLengthMenu':     'Mostrar _MENU_ registros',
@@ -1361,6 +1365,55 @@ this.http.post(this.url.getUrlBackEnd() +'moveDoc', formData, {
       err => {},
       () => {}
     );
+
+
+    this.repositorioENR.getRepositorioFacturadosEE().subscribe(
+      response => {
+  
+        this.repositorioFacEE= response;
+  
+        
+  
+        const table: any = $('#tbl_FacturadosEE');
+        this.dataTable = table.DataTable();
+        this.dataTable.destroy();
+    
+        this.chRef.detectChanges();
+        this.dataTable = table.DataTable({
+          'iDisplayLength' : 5,
+        'responsive': true,
+          'order' :[[0,'desc']],
+  
+        'language' : {
+          'sProcessing':     'Procesando...',
+          'sLengthMenu':     'Mostrar _MENU_ registros',
+          'sZeroRecords':    'No se encontraron resultados',
+          'sEmptyTable':     'Ningún dato disponible en esta tabla',
+          'sInfo':           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
+          'sInfoEmpty':      'Mostrando registros del 0 al 0 de un total de 0 registros',
+          'sInfoFiltered':   '(filtrado de un total de _MAX_ registros)',
+          'sInfoPostFix':    '',
+          'sSearch':         'Buscar:',
+          'sUrl':            '',
+          'sInfoThousands':  ',',
+          'sLoadingRecords': 'Cargando...',
+          'oPaginate': {
+              'sFirst':    'Primero',
+              'sLast':     'Último',
+              'sNext':     'Siguiente',
+              'sPrevious': 'Anterior'
+          },
+          'oAria': {
+              'sSortAscending':  ': Activar para ordenar la columna de manera ascendente',
+              'sSortDescending': ': Activar para ordenar la columna de manera descendente'
+          }
+        }
+        });
+      },
+      err => {},
+      () => {}
+    );
+  
   }
 
   //método para obtener dias segun el codigo tipo enr
@@ -5051,6 +5104,8 @@ public mostrardtCalculoC(){
 public mostrarTblM(){
   $("#tblM").show();
   $("#tblFEE").hide();
+
+  
 }
 
 public mostrarTblFE(){

@@ -537,6 +537,100 @@ class ENRController extends Controller
         return response()->json($getDatos);
     }
 
+    public function getRepositorioFacturadosManual(){
+        $getDatos =  DB::connection('facturacion')->select("
+        select dg.id as caso, dg.num_suministro as nis, dg.scanPrimerNoti as ruta,
+        dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
+        convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
+        t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
+        m.codigo as codBase,
+        (select count(id) from enr_documentacion where idCasoENR =
+        dg.id and idEliminado = 1) as adjuntos,
+        dg.codigoTipoENR as codTipoENR,
+        fes.codigo_tarifa as tarifa, dg.fechaInicio as fechaIn, dg.fechaFin as fechaFin,
+        fm.numero_interno as num_interno,
+        case 
+            when fm.estado_fm = 1
+                then 'Ingresada'
+            when fm.estado_fm = 2
+                then 'Impresa'
+            when fm.estado_fm = 3
+                then 'Pagada'
+            when fm.estado_fm = 4
+                then 'Anulada'
+        end as estadoFactura,
+        '$'+str(fm.total,12,2) as totalFactura from enr_datosGenerales dg
+        inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
+        inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
+        inner join EDESAL_CALIDAD.dbo.SGT_Usuarios u on u.id = dg.usuario_creacion
+        inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
+        inner join enr_totalPagos tp on tp.casoENR = dg.id
+        inner join fe_facturacion_manual_enc fm on fm.numero_interno = tp.numero_interno
+        where dg.idEliminado = 1
+        ");
+
+
+        return response()->json($getDatos);
+    }
+
+
+    public function getRepositorioFacturadosEE(){
+        $getDatos =  DB::connection('facturacion')->select("
+        
+       select distinct dg.id as caso, dg.num_suministro as nis, dg.scanPrimerNoti as ruta,
+       dg.diasCobro as diasCobrar, u.alias as usuarioCreacion, 
+       convert(varchar,dg.fechaCreacion, 103)+' '+substring(convert(varchar,dg.fechaCreacion, 114),1,5) as fechaCreacion,
+       t.tipoENR as codigoENR, m.tipoENR as metodologiaENR ,dg.estado as estado,
+       m.codigo as codBase,
+       (select count(id) from enr_documentacion where idCasoENR =
+       dg.id and idEliminado = 1) as adjuntos,
+       dg.codigoTipoENR as codTipoENR,
+       fes.codigo_tarifa as tarifa, dg.fechaInicio as fechaIn, dg.fechaFin as fechaFin,
+        case when fee.estado = 'P'
+        then
+            'No Facturado'
+        else 
+        (select 
+        case when fc.codigo_movimiento = '01'
+            then 'Facturado'
+        when fc.codigo_movimiento = '02'
+            then 'Pagado'
+        end  
+        from fe_cta_movimientos fc 
+        inner join fe_facturacion_enc ffc on ffc.periodo = fc.periodo and ffc.num_suministro = fc.num_suministro
+        where fc.periodo = fee.periodo and fc.num_suministro = fee.num_suministro
+        and fc.estado = 1 and fc.codigo_movimiento = '01')
+        end as estadoFactura,
+        'Fact. Eléctrica' as tipoFactura,
+        
+        case when fee.estado = 'P'
+        then
+            '$ 0.00'
+        else 
+        (select 
+        '$'+str(fc.valor + fc.alcaldia,12,2)
+        from fe_cta_movimientos fc 
+        inner join fe_facturacion_enc ffc on ffc.periodo = fc.periodo and ffc.num_suministro = fc.num_suministro
+        where fc.periodo = fee.periodo and fc.num_suministro = fee.num_suministro
+        and fc.estado = 1 and fc.codigo_movimiento = '01')
+        end as totalFactura,
+        (select numero_factura from fe_facturacion_enc 
+        where periodo = fee.periodo and num_suministro = fee.num_suministro) as numFactura
+            from enr_datosGenerales dg
+            inner join enr_gestionTipoENR t on t.id = dg.codigoTipoENR
+            inner join enr_metodologiaCalc m on m.id = dg.codigoTipoMet
+            inner join EDESAL_CALIDAD.dbo.SGT_Usuarios u on u.id = dg.usuario_creacion
+            inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
+            inner join enr_totalPagos tp on tp.casoENR = dg.id
+            inner join enr_facturacion_ee fee  on fee.casoENR = dg.id
+            where dg.idEliminado = 1 and dg.estado = 6 
+
+        ");
+
+
+        return response()->json($getDatos);
+    }
+
     public function moveDoc(Request $request){
     
       

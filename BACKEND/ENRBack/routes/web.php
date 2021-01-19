@@ -263,4 +263,6 @@ Route::get('/', function () {
     Route::any('getCodigosCargos', 'ENRController@getCodigosCargos');
     Route::any('saveDatosCalCaso6','ENRController@saveDatosCalCaso6');
     Route::any('getRepositorioFacturados', 'ENRController@getRepositorioFacturados');
+    Route::any('getRepositorioFacturadosManual', 'ENRController@getRepositorioFacturadosManual');
+    Route::any('getRepositorioFacturadosEE', 'ENRController@getRepositorioFacturadosEE');
     

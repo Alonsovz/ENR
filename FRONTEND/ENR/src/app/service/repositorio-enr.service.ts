@@ -631,5 +631,14 @@ export class RepositorioEnrService {
     return this.http.post<Repositorio>(this.url.getUrlBackEnd() + 'guardarSeleccionEE', datos).pipe(map(data => data as Repositorio));
   }
 
+  public getRepositorioFacturadosManual(): Observable<Repositorio[]> {
+    return this.http.get(this.url.getUrlBackEnd() +'getRepositorioFacturadosManual').pipe(map(data => data as Repositorio[]));
+  }
+
+  public getRepositorioFacturadosEE(): Observable<Repositorio[]> {
+    return this.http.get(this.url.getUrlBackEnd() +'getRepositorioFacturadosEE').pipe(map(data => data as Repositorio[]));
+  }
+  
+
 }
 
