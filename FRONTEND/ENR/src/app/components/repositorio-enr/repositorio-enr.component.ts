@@ -279,7 +279,7 @@ export class RepositorioENRComponent implements OnInit {
         'consumo2' : new FormControl('',[Validators.required]),
         'consumoENRFacturar' : new FormControl('',[Validators.required]),
         'diasCobroCaso1' : new FormControl('',[Validators.required]),
-        'consumoENRRegistrado': new FormControl('',[Validators.required]),
+        'consumoENRRegistrado': new FormControl('0',[Validators.required]),
         
       });
 

@@ -566,7 +566,7 @@ class ENRController extends Controller
         inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
         inner join enr_totalPagos tp on tp.casoENR = dg.id
         inner join fe_facturacion_manual_enc fm on fm.numero_interno = tp.numero_interno
-        where dg.idEliminado = 1
+        where dg.idEliminado = 1 and dg.estado in (5,7)
         ");
 
 
@@ -623,7 +623,7 @@ class ENRController extends Controller
             inner join fe_suministros fes on fes.num_suministro = dg.num_suministro
             inner join enr_totalPagos tp on tp.casoENR = dg.id
             inner join enr_facturacion_ee fee  on fee.casoENR = dg.id
-            where dg.idEliminado = 1 and dg.estado = 6 
+            where dg.idEliminado = 1 and dg.estado in (6,7) 
 
         ");
 

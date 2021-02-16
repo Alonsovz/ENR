@@ -883,7 +883,7 @@
                       </td>
                       <td>
                         <input type="number" step="0.01" class="form-control" formControlName="consumoENRRegistrado"
-                        placeholder="Digíte el consumo registrado" (keyup)="calcularENRCaso4()">
+                        placeholder="Digíte el consumo registrado" (keyup)="calcularENRCaso4()" value="0">
                       </td>
                       <td>
                         <input type="text" class="form-control" formControlName="consumoENRFacturar" readonly>
@@ -934,7 +934,7 @@
             <div class="col-md-3">
               <label>Consumo Registrado</label>
               <input type="number" step="0.01" class="form-control" formControlName="consumoENRRegistrado" 
-              placeholder="Consumo Registrado" (keyup)="totalizarDato()">
+              placeholder="Consumo Registrado" (keyup)="totalizarDato()" value="0">
              </div>
 
 
@@ -2143,7 +2143,7 @@ background-color: #323259;" id="titleGlobal">
                           <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Dias de Cobro</th>
                           <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Fecha de Creación</th>
                           <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Acciones</th>
-                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center">Enviar a Fact.</th>
+                          <th style="background-color:#1B1B38; color:#A16EFF;font-size: 11px;" class="text-center" *ngIf="user.rol == 'AEA'">Enviar a Fact.</th>
                         </tr>
                       </thead>
                       <tbody style="background-color:#323259; color:white;text-align: center;font-size: 11px;">
@@ -2166,7 +2166,7 @@ background-color: #323259;" id="titleGlobal">
                                  <i class="fas fa-print"></i> 
                                </button>
                                </td>
-                               <td>
+                               <td *ngIf="user.rol == 'AEA'">
                                <input type="checkbox" class="form-control" value="rep.caso" title="Enviar a tabla EE"
                                (change)="casosTablaEE($event.target.checked, rep.caso, rep.nis, rep.codigoENR,
                                rep.pagoSinIva, rep.cargo)"

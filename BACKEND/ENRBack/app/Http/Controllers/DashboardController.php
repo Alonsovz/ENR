@@ -23,8 +23,10 @@ class DashboardController extends Controller
         $getDatos = DB::connection('facturacion')->select(
             "select periodo, str(enrKwhPeriodo,12,3) as enrKwhPeriodo,
             str(cobroPeriodo,12,2) as cobroPeriodo,
-            str(cobroAcumulado,12,2) as cobroAcumulado
-            from enr_totalAcumulado order by 1 asc");
+            str(cobroAcumulado,12,2) as cobroAcumulado,
+            substring(periodo, 1, 2) as mes, 
+            substring(periodo, 3, 4) as anio
+            from enr_totalAcumulado order by 6 desc, 5 desc");
              
   
         return response()->json($getDatos);
@@ -44,13 +46,18 @@ class DashboardController extends Controller
 
     public function getPagosENR(){
         $getDatos =  DB::connection('facturacion')->select("
-            select CONVERT(char(2), cast(dg.fechaCreacion as datetime), 101) 
-            +''+convert(varchar,year(dg.fechaCreacion)) as periodo, sum(tp.totalPagar) as pagos
-            from enr_datosgenerales dg
-            inner join enr_totalpagos tp on tp.casoENR = dg.id
-            where dg.estado in (3,4) and dg.idEliminado = 1 and tp.totalPagar > 0
-            group by CONVERT(char(2), cast(dg.fechaCreacion as datetime), 101) 
-            +''+convert(varchar,year(dg.fechaCreacion))
+        select CONVERT(char(2), cast(dg.fechaCreacion as datetime), 101) 
+        +''+convert(varchar,year(dg.fechaCreacion)) as periodo, sum(tp.totalPagar) as pagos,
+        CONVERT(char(2), cast(dg.fechaCreacion as datetime), 101)  as mes,
+        convert(varchar,year(dg.fechaCreacion)) as anio
+        from enr_datosgenerales dg
+        inner join enr_totalpagos tp on tp.casoENR = dg.id
+        where dg.estado in (3,4) and dg.idEliminado = 1 and tp.totalPagar > 0
+        group by CONVERT(char(2), cast(dg.fechaCreacion as datetime), 101) 
+        +''+convert(varchar,year(dg.fechaCreacion)),
+        CONVERT(char(2), cast(dg.fechaCreacion as datetime), 101),
+        convert(varchar,year(dg.fechaCreacion))
+        order by 4 desc, 3 desc
         ");
 
         return response()->json($getDatos);
